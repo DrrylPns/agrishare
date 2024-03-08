@@ -107,7 +107,7 @@ export const TraderAddress: React.FC<TraderAddressProps> = ({ user }) => {
         },
         onError: (err) => {
             if (err instanceof AxiosError) {
-                
+
             } else {
                 return toast({
                     title: 'Something went wrong.',
@@ -144,7 +144,7 @@ export const TraderAddress: React.FC<TraderAddressProps> = ({ user }) => {
     }
 
     return (
-        <div className="max-w-4xl mx-5 lg:mx-auto p-6 bg-white border border-[#E6E6E6] rounded-lg">
+        <div className="max-w-4xl mx-5 lg:mx-auto p-6 bg-white border border-[#E6E6E6] rounded-lg mb-3">
             <h2 className="text-2xl font-semibold">Trader Address</h2>
             <Separator className="mb-6 mt-2" />
             <Form {...form}>

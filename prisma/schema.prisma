@@ -6,9 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model Account {
@@ -42,25 +41,33 @@ model Session {
 }
 
 model User {
-  id             String    @id @default(cuid())
+  id             String           @id @default(cuid())
   name           String?
   // username       String    @unique
-  email          String?   @unique
+  email          String?          @unique
   emailVerified  DateTime?
   image          String?
   hashedPassword String?
-  phoneNumber    String?   @unique
+  phoneNumber    String?          @unique
   address        String?
   country        String?
   state          String?
   city           String?
   zip            String?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
   companyName    String?
-  role           Role      @default(DONATOR)
+  points         Float            @default(0)
+  role           Role             @default(DONATOR)
   accounts       Account[]
   sessions       Session[]
+  reviews        Reviews[]
+  News           News[]
+  tags           Tags[]
+  community      Community[]
+  Transaction    Transaction[]
+  ClaimedProduct ClaimedProduct[]
+  Post           Post[]
 }
 
 enum Role {
@@ -78,5 +85,130 @@ model VerificationToken {
 }
 
 model Post {
-  id String @id @default(cuid())
+  id              String           @id @default(cuid())
+  name            String
+  description     String           @db.Text
+  quantity        Float            @default(0)
+  weight          Float
+  color           String
+  type            Types
+  isFavorite      Boolean
+  category        Category
+  status          Status
+  shelfLife       String
+  prefferedOffers String
+  tags            Tags[]
+  reviews         Reviews[]
+  transaction     Transaction[]
+  claimedProduct  ClaimedProduct[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  User   User   @relation(fields: [userId], references: [id])
+  userId String
+}
+
+enum Category {
+  FRESH_FRUIT
+  VEGETABLES
+  TOOLS
+  EQUIPMENTS
+  SEEDS
+  SOILS
+  FERTILIZER
+}
+
+enum Status {
+  OUTOFSTOCK
+  INSTOCK
+  LOWSTOCK
+}
+
+enum Types {
+  ORGANIC
+  INORGANIC
+}
+
+model Tags {
+  id        String   @id @default(cuid())
+  tagName   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  User   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  post Post[]
+}
+
+model Reviews {
+  id        String   @id @default(cuid())
+  review    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  User   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  Post   Post   @relation(fields: [postId], references: [id])
+  postId String
+}
+
+model News {
+  id         String   @id @default(cuid())
+  title      String
+  capturedBy String
+  content    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  writer   User   @relation(fields: [writerId], references: [id], onDelete: Cascade)
+  writerId String
+}
+
+model Community {
+  id             String   @id @default(cuid())
+  thumbnail      String   @db.Text
+  name           String
+  story          String   @db.Text
+  donations      Int      @default(0) // kung ilan na nag donate // based to sa figma.
+  currentDonated Float    @default(0) // current donation sa community na yon
+  neededDonation Float // target donation na ma-reach
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  User           User?    @relation(fields: [userId], references: [id])
+  userId         String?
+}
+
+model Transaction {
+  id        String          @id @default(cuid())
+  type      TransactionType
+  points    Float           @default(0)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  Post   Post?   @relation(fields: [postId], references: [id])
+  postId String?
+}
+
+enum TransactionType {
+  TRADE
+  DONATE
+  POINTS_EARNED
+}
+
+//NOT SURE PA DITO
+model ClaimedProduct {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  Post   Post?   @relation(fields: [postId], references: [id])
+  postId String?
 }
