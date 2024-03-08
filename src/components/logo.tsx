@@ -5,14 +5,8 @@ import AgrishareLogo from '@/../public/images/Logo.png'
 
 export const Logo = () => {
     return (
-        <div className='flex flex-row items-center'>
-            <Link href="/">
-                <Image 
-                    src={AgrishareLogo} 
-                    alt='Agrishare Logo'
-                    className='w-full'
-                />
-            </Link>
-        </div>
+        <Link href="/" className='flex justify-center w-full h-full items-center'>
+            <h1>Temp Logo...</h1>
+        </Link>
     )
 }

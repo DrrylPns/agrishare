@@ -1,11 +1,14 @@
+'use client';
 import Image from 'next/image'
 import React from 'react'
 import HeaderBg from './images/Header.jpg';
 import Logo from './images/Logo.png';
 import { Button } from '@/components/ui/button';
 import { BsArrowRight } from 'react-icons/bs';
+import { useRouter } from 'next/navigation';
 
 function Header() {
+  const router = useRouter()
   return (
     <div className='relative' id='home'>
         <header className={`relative font-poppins w-full text-center tracking-widest`}>
@@ -17,7 +20,9 @@ function Header() {
                     />
                 <div className='relative mt-[-4rem] md:mt-[-8rem]'>
                     <h1 className='relative z-30 text-white text-lg font-poppins font-medium '>Share to care, Trade to aid.</h1>
-                    <Button variant={"default"} className='relative mt-10 z-50 rounded-2xl px-5 text-[0.7rem]'>Start Now!<span className='ml-2 text-lg'><BsArrowRight /></span></Button>
+                    <Button onClick={()=>{router.push('/agrifeed')}} variant={"default"} className='relative mt-10 z-30 rounded-2xl px-5 text-[0.7rem]'>
+                      Start Now!<span className='ml-2 text-lg'><BsArrowRight /></span>
+                    </Button>
                 </div>
             </div>
         </header>
