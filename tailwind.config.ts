@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss"
-
+import HeaderBg from './public/images/Header.jpg'
 const config = {
   darkMode: ["class"],
   content: [
@@ -18,7 +18,18 @@ const config = {
       },
     },
     extend: {
+      backgroundImage: {
+        'headerBgImage' : "url('./public/images/Header.jpg')",
+      },
+      fontFamily: {
+        'poppins': ['Poppins', 'sans-serif'],
+        'livvic': ['Livvic', 'sans-serif'],
+        'dancing-script': ['Dancing Script', 'cursive']
+      },
       colors: {
+        'transparent-white': "rgba(102, 102, 102, 0)" ,
+        'transparent-black': 'rgba(0, 0, 0, 0.42)',
+        'transparent-whitist': 'rgba(233, 255, 240, 0.4)',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
