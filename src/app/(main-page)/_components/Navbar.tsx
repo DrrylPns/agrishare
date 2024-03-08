@@ -22,7 +22,7 @@ function Navbar() {
     className={`bg-white fixed flex justify-around items-center z-50 top-0 left-0 w-full h-[70px] px-4 sm:px-20 py-4 shadow transition-color duration-500 ${visible ? "" : "opacity-0"
         }`}
 >
-    <div className="w-1/3 h-14 border border-black">
+    <div className="w-1/3 h-14 ">
         <Logo />
     </div>
     <div>

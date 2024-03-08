@@ -2,6 +2,7 @@ import Image from 'next/image'
 import React from 'react'
 import Agrifeed from './_components/images/Agrifeed.png'
 import CreatePost from './_components/CreatePost'
+import Products from './_components/Products'
 
 
 const page = () => {
@@ -12,9 +13,10 @@ const page = () => {
                 alt='Agrifeed Logo'
                 className='h h-32 md:w-[40%] mx-auto'
             />
-            <div className='w-full'>
+            <div className='w-full mb-10'>
                 <CreatePost/>
             </div>
+            <Products/>
         </div>
     )
 }
