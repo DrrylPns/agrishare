@@ -27,6 +27,7 @@ const config = {
         'dancing-script': ['Dancing Script', 'cursive']
       },
       colors: {
+        'primary-green': '#00B207',
         'transparent-white': "rgba(102, 102, 102, 0)" ,
         'transparent-black': 'rgba(0, 0, 0, 0.42)',
         'transparent-whitist': 'rgba(233, 255, 240, 0.4)',

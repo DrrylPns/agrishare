@@ -13,7 +13,7 @@ function Header() {
                 <Image 
                     src={Logo}
                     alt='Logo Image'
-                    className='relative z-50 h-[50vh] md:h-[80vh] '
+                    className='relative z-50 h-[70vh] md:h-[80vh] '
                     />
                 <div className='relative mt-[-4rem] md:mt-[-8rem]'>
                     <h1 className='relative z-50 text-white text-lg font-poppins font-medium '>Share to care, Trade to aid.</h1>
