@@ -1,12 +1,8 @@
 import React from 'react'
-import Navbar from '../(landing-page)/_components/Navbar'
 
 const page = () => {
     return (
         <div className="flex flex-col h-screen">
-            <header className="flex items-center justify-center w-full h-12 px-4 border-b md:h-16">
-                <Navbar />
-            </header>
             <main className="flex-1 overflow-y-auto py-6 md:py-12 lg:py-24 xl:py-32">
                 <div className="container flex flex-col min-h-full space-y-4 px-4 md:space-y-6 md:px-6">
                     <div className="space-y-2">
