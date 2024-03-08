@@ -63,7 +63,6 @@ model User {
   sessions       Session[]
   reviews        Reviews[]
   News           News[]
-  tags           Tags[]
   community      Community[]
   Transaction    Transaction[]
   ClaimedProduct ClaimedProduct[]
@@ -85,24 +84,25 @@ model VerificationToken {
 }
 
 model Post {
-  id              String           @id @default(cuid())
-  name            String
-  description     String           @db.Text
-  quantity        Float            @default(0)
-  weight          Float
-  color           String
-  type            Types
-  isFavorite      Boolean
-  category        Category
-  status          Status
-  shelfLife       String
-  prefferedOffers String
-  tags            Tags[]
-  reviews         Reviews[]
-  transaction     Transaction[]
-  claimedProduct  ClaimedProduct[]
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
+  id             String           @id @default(cuid())
+  image          String           @db.Text // step0
+  name           String // step 1 name
+  description    String           @db.Text // step 1 description textarea
+  quantity       Float            @default(0) // step 2 quantity
+  weight         Float //step 2 weight
+  color          String // step 2 color
+  type           Types // step 3 types
+  isFavorite     Boolean          @default(false)
+  category       Category // step 3 category combobox, naka depende sa value neto ang lalabas sa type
+  status         Status
+  shelfLife      String // step 2 shelfLife
+  preferedOffers String // step 3 preferred offers.
+  harvestDate    DateTime
+  reviews        Reviews[]
+  transaction    Transaction[]
+  claimedProduct ClaimedProduct[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
 
   User   User   @relation(fields: [userId], references: [id])
   userId String
@@ -110,8 +110,8 @@ model Post {
 
 enum Category {
   FRESH_FRUIT
-  VEGETABLES
-  TOOLS
+  VEGETABLES // organic / inorganic
+  TOOLS // 
   EQUIPMENTS
   SEEDS
   SOILS
@@ -127,18 +127,6 @@ enum Status {
 enum Types {
   ORGANIC
   INORGANIC
-}
-
-model Tags {
-  id        String   @id @default(cuid())
-  tagName   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  User   User   @relation(fields: [userId], references: [id])
-  userId String
-
-  post Post[]
 }
 
 model Reviews {

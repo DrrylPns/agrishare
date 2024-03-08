@@ -14,9 +14,9 @@ const page = () => {
                 className='h h-32 md:w-[40%] mx-auto'
             />
             <div className='w-full mb-10'>
-                <CreatePost/>
+                <CreatePost />
             </div>
-            <Products/>
+            <Products />
         </div>
     )
 }

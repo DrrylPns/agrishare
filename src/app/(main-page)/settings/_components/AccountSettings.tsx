@@ -162,7 +162,7 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
                                         </div> : <UploadDropzone
                                             className="text-green"
                                             appearance={{
-                                                button: "bg-[#099073] p-2 mb-3",
+                                                button: "bg-[#00B207] p-2 mb-3",
                                                 label: "text-green",
                                                 allowedContent: "flex h-8 flex-col items-center justify-center px-2 text-green",
                                             }}
