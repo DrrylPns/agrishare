@@ -22,10 +22,10 @@ function page() {
   return (
     <div className='transition-all duration-1000 ease-in-out'>
       <Header/>
-      <section className='relative h-dvh font-poppins'>
+      <section className='relative h-dvh font-poppins' id='aboutus'>
         <div className='relative flex flex-col justify-center items-center w-1/2 h-full mx-auto my-auto'>
-          <h1 className='relative z-50 text-5xl text-center text-white font-bold tracking-tight'>About us</h1>
-          <p className='relative z-50 text-white text-justify'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus necessitatibus odit accusamus, qui distinctio architecto excepturi quae molestiae rerum eum, omnis saepe explicabo, ex tenetur libero eos. Totam, laudantium.</p>
+          <h1 className='relative z-20 text-5xl text-center text-white font-bold tracking-tight'>About us</h1>
+          <p className='relative z-20 text-white text-justify'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus necessitatibus odit accusamus, qui distinctio architecto excepturi quae molestiae rerum eum, omnis saepe explicabo, ex tenetur libero eos. Totam, laudantium.</p>
         </div>
         <div className='absolute top-0 z-10 w-full h-dvh bg-transparent-whitist'>
         </div>
@@ -119,7 +119,7 @@ function page() {
               <h3>Points</h3>
             </div>
           </div>
-          <Button variant={"default"} className='relative mt-5 z-50 rounded-2xl px-5 text-[0.7rem]'>Start Now!<span className='ml-2 text-lg'><BsArrowRight /></span></Button>
+          <Button variant={"default"} className='relative mt-5 z-20 rounded-2xl px-5 text-[0.7rem]'>Start Now!<span className='ml-2 text-lg'><BsArrowRight /></span></Button>
         </div>
         <div className='hidden lg:flex justify-center items-center'>
           <Image 
@@ -130,7 +130,7 @@ function page() {
         </div>
       </section>
 
-      <section className='font-poppins px-32 py-10 w-full min-h-dvh'>
+      <section id='news' className='font-poppins px-32 py-10 w-full min-h-dvh'>
         <h1 className='text-2xl font-semibold text-center'>Latest news</h1>
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-2 md:gap-5'>
           {newsArray.length > 0 && newsArray.map((news: NewsItem)=>(
@@ -148,7 +148,7 @@ function page() {
         </div>
       </section>
 
-      <section className='bg-black font-poppins text-white flex flex-col md:flex-row justify-center items-center gap-10 p-10 md:p-32 w-full min-h-dvh h-dvh'>
+      <section id='contactus' className='bg-black font-poppins text-white flex flex-col md:flex-row justify-center items-center gap-10 p-10 md:p-32 w-full min-h-dvh h-dvh'>
         <div className='flex flex-col items-center justify-between px-5 py-5 rounded-lg bg-white text-black h-full w-full md:w-1/3'>
           <div className='text-lg flex flex-col items-center justify-center'>
             <span className='text-[2rem]'><CiLocationOn /></span>

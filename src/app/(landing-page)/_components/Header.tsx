@@ -7,16 +7,16 @@ import { BsArrowRight } from 'react-icons/bs';
 
 function Header() {
   return (
-    <div className='relative'>
+    <div className='relative' id='home'>
         <header className={`relative font-poppins w-full text-center tracking-widest`}>
-            <div className=' z-50 min-h-dvh'>
+            <div className=' z-30 min-h-dvh'>
                 <Image 
                     src={Logo}
                     alt='Logo Image'
-                    className='relative z-50 h-[70vh] md:h-[80vh] '
+                    className='relative z-30 h-[70vh] md:h-[80vh] '
                     />
                 <div className='relative mt-[-4rem] md:mt-[-8rem]'>
-                    <h1 className='relative z-50 text-white text-lg font-poppins font-medium '>Share to care, Trade to aid.</h1>
+                    <h1 className='relative z-30 text-white text-lg font-poppins font-medium '>Share to care, Trade to aid.</h1>
                     <Button variant={"default"} className='relative mt-10 z-50 rounded-2xl px-5 text-[0.7rem]'>Start Now!<span className='ml-2 text-lg'><BsArrowRight /></span></Button>
                 </div>
             </div>
