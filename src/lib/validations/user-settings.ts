@@ -18,7 +18,7 @@ export const AccountSchema = z.object({
 export type TraderType = z.infer<typeof TraderSchema>
 
 export const TraderSchema = z.object({
-    companyName: z.string().min(2, { message: "Company Name should be valid." }).max(255, { message: "Company Name is too long." }).optional(),
+    companyName: z.string().optional(),
     address: z.string().min(2, { message: "Address should be valid." }).max(255, { message: "Address is too long." }).optional(),
     country: z.string().optional(),
     state: z.string().optional(),
