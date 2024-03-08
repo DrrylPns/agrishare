@@ -1,0 +1,46 @@
+import { getAuthSession } from "@/lib/auth";
+import prisma from "@/lib/db";
+import { ChangePasswordSchema } from "@/lib/validations/user-settings";
+import bcrypt from "bcrypt"
+import { z } from "zod";
+
+export async function POST(req: Request) {
+    try {
+      const session = await getAuthSession()
+  
+      if (!session?.user && !session) {
+        return new Response("Error: No session found!", { status: 401 })
+      }
+  
+      const body = await req.json();
+  
+      const { oldPassword, newPassword, confirmNewPassword } = ChangePasswordSchema.parse(body)
+  
+      const user = await prisma.user.findFirst({
+        where: { id: session?.user.id }
+      })
+  
+      const passwordMatch = await bcrypt.compare(oldPassword, user?.hashedPassword as string);
+  
+      if (!passwordMatch) {
+        return new Response("Old password is incorrect", { status: 400 })
+      }
+  
+      const hashedNewPassword = await bcrypt.hash(newPassword, 12);
+  
+      await prisma.user.update({
+        where: { id: user?.id },
+        data: {
+          hashedPassword: hashedNewPassword
+        }
+      })
+  
+      return new Response("Password Updated Successfully", { status: 200 });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return new Response("Invalid POST request data passed", { status: 422 })
+      }
+  
+      return new Response("Could not create a user, please try again later!" + error, { status: 500 });
+    }
+  }

@@ -15,7 +15,7 @@ const SettingsPage = async () => {
     })
 
     return (
-        <main className="w-full">
+        <main className="w-full overflow-hidden">
             {/* Account Settings */}
             <AccountSettings user={user as User} />
 
@@ -23,7 +23,7 @@ const SettingsPage = async () => {
             <TraderAddress user={user as User} />
 
             {/* Change Password */}
-            <PasswordSettings />
+            <PasswordSettings user={user as User} />
         </main>
     )
 }

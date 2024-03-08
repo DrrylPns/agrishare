@@ -4,6 +4,7 @@ import "@/lib/styles/globals.css";
 import Providers from "@/components/providers";
 import Navbar from "./_components/Navbar";
 import SideNav from "./_components/SideNav";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,16 +20,17 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body className={`${inter.className}`}>
+            <body className={`${inter.className} overflow-x-hidden`}>
                 <Providers>
-                    <Navbar/>
-                 
+                    <Navbar />
+
                     <div className="flex w-full min-h-dvh mt-[7%] gap-5 mx-5 transition-all duration-500 ease-in-out">
                         <div className="w-[25%]">
-                            <SideNav/>
+                            <SideNav />
                         </div>
                         {children}
                     </div>
+                    <Toaster />
                 </Providers>
             </body>
         </html>
