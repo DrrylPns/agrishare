@@ -41,14 +41,14 @@ const Navbar = () => {
 
     return (
         <nav
-            className={`bg-white fixed flex justify-around items-center z-50 top-0 left-0 w-full h-[70px] px-4 sm:px-20 py-4 shadow transition-color duration-500 ${visible ? "" : "opacity-0"
+            className={` bg-white fixed flex justify-around items-center z-50 top-0 left-0 w-full h-[70px] px-4 sm:px-20 py-4 shadow transition-color duration-500 ${visible ? "" : "opacity-0"
                 }`}
         >
-            <div>
+            <div className="w-1/3">
                 <Logo />
             </div>
 
-            <div className="flex flex-row gap-7 justify-evenly max-sm:hidden">
+            <div className="flex flex-row gap-7 justify-evenly w-full max-sm:hidden">
                 <button
                     onClick={() => scrollToSection("home")}
                     className="text-[16px] font-normal"
