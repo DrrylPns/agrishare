@@ -15,7 +15,7 @@ const SettingsPage = async () => {
     })
 
     return (
-        <main className="w-full overflow-hidden">
+        <main className="mt-[60px] sm:mt-0 lg:mr-[300px]">
             {/* Account Settings */}
             <AccountSettings user={user as User} />
 

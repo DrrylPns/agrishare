@@ -108,7 +108,7 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
             {/* <div className="flex justify-center items-center"> */}
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
-                    <div className="md:block lg:flex lg:flex-row-reverse lg:justify-between lg:items-center">
+                    <div className="md:block lg:flex lg:flex-row-reverse lg:justify-between lg:items-center mb-3 lg:mb-0">
                         <div className="lg:w-[50%]">
                             <Drawer>
                                 <DrawerTrigger asChild>

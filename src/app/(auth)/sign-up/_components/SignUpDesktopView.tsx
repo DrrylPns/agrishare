@@ -130,10 +130,7 @@ export const SignUpDesktopView = () => {
 
       <div className="flex justify-between flex-row w-full">
         <div className="bg-[#F7FFF6] w-[50%] flex items-center justify-center flex-col">
-          <Logo />
-          <div className="ml-[77px]">
-            <Tagline />
-          </div>
+          <Logo isAuth />
         </div>
 
         <div className="bg-[#84D187] w-[50%]">

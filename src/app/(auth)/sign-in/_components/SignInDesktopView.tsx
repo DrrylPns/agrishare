@@ -7,7 +7,6 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Logo } from "@/components/logo";
-import { Tagline } from "@/components/tagline";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import usePasswordToggle from "@/lib/hooks/usePasswordToggle";
@@ -81,10 +80,7 @@ export const SignInDesktopView = () => {
             </div>
             <div className="flex justify-between flex-row w-full">
                 <div className="bg-[#F7FFF6] w-[50%] flex items-center justify-center flex-col">
-                    <Logo />
-                    <div className="ml-[77px]">
-                        <Tagline />
-                    </div>
+                    <Logo isAuth />
                 </div>
 
                 <div className="bg-[#84D187] w-[50%]">
