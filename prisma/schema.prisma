@@ -51,8 +51,13 @@ model User {
   hashedPassword String?
   phoneNumber    String?   @unique
   address        String?
+  country        String?
+  state          String?
+  city           String?
+  zip            String?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
+  companyName    String?
   role           Role      @default(DONATOR)
   accounts       Account[]
   sessions       Session[]
@@ -74,5 +79,4 @@ model VerificationToken {
 
 model Post {
   id String @id @default(cuid())
-  
 }
