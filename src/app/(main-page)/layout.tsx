@@ -23,9 +23,8 @@ export default function RootLayout({
             <body className={`${inter.className} overflow-x-hidden`}>
                 <Providers>
                     <Navbar />
-
-                    <div className="flex w-full min-h-dvh mt-[7%] gap-5 mx-5 transition-all duration-500 ease-in-out">
-                        <div className="w-[25%]">
+                    <div className="flex justify-around w-full min-h-dvh mt-[7%] transition-all duration-500 ease-in-out">
+                        <div className="w-[25%] hidden sm:block">
                             <SideNav />
                         </div>
                         {children}
