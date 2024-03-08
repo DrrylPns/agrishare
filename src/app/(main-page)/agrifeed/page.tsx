@@ -6,7 +6,7 @@ import CreatePost from './_components/CreatePost'
 
 const page = () => {
     return (
-        <div className='w-3/5'>
+        <div className='w-full sm:w-3/5 mt-5 sm:mt-0'>
             <Image
                 src={Agrifeed}
                 alt='Agrifeed Logo'

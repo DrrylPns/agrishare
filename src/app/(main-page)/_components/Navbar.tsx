@@ -8,6 +8,7 @@ import Link from 'next/link';
 import React, { useState } from 'react'
 import { BiMenu } from 'react-icons/bi';
 import { SearchInput } from './SearchInput';
+import { CiBellOn, CiHeart } from 'react-icons/ci';
 
 function Navbar() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -44,7 +45,15 @@ function Navbar() {
             </Link>
         </div>
     ) : status === "authenticated" ? (
-        <div className="max-sm:hidden">
+        <div className="max-sm:hidden flex items-center text-3xl gap-3 ">
+            <Link 
+                href={'/agrineeds'} 
+                className='hover:scale-105'
+            >
+                <CiHeart />
+               
+            </Link>
+            <CiBellOn />
             <UserAccountAvatar />
         </div>
     ) : status === "loading" ? (

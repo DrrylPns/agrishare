@@ -15,9 +15,9 @@ function SideNav() {
     const pathname = usePathname();
     const { data:session, status} = useSession()
   return (
-    <div className='border border-gray-300 shadow-sm drop-shadow-sm bg-white'>
-        <h1 className='mx-5 py-2 mt-5  text-xl font-poppins font-extralight text-black'>Navigation</h1>
-        <div className='transition-all duration-700 ease-in-out mt-3'>
+    <div className=' border border-gray-300 shadow-sm drop-shadow-sm bg-white'>
+        <h1 className='mx-5 py-2 mt-5 text-gray-500 text-xl font-poppins font-extralight '>Navigation</h1>
+        <div className='text-gray-500 transition-all duration-700 ease-in-out mt-3'>
             <Link 
                 href={'/agrifeed'} 
                 className={`link ${pathname === '/agrifeed' ? "border-l-2 border-primary-green bg-[#e6e6e671]": ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}

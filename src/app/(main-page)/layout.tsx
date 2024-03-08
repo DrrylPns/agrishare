@@ -23,8 +23,8 @@ export default function RootLayout({
                 <Providers>
                     <Navbar/>
                  
-                    <div className="flex w-full min-h-dvh mt-[7%] gap-10 mx-5 transition-all duration-500 ease-in-out">
-                        <div className="w-[25%]">
+                    <div className="flex justify-around w-full min-h-dvh mt-[7%] transition-all duration-500 ease-in-out">
+                        <div className="w-[25%] hidden sm:block">
                             <SideNav/>
                         </div>
                         {children}
