@@ -22,7 +22,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         />
 
         {ToggleIcon && (
-          <span className="flex justify-end -mt-10 ml-[240px] z-0 w-fit">{ToggleIcon}</span>
+          <span className="flex justify-end -mt-10 ml-[235px] lg:ml-[315px] xl:ml-[415px] z-0 w-fit">{ToggleIcon}</span>
         )}
       </>
     )

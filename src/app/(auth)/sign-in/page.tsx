@@ -20,6 +20,9 @@ import { Input } from "@/components/ui/input";
 import usePasswordToggle from "@/lib/hooks/usePasswordToggle";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/logo";
+import { Tagline } from "@/components/tagline";
+import { SignInDesktopView } from "./_components/SignInDesktopView";
 
 const page = () => {
     const router = useRouter();
@@ -70,39 +73,44 @@ const page = () => {
     }
 
     return (
-        <div className="bg-[#84D187]">
-            <Link className="flex flex-row pt-3" href="/">
-                <ChevronLeft />
-                Go Back
-            </Link>
-            <div className='h-screen w-full flex items-center justify-center'>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <Card className='w-full p-6'>
-                        <CardHeader className='flex text-center'>
-                            <CardTitle>Sign In</CardTitle>
-                        </CardHeader>
-                        <CardContent className="grid gap-4 w-full p-0">
+        <div>
+            <SignInDesktopView />
 
-                            <div className='grid gap-2'>
-                                <Label htmlFor='email'>Email</Label>
-                                <Input className="w-[270px]" id='email' type='email' placeholder='username@example.com' {...register("email")} />
-                                {errors.email && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.email.message}</span>}
-                            </div>
+            {/* MOBILE VIEW */}
+            <div className="bg-[#84D187] md:hidden block">
+                <Link className="flex flex-row pt-3" href="/">
+                    <ChevronLeft />
+                    Go Back
+                </Link>
+                <div className='h-screen w-full flex items-center justify-center'>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <Card className='w-full p-6'>
+                            <CardHeader className='flex text-center'>
+                                <CardTitle>Sign In</CardTitle>
+                            </CardHeader>
+                            <CardContent className="grid gap-4 w-full p-0">
+
+                                <div className='grid gap-2'>
+                                    <Label htmlFor='email'>Email</Label>
+                                    <Input className="w-[270px]" id='email' type='email' placeholder='username@example.com' {...register("email")} />
+                                    {errors.email && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.email.message}</span>}
+                                </div>
 
 
-                            <div className='grid gap-2'>
-                                <Label htmlFor='password'>Password</Label>
-                                <Input className="w-[270px]" id='password' type={PasswordInputType as string} placeholder='Enter Password'{...register("password")} ToggleIcon={ToggleIcon} />
-                                {errors.password && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.password.message}</span>}
-                            </div>
-                        </CardContent>
+                                <div className='grid gap-2'>
+                                    <Label htmlFor='password'>Password</Label>
+                                    <Input className="w-[270px]" id='password' type={PasswordInputType as string} placeholder='Enter Password'{...register("password")} ToggleIcon={ToggleIcon} />
+                                    {errors.password && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.password.message}</span>}
+                                </div>
+                            </CardContent>
 
-                        <CardFooter className="p-0 w-full flex flex-col gap-3">
-                            <Button className='w-full rounded-full mt-2' isLoading={isLoading} disabled={session ? true : false} variant={"primary"}>Login</Button>
-                            <Link href="/sign-up" className="text-neutral-500 text-[14px]">Don't have an account? <span className="font-bold">Register</span></Link>
-                        </CardFooter>
-                    </Card>
-                </form>
+                            <CardFooter className="p-0 w-full flex flex-col gap-3">
+                                <Button className='w-full rounded-full mt-2' isLoading={isLoading} disabled={session ? true : false} variant={"primary"}>Login</Button>
+                                <Link href="/sign-up" className="text-neutral-500 text-[14px]">Don't have an account? <span className="font-bold">Register</span></Link>
+                            </CardFooter>
+                        </Card>
+                    </form>
+                </div>
             </div>
         </div>
     )

@@ -1,24 +1,39 @@
+import { PageNF } from "@/components/not-found";
 import Providers from "@/components/providers";
+import { getAuthSession } from "@/lib/auth";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
+import "@/lib/styles/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Agrishare",
-  description: "Agrishare:Where trading and donation happens!",
+  description: "Share to care, Trade to aid",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const session = await getAuthSession()
+
+  if (session?.user === null) return <div>Loading...</div>
+
   return (
     <html lang="en">
       <body className={`${inter.className}`}>
         <Providers>
-          {children}
+          {!session?.user ? (
+            <>
+              <PageNF />
+            </>
+          ) : (
+            <>
+              {children}
+            </>
+          )}
         </Providers>
       </body>
     </html>
