@@ -1,17 +1,15 @@
+import Providers from "@/components/providers";
+import { getAuthSession } from "@/lib/auth";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@/lib/styles/globals.css";
-import Providers from "@/components/providers";
-import { Toaster } from "@/components/ui/toaster";
-import { AuthFooter } from "./_components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Agrishare",
+  title: "Agrishare - Terms and Conditions",
   description: "Share to care, Trade to aid",
 };
-
 export default function RootLayout({
   children,
 }: {
@@ -19,13 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className}`}>
-        <Providers>
-          {children}
-          <AuthFooter />
-          <Toaster />
-        </Providers>
-      </body>
+      <body>{children}</body>
     </html>
   )
 }

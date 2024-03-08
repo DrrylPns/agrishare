@@ -2,7 +2,6 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -19,9 +18,9 @@ import { toast } from "@/components/ui/use-toast";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
+import { SignUpDesktopView } from "./_components/SignUpDesktopView";
 
 const page = () => {
   const router = useRouter();
@@ -119,64 +118,70 @@ const page = () => {
   };
 
   return (
-    <div className="bg-[#84D187]">
-      <Link className="flex flex-row pt-3" href="/">
-        <ChevronLeft />
-        Go Back
-      </Link>
-      <div className='h-screen w-full flex items-center justify-center'>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Card className='w-full p-6'>
-            <CardHeader className='flex text-center'>
-              <CardTitle>Sign Up</CardTitle>
-            </CardHeader>
-            <CardContent className="grid gap-4 w-full p-0">
+    <div className="">
 
-              <div className='grid gap-2'>
-                <Label htmlFor='email'>Email</Label>
-                <Input id='email' type='email' placeholder='username@example.com' {...register("email")} />
-                {errors.email && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.email.message}</span>}
-              </div>
+      <SignUpDesktopView />
 
-              <div className='grid gap-2'>
-                <Label htmlFor='fname'>Full Name</Label>
-                <Input id='fname' type='text' placeholder='Enter Fullname' {...register("fullname")} />
-                {errors.fullname && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.fullname.message}</span>}
-              </div>
+      {/* MOBILE VIEW */}
+      <div className="bg-[#84D187] md:hidden block">
+        <Link className="flex flex-row pt-3" href="/">
+          <ChevronLeft />
+          Go Back
+        </Link>
+        <div className='h-screen w-full flex items-center justify-center'>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Card className='w-full p-6'>
+              <CardHeader className='flex text-center'>
+                <CardTitle>Sign Up</CardTitle>
+              </CardHeader>
+              <CardContent className="grid gap-4 w-full p-0">
 
-              <div className='grid gap-2'>
-                <Label htmlFor='password'>Password</Label>
-                <Input id='password' type={PasswordInputType as string} placeholder='Enter Password'{...register("password")} ToggleIcon={ToggleIcon} />
-                {errors.password && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.password.message}</span>}
-              </div>
-
-              <div className='grid gap-2'>
-                <Label htmlFor='confirm-password'>Confirm Password</Label>
-                <Input id='confirm-password' type={PasswordInputType as string} placeholder='Confirm Password' {...register("confirmPassword")} ToggleIcon={ToggleIcon} />
-                {errors.confirmPassword && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.confirmPassword.message}</span>}
-              </div>
-            </CardContent>
-
-            <CardFooter className="w-full">
-              <div className='flex flex-col w-full gap-4'>
-                <div className='flex space-x-2 mt-5 mb-2'>
-                  <input
-                    id='terms'
-                    type="checkbox"
-                    {...register('terms')}
-                  />
-                  <Label htmlFor='terms' className='text-muted-foreground'>I accept all {" "}
-                    <Link href="/tnc" className="underline text-[#1916C1]">terms & conditions</Link>
-                  </Label>
+                <div className='grid gap-2'>
+                  <Label htmlFor='email'>Email</Label>
+                  <Input id='email' type='email' placeholder='username@example.com' {...register("email")} />
+                  {errors.email && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.email.message}</span>}
                 </div>
-                {errors.terms && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.terms.message}</span>}
 
-                <Button className='w-full rounded-full' isLoading={isLoading} variant="primary" >Proceed</Button>
-                <Link href="/sign-in" className="text-neutral-500 text-[14px]">Already have an account? <span className="font-bold">Login</span></Link>
-              </div>
-            </CardFooter>
-          </Card>
-        </form>
+                <div className='grid gap-2'>
+                  <Label htmlFor='fname'>Full Name</Label>
+                  <Input id='fname' type='text' placeholder='Enter Fullname' {...register("fullname")} />
+                  {errors.fullname && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.fullname.message}</span>}
+                </div>
+
+                <div className='grid gap-2'>
+                  <Label htmlFor='password'>Password</Label>
+                  <Input id='password' type={PasswordInputType as string} placeholder='Enter Password'{...register("password")} ToggleIcon={ToggleIcon} />
+                  {errors.password && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.password.message}</span>}
+                </div>
+
+                <div className='grid gap-2'>
+                  <Label htmlFor='confirm-password'>Confirm Password</Label>
+                  <Input id='confirm-password' type={PasswordInputType as string} placeholder='Confirm Password' {...register("confirmPassword")} ToggleIcon={ToggleIcon} />
+                  {errors.confirmPassword && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.confirmPassword.message}</span>}
+                </div>
+              </CardContent>
+
+              <CardFooter className="w-full">
+                <div className='flex flex-col w-full gap-4'>
+                  <div className='flex space-x-2 mt-5 mb-2'>
+                    <input
+                      id='terms'
+                      type="checkbox"
+                      {...register('terms')}
+                    />
+                    <Label htmlFor='terms' className='text-muted-foreground'>I accept all {" "}
+                      <Link href="/tnc" className="underline text-[#1916C1]">terms & conditions</Link>
+                    </Label>
+                  </div>
+                  {errors.terms && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.terms.message}</span>}
+
+                  <Button className='w-full rounded-full' isLoading={isLoading} variant="primary" >Proceed</Button>
+                  <Link href="/sign-in" className="text-neutral-500 text-[14px]">Already have an account? <span className="font-bold">Login</span></Link>
+                </div>
+              </CardFooter>
+            </Card>
+          </form>
+        </div>
       </div>
     </div>
   )

@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
     title: "Agrishare",
-    description: "Agrishare:Where trading and donation happens!",
+    description: "Share to care, Trade to aid",
 };
 
 export default function RootLayout({
