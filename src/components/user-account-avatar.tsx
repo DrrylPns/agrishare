@@ -54,7 +54,7 @@ export const UserAccountAvatar = () => {
                     <DropdownMenuSeparator />
 
                     <DropdownMenuItem>
-                        <Link href="#">My Account</Link>
+                        <Link href="/agrifeed/settings">My Account</Link>
                     </DropdownMenuItem>
 
                     <DropdownMenuSeparator />
