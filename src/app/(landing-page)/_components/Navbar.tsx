@@ -2,7 +2,9 @@
 
 import { Logo } from "@/components/logo";
 import { buttonVariants } from "@/components/ui/button";
+import { UserAccountAvatar } from "@/components/user-account-avatar";
 import { cn } from "@/lib/utils";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BiMenu } from "react-icons/bi";
@@ -11,6 +13,7 @@ const Navbar = () => {
     const [prevScrollPos, setPrevScrollPos] = useState(0);
     const [visible, setVisible] = useState(true);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { data: session, status } = useSession()
 
     const scrollToSection = (id: string) => {
         const element = document.getElementById(id);
@@ -72,21 +75,30 @@ const Navbar = () => {
                 </button>
             </div>
 
-            <div className="flex flex-row gap-3 max-sm:hidden">
-                <Link
-                    href="/sign-in"
-                    className={cn(buttonVariants({ variant: "primary" }), "p-3 px-8 rounded-full")}
-                >
-                    Sign In
-                </Link>
+            {status === "unauthenticated" ? (
+                <div className="flex flex-row gap-3 max-sm:hidden">
+                    <Link
+                        href="/sign-in"
+                        className={cn(buttonVariants({ variant: "primary" }), "p-3 px-8 rounded-full")}
+                    >
+                        Sign In
+                    </Link>
 
-                <Link
-                    href="/sign-up"
-                    className={cn(buttonVariants({ variant: "primary" }), "p-3 px-8 rounded-full")}
-                >
-                    Sign Up
-                </Link>
-            </div>
+                    <Link
+                        href="/sign-up"
+                        className={cn(buttonVariants({ variant: "primary" }), "p-3 px-8 rounded-full")}
+                    >
+                        Sign Up
+                    </Link>
+                </div>
+            ) : status === "authenticated" ? (
+                <div className="max-sm:hidden">
+                    <UserAccountAvatar />
+                </div>
+            ) : status === "loading" ? (
+                <div>Loading...</div>
+            ) : (<></>)}
+
 
 
             {/* Mobile dropdown menu */}
