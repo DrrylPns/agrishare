@@ -2,6 +2,8 @@ import { Card, Grid, } from '@tremor/react';
 import { UsersRound } from 'lucide-react';
 import PieChart from './_components/PieChart';
 import AdminTitle from '@/components/AdminTitle';
+import { DonationChart } from './_components/DonationChart';
+import { TradeChart } from './_components/TradeChart';
 
 const DashboardPage = () => {
   return (
@@ -43,6 +45,12 @@ const DashboardPage = () => {
 
         {/* PIE CHART */}
         <PieChart />
+
+        {/* DonationChart */}
+        <DonationChart />
+
+        {/* TradeChart */}
+        <TradeChart />
       </Card>
     </div>
   )
