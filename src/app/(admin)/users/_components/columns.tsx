@@ -16,6 +16,7 @@ export const columns: ColumnDef<User>[] = [
         },
         cell: ({ row }) => {
             const name = row.original.name
+            const lastName = row.original.lastName
 
             const words = name?.split(' ');
 
@@ -26,7 +27,7 @@ export const columns: ColumnDef<User>[] = [
             return <div
                 className=""
             >
-                {formattedName}
+                {formattedName} {" "} {lastName}
             </div>
         },
     },

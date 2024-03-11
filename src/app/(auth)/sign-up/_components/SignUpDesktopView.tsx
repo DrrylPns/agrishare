@@ -37,26 +37,22 @@ export const SignUpDesktopView = () => {
       errors,
     },
   } = useForm<RegisterType>({
-    resolver: zodResolver(RegisterSchema),
-    defaultValues: {
-      fullname: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-    },
+    resolver: zodResolver(RegisterSchema)
   });
 
   const { mutate: registerUser, isLoading } = useMutation({
     mutationFn: async ({
       email,
-      fullname,
+      name,
+      lastName,
       password,
       confirmPassword,
       terms,
     }: RegisterType) => {
       const payload: RegisterType = {
         email,
-        fullname,
+        name,
+        lastName,
         password,
         confirmPassword,
         terms,
@@ -110,7 +106,8 @@ export const SignUpDesktopView = () => {
   const onSubmit: SubmitHandler<RegisterType> = (data: RegisterType) => {
     const payload: RegisterType = {
       email: data.email,
-      fullname: data.fullname,
+      name: data.name,
+      lastName: data.lastName,
       password: data.password,
       confirmPassword: data.confirmPassword,
       terms: data.terms,
@@ -149,9 +146,15 @@ export const SignUpDesktopView = () => {
                   </div>
 
                   <div className='grid gap-2'>
-                    <Label htmlFor='fname'>Full Name</Label>
-                    <Input className="lg:w-[350px] xl:w-[450px]" id='fname' type='text' placeholder='Enter Fullname' {...register("fullname")} />
-                    {errors.fullname && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.fullname.message}</span>}
+                    <Label htmlFor='fname'>First Name</Label>
+                    <Input className="lg:w-[350px] xl:w-[450px]" id='fname' type='text' placeholder='Enter first name' {...register("name")} />
+                    {errors.name && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.name.message}</span>}
+                  </div>
+
+                  <div className='grid gap-2'>
+                    <Label htmlFor='lname'>Last Name</Label>
+                    <Input className="lg:w-[350px] xl:w-[450px]" id='lname' type='text' placeholder='Enter last name' {...register("lastName")} />
+                    {errors.lastName && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.lastName.message}</span>}
                   </div>
 
                   <div className='grid gap-2'>

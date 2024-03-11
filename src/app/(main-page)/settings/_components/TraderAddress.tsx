@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
     Form,
@@ -22,6 +22,7 @@ import { useMutation } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios"
 import { toast } from "@/components/ui/use-toast"
 import { useRouter } from "next/navigation"
+import { cn } from "@/lib/utils"
 
 type TraderAddressProps = {
     user: User
@@ -47,10 +48,11 @@ export const TraderAddress: React.FC<TraderAddressProps> = ({ user }) => {
     let countryData = Country.getAllCountries();
     const [stateData, setStateData] = useState();
     const [cityData, setCityData] = useState();
-
     const [country, setCountry] = useState(countryData[173]);
     const [state, setState] = useState<StateType>();
     const [city, setCity] = useState<CityType>();
+    const [isEdit, setIsEdit] = useState<boolean>(false)
+
 
     const router = useRouter();
 
@@ -145,28 +147,21 @@ export const TraderAddress: React.FC<TraderAddressProps> = ({ user }) => {
 
     return (
         <div className="max-w-4xl mx-5 lg:mx-auto p-6 bg-white border border-[#E6E6E6] rounded-lg mb-3">
-            <h2 className="text-2xl font-semibold">Trader Address</h2>
+            <header className="mb-2 flex justify-between">
+                <h2 className="text-2xl font-semibold">Trader Address</h2>
+                {isEdit ? <div className={cn(buttonVariants({
+                    variant: "outline"
+                }), "cursor-pointer")}
+                    onClick={() => setIsEdit(false)}
+                >Cancel</div> : <div className={cn(buttonVariants({
+                    variant: "outline"
+                }), "cursor-pointer")}
+                    onClick={() => setIsEdit(true)}
+                >Edit</div>}
+            </header>
             <Separator className="mb-6 mt-2" />
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
-                    {/* <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        <Input defaultValue="Kimmy" id="first-name" placeholder="First name" />
-                        <Input defaultValue="Alsolema" id="last-name" placeholder="Last name" />
-                        <Input defaultValue="QCU Urban Farm" id="company-name" placeholder="Company Name (optional)" />
-                        <FormField
-                            control={form.control}
-                            name="companyName"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Company Name (Optional)</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Enter Company Name..." {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div> */}
                     <div className="mt-6">
                         <FormField
                             control={form.control}
@@ -175,7 +170,7 @@ export const TraderAddress: React.FC<TraderAddressProps> = ({ user }) => {
                                 <FormItem>
                                     <FormLabel>Company Name (Optional)</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Enter Company Name..." {...field} />
+                                        <Input placeholder="Enter Company Name..." {...field} disabled={!isEdit} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -191,7 +186,7 @@ export const TraderAddress: React.FC<TraderAddressProps> = ({ user }) => {
                                 <FormItem>
                                     <FormLabel>Street Address</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Enter address..." {...field} />
+                                        <Input placeholder="Enter address..." {...field} disabled={!isEdit} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -202,7 +197,7 @@ export const TraderAddress: React.FC<TraderAddressProps> = ({ user }) => {
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-3 mt-6">
                         <div className="">
                             <p className="font-semibold text-[14px]">Country:</p>
-                            <AddressSelector data={countryData} selected={country} setSelected={setCountry} />
+                            <AddressSelector data={countryData} selected={country} setSelected={setCountry} disabled={!isEdit} />
                         </div>
 
                         {state && (
@@ -212,6 +207,7 @@ export const TraderAddress: React.FC<TraderAddressProps> = ({ user }) => {
                                     data={stateData}
                                     selected={state}
                                     setSelected={setState}
+                                    disabled={!isEdit}
                                 />
                             </div>
                         )}
@@ -219,7 +215,7 @@ export const TraderAddress: React.FC<TraderAddressProps> = ({ user }) => {
                         {city && (
                             <div>
                                 <p className=" font-semibold text-[14px]">City :</p>
-                                <AddressSelector data={cityData} selected={city} setSelected={setCity} />
+                                <AddressSelector data={cityData} selected={city} setSelected={setCity} disabled={!isEdit} />
                             </div>
                         )}
 
@@ -231,7 +227,7 @@ export const TraderAddress: React.FC<TraderAddressProps> = ({ user }) => {
                                 <FormItem className="">
                                     <FormLabel>Zip Code</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Enter zip code..." {...field} type="number" />
+                                        <Input placeholder="Enter zip code..." {...field} type="number" disabled={!isEdit} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -240,7 +236,9 @@ export const TraderAddress: React.FC<TraderAddressProps> = ({ user }) => {
                     </div>
 
                     <div className="mt-6">
-                        <Button variant="primary" className="rounded-full" isLoading={isLoading} disabled={isLoading}>Save Changes</Button>
+                        {isEdit ? <>
+                            <Button type="submit" variant="primary" className="rounded-full" isLoading={isLoading} disabled={isLoading}>Save Changes</Button>
+                        </> : null}
                     </div>
                 </form>
             </Form>

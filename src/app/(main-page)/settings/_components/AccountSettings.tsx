@@ -1,5 +1,5 @@
 "use client"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer"
 import {
     Form,
@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { toast } from "@/components/ui/use-toast"
 import { UploadDropzone } from "@/lib/uploadthing"
+import { cn } from "@/lib/utils"
 import { AccountSchema, AccountType } from "@/lib/validations/user-settings"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { User } from "@prisma/client"
@@ -30,27 +31,31 @@ type AccountSettingsProps = {
 
 export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
     const [imageUrl, setImageUrl] = useState<string>(user?.image || "")
+    const [isEdit, setIsEdit] = useState<boolean>(false)
     const router = useRouter()
 
-    const imageIsEmpty = imageUrl.length === 0
+    // const imageIsEmpty = imageUrl.length === 0
 
     const form = useForm<AccountType>({
         resolver: zodResolver(AccountSchema),
         defaultValues: {
-            fullname: user?.name || "",
+            name: user?.name || "",
+            lastName: user?.lastName || "",
             image: user?.image || "",
             phoneNumber: user?.phoneNumber || "",
-        },
+        }
     })
 
     const { mutate: updateAccount, isLoading } = useMutation({
         mutationFn: async ({
-            fullname,
+            name,
+            lastName,
             image,
             phoneNumber,
         }: AccountType) => {
             const payload: AccountType = {
-                fullname,
+                name,
+                lastName,
                 image,
                 phoneNumber,
             }
@@ -91,7 +96,8 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
 
     function onSubmit(values: AccountType) {
         const payload: AccountType = {
-            fullname: values.fullname,
+            name: values.name,
+            lastName: values.lastName,
             phoneNumber: values.phoneNumber,
             image: imageUrl,
         }
@@ -101,10 +107,19 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
 
     return (
         <div className="max-w-4xl mx-5 lg:mx-auto p-6 bg-white border border-[#E6E6E6] rounded-lg mb-3">
-            <header className="mb-2">
+            <header className="mb-2 flex justify-between">
                 <h1 className="font-bold text-2xl text-center md:text-start">Account Settings</h1>
-                <Separator className="mt-2" />
+                {isEdit ? <div className={cn(buttonVariants({
+                    variant: "outline"
+                }), "cursor-pointer")}
+                    onClick={() => setIsEdit(false)}
+                >Cancel</div> : <div className={cn(buttonVariants({
+                    variant: "outline"
+                }), "cursor-pointer")}
+                    onClick={() => setIsEdit(true)}
+                >Edit</div>}
             </header>
+            <Separator className="mt-2" />
             {/* <div className="flex justify-center items-center"> */}
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -204,12 +219,12 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
                         <div className="lg:w-[50%] lg:flex lg:flex-col lg:gap-3">
                             <FormField
                                 control={form.control}
-                                name="fullname"
+                                name="name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Full Name</FormLabel>
+                                        <FormLabel>First Name</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Enter Full Name..." {...field} />
+                                            <Input placeholder="Enter first name..." {...field} disabled={!isEdit} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -218,12 +233,25 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
 
                             <FormField
                                 control={form.control}
+                                name="lastName"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Last Name</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter last name..." {...field} disabled={!isEdit} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
                                 name="phoneNumber"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Phone Number</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Enter Phone Number..." {...field} type="number" />
+                                            <Input placeholder="Enter Phone Number..." {...field} type="number" disabled={!isEdit} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -233,8 +261,10 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
                         </div>
                     </div>
 
-                    <div>
-                        <Button type="submit" variant="primary" className="rounded-full" isLoading={isLoading} disabled={isLoading || imageIsEmpty}>Save Changes</Button>
+                    <div className="mt-3">
+                        {isEdit ? <>
+                            <Button type="submit" variant="primary" className="rounded-full" isLoading={isLoading} disabled={isLoading}>Save Changes</Button>
+                        </> : null}
                     </div>
                 </form>
             </Form>
