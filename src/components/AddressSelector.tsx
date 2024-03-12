@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react'
 import { Combobox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react'
 
-function AddressSelector({ data, selected, setSelected }: any) {
+function AddressSelector({ data, selected, setSelected, disabled }: any) {
     const [query, setQuery] = useState('')
 
     const filteredPeople =
@@ -17,7 +17,7 @@ function AddressSelector({ data, selected, setSelected }: any) {
 
     return (
         <div className="">
-            <Combobox value={selected} onChange={setSelected}>
+            <Combobox value={selected} onChange={setSelected} disabled={disabled}>
                 <div className="relative mt-1">
                     <div className="relative w-full overflow-hidden rounded-lg bg-white text-left border cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-[#00B207] sm:text-sm">
                         <Combobox.Input
@@ -45,9 +45,9 @@ function AddressSelector({ data, selected, setSelected }: any) {
                                     Nothing found.
                                 </div>
                             ) : (
-                                filteredPeople?.map((person: any) => (
+                                filteredPeople?.map((person: any, index: number) => (
                                     <Combobox.Option
-                                        key={person.id}
+                                        key={index}
                                         className={({ active }) =>
                                             `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? "bg-[#00B207] text-white" : "text-gray-900"
                                             }`

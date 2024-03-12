@@ -18,7 +18,8 @@ export async function POST(req: Request) {
         const {
             email,
             password,
-            fullname,
+            lastName,
+            name,
             confirmPassword,
             terms,
         } = RegisterSchema.parse(body)
@@ -39,9 +40,9 @@ export async function POST(req: Request) {
         const user = await prisma.user.create({
             data: {
                 email,
-                name: fullname,
+                name,
+                lastName,
                 hashedPassword,
-                
             }
         });
 

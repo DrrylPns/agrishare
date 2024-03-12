@@ -43,6 +43,8 @@ model Session {
 model User {
   id             String           @id @default(cuid())
   name           String?
+  lastName       String?
+  middleInitial  String?
   // username       String    @unique
   email          String?          @unique
   emailVerified  DateTime?
@@ -54,6 +56,7 @@ model User {
   state          String?
   city           String?
   zip            String?
+  userId         String?          @unique
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   companyName    String?

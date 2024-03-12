@@ -11,7 +11,8 @@ export type RegisterType = z.infer<typeof RegisterSchema>
 
 export const RegisterSchema = z.object({
     email: z.string().email().refine(email => email.length <= 255, { message: "Email is too long" }),
-    fullname: z.string().min(2, { message: "Name should be valid." }).max(255, { message: "Name is too long." }),
+    name: z.string().min(2, { message: "Name should be valid." }).max(255, { message: "Name is too long." }),
+    lastName: z.string().min(2, { message: "Name should be valid." }).max(255, { message: "Name is too long." }),
     password: z.string()
         .min(8, { message: "Minimum password length is 8 characters" })
         .max(20, { message: "Maximum password length is 20 characters" })

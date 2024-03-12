@@ -9,7 +9,7 @@ export async function PUT(req: Request) {
     try {
         const body = await req.json()
 
-        const { fullname, image, phoneNumber } = AccountSchema.parse(body)
+        const { name, lastName, image, phoneNumber } = AccountSchema.parse(body)
 
         const phoneNumberExists = await prisma.user.findFirst({
             where: { phoneNumber: phoneNumber }
@@ -24,7 +24,8 @@ export async function PUT(req: Request) {
                 id: session?.user.id,
             },
             data: {
-                name: fullname,
+                name,
+                lastName,
                 image,
                 phoneNumber,
             }

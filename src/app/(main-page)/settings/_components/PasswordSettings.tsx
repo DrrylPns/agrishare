@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
     Form,
@@ -18,12 +18,16 @@ import { useMutation } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios"
 import { toast } from "@/components/ui/use-toast"
 import { ChangePasswordSchema, ChangePasswordType } from "@/lib/validations/user-settings"
+import { useState } from "react"
+import { cn } from "@/lib/utils"
 
 type PasswordSettingsProps = {
     user: User
 }
 
 export const PasswordSettings: React.FC<PasswordSettingsProps> = ({ user }) => {
+    const [isEdit, setIsEdit] = useState<boolean>(false)
+
     const form = useForm<ChangePasswordType>({
         resolver: zodResolver(ChangePasswordSchema),
         defaultValues: {
@@ -97,7 +101,18 @@ export const PasswordSettings: React.FC<PasswordSettingsProps> = ({ user }) => {
 
     return (
         <div className="max-w-4xl mx-5 lg:mx-auto p-6 bg-white border border-[#E6E6E6] rounded-lg mb-11">
-            <h2 className="text-2xl font-semibold">Change Password</h2>
+            <header className="mb-2 flex justify-between">
+                <h2 className="text-2xl font-semibold">Change Password</h2>
+                {isEdit ? <div className={cn(buttonVariants({
+                    variant: "outline"
+                }), "cursor-pointer")}
+                    onClick={() => setIsEdit(false)}
+                >Cancel</div> : <div className={cn(buttonVariants({
+                    variant: "outline"
+                }), "cursor-pointer")}
+                    onClick={() => setIsEdit(true)}
+                >Edit</div>}
+            </header>
             <Separator className="mb-6 mt-2" />
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -109,7 +124,7 @@ export const PasswordSettings: React.FC<PasswordSettingsProps> = ({ user }) => {
                                 <FormItem>
                                     <FormLabel>Current Password</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Enter Password..." {...field} type="password" />
+                                        <Input placeholder="Enter Password..." {...field} type="password" disabled={!isEdit} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -125,7 +140,7 @@ export const PasswordSettings: React.FC<PasswordSettingsProps> = ({ user }) => {
                                 <FormItem>
                                     <FormLabel>New Password</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Enter Password..." {...field} type="password" />
+                                        <Input placeholder="Enter Password..." {...field} type="password" disabled={!isEdit} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -141,7 +156,7 @@ export const PasswordSettings: React.FC<PasswordSettingsProps> = ({ user }) => {
                                 <FormItem>
                                     <FormLabel>Confirm New Password</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Enter Password..." {...field} type="password" />
+                                        <Input placeholder="Enter Password..." {...field} type="password" disabled={!isEdit} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -150,7 +165,9 @@ export const PasswordSettings: React.FC<PasswordSettingsProps> = ({ user }) => {
                     </div>
 
                     <div className="mt-6">
-                        <Button variant="primary" className="rounded-full" isLoading={isLoading} disabled={isLoading}>Save Changes</Button>
+                        {isEdit ? <>
+                            <Button type="submit" variant="primary" className="rounded-full" isLoading={isLoading} disabled={isLoading}>Save Changes</Button>
+                        </> : null}
                     </div>
                 </form>
             </Form>

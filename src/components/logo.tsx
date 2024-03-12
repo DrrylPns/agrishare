@@ -9,8 +9,8 @@ type LogoProps = {
 
 export const Logo = ({ isAuth }: LogoProps) => {
     return (
-        <Link href="/" className='flex justify-center w-full h-full items-center flex-col'>
-            <Image src={AgrishareLogo} alt='Agrishare Logo' className={`${!isAuth && "w-1/2 h-14"}`} />
+        <Link href="/" className=''>
+            <Image src={AgrishareLogo} alt='Agrishare Logo' className={`w-24 h-16`} />
         </Link>
     )
 }
