@@ -26,11 +26,8 @@ function ProductCard({
     status,
     reviews,
 }:{
-    id: number;
-    user:{
-        id: string;
-        name: string;
-    } ;
+    id: string;
+    user: string | null;
     productImage: string;
     productName: string;
     description: string;
@@ -40,7 +37,7 @@ function ProductCard({
 }) {
     return (
         <Card className='transition-all duration-700 ease-in-out border-gray-400 border p-10 rounded-2xl drop-shadow-md hover:drop-shadow-md hover:shadow-xl font-poppins'>
-            <CardTitle className='text-4xl font-semibold'>{user.name}</CardTitle>
+            <CardTitle className='text-4xl font-semibold'>{user}</CardTitle>
 
             <div className='flex justify-around gap-5 mt-5'>
                 <Image
