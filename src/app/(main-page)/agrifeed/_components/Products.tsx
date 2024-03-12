@@ -14,6 +14,7 @@ type ProductType = {
   id: string,
   image: string,
   name: string,
+  lastName: string;
   description: string,
   quantity: number,
   weight: number,
@@ -68,6 +69,7 @@ function Products() {
               key={product.id}
               id={product.id}
               user={product.User.name}
+              lastName={product.User.lastName}
               productImage={product.image}
               productName={product.name}
               description={product.description}

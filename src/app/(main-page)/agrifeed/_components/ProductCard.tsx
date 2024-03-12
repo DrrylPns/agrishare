@@ -15,6 +15,7 @@ import { BiMessageDetail } from 'react-icons/bi';
 import { CiHeart } from 'react-icons/ci';
 import { ReviewsType } from './Products';
 import Link from 'next/link';
+import { formattedCategory } from '@/lib/utils';
 
 function ProductCard({
     id,
@@ -25,7 +26,8 @@ function ProductCard({
     category,
     status,
     reviews,
-}:{
+    lastName,
+}: {
     id: string;
     user: string | null;
     productImage: string;
@@ -33,11 +35,12 @@ function ProductCard({
     description: string;
     category: string;
     status: string;
+    lastName: string | null;
     reviews: ReviewsType[]
 }) {
     return (
         <Card className='transition-all duration-700 ease-in-out border-gray-400 border p-10 rounded-2xl drop-shadow-md hover:drop-shadow-md hover:shadow-xl font-poppins'>
-            <CardTitle className='text-4xl font-semibold'>{user}</CardTitle>
+            <CardTitle className='text-4xl font-semibold'>{user} {" "} {lastName}</CardTitle>
 
             <div className='flex justify-around gap-5 mt-5'>
                 <Image
@@ -50,7 +53,7 @@ function ProductCard({
                 <div className='w-1/2'>
                     <div className='flex items-center gap-5 mb-3'>
                         <h1 className='text-3xl font-medium'>{productName}</h1>
-        
+
                     </div>
                     <CardDescription className='min-h-24 line-clamp-5 text-ellipsis'>{description}</CardDescription>
                     <div className='flex gap-3 justify-between items-center border-y-2 border-gray-300 py-5'>
@@ -66,7 +69,7 @@ function ProductCard({
                             <span className=''><CiHeart /></span>
                         </Button>
                     </div>
-                    <h1 className='text-sm text-gray-700 my-3'>Categoy: <span className='text-gray-500'>{category}</span></h1>
+                    <h1 className='text-sm text-gray-700 my-3'>Category: <span className='text-gray-500'>{formattedCategory(category)}</span></h1>
                 </div>
             </div>
         </Card>

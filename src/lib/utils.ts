@@ -15,3 +15,10 @@ export const categories = [
     label: "Urban Farmer",
   },
 ];
+
+export function formattedCategory(category: string) {
+
+  const formatted = category.toLowerCase().replace(/_/g, ' ');
+
+  return formatted.replace(/(?:^|\s)\S/g, (char) => char.toUpperCase());
+}

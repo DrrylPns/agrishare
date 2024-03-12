@@ -88,18 +88,18 @@ model VerificationToken {
 
 model Post {
   id             String           @id @default(cuid())
-  image          String           @db.Text // step0
-  name           String // step 1 name
-  description    String           @db.Text // step 1 description textarea
-  quantity       Float            @default(0) // step 2 quantity
-  weight         Float //step 2 weight
-  color          String // step 2 color
-  type           Types // step 3 types
+  image          String           @db.Text
+  name           String
+  description    String           @db.Text
+  quantity       Float            @default(0)
+  weight         Float
+  color          String
+  type           Types
   isFavorite     Boolean          @default(false)
-  category       Category // step 3 category combobox, naka depende sa value neto ang lalabas sa type
+  category       Category
   status         Status
-  shelfLife      String // step 2 shelfLife
-  preferedOffers String // step 3 preferred offers.
+  shelfLife      String
+  preferedOffers String
   harvestDate    DateTime
   reviews        Reviews[]
   transaction    Transaction[]
@@ -113,8 +113,8 @@ model Post {
 
 enum Category {
   FRESH_FRUIT
-  VEGETABLES // organic / inorganic
-  TOOLS // 
+  VEGETABLES
+  TOOLS 
   EQUIPMENTS
   SEEDS
   SOILS
@@ -188,7 +188,7 @@ model Transaction {
 enum TransactionType {
   TRADE
   DONATE
-  POINTS_EARNED
+  EARN
 }
 
 //NOT SURE PA DITO
