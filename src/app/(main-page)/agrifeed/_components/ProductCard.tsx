@@ -13,6 +13,8 @@ import { Button } from '@/components/ui/button';
 import { LiaExchangeAltSolid } from "react-icons/lia";
 import { BiMessageDetail } from 'react-icons/bi';
 import { CiHeart } from 'react-icons/ci';
+import { ReviewsType } from './Products';
+import Link from 'next/link';
 
 function ProductCard({
     id,
@@ -21,25 +23,25 @@ function ProductCard({
     productName,
     description,
     category,
-    tag,
-    availableStocks,
+    status,
+    reviews,
 }:{
-    id: number;
-    user:{
-        id: string;
-        name: string;
-    } ;
+    id: string;
+    user: string | null;
     productImage: string;
     productName: string;
     description: string;
     category: string;
-    tag: string[];
-    availableStocks: number;
+    status: string;
+    reviews: ReviewsType[]
 }) {
-  return (
-    <Card className='transition-all duration-700 ease-in-out border-gray-400 border p-10 rounded-2xl drop-shadow-md hover:drop-shadow-md hover:shadow-xl font-poppins'>
-        <CardTitle className='text-4xl font-semibold'>{user.name}</CardTitle>
 
+  return (
+    <Card key={id} className='transition-all duration-700 ease-in-out border-gray-400 border p-10 rounded-2xl drop-shadow-md hover:drop-shadow-md hover:shadow-xl font-poppins'>
+        <Link href={`/agrifeed/${id}`} >
+        <CardTitle className='text-4xl font-semibold'>{user}</CardTitle>
+        </Link>
+        <h1>{reviews.length} {reviews.length  < 2 ? "Review":"Reviews"}</h1>
         <div className='flex justify-around gap-5 mt-5'>
             <Image 
             src={productImage} 
@@ -49,29 +51,27 @@ function ProductCard({
             className='w-2/5 h-72 object-center border border-gray-300'
             />
             <div className='w-1/2'>
-                <div className='flex items-center gap-5 mb-3'>
-                    <h1 className='text-3xl font-medium'>{productName}</h1>
-                    <span className='px-3 py-1 font-bold bg-green-200 text-[0.5rem] text-green-400'>{availableStocks < 1 ? 'Not Available' : "In Stock"}</span>
-                </div>
-                <CardDescription className='min-h-24 line-clamp-5 text-ellipsis'>{description}</CardDescription>
+                <Link href={`/agrifeed/${id}`} >
+                    <div className='flex items-center gap-5 mb-3'>
+                        <h1 className='text-3xl font-medium'>{productName}</h1>
+                        <span className='px-3 py-1 font-bold bg-green-200 text-[0.5rem] text-green-400'>{status}</span>
+                    </div>
+                    <CardDescription className='min-h-24 line-clamp-5 text-ellipsis'>{description}</CardDescription>
+                </Link>
                 <div className='flex gap-3 justify-between items-center border-y-2 border-gray-300 py-5'>
-                    <Button variant={'default'} className='rounded-full w-2/5'>
+                    <Button variant={'default'} className='rounded-full w-2/5 z-30'>
                         Trade 
                         <span className='ml-3'><LiaExchangeAltSolid /></span>
                     </Button>
-                    <Button variant={'default'} className='rounded-full  w-2/5'>
+                    <Button variant={'default'} className='rounded-full  w-2/5 z-30'>
                         Message 
                         <span className='ml-3'><BiMessageDetail /></span>
                     </Button>
-                    <Button variant={'ghost'} className='rounded-full px-3 text-lg font-medium bg-gray-300'> 
+                    <Button variant={'ghost'} className='rounded-full px-3 z-30 text-lg font-medium bg-gray-300'> 
                         <span className=''><CiHeart /></span>
                     </Button>
                 </div>
                 <h1 className='text-sm text-gray-700 my-3'>Categoy: <span className='text-gray-500'>{category}</span></h1>
-                <h1 className='text-sm text-gray-700'>Tag/s: 
-                    {tag.length > 0 && tag.map((tag)=>(
-                        <span className='text-gray-500'>{tag} </span>
-                    ))}</h1>
             </div>
         </div>
     </Card>

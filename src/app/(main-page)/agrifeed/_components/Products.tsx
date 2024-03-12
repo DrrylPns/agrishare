@@ -1,24 +1,83 @@
+'use client'
 import React from 'react'
-import productsData, { Product } from '../../_components/dummyData/productsData'
 import ProductCard from './ProductCard'
+import axios from 'axios'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { User } from './_types'
+
+type ProductPostType = {
+  getAllPost: ProductType[],
+  nextId: string
+}
+
+type ProductType = {
+  id: string,
+  image: string,
+  name: string,
+  description: string,
+  quantity: number,
+  weight: number,
+  color: string,
+  type: "ORGANIC" | "INORGANIC",
+  isFavorite: boolean,
+  category: "FRESH_FRUIT" | "VEGETABLES" | "TOOLS" | "EQUIPMENTS" | "SEEDS" | "SOILS" | "FERTILIZER",
+  status: string,
+  shelfLife: string, 
+  harvestDate: Date,
+  reviews: ReviewsType[],
+  createdAt: Date,
+  updatedAt: Date,
+  User: User
+}
+
+export type ReviewsType = {
+  id: string,
+  review: string,
+  createdAt: Date,
+  updatedAt: Date,
+  user: User
+}
 
 function Products() {
 
+  const { isLoading, isError, data: Posts, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
+    queryKey: ['post'],
+    queryFn: async ({pageParam = ''}) => {
+        try {
+            const { data } = await axios.get(`/api/agrifeedGetPost?cursor=${pageParam}`);
+            return data as ProductPostType;
+        } catch (error: any) {
+            throw new Error(`Error fetching post: ${error.message}`);
+        }
+    },
+    getNextPageParam:(lastPage) => lastPage.nextId || undefined
+  })
+
+  console.log(Posts)
+  if(isLoading) return <div>Loading...</div>
+
+  if(isError) return <div>Error!</div>
+
   return (
     <div>
-      {productsData.length > 0 ? productsData.map((product) => (
-        <div key={product.id} className='mb-3'>
-          <ProductCard
-            key={product.id}
-            id={product.id}
-            user={product.user}
-            productImage={product.productImage}
-            productName={product.productName}
-            description={product.description}
-            category={product.category}
-            tag={product.tag}
-            availableStocks={product.availableStocks}
-          />
+      {Posts?.pages.length > 0 ? Posts?.pages.map((page) => (
+        <div key={page.nextId} >
+          {page.getAllPost !== undefined && page.getAllPost.map((product)=>(
+            <div key={product.id} className='mb-3'>
+            <ProductCard
+              key={product.id}
+              id={product.id}
+              user={product.User.name}
+              productImage={product.image}
+              productName={product.name}
+              description={product.description}
+              category={product.category}
+              status={product.status}
+              reviews={product.reviews}
+            />
+          </div>
+          ))}
+          
         </div>
       )) : (
         <>
