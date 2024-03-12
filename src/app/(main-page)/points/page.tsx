@@ -29,7 +29,7 @@ function page() {
         </DialogTrigger>
         <DialogContent className='lg:max-w-3xl'>
           <DialogHeader>
-            <DialogTitle className='md:text-[48px] font-semibold mb-6 w-full justify-center items-center'>Ways to Earn Points</DialogTitle>
+            <DialogTitle className='md:text-[48px] font-semibold mb-6 w-full justify-center items-center text-center'>Ways to Earn Points</DialogTitle>
             <DialogDescription className='grid grid-flow-col grid-rows-4 md:gap-5 gap-1'>
               <div className='text-muted-foreground flex md:flex-row flex-col md:gap-5 lg:gap-7 items-center justify-center gap-0'>
                 <Image src="/images/WaysToEarn1.png" alt='ways2earn1' width={100} height={100} className='w-[40px] h-[40px] md:w-[100px] md:h-[100px]' />
@@ -57,21 +57,42 @@ function page() {
         </DialogContent>
       </Dialog>
 
-      <div className={`bg-[url(https://utfs.io/f/6cab600f-5d4b-4c30-94da-7af722f07000-cm65r5.png)] bg-no-repeat h-[400px] flex justify-center items-start w-full`}>
-        {points >= 3000 ? (
-          <Image src="/images/seedling5.svg" alt="seedling5" width={200} height={200} />
-        ) : points >= 1000 && points < 3000 ? (
-          <Image src="/images/seedling4.svg" alt="seedling4" width={200} height={200} />
-        ) : points >= 500 && points < 1000 ? (
-          <Image src="/images/seedling3.svg" alt="seedling3" width={200} height={200} />
-        ) : points >= 100 && points < 500 ? (
-          <Image src="/images/seedling2.svg" alt="seedling2" width={200} height={200} />
-        ) : points === 0 ? (
-          <Image src="/images/seedling1.svg" alt="seedling1" width={200} height={200} />
-        ) : (<></>)
-        }
+      <div className={`bg-[url(https://utfs.io/f/6cab600f-5d4b-4c30-94da-7af722f07000-cm65r5.png)] bg-no-repeat h-[400px]`}>
+        <div className='flex flex-col justify-start items-center w-full gap-3'>
+          {points >= 3000 ? (
+            <Image src="/images/seedling5.svg" alt="seedling5" width={200} height={200} />
+          ) : points >= 1000 && points < 3000 ? (
+            <Image src="/images/seedling4.svg" alt="seedling4" width={200} height={200} />
+          ) : points >= 500 && points < 1000 ? (
+            <Image src="/images/seedling3.svg" alt="seedling3" width={200} height={200} />
+          ) : points >= 100 && points < 500 ? (
+            <Image src="/images/seedling2.svg" alt="seedling2" width={200} height={200} />
+          ) : points === 0 ? (
+            <Image src="/images/seedling1.svg" alt="seedling1" width={200} height={200} />
+          ) : (<></>)
+          }
+        </div>
 
+        <div className='flex flex-row gap-[40px] mx-2 md:mx-0 md:gap-[60px] items-center justify-center max-sm:mt-11 mt-7'>
+          <Card className='relative drop-shadow-md cursor-pointer w-fit p-1'>
+            <Image src="/images/qr.png" alt="qr" width={90} height={90} />
+            <p className='absolute -bottom-7 left-[27px] max-sm:left-[20px] font-semibold text-white'>Scan</p>
+          </Card>
+
+          <Card className='drop-shadow-md cursor-pointer w-fit p-1'>
+            <Image src="/images/transfer.png" alt="transfer" width={90} height={90} />
+            <p className='absolute -bottom-7 left-[20px] max-sm:left-[7px] font-semibold text-white'>Transfer</p>
+          </Card>
+
+          <Card className='drop-shadow-md cursor-pointer w-fit p-1'>
+            <Image src="/images/earn.png" alt="earn" width={90} height={90} />
+            <p className='absolute -bottom-7 left-[27px] max-sm:left-[20px] font-semibold text-white'>Earn</p>
+          </Card>
+        </div>
       </div>
+
+
+
       {/* <Image src="/images/PointsDesign.png" alt='points bg image' width={1200} height={1200} className='w-full h-full' /> */}
     </Card>
   )
