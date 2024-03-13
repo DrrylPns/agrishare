@@ -18,9 +18,9 @@ export async function POST(req: NextRequest) {
 
         if (!Object.values(TransactionType).includes(type)) {
             return new NextResponse(`Invalid transaction type: ${type}`, { status: 400 });
-          }
+        }
 
-        if (type === "EARN" || type === "DONATE") {
+        if (type === "EARN" || type === "DONATE" || type === "TRADE") {
             await prisma.transaction.create({
                 data: {
                     userId: session.user.id,
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
                     }
                 }
             })
-        } else if (type === "TRADE") {
+        } else if (type === "CLAIM") {
             await prisma.transaction.create({
                 data: {
                     userId: session.user.id,
@@ -60,7 +60,6 @@ export async function POST(req: NextRequest) {
             })
         }
 
-
         return new NextResponse(`Successfully gained points.`)
     } catch (error: any) {
         return new NextResponse(`Error earning points: ${error.message}`, { status: 500 });
@@ -78,7 +77,10 @@ export async function GET() {
         const transactions = await prisma.transaction.findMany({
             where: {
                 userId: session.user.id,
-                type: "EARN"
+                // type: "EARN"
+            },
+            include: {
+                user: true
             }
         })
 

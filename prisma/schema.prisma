@@ -41,35 +41,37 @@ model Session {
 }
 
 model User {
-  id             String           @id @default(cuid())
+  id             String        @id @default(cuid())
   name           String?
   lastName       String?
   middleInitial  String?
   // username       String    @unique
-  email          String?          @unique
+  email          String?       @unique
   emailVerified  DateTime?
-  image          String?
+  image          String?       @db.Text
   hashedPassword String?
-  phoneNumber    String?          @unique
+  phoneNumber    String?       @unique
   address        String?
   country        String?
   state          String?
   city           String?
   zip            String?
-  userId         String?          @unique
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  userId         String?       @unique
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
   companyName    String?
-  points         Float            @default(0)
-  role           Role             @default(DONATOR)
+  points         Float         @default(0)
+  role           Role          @default(DONATOR)
   accounts       Account[]
   sessions       Session[]
   reviews        Reviews[]
   News           News[]
   community      Community[]
   Transaction    Transaction[]
-  ClaimedProduct ClaimedProduct[]
   Post           Post[]
+  tradee         Trade[]       @relation("Tradee")
+  trader         Trade[]       @relation("Trader")
+  Donation       Donation[]
 }
 
 enum Role {
@@ -87,15 +89,15 @@ model VerificationToken {
 }
 
 model Post {
-  id             String           @id @default(cuid())
-  image          String           @db.Text
+  id             String        @id @default(cuid())
+  image          String        @db.Text
   name           String
-  description    String           @db.Text
-  quantity       Float            @default(0)
+  description    String        @db.Text
+  quantity       Float         @default(0)
   weight         Float
   color          String
   type           Types
-  isFavorite     Boolean          @default(false)
+  isFavorite     Boolean       @default(false)
   category       Category
   status         Status
   shelfLife      String
@@ -103,18 +105,17 @@ model Post {
   harvestDate    DateTime
   reviews        Reviews[]
   transaction    Transaction[]
-  claimedProduct ClaimedProduct[]
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 
-  User   User   @relation(fields: [userId], references: [id])
+  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 }
 
 enum Category {
   FRESH_FRUIT
   VEGETABLES
-  TOOLS 
+  TOOLS
   EQUIPMENTS
   SEEDS
   SOILS
@@ -162,26 +163,61 @@ model Community {
   thumbnail      String   @db.Text
   name           String
   story          String   @db.Text
-  donations      Int      @default(0) // kung ilan na nag donate // based to sa figma.
+  //donations      Int      @default(0) // kung ilan na nag donate // based to sa figma. // to get number of donations use  prisma.count donation based on community ID
   currentDonated Float    @default(0) // current donation sa community na yon
   neededDonation Float // target donation na ma-reach
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
-  User           User?    @relation(fields: [userId], references: [id])
-  userId         String?
+
+  User   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String?
+
+  donations Donation[]
+}
+
+// to get number of donators by community use this model fetch it by Community ID...
+model Donation {
+  id                  String   @id @default(cuid())
+  // fetch full name, contact #, email at zip sa session
+  name                String // can fetch and be used as default values
+  lastName            String // can fetch and be used as default values
+  phoneNumber         String // can fetch and be used as default values
+  email               String // can fetch and be used as default values
+  district            String
+  zip                 String // can fetch and be used as default values
+  category            Category
+  productName         String
+  condition           String
+  quantity            String
+  preservationReq     String
+  deliveryTime        DateTime
+  deliveryAddress     String
+  specialInstructions String   @db.Text
+  comment             String   @db.Text
+  image               String   @db.Text
+  isAnonymous         Boolean
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  donator   User   @relation(fields: [donatorId], references: [id], onDelete: Cascade)
+  donatorId String
+
+  Community   Community @relation(fields: [communityId], references: [id])
+  communityId String
 }
 
 model Transaction {
-  id        String          @id @default(cuid())
-  type      TransactionType
-  points    Float           @default(0)
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @updatedAt
+  id     String          @id @default(cuid())
+  type   TransactionType
+  points Float           @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  Post   Post?   @relation(fields: [postId], references: [id])
+  Post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId String?
 }
 
@@ -189,17 +225,48 @@ enum TransactionType {
   TRADE
   DONATE
   EARN
+  CLAIM
 }
 
-//NOT SURE PA DITO
-model ClaimedProduct {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+// dito iffetch yung product na gustong ipang trade
+// once trade is COMPLETED make a transaction.create based on trade values para mapalabas siya sa transaction history.
+model Trade {
+  id          String     @id @default(cuid())
+  image       String     @db.Text
+  quantity    Float
+  weight      Float
+  value       Float
+  description String     @db.Text
+  category    Category
+  status      StatusType
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
+  // yung nag post, pwede ma-fetch dito yung pinost na product
+  tradeeId String
+  tradee   User   @relation(fields: [tradeeId], references: [id], onDelete: Cascade, name: "Tradee")
 
-  Post   Post?   @relation(fields: [postId], references: [id])
-  postId String?
+  // yung nag trade intent
+  traderId String
+  trader   User   @relation(fields: [traderId], references: [id], onDelete: Cascade, name: "Trader")
 }
+
+enum StatusType {
+  PENDING // TRADE INTENT 
+  PROCESSING // INACCEPT NA NG TRADEE YUNG TRADE INTENT
+  COMPLETED // BOTH PARTIES HAVE CONFIRMED THAT TRADE IS COMPLETE.
+}
+
+//NOT SURE PA DITO -- di na ata kailangan to, i-fetch nalang to sa model Transaction at dagdagan ang transaction type ng CLAIM.
+// if nag claim si user then deduct points
+// model ClaimedProduct {
+//   id        String   @id @default(cuid())
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   userId String
+//   user   User   @relation(fields: [userId], references: [id])
+
+//   Post   Post?   @relation(fields: [postId], references: [id])
+//   postId String?
+// }
