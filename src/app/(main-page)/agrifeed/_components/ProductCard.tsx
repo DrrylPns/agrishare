@@ -43,30 +43,27 @@ function ProductCard({
             <CardTitle className='text-4xl font-semibold'>{user} {" "} {lastName}</CardTitle>
 
             <div className='flex justify-around gap-5 mt-5'>
+                <Link href={`/agrifeed/${id}`} className='w-2/5'>
                 <Image
                     src={productImage}
                     alt={productName}
                     width={300}
                     height={300}
-                    className='w-2/5 h-72 object-center border border-gray-300'
+                    className=' w-full h-72  object-center border border-gray-300'
                 />
+                </Link>
                 <div className='w-1/2'>
-                    <div className='flex items-center gap-5 mb-3'>
-                        <h1 className='text-3xl font-medium'>{productName}</h1>
 
-                    </div>
-                    <CardDescription className='min-h-24 line-clamp-5 text-ellipsis'>{description}</CardDescription>
+                    <Link href={`/agrifeed/${id}`} className='flex items-center gap-5 mb-3'>
+                        <h1 className='text-3xl font-medium'>{productName}</h1>
+                    </Link>
+                    <Link href={`/agrifeed/${id}`}>
+                        <CardDescription className='min-h-24 line-clamp-5 text-ellipsis'>{description}</CardDescription>
+                    </Link>
                     <div className='flex gap-3 justify-between items-center border-y-2 border-gray-300 py-5'>
                         <Button variant={'default'} className='rounded-full w-2/5'>
                             Trade
                             <span className='ml-3'><LiaExchangeAltSolid /></span>
-                        </Button>
-                        <Button variant={'default'} className='rounded-full  w-2/5'>
-                            Message
-                            <span className='ml-3'><BiMessageDetail /></span>
-                        </Button>
-                        <Button variant={'ghost'} className='rounded-full px-3 text-lg font-medium bg-gray-300'>
-                            <span className=''><CiHeart /></span>
                         </Button>
                     </div>
                     <h1 className='text-sm text-gray-700 my-3'>Category: <span className='text-gray-500'>{formattedCategory(category)}</span></h1>
