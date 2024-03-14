@@ -37,7 +37,7 @@ function PostCard({
         <CardContent className="mt-3">
             <div className="flex items-center justify-between">
                 <h1>{post.name}</h1>
-                <Link href={`/agrifeed/${post.id}`} className='flex just-center items-center px-3 text-green-500 bg-slate-300 cursor-pointer hover:text-white py-3 rounded-full hover:bg-green-500'>
+                <Link href={{pathname:`/propose-offer/${post.id}` }} className='flex just-center items-center px-3 text-green-500 bg-slate-300 cursor-pointer hover:text-white py-3 rounded-full hover:bg-green-500'>
                 <span ><LiaExchangeAltSolid /></span>
                 </Link>
             </div>
