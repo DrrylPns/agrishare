@@ -1,12 +1,13 @@
 import { AccountSettings } from "./_components/AccountSettings"
 import { TraderAddress } from "./_components/TraderAddress"
 import { PasswordSettings } from "./_components/PasswordSettings"
-import { getAuthSession } from "@/lib/auth"
+
 import prisma from "@/lib/db"
 import { User } from "@prisma/client"
+import { auth } from "../../../../auth"
 
 const SettingsPage = async () => {
-    const session = await getAuthSession()
+    const session = await auth()
 
     const user = await prisma.user.findFirst({
         where: {

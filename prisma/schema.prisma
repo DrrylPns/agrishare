@@ -30,16 +30,6 @@ model Account {
   @@index([userId])
 }
 
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-}
-
 model User {
   id                    String                 @id @default(cuid())
   name                  String?
@@ -65,7 +55,6 @@ model User {
   twoFactorConfirmation TwoFactorConfirmation?
   role                  Role                   @default(DONATOR)
   accounts              Account[]
-  sessions              Session[]
   reviews               Reviews[]
   News                  News[]
   community             Community[]

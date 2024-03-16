@@ -1,11 +1,11 @@
-import { getAuthSession } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { AgrifeedSchema } from "@/lib/validations/agrifeed";
 import { Status } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { auth } from "../../../../auth";
 
 export async function POST(req: Request) {
-    const session = await getAuthSession()
+    const session = await auth()
 
     try {
         const body = await req.json()

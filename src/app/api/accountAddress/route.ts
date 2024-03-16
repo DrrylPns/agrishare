@@ -1,10 +1,10 @@
-import { getAuthSession } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { TraderSchema } from "@/lib/validations/user-settings";
 import { NextResponse } from "next/server";
+import { auth } from "../../../../auth";
 
 export async function PUT(req: Request) {
-    const session = await getAuthSession()
+    const session = await auth()
 
     try {
         const body = await req.json()

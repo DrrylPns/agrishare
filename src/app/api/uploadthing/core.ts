@@ -1,10 +1,10 @@
-import { getAuthSession } from '@/lib/auth'
 import { createUploadthing, type FileRouter } from 'uploadthing/next'
+import { auth } from '../../../../auth'
 
 const f = createUploadthing()
 
 const middleware = async () => {
-    const session = await getAuthSession()
+    const session = await auth()
 
     if (!session || !session.user) throw new Error('Unauthorized')
 

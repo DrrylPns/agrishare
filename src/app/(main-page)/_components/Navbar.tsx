@@ -48,14 +48,14 @@ function Navbar() {
             {status === "unauthenticated" ? (
                 <div className="flex flex-row gap-3 max-sm:hidden">
                     <Link
-                        href="/sign-in"
+                        href="/login"
                         className={cn(buttonVariants({ variant: "primary" }), "p-3 px-8 rounded-full")}
                     >
                         Sign In
                     </Link>
 
                     <Link
-                        href="/sign-up"
+                        href="/register"
                         className={cn(buttonVariants({ variant: "primary" }), "p-3 px-8 rounded-full")}
                     >
                         Sign Up
