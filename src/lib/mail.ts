@@ -8,8 +8,12 @@ export const sendTwoFactorTokenEmail = async (email: string, token: string) => {
     await resend.emails.send({
         from: "onboarding@resend.dev",
         to: email,
-        subject: "Two-factor authentication code.",
-        html: `<p>Your 2FA Code: ${token}</p>`
+        subject: "Agrishare: Two-factor authentication code.",
+        html: `<div>
+                    <p>Your Agrishare OTP Code is: ${token}</p>
+                    <p>Valid for 1 hour. NEVER share this code with others, including Agrishare staff.</p>
+                    <b>Agrishare's Team</b>
+                </div>`
     })
 }
 
@@ -19,8 +23,12 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
     await resend.emails.send({
         from: "onboarding@resend.dev",
         to: email,
-        subject: "Reset your password",
-        html: `<p>Click <a href="${resetLink}">here</a> to reset password.</p>`
+        subject: "Agrishare: Reset your password",
+        html: `<div>
+                    <p>Click <a href="${resetLink}">here</a> to reset password.</p>
+                    <p>Valid for 1 hour. NEVER share this code with others, including Agrishare staff.</p>
+                    <b>Agrishare's Team</b>
+                </div>`
     })
 }
 
@@ -30,7 +38,11 @@ export const sendVerificationEmail = async (email: string, token: string) => {
     await resend.emails.send({
         from: "onboarding@resend.dev",
         to: email,
-        subject: "Confirm your email.",
-        html: `<p>Click <a href="${confirmLink}">here</a> to confirm email.</p>`
+        subject: "Agrishare: Confirm your email.",
+        html: `<div>
+                <p>Click <a href="${confirmLink}">here</a> to confirm email.</p>
+                <p>Valid for 1 hour. NEVER share this code with others, including Agrishare staff.</p>
+                <b>Agrishare's Team</b>
+        </div>`
     })
 }
