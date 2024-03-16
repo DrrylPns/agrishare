@@ -27,7 +27,7 @@ function Footer() {
                         <h1>Helps</h1>
                         <Link href={'/'} className='text-[#808080] text-xs'>Contact</Link>
                         <Link href={'/'} className='text-[#808080] text-xs'>Faqs</Link>
-                        <Link href={'/tnc'} className='text-[#808080] text-xs'>Terms & Condition</Link>
+                        <Link href={'/terms-and-condition'} className='text-[#808080] text-xs'>Terms & Condition</Link>
                         <Link href={'/'} className='text-[#808080] text-xs'>Privacy Policy</Link>
                     </div>
                     <div className='flex flex-col gap-3'>

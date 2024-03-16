@@ -169,7 +169,7 @@ export const RegisterForm = () => {
                       </FormControl>
                       <FormDescription>
                         I accept all {" "}
-                        <Link href="/tnc" className="underline text-[#1916C1]">terms & conditions</Link>
+                        <Link href="/terms-and-condition" className="underline text-[#1916C1]">terms & conditions</Link>
                       </FormDescription>
                     </div>
                     <FormMessage />
