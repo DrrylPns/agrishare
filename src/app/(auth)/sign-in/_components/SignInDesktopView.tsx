@@ -18,15 +18,19 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { ChevronLeft } from "lucide-react";
 
 
 export const SignInDesktopView = () => {
     const router = useRouter();
-    const [isLoading, setIsLoading] = useState<boolean>(false);
     const { data: session } = useSession();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [PasswordInputType, ToggleIcon] = usePasswordToggle();
+    const [showTwoFactor, setShowTwoFactor] = useState<boolean>(false)
+    const [error, setError] = useState<string | undefined>("");
+    const [success, setSuccess] = useState<string | undefined>("");
+    const [isPending, startTransition] = useTransition();
 
     const {
         register,
@@ -67,6 +71,11 @@ export const SignInDesktopView = () => {
                     variant: "destructive"
                 });
             }
+
+            if (callback?.requiresTwoFactor) {
+                setShowTwoFactor(true)
+                return
+            }
         });
     }
 
@@ -91,30 +100,34 @@ export const SignInDesktopView = () => {
                                     <CardTitle>Sign In</CardTitle>
                                 </CardHeader>
                                 <CardContent className="grid gap-4 w-full p-0">
+                                    {!showTwoFactor && (
+                                        <>
+                                            <div className='grid gap-2 '>
+                                                <Label htmlFor='email'>Email</Label>
+                                                <Input className="lg:w-[350px] xl:w-[450px]" id='email' type='email' placeholder='username@example.com' {...register("email")} />
+                                                {/* {errors.email && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.email.message}</span>} */}
+                                            </div>
 
-                                    <div className='grid gap-2 '>
-                                        <Label htmlFor='email'>Email</Label>
-                                        <Input className="lg:w-[350px] xl:w-[450px]" id='email' type='email' placeholder='username@example.com' {...register("email")} />
-                                        {errors.email && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.email.message}</span>}
-                                    </div>
 
-
-                                    <div className='grid gap-2'>
-                                        <Label htmlFor='password'>Password</Label>
-                                        <Input className="lg:w-[350px] xl:w-[450px]" id='password' type={PasswordInputType as string} placeholder='Enter Password'{...register("password")} ToggleIcon={ToggleIcon} />
-                                        {errors.password && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.password.message}</span>}
-                                    </div>
+                                            <div className='grid gap-2'>
+                                                <Label htmlFor='password'>Password</Label>
+                                                <Input className="lg:w-[350px] xl:w-[450px]" id='password' type={PasswordInputType as string} placeholder='Enter Password'{...register("password")} ToggleIcon={ToggleIcon} />
+                                                {/* {errors.password && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.password.message}</span>} */}
+                                            </div>
+                                        </>
+                                    )}
                                 </CardContent>
 
                                 <CardFooter className="p-0 w-full flex flex-col gap-3">
                                     <Button className='w-full rounded-full mt-2' isLoading={isLoading} disabled={session ? true : false} variant={"primary"}>Login</Button>
                                     <Link href="/sign-up" className="text-neutral-500 text-[14px]">Don't have an account? <span className="font-bold">Register</span></Link>
+                                    <Link href="/reset" className="text-neutral-500 text-[14px]">Forgot password? <span className="font-bold">Click here.</span></Link>
                                 </CardFooter>
                             </Card>
                         </form>
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }

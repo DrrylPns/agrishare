@@ -92,10 +92,9 @@ const page = () => {
       }
     },
     onSuccess: () => {
-      router.push("/sign-in");
       return toast({
         title: "Success!",
-        description: "Account Created Successfully!",
+        description: "Email verification sent!",
         variant: "default",
       });
     },

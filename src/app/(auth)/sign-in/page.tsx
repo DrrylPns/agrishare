@@ -4,7 +4,7 @@ import { LoginSchema, LoginType } from "@/lib/validations/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
     Card,
@@ -20,15 +20,17 @@ import { Input } from "@/components/ui/input";
 import usePasswordToggle from "@/lib/hooks/usePasswordToggle";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/logo";
-import { Tagline } from "@/components/tagline";
 import { SignInDesktopView } from "./_components/SignInDesktopView";
 
 const page = () => {
     const router = useRouter();
-    const [isLoading, setIsLoading] = useState<boolean>(false);
     const { data: session } = useSession();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [PasswordInputType, ToggleIcon] = usePasswordToggle();
+    const [showTwoFactor, setShowTwoFactor] = useState<boolean>(false)
+    const [error, setError] = useState<string | undefined>("");
+    const [success, setSuccess] = useState<string | undefined>("");
+    const [isPending, startTransition] = useTransition();
 
     const {
         register,
@@ -45,22 +47,24 @@ const page = () => {
     })
 
     const onSubmit: SubmitHandler<LoginType> = (data: LoginType) => {
-        setIsLoading(true);
+        setIsLoading(true)
 
         signIn('credentials', {
             ...data,
             redirect: false,
-        }).then((callback: any) => {
+        }).then((callback) => {
             setIsLoading(false);
+
+            // if there is a 2FA Code then don't sign in yet and instead show the 2fa codes
+
 
             if (callback?.ok && !callback?.error) {
                 toast({
                     description: "Logged In",
                 });
 
-                setTimeout(() => {
-                    router.push('/agrifeed');
-                }, 1000)
+
+                router.push('/agrifeed');
             }
 
             if (callback?.error) {
@@ -89,24 +93,35 @@ const page = () => {
                                 <CardTitle>Sign In</CardTitle>
                             </CardHeader>
                             <CardContent className="grid gap-4 w-full p-0">
+                                {showTwoFactor && (
+                                    <div className='grid gap-2'>
+                                        <Label htmlFor='email'>Two Factor Code:</Label>
+                                        <Input className="w-[270px]" id='email' placeholder='123456' {...register("code")} disabled={isPending} />
+                                        {errors.code && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.code.message}</span>}
+                                    </div>
+                                )}
+                                {!showTwoFactor && (
+                                    <>
+                                        <div className='grid gap-2'>
+                                            <Label htmlFor='email'>Email</Label>
+                                            <Input className="w-[270px]" id='email' type='email' placeholder='username@example.com' {...register("email")} disabled={isPending} />
+                                            {errors.email && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.email.message}</span>}
+                                        </div>
 
-                                <div className='grid gap-2'>
-                                    <Label htmlFor='email'>Email</Label>
-                                    <Input className="w-[270px]" id='email' type='email' placeholder='username@example.com' {...register("email")} />
-                                    {errors.email && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.email.message}</span>}
-                                </div>
 
-
-                                <div className='grid gap-2'>
-                                    <Label htmlFor='password'>Password</Label>
-                                    <Input className="w-[270px]" id='password' type={PasswordInputType as string} placeholder='Enter Password'{...register("password")} ToggleIcon={ToggleIcon} />
-                                    {errors.password && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.password.message}</span>}
-                                </div>
+                                        <div className='grid gap-2'>
+                                            <Label htmlFor='password'>Password</Label>
+                                            <Input className="w-[270px]" id='password' type={PasswordInputType as string} placeholder='Enter Password'{...register("password")} disabled={isPending} ToggleIcon={ToggleIcon} />
+                                            {errors.password && <span className='text-rose-500 text-[13px] md:text-[16px]'>{errors.password.message}</span>}
+                                        </div>
+                                    </>
+                                )}
                             </CardContent>
 
                             <CardFooter className="p-0 w-full flex flex-col gap-3">
                                 <Button className='w-full rounded-full mt-2' isLoading={isLoading} disabled={session ? true : false} variant={"primary"}>Login</Button>
                                 <Link href="/sign-up" className="text-neutral-500 text-[14px]">Don't have an account? <span className="font-bold">Register</span></Link>
+                                <Link href="/reset" className="text-neutral-500 text-[14px]">Forgot password? <span className="font-bold">Click here.</span></Link>
                             </CardFooter>
                         </Card>
                     </form>

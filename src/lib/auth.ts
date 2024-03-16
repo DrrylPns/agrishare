@@ -3,6 +3,10 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import CredentialsProvider from "next-auth/providers/credentials"
 import prisma from "./db"
 import bcrypt from "bcrypt"
+import { getUserById } from "../../data/user"
+import { getTwoFactorConfirmationByUserId } from "../../data/two-factor-confirmation"
+import { sendVerificationEmail, sendTwoFactorTokenEmail } from "./mail"
+import { generateVerificationToken, generateTwoFactorToken } from "@/lib/tokens"
 
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
@@ -30,9 +34,30 @@ export const authOptions: NextAuthOptions = {
                     }
                 })
 
-                if (!dbUser || !dbUser?.hashedPassword) {
+                if (!dbUser || !dbUser?.hashedPassword || !dbUser.email) {
                     throw new Error("No user found")
                 }
+
+                if (!dbUser.emailVerified) {
+                    const verificationToken = await generateVerificationToken(dbUser.email)
+
+                    await sendVerificationEmail(
+                        verificationToken.email,
+                        verificationToken.token,
+                    )
+
+                    throw new Error("User not verified, we sent a verification to your email.")
+                }
+
+                // 2FA CODE
+                // if (dbUser.isTwoFactorEnabled && dbUser.email) {
+                //     const twoFactorToken = await generateTwoFactorToken(dbUser.email)
+                //     await sendTwoFactorTokenEmail(
+                //         twoFactorToken.email,
+                //         twoFactorToken.token,
+                //     );
+                // }
+
 
                 const passwordMatch = await bcrypt.compare(credentials.password, dbUser.hashedPassword)
 
@@ -44,7 +69,35 @@ export const authOptions: NextAuthOptions = {
             }
         })
     ],
+    events: {
+        async linkAccount({ user }) {
+            await prisma.user.update({
+                where: { id: user.id },
+                data: { emailVerified: new Date() }
+            })
+        }
+    },
     callbacks: {
+        async signIn({ user, account }) {
+            const existingUser = await getUserById(user.id)
+
+            if (!existingUser?.emailVerified) return false
+
+            // 2FA CODE
+            // if (existingUser.isTwoFactorEnabled) {
+            //     const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(existingUser.id)
+
+            //     if (!twoFactorConfirmation) {
+            //         return false
+            //     }
+
+            //     await prisma.twoFactorConfirmation.delete({
+            //         where: { id: twoFactorConfirmation.id }
+            //     })
+            // }
+
+            return true
+        },
         async session({ token, session }) {
             if (token) {
                 session.user.id = token.id
@@ -52,6 +105,7 @@ export const authOptions: NextAuthOptions = {
                 session.user.image = token.picture
                 session.user.role = token.role
                 session.user.name = token.name
+                session.user.isTwoFactorEnabled = token.isTwoFactorEnabled
             }
 
             return session;
@@ -74,6 +128,7 @@ export const authOptions: NextAuthOptions = {
                 picture: dbUser.image,
                 role: dbUser.role,
                 name: dbUser.name,
+                isTwoFactorEnabled: dbUser.isTwoFactorEnabled,
             }
         },
     }
