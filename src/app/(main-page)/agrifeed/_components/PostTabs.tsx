@@ -4,6 +4,7 @@ import { Post } from './_types'
 import RelativeDate from '@/components/RelativeDate'
 import Image from 'next/image'
 import DefaultImage from './images/default-user.jpg'
+import { formattedCategory } from '@/lib/utils'
 
 function PostTabs({
   post
@@ -34,7 +35,7 @@ function PostTabs({
            </div>
             <div className='flex'>
               <h1 className='w-1/3'>Category: </h1>
-              <span className='text-gray-400'>{post.category}</span>
+              <span className='text-gray-400'>{formattedCategory(post.category)}</span>
             </div>
             <div  className='flex'>
               <h1 className='w-1/3'>Quantity: </h1>
