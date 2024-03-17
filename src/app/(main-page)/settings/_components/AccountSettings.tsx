@@ -4,6 +4,7 @@ import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, Dr
 import {
     Form,
     FormControl,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -24,6 +25,7 @@ import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+import { Switch } from "@/components/ui/switch"
 
 type AccountSettingsProps = {
     user?: User
@@ -43,6 +45,7 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
             lastName: user?.lastName || "",
             image: user?.image || "",
             phoneNumber: user?.phoneNumber || "",
+            isTwoFactorEnabled: user?.isTwoFactorEnabled
         }
     })
 
@@ -52,12 +55,14 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
             lastName,
             image,
             phoneNumber,
+            isTwoFactorEnabled,
         }: AccountType) => {
             const payload: AccountType = {
                 name,
                 lastName,
                 image,
                 phoneNumber,
+                isTwoFactorEnabled,
             }
 
             const { data } = await axios.put("/api/accountSettings", payload)
@@ -100,6 +105,7 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
             lastName: values.lastName,
             phoneNumber: values.phoneNumber,
             image: imageUrl,
+            isTwoFactorEnabled: values.isTwoFactorEnabled
         }
 
         updateAccount(payload)
@@ -216,7 +222,7 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
                             </Drawer>
                         </div>
 
-                        <div className="lg:w-[50%] lg:flex lg:flex-col lg:gap-3">
+                        <div className="lg:w-[50%] lg:flex lg:flex-col lg:gap-3 space-y-3 md:space-y-1">
                             <FormField
                                 control={form.control}
                                 name="name"
@@ -258,6 +264,28 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
                                 )}
                             />
 
+                            <FormField
+                                control={form.control}
+                                name="isTwoFactorEnabled"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                                        <div className="space-y-0.5">
+                                            <FormLabel>Two Factor Authentication</FormLabel>
+                                            <FormDescription>
+                                                enhances account security by requiring a unique code sent to your email for login alongside your password.
+                                            </FormDescription>
+                                        </div>
+                                        <FormControl>
+                                            <Switch
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                                disabled={!isEdit}
+                                                className="data-[state=checked]:bg-[#00B207]"
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
                         </div>
                     </div>
 

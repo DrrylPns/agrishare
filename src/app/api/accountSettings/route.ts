@@ -9,7 +9,7 @@ export async function PUT(req: Request) {
     try {
         const body = await req.json()
 
-        const { name, lastName, image, phoneNumber } = AccountSchema.parse(body)
+        const { name, lastName, image, phoneNumber, isTwoFactorEnabled } = AccountSchema.parse(body)
 
         const phoneNumberExists = await prisma.user.findFirst({
             where: { phoneNumber: phoneNumber }
@@ -28,6 +28,7 @@ export async function PUT(req: Request) {
                 lastName,
                 image,
                 phoneNumber,
+                isTwoFactorEnabled,
             }
         })
 
