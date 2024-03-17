@@ -115,7 +115,7 @@ model Post {
   quantity       Float         @default(0)
   weight         Float
   color          String
-  type           Types
+  type           Types?
   isFavorite     Boolean       @default(false)
   category       Category
   subcategory    Subcategory?
@@ -148,6 +148,16 @@ enum Subcategory {
   FRUIT_VEGETABLES
   ROOT_VEGETABLES
   HERBS_VEGETABLES
+  FRUIT1
+  FRUIT2
+  TOOLS1
+  EQUIPMENTS1
+  SEEDS1
+  SEEDS2
+  SOILS1
+  SOILS2
+  SOILS3
+  FERTILIZER1
   // TO BE ADDED
 }
 
