@@ -1,15 +1,15 @@
-import { getAuthSession } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { AccountSchema } from "@/lib/validations/user-settings";
 import { NextResponse } from "next/server";
+import { auth } from "../../../../auth";
 
 export async function PUT(req: Request) {
-    const session = await getAuthSession()
+    const session = await auth()
 
     try {
         const body = await req.json()
 
-        const { name, lastName, image, phoneNumber } = AccountSchema.parse(body)
+        const { name, lastName, image, phoneNumber, isTwoFactorEnabled } = AccountSchema.parse(body)
 
         const phoneNumberExists = await prisma.user.findFirst({
             where: { phoneNumber: phoneNumber }
@@ -28,6 +28,7 @@ export async function PUT(req: Request) {
                 lastName,
                 image,
                 phoneNumber,
+                isTwoFactorEnabled,
             }
         })
 

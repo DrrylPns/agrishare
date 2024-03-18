@@ -1,7 +1,7 @@
 "use client"
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, ArrowRight, CalendarIcon, LucideImagePlus } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -34,13 +34,17 @@ import { format, sub } from 'date-fns'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
+import { Category, Subcategory, Types } from '@prisma/client'
 
 
 function CreatePost() {
   const [imageUrl, setImageUrl] = useState<string>("")
   const [formStep, setFormStep] = useState(0)
+  const [chosenCategory, setChosenCategory] = useState("")
 
   const imageIsEmpty = imageUrl.length === 0
+
+
 
   const form = useForm<AgrifeedType>({
     resolver: zodResolver(AgrifeedSchema),
@@ -56,6 +60,10 @@ function CreatePost() {
     }
   })
 
+  useEffect(() => {
+    form.resetField("type")
+  }, [chosenCategory]);
+
   const { mutate: createPost, isLoading } = useMutation({
     mutationFn: async ({
       category,
@@ -69,6 +77,7 @@ function CreatePost() {
       type,
       weight,
       image,
+      subcategory,
     }: AgrifeedType) => {
       const payload: AgrifeedType = {
         category,
@@ -82,6 +91,7 @@ function CreatePost() {
         type,
         weight,
         image,
+        subcategory,
       }
 
       const { data } = await axios.post("/api/agrifeedPost", payload)
@@ -120,6 +130,7 @@ function CreatePost() {
       shelfLife: values.shelfLife,
       type: values.type,
       harvestDate: values.harvestDate,
+      subcategory: values.subcategory,
     }
 
     createPost(payload)
@@ -244,7 +255,7 @@ function CreatePost() {
                         name="weight"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Weight</FormLabel>
+                            <FormLabel>Weight by (kg)</FormLabel>
                             <FormControl>
                               <Input placeholder="Enter weight..." {...field} type='number' min={0} />
                             </FormControl>
@@ -291,20 +302,24 @@ function CreatePost() {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Category</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select onValueChange={(newValue) => {
+                              field.onChange(newValue);
+                              setChosenCategory(newValue);
+                            }}
+                              defaultValue={field.value}>
                               <FormControl>
                                 <SelectTrigger>
                                   <SelectValue placeholder="Select a category..." />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                <SelectItem value="FRESH_FRUIT">Fresh Fruit</SelectItem>
-                                <SelectItem value="VEGETABLES">Vegetables</SelectItem>
-                                <SelectItem value="TOOLS">Tools</SelectItem>
-                                <SelectItem value="EQUIPMENTS">Equipments</SelectItem>
-                                <SelectItem value="SEEDS">Seeds</SelectItem>
-                                <SelectItem value="SOILS">Soils</SelectItem>
-                                <SelectItem value="FERTILIZER">Fertilizer</SelectItem>
+                                <SelectItem value={Category.FRESH_FRUIT}>Fresh Fruit</SelectItem>
+                                <SelectItem value={Category.VEGETABLES}>Vegetables</SelectItem>
+                                <SelectItem value={Category.TOOLS}>Tools</SelectItem>
+                                <SelectItem value={Category.EQUIPMENTS}>Equipments</SelectItem>
+                                <SelectItem value={Category.SEEDS}>Seeds</SelectItem>
+                                <SelectItem value={Category.SOILS}>Soils</SelectItem>
+                                <SelectItem value={Category.FERTILIZER}>Fertilizer</SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
@@ -314,28 +329,96 @@ function CreatePost() {
 
                       <FormField
                         control={form.control}
-                        name="type"
+                        name="subcategory"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Type</FormLabel>
-                            <FormControl>
-                              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Select a type..." />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="ORGANIC">Organic</SelectItem>
-                                  <SelectItem value="INORGANIC">Inorganic</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
+                            <FormLabel>Subcategory</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select a subcategory..." />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {chosenCategory === Category.VEGETABLES && (
+                                  <>
+                                    <SelectItem value={Subcategory.LEAFY_VEGETABLES}>Leafy Vegetables</SelectItem>
+                                    <SelectItem value={Subcategory.PODDED_VEGETABLES}>Podded Vegetables</SelectItem>
+                                    <SelectItem value={Subcategory.FRUIT_VEGETABLES}>Fruit Vegetables</SelectItem>
+                                    <SelectItem value={Subcategory.ROOT_VEGETABLES}>Root Vegetables</SelectItem>
+                                    <SelectItem value={Subcategory.HERBS_VEGETABLES}>Herbs Vegetables</SelectItem>
+                                  </>
+                                )}
+                                {chosenCategory === Category.FRESH_FRUIT && (
+                                  <>
+                                    <SelectItem value={Subcategory.FRUIT1}>Fruit 1</SelectItem>
+                                    <SelectItem value={Subcategory.FRUIT2}>Fruit 2</SelectItem>
+                                  </>
+                                )}
+                                {chosenCategory === Category.EQUIPMENTS && (
+                                  <>
+                                    <SelectItem value={Subcategory.EQUIPMENTS1}>Equipment 1</SelectItem>
+                                  </>
+                                )}
+                                {chosenCategory === Category.FERTILIZER && (
+                                  <>
+                                    <SelectItem value={Subcategory.FERTILIZER1}>Fertilizer 1</SelectItem>
+                                  </>
+                                )}
+                                {chosenCategory === Category.SEEDS && (
+                                  <>
+                                    <SelectItem value={Subcategory.SEEDS1}>Seeds 1</SelectItem>
+                                    <SelectItem value={Subcategory.SEEDS2}>Seeds 2</SelectItem>
+                                  </>
+                                )}
+                                {chosenCategory === Category.TOOLS && (
+                                  <>
+                                    <SelectItem value={Subcategory.TOOLS1}>Tools 1</SelectItem>
+                                  </>
+                                )}
+                                {chosenCategory === Category.SOILS && (
+                                  <>
+                                    <SelectItem value={Subcategory.SOILS1}>Soils 1</SelectItem>
+                                    <SelectItem value={Subcategory.SOILS2}>Soils 2</SelectItem>
+                                    <SelectItem value={Subcategory.SOILS3}>Soils 3</SelectItem>
+                                  </>
+                                )}
+                              </SelectContent>
+                            </Select>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-
+                      {(chosenCategory === Category.VEGETABLES || chosenCategory === Category.FRESH_FRUIT) && (
+                        <FormField
+                          control={form.control}
+                          name="type"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Type</FormLabel>
+                              <FormControl>
+                                <Select onValueChange={(newValue) => {
+                                  chosenCategory === Category.VEGETABLES ||
+                                    chosenCategory === Category.FRESH_FRUIT
+                                    ? field.onChange(newValue)
+                                    : form.unregister("type")
+                                }} defaultValue={field.value}>
+                                  <FormControl>
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Select a type..." />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value={Types.ORGANIC}>Organic</SelectItem>
+                                    <SelectItem value={Types.INORGANIC}>Inorganic</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      )}
 
                       <FormField
                         control={form.control}

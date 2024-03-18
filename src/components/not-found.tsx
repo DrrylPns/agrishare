@@ -16,7 +16,7 @@ export const PageNF = () => {
                 The page you are looking for does not exist. Users must be logged in to continue. But you can click the button below to go back to the site.
             </div>
 
-            <Link href={"/sign-in"} className={cn(buttonVariants({
+            <Link href={"/login"} className={cn(buttonVariants({
                 variant: "primary"
             }))}>
                 Go Back

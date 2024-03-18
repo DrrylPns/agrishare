@@ -1,12 +1,12 @@
-import { getAuthSession } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { UrbanFarmerSchema } from "@/lib/validations/user-settings";
 import { NextRequest, NextResponse } from "next/server";
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
+import { auth } from "../../../../auth";
 
 export async function POST(req: Request) {
     try {
-        const session = await getAuthSession()
+        const session = await auth()
 
         if (!session) {
             return new NextResponse("Unauthorized", { status: 404 })

@@ -30,48 +30,39 @@ model Account {
   @@index([userId])
 }
 
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-}
-
 model User {
-  id             String        @id @default(cuid())
-  name           String?
-  lastName       String?
-  middleInitial  String?
+  id                    String                 @id @default(cuid())
+  name                  String?
+  lastName              String?
+  middleInitial         String?
   // username       String    @unique
-  email          String?       @unique
-  emailVerified  DateTime?
-  image          String?       @db.Text
-  hashedPassword String?
-  phoneNumber    String?       @unique
-  address        String?
-  country        String?
-  state          String?
-  city           String?
-  zip            String?
-  userId         String?       @unique
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  companyName    String?
-  points         Float         @default(0)
-  role           Role          @default(DONATOR)
-  accounts       Account[]
-  sessions       Session[]
-  reviews        Reviews[]
-  News           News[]
-  community      Community[]
-  Transaction    Transaction[]
-  Post           Post[]
-  tradee         Trade[]       @relation("Tradee")
-  trader         Trade[]       @relation("Trader")
-  Donation       Donation[]
+  email                 String?                @unique
+  emailVerified         DateTime?
+  image                 String?                @db.Text
+  hashedPassword        String?
+  phoneNumber           String?                @unique
+  address               String?
+  country               String?
+  state                 String?
+  city                  String?
+  zip                   String?
+  userId                String?                @unique
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  companyName           String?
+  points                Float                  @default(0)
+  isTwoFactorEnabled    Boolean                @default(false)
+  twoFactorConfirmation TwoFactorConfirmation?
+  role                  Role                   @default(DONATOR)
+  accounts              Account[]
+  reviews               Reviews[]
+  News                  News[]
+  community             Community[]
+  Transaction           Transaction[]
+  Post                  Post[]
+  tradee                Trade[]                @relation("Tradee")
+  trader                Trade[]                @relation("Trader")
+  Donation              Donation[]
 }
 
 enum Role {
@@ -81,11 +72,39 @@ enum Role {
 }
 
 model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
 
-  @@unique([identifier, token])
+  @@unique([email, token])
+}
+
+model PasswordResetToken {
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model TwoFactorToken {
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model TwoFactorConfirmation {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
 }
 
 model Post {
@@ -96,9 +115,10 @@ model Post {
   quantity       Float         @default(0)
   weight         Float
   color          String
-  type           Types
+  type           Types?
   isFavorite     Boolean       @default(false)
   category       Category
+  subcategory    Subcategory?
   status         Status
   shelfLife      String
   preferedOffers String
@@ -120,6 +140,25 @@ enum Category {
   SEEDS
   SOILS
   FERTILIZER
+}
+
+enum Subcategory {
+  LEAFY_VEGETABLES
+  PODDED_VEGETABLES
+  FRUIT_VEGETABLES
+  ROOT_VEGETABLES
+  HERBS_VEGETABLES
+  FRUIT1
+  FRUIT2
+  TOOLS1
+  EQUIPMENTS1
+  SEEDS1
+  SEEDS2
+  SOILS1
+  SOILS2
+  SOILS3
+  FERTILIZER1
+  // TO BE ADDED
 }
 
 enum Status {
@@ -253,7 +292,7 @@ model Trade {
 }
 
 enum StatusType {
-  PENDING // TRADE INTENT 
+  PENDING // TRADE INTENT
   PROCESSING // INACCEPT NA NG TRADEE YUNG TRADE INTENT
   COMPLETED // BOTH PARTIES HAVE CONFIRMED THAT TRADE IS COMPLETE.
 }

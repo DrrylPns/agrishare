@@ -3,7 +3,22 @@ import { z } from "zod";
 export type AgrifeedType = z.infer<typeof AgrifeedSchema>
 
 const Category = z.enum(["FRESH_FRUIT", "VEGETABLES", "TOOLS", "EQUIPMENTS", "SEEDS", "SOILS", "FERTILIZER"])
-const Type = z.enum(["ORGANIC", "INORGANIC"])
+const Subcategory = z.enum([
+    "LEAFY_VEGETABLES",
+    "PODDED_VEGETABLES",
+    "FRUIT_VEGETABLES",
+    "ROOT_VEGETABLES",
+    "HERBS_VEGETABLES",
+    "FRUIT1",
+    "FRUIT2",
+    "TOOLS1",
+    "EQUIPMENTS1",
+    "SEEDS1",
+    "SEEDS2",
+    "SOILS1",
+    "SOILS2",
+    "SOILS3",
+    "FERTILIZER1"])
 
 export const AgrifeedSchema = z.object({
     image: z.string().optional(),
@@ -14,7 +29,8 @@ export const AgrifeedSchema = z.object({
     color: z.string().min(2, { message: "Color should be valid." }),
     shelfLife: z.string().min(2, { message: "Shelf life should be valid." }),
     category: Category,
-    type: Type,
+    subcategory: Subcategory,
+    type: z.optional(z.enum(["ORGANIC", "INORGANIC"])),
     harvestDate: z.coerce.date(),
     preferedOffers: z.string().min(2, { message: "Preferred Offer should be valid." }),
 })

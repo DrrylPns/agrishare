@@ -89,14 +89,14 @@ const Navbar = () => {
             {status === "unauthenticated" ? (
                 <div className="flex flex-row gap-3 max-lg:hidden">
                     <Link
-                        href="/sign-in"
+                        href="/login"
                         className={cn(buttonVariants({ variant: "primary" }), "p-3 px-8 rounded-full")}
                     >
                         Sign In
                     </Link>
 
                     <Link
-                        href="/sign-up"
+                        href="/register"
                         className={cn(buttonVariants({ variant: "primary" }), "p-3 px-8 rounded-full")}
                     >
                         Sign Up
@@ -148,14 +148,14 @@ const Navbar = () => {
                     {status === "unauthenticated" ? (
                         <div className="grid grid-cols-2 mt-5 gap-5 justify-center items-center">
                             <Link
-                                href="/sign-in"
+                                href="/login"
                                 className={cn(buttonVariants({ variant: "primary" }), "p-3 px-8 rounded-full")}
                             >
                                 Sign In
                             </Link>
 
                             <Link
-                                href="/sign-up"
+                                href="/register"
                                 className={cn(buttonVariants({ variant: "primary" }), "p-3 px-8 rounded-full")}
                             >
                                 Sign Up

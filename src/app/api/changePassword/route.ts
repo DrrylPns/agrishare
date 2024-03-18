@@ -1,12 +1,12 @@
-import { getAuthSession } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { ChangePasswordSchema } from "@/lib/validations/user-settings";
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 import { z } from "zod";
+import { auth } from "../../../../auth";
 
 export async function POST(req: Request) {
     try {
-      const session = await getAuthSession()
+      const session = await auth()
   
       if (!session?.user && !session) {
         return new Response("Error: No session found!", { status: 401 })

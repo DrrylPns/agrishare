@@ -10,7 +10,7 @@ const page = () => {
                     </div>
 
                     <div>
-                        <p className='font-bold'>Effective Date: November 26, 2023</p>
+                        <p className='font-bold'>Effective Date: November 23, 2023</p>
                         <h1 className='text-2xl font-bold'>Welcome to Agrishare</h1>
                         <p className='text-neutral-500'>
                             Please read these terms and conditions carefully before using our application.
@@ -94,8 +94,8 @@ const page = () => {
                         <h2 className='text-3xl font-bold'>9. Contact Information</h2>
                         <p className=''>
                             For questions or concerns regarding these terms and conditions, please contact us at emailnyolagaynyo@gmail.com
-By using the Agrishare donating, you agree to these terms and conditions. Thank you for being a part of our community.
-                                                    </p>
+                            By using the Agrishare donating, you agree to these terms and conditions. Thank you for being a part of our community.
+                        </p>
                     </div>
                 </div>
             </main>

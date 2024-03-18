@@ -1,11 +1,11 @@
-import { getAuthSession } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { PointsSchema } from "@/lib/validations/points";
 import { TransactionType } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "../../../../auth";
 
 export async function POST(req: NextRequest) {
-    const session = await getAuthSession()
+    const session = await auth()
     try {
 
         if (!session) {
@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
-    const session = await getAuthSession()
+    const session = await auth()
 
     try {
         if (!session) {

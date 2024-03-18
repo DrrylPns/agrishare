@@ -14,6 +14,7 @@ export const AccountSchema = z.object({
     image: z.string({
         required_error: "Please select an image."
     }).optional(),
+    isTwoFactorEnabled: z.optional(z.boolean()),
 })
 
 export type TraderType = z.infer<typeof TraderSchema>

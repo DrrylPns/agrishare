@@ -1,13 +1,15 @@
-import { getAuthSession } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { RegisterSchema } from "@/lib/validations/auth";
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { generateVerificationToken } from "@/lib/tokens";
+import { sendVerificationEmail } from "@/lib/mail";
+import { auth } from "../../../../auth";
 
 export async function POST(req: Request) {
     try {
-        const session = await getAuthSession()
+        const session = await auth()
 
         if (session?.user) {
             return new Response("Error: Already Logged In", { status: 403 })
@@ -34,7 +36,6 @@ export async function POST(req: Request) {
             return new Response("Email already exists. Please use a different one.", { status: 409 })
         }
 
-
         const hashedPassword = await bcrypt.hash(password, 12);
 
         const user = await prisma.user.create({
@@ -45,6 +46,12 @@ export async function POST(req: Request) {
                 hashedPassword,
             }
         });
+
+        const verificationToken = await generateVerificationToken(email)
+        await sendVerificationEmail(
+            verificationToken.email,
+            verificationToken.token,
+        )
 
         return NextResponse.json(user)
     } catch (error) {
