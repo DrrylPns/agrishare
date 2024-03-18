@@ -163,7 +163,8 @@ model Community {
   thumbnail      String   @db.Text
   name           String
   story          String   @db.Text
-  //donations      Int      @default(0) // kung ilan na nag donate // based to sa figma. // to get number of donations use  prisma.count donation based on community ID
+  communityImage String?   @db.Text
+  title          String?
   currentDonated Float    @default(0) // current donation sa community na yon
   neededDonation Float // target donation na ma-reach
   createdAt      DateTime @default(now())
