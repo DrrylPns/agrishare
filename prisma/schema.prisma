@@ -202,7 +202,7 @@ model Community {
   thumbnail      String   @db.Text
   name           String
   story          String   @db.Text
-  communityImage String?   @db.Text
+  communityImage String?  @db.Text
   title          String?
   currentDonated Float    @default(0) // current donation sa community na yon
   neededDonation Float // target donation na ma-reach
@@ -271,22 +271,23 @@ enum TransactionType {
 // dito iffetch yung product na gustong ipang trade
 // once trade is COMPLETED make a transaction.create based on trade values para mapalabas siya sa transaction history.
 model Trade {
-  id          String     @id @default(cuid())
-  image       String     @db.Text
-  quantity    Float
-  weight      Float
-  value       Float
-  description String     @db.Text
-  category    Category
-  status      StatusType
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id             String     @id @default(cuid())
+  item           String
+  image          String     @db.Text
+  quantity       Float
+  tradedQuantity Float
+  weight         Float
+  value          Float
+  description    String     @db.Text
+  status         StatusType @default(PENDING)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
 
   // yung nag post, pwede ma-fetch dito yung pinost na product
   tradeeId String
   tradee   User   @relation(fields: [tradeeId], references: [id], onDelete: Cascade, name: "Tradee")
 
-  // yung nag trade intent
+  // yung nag trade intent, pwede ma-fetch dito yung gusto ipang trade
   traderId String
   trader   User   @relation(fields: [traderId], references: [id], onDelete: Cascade, name: "Trader")
 }

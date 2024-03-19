@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Switch } from "@/components/ui/switch"
+import { useSession } from "next-auth/react"
 
 type AccountSettingsProps = {
     user?: User
@@ -35,6 +36,7 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
     const [imageUrl, setImageUrl] = useState<string>(user?.image || "")
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const router = useRouter()
+    const { update } = useSession()
 
     // const imageIsEmpty = imageUrl.length === 0
 
@@ -91,6 +93,8 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
                 description: `${data}`,
                 variant: 'default',
             })
+
+            update()
 
             setTimeout(() => {
                 window.location.reload(),

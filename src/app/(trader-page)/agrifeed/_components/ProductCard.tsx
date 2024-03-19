@@ -60,7 +60,7 @@ function ProductCard({
                     <Link href={`/agrifeed/${id}`}>
                         <CardDescription className='min-h-24 line-clamp-5 text-ellipsis'>{description}</CardDescription>
                     </Link>
-                    <Link href={{pathname:`/propose-offer/${id}`}} className='flex gap-3 justify-between items-center border-y-2 border-gray-300 py-5'>
+                    <Link href={{pathname:`/agrifeed/${id}`}} className='flex gap-3 justify-between items-center border-y-2 border-gray-300 py-5'>
                         <Button variant={'default'} className='rounded-full w-2/5'>
                             Trade
                             <span className='ml-3'><LiaExchangeAltSolid /></span>
