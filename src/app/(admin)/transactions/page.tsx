@@ -5,9 +5,9 @@ import { DataTable } from '../users/_components/data-table'
 import { fetchTrades } from '../../../../actions/trade'
 import { fetchDonations } from '../../../../actions/donate'
 import { fetchTransaction } from '../../../../actions/transaction'
-import { columnsTrade } from './_components/columnsTrade'
-import { columnsDonation } from './_components/columnsDonation'
-import { columnsPoints } from './_components/columnsPoints'
+import { columnTrade } from '@/components/tables/columnTrade'
+import { columnDonation } from '@/components/tables/columnDonation'
+import { columnPoints } from '@/components/tables/columnPoints'
 
 
 const page = async () => {
@@ -30,17 +30,17 @@ const page = async () => {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <DataTable data={trades} columns={columnsTrade} />
+              <DataTable data={trades} columns={columnTrade} />
             </TabPanel>
             <TabPanel>
               <DataTable
                 data={donations}
-                columns={columnsDonation} />
+                columns={columnDonation} />
             </TabPanel>
             <TabPanel>
               <DataTable
                 data={transactions}
-                columns={columnsPoints} />
+                columns={columnPoints} />
             </TabPanel>
             <TabPanel>
               {/* <DataTable data={ } columns={ } /> */}

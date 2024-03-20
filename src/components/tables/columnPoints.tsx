@@ -1,10 +1,11 @@
 "use client"
+
+import { DataTableColumnHeader } from "@/app/(admin)/users/_components/data-table-column-header"
 import { TransactionWithUserAndPost } from "@/lib/types"
 import { ColumnDef } from "@tanstack/react-table"
-import { DataTableColumnHeader } from "../../users/_components/data-table-column-header"
 import { format } from "date-fns"
 
-export const columnsPoints: ColumnDef<TransactionWithUserAndPost>[] = [
+export const columnPoints: ColumnDef<TransactionWithUserAndPost>[] = [
     {
         accessorKey: "id",
         header: ({ column }) => {
