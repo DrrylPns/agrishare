@@ -16,7 +16,7 @@ import { handleTrade } from "../../../../../actions/trade"
 import { toast } from "@/components/ui/use-toast"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
 
-export const ColumnsTrade: ColumnDef<TradeWithTradeeTraders>[] = [
+export const columnsTrade: ColumnDef<TradeWithTradeeTraders>[] = [
     {
         accessorKey: "id",
         header: ({ column }) => {
