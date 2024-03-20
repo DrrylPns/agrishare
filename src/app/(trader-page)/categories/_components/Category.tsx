@@ -7,6 +7,7 @@ import { IoIosAddCircleOutline, IoIosRadioButtonOff, IoIosRadioButtonOn } from '
 import { Post } from "../../agrifeed/_components/_types";
 import PostCard from "./PostCard";
 import Link from "next/link";
+import { PostCardSkeleton } from "./skeleton/PostCardSkeleton";
 
 const Categories = [
     'FRESH_FRUIT',
@@ -25,16 +26,19 @@ function Category({
 
 }) {
     const [selectedCategory, setSelectedCategory] = useState<string>(Categories[0])
+    const [isLoading, setIsLoading] = useState<boolean>(true)
     const [post, setPost] = useState<Post[]>()
 
    useEffect(()=>{
     getPostByCategory()
+  
    },[selectedCategory])
 
    const getPostByCategory = async () => {
     try {
         const res = (await axios.post('/api/getPostByCategory',{category: selectedCategory})).data;
         setPost(res)
+        setIsLoading(false)
     } catch (error) {
         console.log(error)
     }
@@ -46,11 +50,14 @@ function Category({
     <div className='grid grid-cols-12 w-full gap-x-2 '>
     <h1 className="text-right col-span-9">{post?.length} Results found</h1>
         <div className='grid grid-cols-3 w-full  gap-3 col-span-9 '>
-            {post && post.map((item)=>(
-                <Link href={`/agrifeed/${item.id}`} key={item.id}>
-                    <PostCard post={item} />
-                </Link>
-            ))}
+          {isLoading && (
+            <PostCardSkeleton/>
+          )}
+          {post && post.map((item)=>(
+              <Link href={`/agrifeed/${item.id}`} key={item.id}>
+                  <PostCard post={item} />
+              </Link>
+          ))}
         </div>
         <div className='col-span-3 '>
             <RadioGroup value={selectedCategory} onChange={setSelectedCategory} className="shadow-md drop-shadow-md p-5">

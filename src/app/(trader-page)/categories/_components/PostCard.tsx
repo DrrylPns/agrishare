@@ -31,7 +31,7 @@ function PostCard({
                 alt={post.name}
                 width={100}
                 height={160}
-                className="w-full object-contain"
+                className="w-full max-h-52 min-h-52 h-1/2 object-contain"
             />    
         </div>
         <CardContent className="mt-3">
