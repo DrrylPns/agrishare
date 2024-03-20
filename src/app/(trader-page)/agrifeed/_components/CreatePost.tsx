@@ -153,7 +153,7 @@ function CreatePost() {
           <DialogContent>
             <DialogHeader>
               <DialogTitle className='text-center'>
-                {formStep === 0 && "Upload Image"}
+                {formStep === 0 && "Upload Product Image"}
                 {formStep === 1 && "Enter Info"}
                 {formStep === 2 && "Specifics"}
                 {formStep === 3 && "More info"}

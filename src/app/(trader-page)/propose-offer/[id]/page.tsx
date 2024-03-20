@@ -11,13 +11,6 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -52,6 +45,7 @@ function Page({
     const [imageUrl, setImageUrl] = useState<string>('')
     const [number, setNumber] = useState<number>(0)
     const [tradeeId, setTradeeId] = useState<string>()
+    const [postId, setPostId] = useState<string>()
 
     const imageIsEmpty = imageUrl.length === 0
 
@@ -64,6 +58,7 @@ function Page({
         setPost(post as Post)
         if (post) {
             setTradeeId(post.User.id);
+            setPostId(post.id)
         }
     }
 
@@ -87,6 +82,7 @@ function Page({
             value: 0,
             weight: 0,
             description: '',
+            shelfLife: '',
         },
     })
 
@@ -95,7 +91,7 @@ function Page({
         setSuccess("");
 
         startTransition(() => {
-            trade(values as TradeType, number, tradeeId as string, imageUrl).then((data) => {
+            trade(values as TradeType, number, tradeeId as string, imageUrl, postId as string).then((data) => {
                 if (data?.error) {
                     setError(data.error)
                 }
@@ -108,10 +104,6 @@ function Page({
                 }
             }).catch(() => setError("Something went wrong"))
         })
-
-
-
-        console.log(`${values}, ${number}, ${tradeeId}, ${imageUrl}`)
     }
 
     if (post === undefined) return <BeatLoader />
@@ -196,29 +188,31 @@ function Page({
                                 })
                             }}
                         />}
+
+                        <FormField
+                            control={form.control}
+                            name="item"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Item</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Item" {...field} disabled={isPending} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-10'>
+
                             <FormField
                                 control={form.control}
-                                name="item"
+                                name="shelfLife"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Item</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                <SelectItem value="FRESH_FRUITS">Fresh fruits</SelectItem>
-                                                <SelectItem value="VEGETABLES">Vegetables</SelectItem>
-                                                <SelectItem value="TOOLS">Tools</SelectItem>
-                                                <SelectItem value="EQUIPMENTS">Equipments</SelectItem>
-                                                <SelectItem value="SEEDS">Seeds</SelectItem>
-                                                <SelectItem value="SOILS">Soils</SelectItem>
-                                                <SelectItem value="FERTILIZER">Fertilizer</SelectItem>
-                                            </SelectContent>
-                                        </Select>
+                                        <FormLabel>Shelf Life</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Shelf life..." {...field} disabled={isPending} />
+                                        </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -231,7 +225,7 @@ function Page({
                                     <FormItem>
                                         <FormLabel>Value</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="P" {...field} disabled={isPending} />
+                                            <Input placeholder="P" {...field} disabled={isPending} type="number" />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -247,7 +241,7 @@ function Page({
                                     <FormItem className='col'>
                                         <FormLabel>Quantity</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="100" {...field} disabled={isPending} />
+                                            <Input placeholder="100" {...field} disabled={isPending} type="number" />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -260,7 +254,7 @@ function Page({
                                     <FormItem className='col'>
                                         <FormLabel>Weight</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="1 Kg" {...field} disabled={isPending} />
+                                            <Input placeholder="1 Kg" {...field} disabled={isPending} type="number" />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

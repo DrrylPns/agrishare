@@ -59,7 +59,7 @@ model User {
   News                  News[]
   community             Community[]
   Transaction           Transaction[]
-  Post                  Post[]
+  post                  Post[]
   tradee                Trade[]                @relation("Tradee")
   trader                Trade[]                @relation("Trader")
   Donation              Donation[]
@@ -125,6 +125,7 @@ model Post {
   harvestDate    DateTime
   reviews        Reviews[]
   transaction    Transaction[]
+  trades         Trade[]
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
 
@@ -217,33 +218,44 @@ model Community {
 
 // to get number of donators by community use this model fetch it by Community ID...
 model Donation {
-  id                  String   @id @default(cuid())
-  // fetch full name, contact #, email at zip sa session
-  name                String // can fetch and be used as default values
-  lastName            String // can fetch and be used as default values
-  phoneNumber         String // can fetch and be used as default values
-  email               String // can fetch and be used as default values
-  district            String
-  zip                 String // can fetch and be used as default values
-  category            Category
-  productName         String
-  condition           String
-  quantity            String
-  preservationReq     String
-  deliveryTime        DateTime
-  deliveryAddress     String
-  specialInstructions String   @db.Text
-  comment             String   @db.Text
-  image               String   @db.Text
-  isAnonymous         Boolean
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  id        String         @id @default(cuid())
+  donatee   String
+  name      String
+  product   String
+  date      DateTime
+  image     String
+  status    DonationStatus @default(PENDING)
+  // name                String
+  // lastName            String
+  // phoneNumber         String
+  // email               String
+  // district            String
+  // zip                 String
+  // category            Category
+  // productName         String
+  // condition           String
+  // quantity            String
+  // preservationReq     String
+  // deliveryTime        DateTime
+  // deliveryAddress     String
+  // specialInstructions String   @db.Text
+  // comment             String   @db.Text
+  // image               String   @db.Text
+  // isAnonymous         Boolean
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
 
   donator   User   @relation(fields: [donatorId], references: [id], onDelete: Cascade)
   donatorId String
 
-  Community   Community @relation(fields: [communityId], references: [id])
-  communityId String
+  Community   Community? @relation(fields: [communityId], references: [id])
+  communityId String?
+}
+
+enum DonationStatus {
+  PENDING
+  CANCELLED
+  APPROVED
 }
 
 model Transaction {
@@ -275,6 +287,7 @@ model Trade {
   item           String
   image          String     @db.Text
   quantity       Float
+  shelfLife      String
   tradedQuantity Float
   weight         Float
   value          Float
@@ -290,12 +303,16 @@ model Trade {
   // yung nag trade intent, pwede ma-fetch dito yung gusto ipang trade
   traderId String
   trader   User   @relation(fields: [traderId], references: [id], onDelete: Cascade, name: "Trader")
+
+  post   Post   @relation(fields: [postId], references: [id])
+  postId String
 }
 
 enum StatusType {
   PENDING // TRADE INTENT
   PROCESSING // INACCEPT NA NG TRADEE YUNG TRADE INTENT
-  COMPLETED // BOTH PARTIES HAVE CONFIRMED THAT TRADE IS COMPLETE.
+  COMPLETED // ADMIN HAS CONFIRMED THAT TRADE IS INDEED SUCCESSFUL // IF COMPLETED THEN BAWAS NA QTY KAAGAD
+  CANCELLED // ADMIN FINDS THE TRADE SUSPICIOUS
 }
 
 //NOT SURE PA DITO -- di na ata kailangan to, i-fetch nalang to sa model Transaction at dagdagan ang transaction type ng CLAIM.

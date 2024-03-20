@@ -3,17 +3,9 @@ import { z } from "zod";
 export type DonationType = z.infer<typeof DonationSchema>
 
 export const DonationSchema = z.object({
-    image: z.string({
-        required_error: 'Upload your E-Signature!'
-    }),
-    urbanFarmName: z.string({
-        required_error: 'Enter a valid Urban farm / Organization!'
-    }),
-    donator: z.string({
-        required_error:'Enter a valid donator name!'
-    }),
-    productName: z.string({
-        required_error:'Enter a valid product name'
-    }),
+    donatee: z.string().min(2, { message: "Invalid donatee." }).max(35, { message: "Invalid input, you exceeded the amount of characters." }),
+    name: z.string().min(2, { message: "Invalid name." }).max(35, { message: "Invalid input, you exceeded the amount of characters." }),
+    product: z.string().min(2, { message: "Invalid product." }).max(35, { message: "Invalid input, you exceeded the amount of characters." }),
     date: z.coerce.date(),
+    image: z.string().optional(),
 })
