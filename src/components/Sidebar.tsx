@@ -8,6 +8,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
+import { FiRefreshCw } from 'react-icons/fi'
 
 
 export const Sidebar = () => {
@@ -31,6 +32,9 @@ export const Sidebar = () => {
                     </Link>
                     <Link href="transactions" className={`mx-auto text-neutral-500 p-1 rounded-lg ${url === "transactions" ? "bg-[#00B207] hover:bg-[#00B207]/80 text-white" : "hover:bg-gray-200 text-gray-500"}`}>
                         <TicketIcon />
+                    </Link>
+                    <Link href="add-agrichange" className={`mx-auto text-neutral-500 p-1 rounded-lg ${url === "add-agrichange" ? "bg-[#00B207] hover:bg-[#00B207]/80 text-white" : "hover:bg-gray-200 text-gray-500"}`}>
+                        <FiRefreshCw />
                     </Link>
                     <Popover>
                         <PopoverTrigger asChild className={`mx-auto text-neutral-500 rounded-lg ${url === "adminSettings" ? "bg-[#00B207] hover:bg-[#00B207]/80 text-white p-1 w-[29px] h-[29px]" : "hover:bg-gray-200 text-gray-500"}`}>
@@ -75,6 +79,10 @@ export const Sidebar = () => {
                         <Link href="transactions" className={`w-full flex items-center space-x-2 py-2 px-2 rounded-lg ${url === "transactions" ? "bg-[#00B207] hover:bg-[#00B207]/80 text-white" : "hover:bg-gray-200 text-gray-500"}`}>
                             <TicketIcon className="w-4 h-4" />
                             <span className="text-sm font-medium">History</span>
+                        </Link>
+                        <Link href="add-agrichange" className={`w-full flex items-center space-x-2 py-2 px-2 rounded-lg ${url === "add-agrichange" ? "bg-[#00B207] hover:bg-[#00B207]/80 text-white" : "hover:bg-gray-200 text-gray-500"}`}>
+                            <FiRefreshCw className='w-4 h-4' />
+                            <span className="text-sm font-medium">Agrichange</span>
                         </Link>
                     </nav>
                     <div className='space-y-2 absolute bottom-10 w-[85%]'>
