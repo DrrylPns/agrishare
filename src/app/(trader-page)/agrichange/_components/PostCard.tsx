@@ -31,15 +31,15 @@ function PostCard({
                 alt={post.name}
                 width={100}
                 height={160}
-                className="w-full object-contain"
+                className="w-full max-h-52 min-h-52 h-1/2 object-contain"
             />    
         </div>
         <CardContent className="mt-3">
             <div className="flex items-center justify-between">
                 <h1>{post.name}</h1>
-                <Link href={{pathname:`/propose-offer/${post.id}` }} className='flex just-center items-center px-3 text-green-500 bg-slate-300 cursor-pointer hover:text-white py-3 rounded-full hover:bg-green-500'>
+                <div className='flex just-center items-center px-3 text-green-500 bg-slate-300 cursor-pointer hover:text-white py-3 rounded-full hover:bg-green-500'>
                 <span ><LiaExchangeAltSolid /></span>
-                </Link>
+                </div>
             </div>
         </CardContent>
     </Card>
