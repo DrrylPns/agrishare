@@ -3,12 +3,14 @@ import { Card, Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react
 import React from 'react'
 import { DataTable } from '../users/_components/data-table'
 import { fetchTrades } from '../../../../actions/trade'
-import { columnsTrade } from './_components/columnsTrade'
+import { fetchDonations } from '../../../../actions/donate'
+import { ColumnsTrade } from './_components/ColumnsTrade'
+import { ColumnsDonation } from './_components/ColumnsDonation'
 
 const page = async () => {
 
   const trades = await fetchTrades()
-
+  const donations = await fetchDonations()
 
   return (
     <div className=''>
@@ -24,10 +26,13 @@ const page = async () => {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <DataTable data={trades} columns={columnsTrade} />
+              <DataTable data={trades} columns={ColumnsTrade} />
             </TabPanel>
             <TabPanel>
-              {/* <DataTable data={ } columns={ } /> */}
+              <DataTable
+                data={donations}
+                //@ts-ignore
+                columns={ColumnsDonation} />
             </TabPanel>
             <TabPanel>
               {/* <DataTable data={ } columns={ } /> */}

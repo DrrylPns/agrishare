@@ -1,22 +1,21 @@
 "use client"
-
-import { TradeWithTradeeTraders } from "@/lib/types"
-import { ColumnDef } from "@tanstack/react-table"
-import { format } from "date-fns"
-import { DataTableColumnHeader } from "../../users/_components/data-table-column-header"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import { FolderSyncIcon, MoreHorizontal } from "lucide-react"
-import Link from "next/link"
-import { useState, useTransition } from "react"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { DonationWithDonators } from "@/lib/types";
+import { ColumnDef } from "@tanstack/react-table";
+import { DataTableColumnHeader } from "../../users/_components/data-table-column-header";
+import { format } from "date-fns";
 import AdminTitle from "@/components/AdminTitle"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { handleTrade } from "../../../../../actions/trade"
 import { toast } from "@/components/ui/use-toast"
+import { useState, useTransition } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Button } from "@/components/ui/button";
+import { MoreHorizontal } from "lucide-react";
+import Link from "next/link";
+import { handleDonations } from "../../../../../actions/donate";
 
-export const ColumnsTrade: ColumnDef<TradeWithTradeeTraders>[] = [
+export const ColumnsDonation: ColumnDef<DonationWithDonators>[] = [
     {
         accessorKey: "id",
         header: ({ column }) => {
@@ -35,14 +34,14 @@ export const ColumnsTrade: ColumnDef<TradeWithTradeeTraders>[] = [
         },
     },
     {
-        accessorKey: "item",
+        accessorKey: "product",
         header: ({ column }) => {
             return (
                 <DataTableColumnHeader column={column} title="ITEM" />
             )
         },
         cell: ({ row }) => {
-            const item = row.original.item
+            const item = row.original.product
 
             return <div
                 className=""
@@ -52,14 +51,14 @@ export const ColumnsTrade: ColumnDef<TradeWithTradeeTraders>[] = [
         },
     },
     {
-        accessorKey: "trader",
+        accessorKey: "name",
         header: ({ column }) => {
             return (
-                <DataTableColumnHeader column={column} title="USER" />
+                <DataTableColumnHeader column={column} title="NAME" />
             )
         },
         cell: ({ row }) => {
-            const user = row.original.trader.name
+            const user = row.original.name
 
             return <div
                 className=""
@@ -69,37 +68,19 @@ export const ColumnsTrade: ColumnDef<TradeWithTradeeTraders>[] = [
         },
     },
     {
-        accessorKey: "createdAt",
+        accessorKey: "pointsToGain",
         header: ({ column }) => {
             return (
-                <DataTableColumnHeader column={column} title="DATE" />
+                <DataTableColumnHeader column={column} title="GAINED POINTS" />
             )
         },
         cell: ({ row }) => {
-            const date = row.original.createdAt
-
+            const points = row.original.pointsToGain
 
             return <div
                 className=""
             >
-                {format(date, "PPP")}
-            </div>
-        },
-    },
-    {
-        accessorKey: "tradedQuantity",
-        header: ({ column }) => {
-            return (
-                <DataTableColumnHeader column={column} title="TOTAL" />
-            )
-        },
-        cell: ({ row }) => {
-            const qty = row.original.tradedQuantity
-
-            return <div
-                className=""
-            >
-                {qty} items
+                {points} Points
             </div>
         },
     },
@@ -121,6 +102,23 @@ export const ColumnsTrade: ColumnDef<TradeWithTradeeTraders>[] = [
         },
     },
     {
+        accessorKey: "createdAt",
+        header: ({ column }) => {
+            return (
+                <DataTableColumnHeader column={column} title="DATE" />
+            )
+        },
+        cell: ({ row }) => {
+            const date = row.original.createdAt
+
+            return <div
+                className=""
+            >
+                {format(date, "PPP")}
+            </div>
+        },
+    },
+    {
         id: "actions",
         header: "Actions",
         cell: ({ row }) => {
@@ -130,32 +128,19 @@ export const ColumnsTrade: ColumnDef<TradeWithTradeeTraders>[] = [
             const [isRejectOpen, setIsRejectOpen] = useState<boolean>(false)
 
 
-            const tradeId = row.original.id;
-            const traderId = row.original.trader.id
-            const tradeeId = row.original.tradee.id
-            const postId = row.original.post.id
+            const donatorImage = row.original.donator.image
+            const donatorName = row.original.donator.name
+            const donatorLastName = row.original.donator.lastName
+            const donatorProduct = row.original.product
+            const donatoryQty = row.original.quantity
+            const donatorPoints = row.original.pointsToGain
+            const donatorId = row.original.donator.id
 
-            const traderName = row.original.trader.name
-            const traderLastName = row.original.trader.lastName
-            const traderImage = row.original.trader.image
-            const traderItem = row.original.item
-            const traderQty = row.original.quantity
-            const traderPts = row.original.trader.points
-            const traderShelfLife = row.original.shelfLife
+            const dateDonated = row.original.createdAt
+            const donationStatus = row.original.status
+            const donationId = row.original.id
 
-            const tradeeName = row.original.tradee.name
-            const tradeeLastName = row.original.tradee.lastName
-            const tradeeImage = row.original.tradee.image
-            const tradeeItem = row.original.post.name
-            const tradeeQty = row.original.tradedQuantity
-            const tradeePts = row.original.tradee.points
-            const tradeeShelfLife = row.original.post.shelfLife
-
-            const tradeStatus = row.original.status
-            const tradeDate = row.original.createdAt
-
-
-            const isImageNull = tradeeImage || traderImage === null;
+            const isImageNull = donatorImage === null;
             return (
                 <>
                     <DropdownMenu>
@@ -187,50 +172,26 @@ export const ColumnsTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                             <DialogHeader>
                                 <DialogTitle>
                                     <AdminTitle entry="4" title="Trade Review" />
-                                    <p className="">Status: {tradeStatus}</p>
+                                    <p className="text-center">Status: {donationStatus}</p>
                                 </DialogTitle>
                                 <DialogDescription>
                                     <>
-                                        <div className="bg-white p-6 rounded-lg shadow-md flex flex-col md:flex-row items-center justify-between max-w-4xl mx-auto">
+                                        <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-between max-w-fit mx-auto">
                                             <div className="flex flex-col items-center md:items-start">
                                                 <Avatar>
-                                                    <AvatarImage src={`${isImageNull ? "/avatar-placeholder.jpg" : traderImage}`} alt="profile" />
+                                                    <AvatarImage src={`${isImageNull ? "/avatar-placeholder.jpg" : donatorImage}`} alt="profile" />
                                                     <AvatarFallback>CN</AvatarFallback>
                                                 </Avatar>
-                                                <div className="mt-4 text-sm text-center md:text-left">
+                                                <div className="mt-4 text-sm text-center md:text-start">
                                                     {/* <p className="font-semibold">Trade ID: {id}</p> */}
-                                                    <p>Name: {traderName} {" "} {traderLastName}</p>
-                                                    <p>Item: {traderItem}</p>
-                                                    <p>Quantity: {traderQty}</p>
+                                                    <p>Name: {donatorName} {" "} {donatorLastName}</p>
+                                                    <p>Item: {donatorProduct}</p>
+                                                    <p>Quantity: {donatoryQty}</p>
                                                     <p>
-                                                        Accumulated Points: <span className="text-green-500">{traderPts} Point(s)</span>
+                                                        Accumulated Points: <span className="text-green-500">{donatorPoints} Point(s)</span>
                                                     </p>
-                                                    <p>Shelf Life: {traderShelfLife} Day(s)</p>
-                                                    <p>Date: {format(tradeDate, "PPP")}</p>
+                                                    <p>Date: {format(dateDonated, "PPP")}</p>
                                                     {/* redirect to uploadthing when clicked. */}
-                                                    <Link className="text-blue-500" href="#">
-                                                        Proof: image.jpg
-                                                    </Link>
-                                                </div>
-                                            </div>
-
-                                            <FolderSyncIcon className="text-green-500 self-center mx-0 my-4 md:mx-8" />
-
-                                            <div className="flex flex-col items-center md:items-start">
-                                                <Avatar>
-                                                    <AvatarImage src={`${isImageNull ? "/avatar-placeholder.jpg" : tradeeImage}`} alt="profile" />
-                                                    <AvatarFallback>CN</AvatarFallback>
-                                                </Avatar>
-                                                <div className="mt-4 text-sm text-center md:text-left">
-                                                    {/* <p className="font-semibold">Trade ID: {id}</p> */}
-                                                    <p>Name: {tradeeName} {" "} {tradeeLastName}</p>
-                                                    <p>Item: {tradeeItem}</p>
-                                                    <p>Quantity: {tradeeQty}</p>
-                                                    <p>
-                                                        Accumulated Points: <span className="text-green-500">{tradeePts} Point(s)</span>
-                                                    </p>
-                                                    <p>Shelf Life: {tradeeShelfLife} Day(s)</p>
-                                                    <p>Date: {format(tradeDate, "PPP")}</p>
                                                     <Link className="text-blue-500" href="#">
                                                         Proof: image.jpg
                                                     </Link>
@@ -272,7 +233,7 @@ export const ColumnsTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleTrade("COMPLETED", tradeId, tradeeId, traderId, tradeeQty, traderQty).then((callback) => {
+                                                handleDonations("APPROVED", donatorPoints, donationId, donatorId).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,
@@ -282,7 +243,8 @@ export const ColumnsTrade: ColumnDef<TradeWithTradeeTraders>[] = [
 
                                                     if (callback?.success) {
                                                         toast({
-                                                            description: callback.success
+                                                            description: callback.success,
+                                                            variant: "default",
                                                         })
                                                     }
                                                 })
@@ -310,7 +272,7 @@ export const ColumnsTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleTrade("CANCELLED", tradeId, tradeeId, traderId, tradeeQty, traderQty).then((callback) => {
+                                                handleDonations("CANCELLED", donatorPoints, donationId, donatorId).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,
@@ -320,7 +282,8 @@ export const ColumnsTrade: ColumnDef<TradeWithTradeeTraders>[] = [
 
                                                     if (callback?.success) {
                                                         toast({
-                                                            description: callback.success
+                                                            description: callback.success,
+                                                            variant: "default",
                                                         })
                                                     }
                                                 })

@@ -147,40 +147,40 @@ export const handleTrade = async (status: StatusType, tradeId: string, tradeeId:
     }
 
     if (status === "CANCELLED") {
-        const tradee = await prisma.user.findUnique({
-            where: {
-                id: tradeeId
-            }
-        })
+        // const tradee = await prisma.user.findUnique({
+        //     where: {
+        //         id: tradeeId
+        //     }
+        // })
 
-        const trader = await prisma.user.findUnique({
-            where: {
-                id: traderId
-            }
-        })
+        // const trader = await prisma.user.findUnique({
+        //     where: {
+        //         id: traderId
+        //     }
+        // })
 
-        if (!tradee || !trader) return { error: "Tradee or trader not found." }
+        // if (!tradee || !trader) return { error: "Tradee or trader not found." }
 
-        const tradeeCalculatedPoints = 6 * tradeeQty
-        const traderCalculatedPoints = 6 * traderQty
+        // const tradeeCalculatedPoints = 6 * tradeeQty
+        // const traderCalculatedPoints = 6 * traderQty
 
-        await prisma.user.update({
-            data: {
-                points: tradee.points - tradeeCalculatedPoints
-            },
-            where: {
-                id: tradeeId
-            }
-        })
+        // await prisma.user.update({
+        //     data: {
+        //         points: tradee.points - tradeeCalculatedPoints
+        //     },
+        //     where: {
+        //         id: tradeeId
+        //     }
+        // })
 
-        await prisma.user.update({
-            data: {
-                points: trader.points - traderCalculatedPoints
-            },
-            where: {
-                id: traderId
-            }
-        })
+        // await prisma.user.update({
+        //     data: {
+        //         points: trader.points - traderCalculatedPoints
+        //     },
+        //     where: {
+        //         id: traderId
+        //     }
+        // })
 
         revalidatePath("/transactions")
         return { success: "Cancelled the trade." }

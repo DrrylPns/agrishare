@@ -1,4 +1,4 @@
-import { Post, Role, StatusType, User } from "@prisma/client";
+import { Post, Role, StatusType, User, Donation, DonationStatus } from "@prisma/client";
 
 export interface Posts {
     id: string;
@@ -64,4 +64,21 @@ interface UserHardCoded {
     isTwoFactorEnabled: boolean;
     role: Role
     post: Post[]
+}
+
+export type DonationWithDonators = {
+    id: string;
+    donatee: string;
+    name: string;
+    product: string;
+    quantity: number;
+    date: Date;
+    image: string;
+    pointsToGain: number;
+    status: DonationStatus;
+    createdAt: Date;
+    updatedAt: Date;
+    donatorId: string;
+    communityId: string | null;
+    donator: User
 }

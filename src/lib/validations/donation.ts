@@ -8,4 +8,5 @@ export const DonationSchema = z.object({
     product: z.string().min(2, { message: "Invalid product." }).max(35, { message: "Invalid input, you exceeded the amount of characters." }),
     date: z.coerce.date(),
     image: z.string().optional(),
+    quantity: z.coerce.number(),
 })

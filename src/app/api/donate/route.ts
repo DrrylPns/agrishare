@@ -14,13 +14,15 @@ export async function POST(req: Request) {
 
         const body = await req.json()
 
-        const { date, donatee, name, product, image } = DonationSchema.parse(body)
+        const { date, donatee, name, product, image, quantity } = DonationSchema.parse(body)
 
         const user = await getUserById(session.user.id)
 
         if (!user) {
             return new NextResponse("Error: No user found!", { status: 402 })
         }
+
+        const calculatedPointsToGain = 10 * quantity
 
         await prisma.donation.create({
             data: {
@@ -30,6 +32,8 @@ export async function POST(req: Request) {
                 product,
                 image: image as string,
                 donatorId: user.id,
+                quantity,
+                pointsToGain: calculatedPointsToGain
             }
         })
 

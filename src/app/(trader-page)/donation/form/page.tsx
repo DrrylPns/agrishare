@@ -20,9 +20,7 @@ import { Calendar } from "@/components/ui/calendar"
 import { DonationSchema, DonationType } from "@/lib/validations/donation"
 import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
-import { useState, useTransition } from "react"
-import { FormSuccess } from "@/components/form-success"
-import { FormError } from "@/components/form-error"
+import { useState } from "react"
 import { UploadButton } from "@/lib/uploadthing"
 
 
@@ -41,6 +39,7 @@ export default function Page() {
       donatee,
       name,
       product,
+      quantity,
     }: DonationType) => {
       const payload: DonationType = {
         image,
@@ -48,6 +47,7 @@ export default function Page() {
         donatee,
         name,
         product,
+        quantity,
       }
 
       const { data } = await axios.post("/api/donate", payload)
@@ -79,7 +79,8 @@ export default function Page() {
       donatee: values.donatee,
       name: values.name,
       product: values.product,
-      image: imageUrl
+      quantity: values.quantity,
+      image: imageUrl,
     }
 
     createPost(payload)
@@ -89,9 +90,9 @@ export default function Page() {
     <div className="w-full sm:w-3/5 mt-5 sm:mt-0 ">
       <Form {...form}>
         <h1 className='text-center text-4xl font-semibold mb-5'>Donation Form</h1>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="font-poppins bg-green-200 p-10 rounded-2xl ">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="font-poppins bg-green-200 p-10 rounded-2xl space-y-3">
           <h1 className='text-center text-xl font-medium mb-5'>Donation Information</h1>
-          <div className="grid grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <FormField
               control={form.control}
               name="donatee"
@@ -104,6 +105,7 @@ export default function Page() {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="name"
@@ -116,6 +118,9 @@ export default function Page() {
                 </FormItem>
               )}
             />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <FormField
               control={form.control}
               name="product"
@@ -123,6 +128,19 @@ export default function Page() {
                 <FormItem>
                   <FormControl>
                     <Input placeholder="Name of Donation Product" {...field} disabled={isLoading} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="quantity"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input placeholder="Quantity" {...field} disabled={isLoading} type="number" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

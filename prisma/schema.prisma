@@ -218,13 +218,15 @@ model Community {
 
 // to get number of donators by community use this model fetch it by Community ID...
 model Donation {
-  id        String         @id @default(cuid())
-  donatee   String
-  name      String
-  product   String
-  date      DateTime
-  image     String
-  status    DonationStatus @default(PENDING)
+  id           String         @id @default(cuid())
+  donatee      String
+  name         String
+  product      String
+  quantity     Float
+  date         DateTime
+  image        String
+  pointsToGain Float?
+  status       DonationStatus @default(PENDING)
   // name                String
   // lastName            String
   // phoneNumber         String
@@ -242,8 +244,8 @@ model Donation {
   // comment             String   @db.Text
   // image               String   @db.Text
   // isAnonymous         Boolean
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 
   donator   User   @relation(fields: [donatorId], references: [id], onDelete: Cascade)
   donatorId String
