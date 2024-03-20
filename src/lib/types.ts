@@ -1,4 +1,4 @@
-import { Post, Role, StatusType, User, DonationStatus, TransactionType } from "@prisma/client";
+import { Post, Role, StatusType, User, DonationStatus, TransactionType, Donation, Transaction } from "@prisma/client";
 
 export interface Posts {
     id: string;
@@ -66,7 +66,7 @@ interface UserHardCoded {
     post: Post[]
 }
 
-export type DonationWithDonators = {
+export interface DonationWithDonators {
     id: string;
     donatee: string;
     name: string;
@@ -81,9 +81,10 @@ export type DonationWithDonators = {
     donatorId: string;
     communityId: string | null;
     donator: User
+
 }
 
-export type TransactionWithUserAndPost = {
+export interface TransactionWithUserAndPost {
     id: string;
     type: TransactionType;
     points: number;
@@ -92,5 +93,5 @@ export type TransactionWithUserAndPost = {
     userId: string;
     postId: string | null;
     user: User;
-    Post: Post;
+    post: Post | null;
 }

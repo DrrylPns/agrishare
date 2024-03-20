@@ -5,7 +5,7 @@ import prisma from "@/lib/db"
 export const fetchTransaction = async () => {
     const transactions = await prisma.transaction.findMany({
         include: {
-            Post: true,
+            post: true,
             user: true,
         }
     })

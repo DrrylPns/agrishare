@@ -4,10 +4,11 @@ import React from 'react'
 import { DataTable } from '../users/_components/data-table'
 import { fetchTrades } from '../../../../actions/trade'
 import { fetchDonations } from '../../../../actions/donate'
-import { ColumnsTrade } from './_components/ColumnsTrade'
-import { ColumnsDonation } from './_components/ColumnsDonation'
 import { fetchTransaction } from '../../../../actions/transaction'
-import { ColumnsPoints } from './_components/ColumnsPoints'
+import { columnsTrade } from './_components/columnsTrade'
+import { columnsDonation } from './_components/columnsDonation'
+import { columnsPoints } from './_components/columnsPoints'
+
 
 const page = async () => {
 
@@ -29,18 +30,17 @@ const page = async () => {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <DataTable data={trades} columns={ColumnsTrade} />
+              <DataTable data={trades} columns={columnsTrade} />
             </TabPanel>
             <TabPanel>
               <DataTable
                 data={donations}
-                //@ts-ignore
-                columns={ColumnsDonation} />
+                columns={columnsDonation} />
             </TabPanel>
             <TabPanel>
-              <DataTable data={transactions}
-                //@ts-ignore
-                columns={ColumnsPoints} />
+              <DataTable
+                data={transactions}
+                columns={columnsPoints} />
             </TabPanel>
             <TabPanel>
               {/* <DataTable data={ } columns={ } /> */}

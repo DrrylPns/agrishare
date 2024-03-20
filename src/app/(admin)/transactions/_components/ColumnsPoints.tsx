@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { DataTableColumnHeader } from "../../users/_components/data-table-column-header"
 import { format } from "date-fns"
 
-export const ColumnsPoints: ColumnDef<TransactionWithUserAndPost>[] = [
+export const columnsPoints: ColumnDef<TransactionWithUserAndPost>[] = [
     {
         accessorKey: "id",
         header: ({ column }) => {
