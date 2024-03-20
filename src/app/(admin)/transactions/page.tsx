@@ -5,9 +5,9 @@ import { DataTable } from '../users/_components/data-table'
 import { fetchTrades } from '../../../../actions/trade'
 import { fetchDonations } from '../../../../actions/donate'
 import { fetchTransaction } from '../../../../actions/transaction'
-import { columnsTrade } from './_components/ColumnsTrade'
-import { columnsDonations } from './_components/ColumnsDonation'
-import { columnsPoints } from './_components/ColumnsPoints'
+import { columnsTrade } from './_components/columnsTrade'
+import { columnsDonations } from './_components/columnsDonation'
+import { columnsPoints } from './_components/columnsPoints'
 
 
 const page = async () => {
