@@ -6,11 +6,14 @@ import { fetchTrades } from '../../../../actions/trade'
 import { fetchDonations } from '../../../../actions/donate'
 import { ColumnsTrade } from './_components/ColumnsTrade'
 import { ColumnsDonation } from './_components/ColumnsDonation'
+import { fetchTransaction } from '../../../../actions/transaction'
+import { ColumnsPoints } from './_components/ColumnsPoints'
 
 const page = async () => {
 
   const trades = await fetchTrades()
   const donations = await fetchDonations()
+  const transactions = await fetchTransaction()
 
   return (
     <div className=''>
@@ -35,7 +38,9 @@ const page = async () => {
                 columns={ColumnsDonation} />
             </TabPanel>
             <TabPanel>
-              {/* <DataTable data={ } columns={ } /> */}
+              <DataTable data={transactions}
+                //@ts-ignore
+                columns={ColumnsPoints} />
             </TabPanel>
             <TabPanel>
               {/* <DataTable data={ } columns={ } /> */}

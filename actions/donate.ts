@@ -43,6 +43,14 @@ export const handleDonations = async (status: DonationStatus, pointsToGain: numb
         return { error: "Donation is already cancelled." };
     }
 
+    if (status === "CANCELLED" && currentDonation.status === "APPROVED") {
+        return { error: "Invalid action, the trade is already cancelled." }
+    }
+
+    if (status === "APPROVED" && currentDonation.status === "CANCELLED") {
+        return { error: "Invalid action, the trade is already confirmed." }
+    }
+
     const processDonate = await prisma.donation.update({
         data: { status },
         where: { id: currentDonation.id }
@@ -59,11 +67,21 @@ export const handleDonations = async (status: DonationStatus, pointsToGain: numb
             })
         }
 
+        await prisma.transaction.create({
+            data: {
+                type: "DONATE",
+                points: pointsToGain,
+                userId: donator.id,
+            }
+        })
+
         revalidatePath("/transactions")
         return { success: "Confirmed the donation." }
     }
 
     if (status === "CANCELLED") {
+
+        // TODO: CREATE TRANSACTION FOR CANCELLED DONATIONS CAN EVEN IMPLEMENT PENALTY WHEREIN USERS CAN RECEIVE MINUS LOYALTY POINTS
 
         revalidatePath("/transactions")
         return { success: "Cancelled the donation" }
