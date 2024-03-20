@@ -15,7 +15,7 @@ import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { handleDonations } from "../../../../../actions/donate";
 
-export const columnsDonations: ColumnDef<DonationWithDonators>[] = [
+export const columnsDonation: ColumnDef<DonationWithDonators>[] = [
     {
         accessorKey: "id",
         header: ({ column }) => {
