@@ -171,7 +171,7 @@ export const ColumnsDonation: ColumnDef<DonationWithDonators>[] = [
                         <DialogContent className="lg:max-w-2xl">
                             <DialogHeader>
                                 <DialogTitle>
-                                    <AdminTitle entry="4" title="Trade Review" />
+                                    <AdminTitle entry="4" title="Donations Review" />
                                     <p className="text-center">Status: {donationStatus}</p>
                                 </DialogTitle>
                                 <DialogDescription>
@@ -223,7 +223,7 @@ export const ColumnsDonation: ColumnDef<DonationWithDonators>[] = [
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Are you sure you want to confirm the transaction?</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Note: that this action can be cancelled anytime.
+                                    Note: Once confirmed, this action cannot be undone.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -262,7 +262,7 @@ export const ColumnsDonation: ColumnDef<DonationWithDonators>[] = [
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Are you sure you want to cancel the transaction?</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Note: that this action can be cancelled anytime.
+                                    Note: Once confirmed, this action cannot be undone.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>

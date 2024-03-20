@@ -66,7 +66,7 @@ export const fetchTrades = () => {
     return trades
 }
 
-export const handleTrade = async (status: StatusType, tradeId: string, tradeeId: string, traderId: string, tradeeQty: number, traderQty: number) => {
+export const handleTrade = async (status: StatusType, tradeId: string, tradeeId: string, traderId: string, tradeeQty: number, traderQty: number, postId: string) => {
     const session = await auth()
 
     if (!session) return { error: "Unauthorized" }
@@ -95,6 +95,14 @@ export const handleTrade = async (status: StatusType, tradeId: string, tradeeId:
 
     if (status === "CANCELLED" && currentTrade.status === "CANCELLED") {
         return { error: "Trade is already cancelled." };
+    }
+
+    if (status === "CANCELLED" && currentTrade.status === "COMPLETED") {
+        return { error: "Invalid action, the trade is already cancelled." }
+    }
+
+    if (status === "COMPLETED" && currentTrade.status === "CANCELLED") {
+        return { error: "Invalid action, the trade is already confirmed." }
     }
 
     await prisma.trade.update({
@@ -142,6 +150,34 @@ export const handleTrade = async (status: StatusType, tradeId: string, tradeeId:
             }
         })
 
+        await prisma.post.update({
+            data: {
+                quantity: {
+                    decrement: tradeeQty
+                }
+            },
+            where: {
+                id: postId
+            }
+        })
+
+        await prisma.transaction.create({
+            data: {
+                type: "TRADE",
+                points: tradeeCalculatedPoints,
+                userId: tradeeId,
+                postId,
+            }
+        })
+
+        await prisma.transaction.create({
+            data: {
+                type: "TRADE",
+                points: traderCalculatedPoints,
+                userId: traderId,
+            }
+        })
+
         revalidatePath("/transactions")
         return { success: "Confirmed the trade." }
     }
@@ -181,6 +217,8 @@ export const handleTrade = async (status: StatusType, tradeId: string, tradeeId:
         //         id: traderId
         //     }
         // })
+
+        // TODO: CREATE TRANSACTION FOR CANCELLED TRADES CAN EVEN IMPLEMENT PENALTY WHEREIN USERS CAN RECEIVE MINUS LOYALTY POINTS
 
         revalidatePath("/transactions")
         return { success: "Cancelled the trade." }

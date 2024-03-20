@@ -262,7 +262,7 @@ export const ColumnsTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Are you sure you want to confirm the transaction?</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Note: that this action can be cancelled anytime.
+                                    Note: Once confirmed, this action cannot be undone.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -272,7 +272,7 @@ export const ColumnsTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleTrade("COMPLETED", tradeId, tradeeId, traderId, tradeeQty, traderQty).then((callback) => {
+                                                handleTrade("COMPLETED", tradeId, tradeeId, traderId, tradeeQty, traderQty, postId).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,
@@ -300,7 +300,7 @@ export const ColumnsTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Are you sure you want to cancel the transaction?</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Note: that this action can be cancelled anytime.
+                                    Note: Once confirmed, this action cannot be undone.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
@@ -310,7 +310,7 @@ export const ColumnsTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleTrade("CANCELLED", tradeId, tradeeId, traderId, tradeeQty, traderQty).then((callback) => {
+                                                handleTrade("CANCELLED", tradeId, tradeeId, traderId, tradeeQty, traderQty, postId).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,
