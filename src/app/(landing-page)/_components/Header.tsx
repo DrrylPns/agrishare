@@ -6,9 +6,20 @@ import Logo from './images/Logo.png';
 import { Button } from '@/components/ui/button';
 import { BsArrowRight } from 'react-icons/bs';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 function Header() {
   const router = useRouter()
+  const {data: session, status} = useSession()
+
+  const handleStartNowBtn = () =>{
+    if(session?.user.role === "TRADER"){
+      router.push('/agrifeed') 
+    } else {
+      router.push('/donation')
+    }
+    
+  } 
   return (
     <div className='relative' id='home'>
       <header className={`relative font-poppins w-full text-center tracking-widest`}>
@@ -20,7 +31,7 @@ function Header() {
           />
           <div className='relative mt-[-4rem] md:mt-[-8rem]'>
             <h1 className='relative z-30 text-white text-lg font-poppins font-medium '>Share to care, Trade to aid.</h1>
-            <Button onClick={() => { router.push('/agrifeed') }} variant={"default"} className='relative mt-10 z-30 rounded-2xl px-5 text-[0.7rem]'>
+            <Button onClick={handleStartNowBtn} variant={"default"} className='relative mt-10 z-30 rounded-2xl px-5 text-[0.7rem]'>
               Start Now!<span className='ml-2 text-lg'><BsArrowRight /></span>
             </Button>
           </div>
