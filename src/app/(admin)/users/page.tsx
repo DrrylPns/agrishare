@@ -6,6 +6,7 @@ import axios from 'axios';
 import { User } from '@prisma/client';
 import { columns } from './_components/columns';
 import { fetchDonatorAndTrader } from '../../../../actions/users';
+import prisma from '@/lib/db';
 
 const page = async () => {
 
@@ -17,7 +18,18 @@ const page = async () => {
   //   }
   // })
 
-  const users = await fetchDonatorAndTrader() as User[]
+  // const users = await fetchDonatorAndTrader() as User[]
+
+  const users = await prisma.user.findMany({
+    where: {
+      role: {
+        in: ["DONATOR", "TRADER"]
+      }
+    },
+    orderBy: {
+      createdAt: "desc"
+    },
+  })
 
   return (
     <div className=''>
