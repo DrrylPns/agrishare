@@ -10,6 +10,9 @@ export const fetchDonations = async () => {
     const donations = await prisma.donation.findMany({
         include: {
             donator: true
+        },
+        orderBy: {
+            createdAt: "desc"
         }
     })
 

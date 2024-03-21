@@ -24,6 +24,9 @@ export const fetchNotifications = async () => {
                 }
             }
         },
+        orderBy: {
+            createdAt: "desc"
+        },
     })
 
     return notifications || []
