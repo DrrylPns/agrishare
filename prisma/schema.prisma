@@ -64,6 +64,7 @@ model User {
   trader                Trade[]                @relation("Trader")
   Donation              Donation[]
   notificationsReceived Notification[]
+  AgriChange            AgriChange[]
 }
 
 enum Role {
@@ -161,6 +162,29 @@ enum Subcategory {
   SOILS3
   FERTILIZER1
   // TO BE ADDED
+}
+
+model AgriChange {
+  id           String        @id @default(cuid())
+  image        String        @db.Text
+  name         String
+  description  String        @db.Text
+  quantity     Float         @default(0)
+  weight       Float
+  color        String
+  type         Types?
+  isFavorite   Boolean       @default(false)
+  category     Category
+  subcategory  Subcategory?
+  status       Status
+  shelfLife    String
+  pointsNeeded Float
+  transaction  Transaction[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
 }
 
 enum Status {
@@ -272,8 +296,11 @@ model Transaction {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  postId String?
-  post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId       String?
+  post         Post?       @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  agrichange   AgriChange? @relation(fields: [agrichangeId], references: [id])
+  agrichangeId String?
 }
 
 enum TransactionType {
