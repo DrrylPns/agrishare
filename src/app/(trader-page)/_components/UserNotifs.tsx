@@ -16,6 +16,7 @@ import { formatCreatedAt } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { BeatLoader } from 'react-spinners'
 import { Separator } from '@/components/ui/separator'
+import { GoDotFill } from "react-icons/go";
 
 export const UserNotifs = () => {
     const [loading, setLoading] = useState<boolean>(true);
@@ -38,11 +39,17 @@ export const UserNotifs = () => {
         fetchNotificationsByUser()
     }, [])
 
+    const hasUnread = notifications.some(notification => notification.isRead == false);
 
     return (
         <Popover>
             <PopoverTrigger>
-                <CiBellOn />
+                <div className='relative'>
+                    <CiBellOn /> 
+                    {hasUnread && (
+                         <span className='text-red-600 text-lg absolute right-[-1px] top-[-1px]'><GoDotFill /></span>
+                    )}
+                </div>
             </PopoverTrigger>
             <PopoverContent className='p-0'>
                 <ScrollArea className="h-72 w-full rounded-md border">
