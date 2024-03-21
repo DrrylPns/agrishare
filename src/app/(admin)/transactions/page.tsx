@@ -30,17 +30,25 @@ const page = async () => {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <DataTable data={trades} columns={columnTrade} />
+              <DataTable
+                data={trades}
+                columns={columnTrade}
+                isHistory
+              />
             </TabPanel>
             <TabPanel>
               <DataTable
                 data={donations}
-                columns={columnDonation} />
+                columns={columnDonation}
+                isHistory
+              />
             </TabPanel>
             <TabPanel>
               <DataTable
                 data={transactions}
-                columns={columnPoints} />
+                columns={columnPoints}
+                isHistory
+              />
             </TabPanel>
             <TabPanel>
               {/* <DataTable data={ } columns={ } /> */}
