@@ -30,10 +30,18 @@ export const fetchNotifications = async () => {
 }
 
 export const notificationRead = async (notificationId: string) => {
-    const notificationIsRead = await prisma.notification.update({
-        where: { id: notificationId },
-        data: { isRead: true }
+    const notification = await prisma.notification.findFirst({
+        where: { id: notificationId }
     })
 
-    return notificationIsRead
+    if (!notification) return { error: "Invalid notification." }
+
+    if (!notification.isRead) {
+        await prisma.notification.update({
+            where: { id: notification.id },
+            data: { isRead: true }
+        })
+
+        return { success: "Notification read." }
+    }
 }

@@ -10,17 +10,22 @@ import {
 } from "@/components/ui/dialog"
 import { Info } from 'lucide-react'
 
+import { PageNF } from '@/components/not-found'
+import { fetchUser } from '../../../../actions/users'
+import { User } from '@prisma/client'
 
-function page() {
+const page = async () => {
 
-  let points = 3000;
+  const user = await fetchUser() as User
+
+  if (!user) return <PageNF />
 
   return (
     <Card className='max-w-5xl h-full drop-shadow-md bg-[#BCF6BE] outline-none border-none p-0 space-y-3 relative mt-[60px] lg:mt-5 xl:mt-0'>
 
       <div className='w-full flex flex-col justify-center items-center mt-5'>
         <p>My points</p>
-        <p className='font-extrabold text-[24px]'>{points}</p>
+        <p className='font-extrabold text-[24px]'>{user.points}</p>
       </div>
 
       <Dialog>
@@ -59,15 +64,15 @@ function page() {
 
       <div className={`bg-[url(https://utfs.io/f/6cab600f-5d4b-4c30-94da-7af722f07000-cm65r5.png)] bg-no-repeat h-[400px]`}>
         <div className='flex flex-col justify-start items-center w-full gap-3'>
-          {points >= 3000 ? (
+          {user.points >= 3000 ? (
             <Image src="/images/seedling5.svg" alt="seedling5" width={200} height={200} />
-          ) : points >= 1000 && points < 3000 ? (
+          ) : user.points >= 1000 && user.points < 3000 ? (
             <Image src="/images/seedling4.svg" alt="seedling4" width={200} height={200} />
-          ) : points >= 500 && points < 1000 ? (
+          ) : user.points >= 500 && user.points < 1000 ? (
             <Image src="/images/seedling3.svg" alt="seedling3" width={200} height={200} />
-          ) : points >= 100 && points < 500 ? (
+          ) : user.points >= 100 && user.points < 500 ? (
             <Image src="/images/seedling2.svg" alt="seedling2" width={200} height={200} />
-          ) : points === 0 ? (
+          ) : user.points === 0 ? (
             <Image src="/images/seedling1.svg" alt="seedling1" width={200} height={200} />
           ) : (<></>)
           }
