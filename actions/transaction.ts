@@ -7,7 +7,10 @@ export const fetchTransaction = async () => {
         include: {
             post: true,
             user: true,
-        }
+        },
+        orderBy: {
+            createdAt: "desc"
+        },
     })
 
     return transactions

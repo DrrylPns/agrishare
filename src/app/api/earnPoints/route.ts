@@ -81,7 +81,10 @@ export async function GET() {
             },
             include: {
                 user: true
-            }
+            },
+            orderBy: {
+                createdAt: "desc"
+            },
         })
 
         return new NextResponse(JSON.stringify(transactions))

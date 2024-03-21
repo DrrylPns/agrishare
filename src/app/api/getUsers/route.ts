@@ -9,7 +9,10 @@ export async function GET() {
                 role: {
                     in: ["DONATOR", "TRADER"]
                 }
-            }
+            },
+            orderBy: {
+                createdAt: "desc"
+            },
         })
 
         return new NextResponse(JSON.stringify(users))

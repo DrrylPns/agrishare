@@ -19,3 +19,18 @@ export const fetchUser = async () => {
         return { error: `${error}` }
     }
 }
+
+export const fetchDonatorAndTrader = async () => {
+    const users = await prisma.user.findMany({
+        where: {
+            role: {
+                in: ["DONATOR", "TRADER"]
+            }
+        },
+        orderBy: {
+            createdAt: "desc"
+        },
+    })
+
+    return users
+}

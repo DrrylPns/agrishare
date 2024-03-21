@@ -1,4 +1,3 @@
-"use client"
 import AdminTitle from '@/components/AdminTitle';
 import { Card, Grid, } from '@tremor/react';
 import { DataTable } from './_components/data-table';
@@ -6,16 +5,19 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { User } from '@prisma/client';
 import { columns } from './_components/columns';
+import { fetchDonatorAndTrader } from '../../../../actions/users';
 
-const page = () => {
+const page = async () => {
 
-  const { data: users } = useQuery({
-    queryKey: ['users'],
-    queryFn: async () => {
-      const { data } = await axios.get("/api/getUsers")
-      return data as User[]
-    }
-  })
+  // const { data: users } = useQuery({
+  //   queryKey: ['users'],
+  //   queryFn: async () => {
+  //     const { data } = await axios.get("/api/getUsers")
+  //     return data as User[]
+  //   }
+  // })
+
+  const users = await fetchDonatorAndTrader() as User[]
 
   return (
     <div className=''>
