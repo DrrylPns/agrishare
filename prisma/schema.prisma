@@ -63,6 +63,7 @@ model User {
   tradee                Trade[]                @relation("Tradee")
   trader                Trade[]                @relation("Trader")
   Donation              Donation[]
+  notificationsReceived Notification[]
 }
 
 enum Role {
@@ -308,6 +309,8 @@ model Trade {
 
   post   Post   @relation(fields: [postId], references: [id])
   postId String
+
+  notifications Notification[]
 }
 
 enum StatusType {
@@ -315,6 +318,23 @@ enum StatusType {
   PROCESSING // INACCEPT NA NG TRADEE YUNG TRADE INTENT
   COMPLETED // ADMIN HAS CONFIRMED THAT TRADE IS INDEED SUCCESSFUL // IF COMPLETED THEN BAWAS NA QTY KAAGAD
   CANCELLED // ADMIN FINDS THE TRADE SUSPICIOUS
+}
+
+// every time na magbabago yung notification like from pending to processing  
+model Notification {
+  id        String     @id @default(cuid())
+  type      StatusType @default(PENDING)
+  isRead    Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  // user na naka receive ng notification.
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // dito iffetch yung current trade intent na pending shempre.
+  tradeId String
+  trade   Trade  @relation(fields: [tradeId], references: [id], onDelete: Cascade)
 }
 
 //NOT SURE PA DITO -- di na ata kailangan to, i-fetch nalang to sa model Transaction at dagdagan ang transaction type ng CLAIM.

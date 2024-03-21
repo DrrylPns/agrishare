@@ -93,6 +93,7 @@ function Page({
         startTransition(() => {
             trade(values as TradeType, number, tradeeId as string, imageUrl, postId as string).then((data) => {
                 if (data?.error) {
+                    form.reset()
                     setError(data.error)
                 }
 
@@ -252,7 +253,7 @@ function Page({
                                 name="weight"
                                 render={({ field }) => (
                                     <FormItem className='col'>
-                                        <FormLabel>Weight</FormLabel>
+                                        <FormLabel>Weight by (kg)</FormLabel>
                                         <FormControl>
                                             <Input placeholder="1 Kg" {...field} disabled={isPending} type="number" />
                                         </FormControl>

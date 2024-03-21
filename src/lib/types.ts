@@ -1,4 +1,4 @@
-import { Post, Role, StatusType, User, DonationStatus, TransactionType, Donation, Transaction } from "@prisma/client";
+import { Post, Role, StatusType, User, DonationStatus, TransactionType, Trade } from "@prisma/client";
 
 export interface Posts {
     id: string;
@@ -94,4 +94,33 @@ export interface TransactionWithUserAndPost {
     postId: string | null;
     user: User;
     post: Post | null;
+}
+
+export interface NotificationWithUser {
+    id: string;
+    type: StatusType;
+    isRead: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    userId: string;
+    tradeId: string;
+    user: User
+    trade: TradeWithTradersAndPost
+}
+
+interface TradeWithTradersAndPost {
+    id: string;
+    item: string;
+    image: string;
+    quantity: number;
+    tradedQuantity: number;
+    shelfLife: string;
+    weight: number;
+    value: number;
+    description: string;
+    status: StatusType;
+    createdAt: Date;
+    updatedAt: Date;
+    trader: User;
+    post: Post;
 }

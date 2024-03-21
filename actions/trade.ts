@@ -28,11 +28,19 @@ export const trade = async (
 
     if (!user) return { error: "No user found." }
 
+    if (user.id === tradeeId) {
+        return { error: "You cannot issue a trade for your own post." };
+    }
+
     const { description, item, value, weight, quantity, shelfLife } = validatedFields.data
 
     if (quantity <= 0) return { error: "Quantity can't be less than 0" }
 
-    await prisma.trade.create({
+    if (value <= 0) return { error: "Value can't be less than 0" }
+
+    if (weight <= 0) return { error: "Weight can't be less than 0" }
+
+    const trade = await prisma.trade.create({
         data: {
             image,
             tradedQuantity,
@@ -47,6 +55,15 @@ export const trade = async (
             shelfLife,
         }
     })
+
+    if (trade) {
+        await prisma.notification.create({
+            data: {
+                userId: tradeeId,
+                tradeId: trade.id,
+            }
+        })
+    }
 
     return { success: "Trade issued." }
 }
@@ -223,4 +240,51 @@ export const handleTrade = async (status: StatusType, tradeId: string, tradeeId:
         revalidatePath("/transactions")
         return { success: "Cancelled the trade." }
     }
+}
+
+export const fetchTradeByUser = async () => {
+    const session = await auth()
+
+    if (!session) return { error: "Unauthorized" }
+
+    const user = await getUserById(session.user.id)
+
+    if (!user) return { error: "No user found." }
+
+    const trades = await prisma.trade.findMany({
+        include: {
+            tradee: true,
+            trader: true,
+            post: true,
+        },
+        orderBy: {
+            createdAt: "desc"
+        },
+        where: {
+            tradeeId: user.id
+        }
+    })
+
+    return trades
+}
+
+export const singleTrade = async (tradeId: string) => {
+    const session = await auth()
+
+    if (!session) return { error: "Unauthorized" }
+
+    const user = await getUserById(session.user.id)
+
+    if (!user) return { error: "No user found." }
+
+    const trade = await prisma.trade.findFirst({
+        where: { id: tradeId },
+        include: {
+            tradee: true,
+            trader: true,
+            post: true,
+        }
+    })
+
+    return trade
 }

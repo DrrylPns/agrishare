@@ -22,6 +22,7 @@ import { MdDashboard, MdHistory } from 'react-icons/md';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { TbClover2 } from 'react-icons/tb';
 import { FaRegFileAlt } from 'react-icons/fa';
+import { UserNotifs } from './UserNotifs';
 
 
 function Navbar() {
@@ -70,7 +71,7 @@ function Navbar() {
                         <CiHeart />
 
                     </Link>
-                    <CiBellOn />
+                    <UserNotifs />
                     <UserAccountAvatar />
                 </div>
             ) : status === "loading" ? (

@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { formatDistanceToNow } from 'date-fns';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -22,3 +23,7 @@ export function formattedCategory(category: string) {
 
   return formatted.replace(/(?:^|\s)\S/g, (char) => char.toUpperCase());
 }
+
+export const formatCreatedAt = (createdAt: Date): string => {
+  return formatDistanceToNow(new Date(createdAt), { addSuffix: true });
+};
