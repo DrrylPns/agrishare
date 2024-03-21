@@ -9,7 +9,7 @@ import { columns } from './_components/columns';
 import { fetchDonatorAndTrader } from '../../../../actions/users';
 import prisma from '@/lib/db';
 
-const page = async () => {
+const page = () => {
 
   const { data: users } = useQuery({
     queryKey: ['users'],
