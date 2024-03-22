@@ -6,6 +6,7 @@ import { auth } from "../auth";
 import { StatusType, Subcategory } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { sendTradeNotification } from "@/lib/mail";
+import { generateTRD } from "@/lib/utils";
 
 
 export const trade = async (
@@ -41,6 +42,8 @@ export const trade = async (
 
     if (weight <= 0) return { error: "Weight can't be less than 0" }
 
+    const trd = generateTRD()
+
     const trade = await prisma.trade.create({
         data: {
             image,
@@ -55,7 +58,8 @@ export const trade = async (
             postId,
             shelfLife,
             category,
-            subcategory
+            subcategory,
+            trd
         }
     })
 
@@ -236,12 +240,15 @@ export const handleTrade = async (status: StatusType, tradeId: string, tradeeId:
             }
         })
 
+        // pass the generated trade trd to both tradee and trader same lang dapat kasi tradeId yon eh
+
         await prisma.transaction.create({
             data: {
                 type: "TRADE",
                 points: tradeeCalculatedPoints,
                 userId: tradeeId,
                 postId,
+                trd: currentTrade.trd
             }
         })
 
@@ -250,6 +257,7 @@ export const handleTrade = async (status: StatusType, tradeId: string, tradeeId:
                 type: "TRADE",
                 points: traderCalculatedPoints,
                 userId: traderId,
+                trd: currentTrade.trd
             }
         })
 

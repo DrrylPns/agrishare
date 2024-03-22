@@ -18,14 +18,14 @@ import { handleDonations } from "../../../actions/donate"
 
 export const columnDonation: ColumnDef<DonationWithDonators>[] = [
     {
-        accessorKey: "id",
+        accessorKey: "dn",
         header: ({ column }) => {
             return (
                 <DataTableColumnHeader column={column} title="TRADE ID" />
             )
         },
         cell: ({ row }) => {
-            const id = row.original.id
+            const id = row.original.dn
 
             return <div
                 className=""

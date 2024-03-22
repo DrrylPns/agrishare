@@ -70,11 +70,14 @@ export const handleDonations = async (status: DonationStatus, pointsToGain: numb
             })
         }
 
+        
+
         await prisma.transaction.create({
             data: {
                 type: "DONATE",
                 points: pointsToGain,
                 userId: donator.id,
+                dn: currentDonation.dn
             }
         })
 
@@ -85,6 +88,8 @@ export const handleDonations = async (status: DonationStatus, pointsToGain: numb
     if (status === "CANCELLED") {
 
         // TODO: CREATE TRANSACTION FOR CANCELLED DONATIONS CAN EVEN IMPLEMENT PENALTY WHEREIN USERS CAN RECEIVE MINUS LOYALTY POINTS
+
+        // magccreate pa rin ng transaction pero cancelled at walang maggain na points?
 
         revalidatePath("/transactions")
         return { success: "Cancelled the donation" }

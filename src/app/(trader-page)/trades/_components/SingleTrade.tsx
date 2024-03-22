@@ -9,17 +9,21 @@ interface SingleTradeProps {
 }
 
 export const SingleTrade: React.FC<SingleTradeProps> = ({ trade }) => {
+
+    const first = trade.trader.name?.charAt(0)
+    const last = trade.trader.lastName?.charAt(0)
+
     return (
         <div className="bg-white p-4 rounded-lg shadow max-w-md mx-auto">
             <div className="flex items-center justify-center gap-2">
                 <Avatar>
                     <AvatarImage
                         className='cursor-pointer'
-                        src={`${trade.trader.image ? trade.trader.image : "/avatar-placeholder.jpg"}`}
+                        src={trade.trader.image as string}
                         width={25}
                         height={25}
                         alt='User Profile' />
-                    <AvatarFallback>Trader Profile</AvatarFallback>
+                    <AvatarFallback>{first}{last}</AvatarFallback>
                 </Avatar>
                 <h2 className="text-2xl font-semibold mt-4">{trade.trader.name} {" "} {trade.trader.lastName}</h2>
                 {/* <div className="flex items-center mt-1">

@@ -26,6 +26,7 @@ export interface Posts {
 export interface TradeWithTradeeTraders {
     id: string;
     item: string;
+    trd: string
     image: string;
     quantity: number;
     tradedQuantity: number;
@@ -69,6 +70,7 @@ interface UserHardCoded {
 
 export interface DonationWithDonators {
     id: string;
+    dn: string;
     donatee: string;
     name: string;
     product: string;
@@ -87,6 +89,9 @@ export interface DonationWithDonators {
 
 export interface TransactionWithUserAndPost {
     id: string;
+    dn: string | null;
+    trd: string | null;
+    itm: string | null;
     type: TransactionType;
     points: number;
     createdAt: Date;

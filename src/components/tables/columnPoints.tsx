@@ -7,14 +7,30 @@ import { format } from "date-fns"
 
 export const columnPoints: ColumnDef<TransactionWithUserAndPost>[] = [
     {
-        accessorKey: "id",
+        accessorKey: "ids",
         header: ({ column }) => {
             return (
-                <DataTableColumnHeader column={column} title="TRADE ID" />
+                <DataTableColumnHeader column={column} title="REFERENCE ID" />
             )
         },
         cell: ({ row }) => {
-            const id = row.original.id
+
+            let id
+
+            const trd = row.original.trd
+            const dn = row.original.dn
+            const itm = row.original.itm
+
+
+            const type = row.original.type
+
+            if (type === "DONATE") {
+                id = row.original.dn
+            } else if (type === "TRADE") {
+                id = row.original.trd
+            } else if (type === "CLAIM") {
+                id = row.original.itm
+            }
 
             return <div
                 className=""

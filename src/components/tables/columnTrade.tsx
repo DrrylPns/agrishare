@@ -18,14 +18,14 @@ import { handleTrade } from "../../../actions/trade"
 
 export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
     {
-        accessorKey: "id",
+        accessorKey: "trd",
         header: ({ column }) => {
             return (
                 <DataTableColumnHeader column={column} title="TRADE ID" />
             )
         },
         cell: ({ row }) => {
-            const id = row.original.id
+            const id = row.original.trd
 
             return <div
                 className=""
@@ -162,6 +162,43 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
             const firstLetterOfTradeeName = tradeeName?.charAt(0);
             const firstLetterOfTradeeLastName = tradeeLastName?.charAt(0);
 
+            // kalkulasyon at rebolusyon
+
+            let conditionRate = 1.5
+            let ptsEquivalentTrader
+            let ptsEquivalentTradee
+
+            if (traderSubcategory === "FRUIT_VEGETABLES") {
+                ptsEquivalentTrader = 0.18
+            } else if (traderSubcategory === "HERBS_VEGETABLES") {
+                ptsEquivalentTrader = 0.17
+            } else if (traderSubcategory === "LEAFY_VEGETABLES") {
+                ptsEquivalentTrader = 0.15
+            } else if (traderSubcategory === "PODDED_VEGETABLES") {
+                ptsEquivalentTrader = 0.25
+            } else if (traderSubcategory === "ROOT_VEGETABLES") {
+                ptsEquivalentTrader = 0.20
+            } else {
+                ptsEquivalentTrader = 0.15
+            }
+    
+            if (tradeeSubcategory === "FRUIT_VEGETABLES") {
+                ptsEquivalentTradee = 0.18
+            } else if (tradeeSubcategory === "HERBS_VEGETABLES") {
+                ptsEquivalentTradee = 0.17
+            } else if (tradeeSubcategory === "LEAFY_VEGETABLES") {
+                ptsEquivalentTradee = 0.15
+            } else if (tradeeSubcategory === "PODDED_VEGETABLES") {
+                ptsEquivalentTradee = 0.25
+            } else if (tradeeSubcategory === "ROOT_VEGETABLES") {
+                ptsEquivalentTradee = 0.20
+            } else {
+                ptsEquivalentTradee = 0.15
+            }
+
+            const tradeeCalculatedPoints = (6 / ptsEquivalentTradee) * tradeeQty * conditionRate
+            const traderCalculatedPoints = (6 / ptsEquivalentTrader) * tradeeQty * conditionRate
+
             return (
                 <>
                     <DropdownMenu>
@@ -209,9 +246,9 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                                     <p>Item: {traderItem}</p>
                                                     <p>Quantity: {traderQty}</p>
                                                     <p>
-                                                        Accumulated Points: <span className="text-green-500">{traderPts.toFixed(2)} Point(s)</span>
+                                                        Accumulated Points: <span className="text-green-500">{traderCalculatedPoints.toFixed(2)} Point(s)</span>
                                                     </p>
-                                                    <p>Shelf Life: {traderShelfLife} Day(s)</p>
+                                                    <p>Shelf Life: {traderShelfLife}</p>
                                                     <p>Date: {format(tradeDate, "PPP")}</p>
                                                     {/* redirect to uploadthing when clicked. */}
                                                     <Link className="text-blue-500" href="#">
@@ -232,9 +269,9 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                                     <p>Item: {tradeeItem}</p>
                                                     <p>Quantity: {tradeeQty}</p>
                                                     <p>
-                                                        Accumulated Points: <span className="text-green-500">{tradeePts.toFixed(2)} Point(s)</span>
+                                                        Accumulated Points: <span className="text-green-500">{tradeeCalculatedPoints.toFixed(2)} Point(s)</span>
                                                     </p>
-                                                    <p>Shelf Life: {tradeeShelfLife} Day(s)</p>
+                                                    <p>Shelf Life: {tradeeShelfLife}</p>
                                                     <p>Date: {format(tradeDate, "PPP")}</p>
                                                     <Link className="text-blue-500" href="#">
                                                         Proof: image.jpg

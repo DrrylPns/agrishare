@@ -39,8 +39,10 @@ export const UserNotifs = () => {
         fetchNotificationsByUser()
     }, [])
 
+
     const hasUnread = notifications.some(notification => notification.isRead == false);
 
+    console.log("notifications:", notifications);
     return (
         <Popover>
             <PopoverTrigger>

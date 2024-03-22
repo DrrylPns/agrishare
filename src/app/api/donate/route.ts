@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { auth } from "../../../../auth";
 import { DonationSchema } from "@/lib/validations/donation";
 import { getUserById } from "../../../../data/user";
+import { generateDonationHistoryID } from "@/lib/utils";
 
 export async function POST(req: Request) {
     try {
@@ -25,9 +26,12 @@ export async function POST(req: Request) {
 
         const calculatedPointsToGain = 0
 
+        const dn = generateDonationHistoryID()
+
         const donation = await prisma.donation.create({
             data: {
                 donatee,
+                dn,
                 name,
                 product,
                 image: image as string,

@@ -245,6 +245,7 @@ model Community {
 // to get number of donators by community use this model fetch it by Community ID...
 model Donation {
   id           String         @id @default(cuid())
+  dn           String         @unique
   donatee      String
   name         String
   product      String
@@ -289,6 +290,10 @@ enum DonationStatus {
 
 model Transaction {
   id     String          @id @default(cuid())
+  ps     String? // mali ps explain sakanila kung bakit
+  itm    String? // eto tama to kaso to do pa dahil wala pang claiming functionality.
+  dn     String?
+  trd    String?
   type   TransactionType
   points Float           @default(0)
 
@@ -316,6 +321,7 @@ enum TransactionType {
 // once trade is COMPLETED make a transaction.create based on trade values para mapalabas siya sa transaction history.
 model Trade {
   id             String       @id @default(cuid())
+  trd            String       @unique
   item           String
   image          String       @db.Text
   quantity       Float
