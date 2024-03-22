@@ -19,6 +19,24 @@ export const fetchDonations = async () => {
     return donations
 }
 
+export const fetchDonationsByUser = async () => {
+    const session = await auth()
+
+    if (!session) return { error: "Unauthorized" }
+
+    const donations = await prisma.donation.findMany({
+        include: {
+            donator: true
+        },
+        orderBy: {
+            createdAt: "desc"
+        },
+        where: { id: session.user.id }
+    })
+
+    return donations
+}
+
 export const handleDonations = async (status: DonationStatus, pointsToGain: number, donationId: string, donatorId: string) => {
     const session = await auth()
 
@@ -70,7 +88,7 @@ export const handleDonations = async (status: DonationStatus, pointsToGain: numb
             })
         }
 
-        
+
 
         await prisma.transaction.create({
             data: {

@@ -125,6 +125,7 @@ model Post {
   shelfLife      String
   preferedOffers String
   harvestDate    DateTime
+  proof          String?
   reviews        Reviews[]
   transaction    Transaction[]
   trades         Trade[]
@@ -330,6 +331,7 @@ model Trade {
   weight         Float
   value          Float
   description    String       @db.Text
+  proof          String?
   status         StatusType   @default(PENDING)
   category       Category?
   subcategory    Subcategory? // trader PE

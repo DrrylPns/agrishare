@@ -17,11 +17,13 @@ import { useQuery } from '@tanstack/react-query'
 import { BeatLoader } from 'react-spinners'
 import { Separator } from '@/components/ui/separator'
 import { GoDotFill } from "react-icons/go";
+import { usePathname } from 'next/navigation'
 
 export const UserNotifs = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<boolean>(false)
     const [notifications, setNotifications] = useState<NotificationWithUser[]>([])
+    const pathname = usePathname()
 
     const fetchNotificationsByUser = async () => {
         try {
@@ -42,7 +44,6 @@ export const UserNotifs = () => {
 
     const hasUnread = notifications.some(notification => notification.isRead == false);
 
-    console.log("notifications:", notifications);
     return (
         <Popover>
             <PopoverTrigger>
@@ -76,7 +77,7 @@ export const UserNotifs = () => {
                                             className={`flex flex-col items-start p-2 rounded-md dark:bg-gray-800 ${!notification.isRead ? "bg-gray-100" : ""}`}
                                             href={`/trades/${notification.tradeId}`}
                                             onClick={async () => {
-                                                notificationRead(notification.id)
+                                                notificationRead(notification.id, pathname)
                                             }}
                                         >
                                             <div className='flex items-center'>

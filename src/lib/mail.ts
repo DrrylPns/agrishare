@@ -4,6 +4,37 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const domain = process.env.NEXT_PUBLIC_APP_URL;
 
+export const sendAcceptedTradeNotification = async (email: string, tradeeName: string, postName: string) => {
+    const tradeLink = `${domain}/history`
+
+    await resend.emails.send({
+        from: "onboarding@resend.dev",
+        to: email,
+        subject: `Agrishare: Your trade request ${postName} has been accepted.`,
+        html: `<div>
+                    <p>${tradeeName} has accepted your trade request.</p>
+                    <p>Please don't forget to document and upload your proof for your convenience</p>
+                    <p>Click <a href="${tradeLink}">here</a> to check it out.</p>
+                    <b>Agrishare's Team</b>
+                </div>`
+    })
+}
+
+export const sendDeclinedNotification = async (email: string, tradeeName: string, postName: string) => {
+    const tradeLink = `${domain}/history`
+
+    await resend.emails.send({
+        from: "onboarding@resend.dev",
+        to: email,
+        subject: `Agrishare: Your trade request ${postName} has been declined.`,
+        html: `<div>
+                    <p>${tradeeName} has declined your trade request.</p>
+                    <p>Click <a href="${tradeLink}">here</a> to check it out.</p>
+                    <b>Agrishare's Team</b>
+                </div>`
+    })
+}
+
 export const sendTradeNotification = async (email: string, traderName: string, postName: string, tradeId: string, description: string) => {
     const tradeLink = `${domain}/trades/${tradeId}`
 

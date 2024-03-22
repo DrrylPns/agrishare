@@ -5,7 +5,7 @@ import { getUserById } from "../data/user";
 import { auth } from "../auth";
 import { StatusType, Subcategory } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { sendTradeNotification } from "@/lib/mail";
+import { sendAcceptedTradeNotification, sendDeclinedNotification, sendTradeNotification } from "@/lib/mail";
 import { generateTRD } from "@/lib/utils";
 
 
@@ -107,6 +107,26 @@ export const fetchTrades = () => {
         orderBy: {
             createdAt: "desc"
         },
+    })
+
+    return trades
+}
+
+export const fetchTradesByUser = async () => {
+    const session = await auth()
+
+    if (!session) return { error: "Unauthorized" }
+
+    const trades = prisma.trade.findMany({
+        include: {
+            tradee: true,
+            trader: true,
+            post: true,
+        },
+        orderBy: {
+            createdAt: "desc"
+        },
+        where: { id: session.user.id }
     })
 
     return trades
@@ -353,4 +373,42 @@ export const singleTrade = async (tradeId: string) => {
     })
 
     return trade
+}
+
+export const tradeIntent = async (status: StatusType, tradeId: string, email: string) => {
+    const session = await auth()
+
+    if (!session) return { error: "Unauthorized" }
+
+    const user = await getUserById(session.user.id)
+
+    if (!user) return { error: "No user found." }
+
+    const trade = await prisma.trade.findFirst({
+        where: { id: tradeId },
+        include: {
+            tradee: true,
+            post: true
+        }
+    })
+
+    if (!trade) return { error: "Trade not found." }
+
+    await prisma.trade.update({
+        where: {
+            id: trade.id
+        },
+        data: {
+            status
+        }
+    })
+
+    if (status === "PROCESSING") {
+        await sendAcceptedTradeNotification(email, trade.tradee.name as string, trade.post.name)
+    } else if (status === "CANCELLED") {
+        await sendDeclinedNotification(email, trade.tradee.name as string, trade.post.name)
+    }
+
+    revalidatePath("/trades/[traderId]")
+    return { success: "Trade Accepted." }
 }

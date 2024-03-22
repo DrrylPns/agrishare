@@ -32,6 +32,7 @@ export interface TradeWithTradeeTraders {
     tradedQuantity: number;
     shelfLife: string;
     weight: number;
+    proof: string | null;
     value: number;
     description: string;
     subcategory: Subcategory | null;
@@ -84,7 +85,6 @@ export interface DonationWithDonators {
     donatorId: string;
     communityId: string | null;
     donator: User
-
 }
 
 export interface TransactionWithUserAndPost {
@@ -119,6 +119,7 @@ interface TradeWithTradersAndPost {
     item: string;
     image: string;
     quantity: number;
+    proof: string | null;
     tradedQuantity: number;
     shelfLife: string;
     weight: number;

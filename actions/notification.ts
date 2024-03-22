@@ -33,7 +33,7 @@ export const fetchNotifications = async () => {
     return notifications || []
 }
 
-export const notificationRead = async (notificationId: string) => {
+export const notificationRead = async (notificationId: string, path: string) => {
     const notification = await prisma.notification.findFirst({
         where: { id: notificationId }
     })
@@ -46,7 +46,7 @@ export const notificationRead = async (notificationId: string) => {
             data: { isRead: true }
         })
 
-        revalidatePath("/(admin)")
+        revalidatePath(`${path}`)
         return { success: "Notification read." }
     }
 }

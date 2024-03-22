@@ -57,6 +57,7 @@ export const TradeIntents: React.FC<TradeIntentsProps> = ({
                 </div>
                 <hr className="my-6 border-gray-300" />
                 <div className="flex justify-center gap-4">
+                    {/* implement also the send accept notification. Notify the trader that the tradee has accepted their request and to send proof */}
                     <Button className=" px-6 py-2 rounded-full" variant="primary">Accept</Button>
                     <Button className=" px-6 py-2 rounded-full" variant="destructive">Decline</Button>
                 </div>
