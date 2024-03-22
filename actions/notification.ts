@@ -3,6 +3,7 @@
 import prisma from "@/lib/db"
 import { auth } from "../auth"
 import { getUserById } from "../data/user"
+import { revalidatePath } from "next/cache"
 
 export const fetchNotifications = async () => {
     const session = await auth()
@@ -45,6 +46,7 @@ export const notificationRead = async (notificationId: string) => {
             data: { isRead: true }
         })
 
+        revalidatePath("/(admin)", 'layout')
         return { success: "Notification read." }
     }
 }

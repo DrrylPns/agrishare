@@ -9,6 +9,7 @@ import { columnTrade } from '@/components/tables/columnTrade'
 import { columnDonation } from '@/components/tables/columnDonation'
 import { columnPoints } from '@/components/tables/columnPoints'
 
+export const dynamic = 'force-dynamic';
 
 const page = async () => {
 

@@ -87,6 +87,7 @@ export const trade = async (
         )
     }
 
+    revalidatePath("/propose-offer/[id]", 'page')
     return { success: "Trade issued." }
 }
 
