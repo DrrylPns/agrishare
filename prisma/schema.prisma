@@ -296,8 +296,8 @@ model Transaction {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  postId       String?
-  post         Post?       @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String?
+  post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   agrichange   AgriChange? @relation(fields: [agrichangeId], references: [id])
   agrichangeId String?

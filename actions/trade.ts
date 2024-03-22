@@ -5,6 +5,7 @@ import { getUserById } from "../data/user";
 import { auth } from "../auth";
 import { StatusType } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { sendTradeNotification } from "@/lib/mail";
 
 
 export const trade = async (
@@ -63,6 +64,27 @@ export const trade = async (
                 tradeId: trade.id,
             }
         })
+
+        const tradeeUser = await prisma.user.findFirst({
+            where: { id: tradeeId }
+        })
+
+        if (!tradeeUser) return { error: "No tradee user found!" }
+        // find post then postname
+
+        const post = await prisma.post.findFirst({
+            where: { id: postId }
+        })
+
+        if (!post) return { error: "No post found!" }
+
+        await sendTradeNotification(
+            tradeeUser.email as string,
+            user.name as string,
+            post.name,
+            trade.id,
+            description
+        )
     }
 
     return { success: "Trade issued." }
@@ -278,7 +300,7 @@ export const singleTrade = async (tradeId: string) => {
     if (!user) return { error: "No user found." }
 
     const trade = await prisma.trade.findFirst({
-        where: { id: tradeId },
+        where: { tradeeId: user.id, id: tradeId },
         include: {
             tradee: true,
             trader: true,

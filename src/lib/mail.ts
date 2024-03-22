@@ -4,6 +4,21 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const domain = process.env.NEXT_PUBLIC_APP_URL;
 
+export const sendTradeNotification = async (email: string, traderName: string, postName: string, tradeId: string, description: string) => {
+    const tradeLink = `${domain}/trades/${tradeId}`
+
+    await resend.emails.send({
+        from: "onboarding@resend.dev",
+        to: email,
+        subject: `Agrishare: ${traderName} has requested a trade to your ${postName}.`,
+        html: `<div>
+                    <p>${traderName}: ${description}</p>
+                    <p>Click <a href="${tradeLink}">here</a> to see the trade request.</p>
+                    <b>Agrishare's Team</b>
+                </div>`
+    })
+}
+
 export const sendTwoFactorTokenEmail = async (email: string, token: string) => {
     await resend.emails.send({
         from: "onboarding@resend.dev",
