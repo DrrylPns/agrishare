@@ -3,7 +3,7 @@ import prisma from "@/lib/db";
 import { TradeSchema, TradeType } from "@/lib/validations/trade";
 import { getUserById } from "../data/user";
 import { auth } from "../auth";
-import { StatusType } from "@prisma/client";
+import { StatusType, Subcategory } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { sendTradeNotification } from "@/lib/mail";
 
@@ -33,7 +33,7 @@ export const trade = async (
         return { error: "You cannot issue a trade for your own post." };
     }
 
-    const { description, item, value, weight, quantity, shelfLife } = validatedFields.data
+    const { description, item, value, weight, quantity, shelfLife, category, subcategory } = validatedFields.data
 
     if (quantity <= 0) return { error: "Quantity can't be less than 0" }
 
@@ -54,6 +54,8 @@ export const trade = async (
             traderId: user.id,
             postId,
             shelfLife,
+            category,
+            subcategory
         }
     })
 
@@ -106,7 +108,7 @@ export const fetchTrades = () => {
     return trades
 }
 
-export const handleTrade = async (status: StatusType, tradeId: string, tradeeId: string, traderId: string, tradeeQty: number, traderQty: number, postId: string) => {
+export const handleTrade = async (status: StatusType, tradeId: string, tradeeId: string, traderId: string, tradeeQty: number, traderQty: number, postId: string, traderSubcategory: Subcategory | null, tradeeSubcategory: Subcategory | null) => {
     const session = await auth()
 
     if (!session) return { error: "Unauthorized" }
@@ -169,8 +171,41 @@ export const handleTrade = async (status: StatusType, tradeId: string, tradeeId:
 
         if (!tradee || !trader) return { error: "Tradee or trader not found." }
 
-        const tradeeCalculatedPoints = 6 * tradeeQty
-        const traderCalculatedPoints = 6 * traderQty
+        let ptsEquivalentTrader
+        let ptsEquivalentTradee
+        let conditionRate = 1.5
+
+        if (traderSubcategory === "FRUIT_VEGETABLES") {
+            ptsEquivalentTrader = 0.18
+        } else if (traderSubcategory === "HERBS_VEGETABLES") {
+            ptsEquivalentTrader = 0.17
+        } else if (traderSubcategory === "LEAFY_VEGETABLES") {
+            ptsEquivalentTrader = 0.15
+        } else if (traderSubcategory === "PODDED_VEGETABLES") {
+            ptsEquivalentTrader = 0.25
+        } else if (traderSubcategory === "ROOT_VEGETABLES") {
+            ptsEquivalentTrader = 0.20
+        } else {
+            ptsEquivalentTrader = 0.15
+        }
+
+        if (tradeeSubcategory === "FRUIT_VEGETABLES") {
+            ptsEquivalentTradee = 0.18
+        } else if (tradeeSubcategory === "HERBS_VEGETABLES") {
+            ptsEquivalentTradee = 0.17
+        } else if (tradeeSubcategory === "LEAFY_VEGETABLES") {
+            ptsEquivalentTradee = 0.15
+        } else if (tradeeSubcategory === "PODDED_VEGETABLES") {
+            ptsEquivalentTradee = 0.25
+        } else if (tradeeSubcategory === "ROOT_VEGETABLES") {
+            ptsEquivalentTradee = 0.20
+        } else {
+            ptsEquivalentTradee = 0.15
+        }
+
+        //fetch PE (subcategory) of tradee and trader
+        const tradeeCalculatedPoints = (6 / ptsEquivalentTradee) * tradeeQty * conditionRate
+        const traderCalculatedPoints = (6 / ptsEquivalentTrader) * tradeeQty * conditionRate
 
         await prisma.user.update({
             data: {

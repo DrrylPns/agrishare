@@ -8,6 +8,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -22,11 +23,13 @@ import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 import { useState } from "react"
 import { UploadButton } from "@/lib/uploadthing"
-
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Category, Subcategory } from '@prisma/client'
 
 export default function Page() {
   const [imageUrl, setImageUrl] = useState<string>("")
   const imageIsEmpty = imageUrl.length === 0
+  const [chosenCategory, setChosenCategory] = useState("")
 
   const form = useForm<DonationType>({
     resolver: zodResolver(DonationSchema),
@@ -35,19 +38,21 @@ export default function Page() {
   const { mutate: createPost, isLoading } = useMutation({
     mutationFn: async ({
       image,
-      date,
       donatee,
       name,
       product,
       quantity,
+      category,
+      subcategory,
     }: DonationType) => {
       const payload: DonationType = {
         image,
-        date,
         donatee,
         name,
         product,
         quantity,
+        category,
+        subcategory,
       }
 
       const { data } = await axios.post("/api/donate", payload)
@@ -75,12 +80,13 @@ export default function Page() {
 
   function onSubmit(values: DonationType) {
     const payload: DonationType = {
-      date: values.date,
       donatee: values.donatee,
       name: values.name,
       product: values.product,
       quantity: values.quantity,
       image: imageUrl,
+      category: values.category,
+      subcategory: values.subcategory,
     }
 
     createPost(payload)
@@ -148,53 +154,106 @@ export default function Page() {
             />
           </div>
 
-          <p className="text-xl font-poppins font-medium leading-6 mt-5 px-5 text-justify">We further certify that this is for free and that there is no payment exchange of monetary value for the distribution of said merchandise but you are required to fill out and give back to the CUAI office the evaluation form attached here.</p>
-
-          <h1 className="text-center text-2xl font-semibold my-10">Acceptance</h1>
-          <p className="text-xl font-poppins font-medium leading-6 mb-5 px-5 text-justify">That the Donee hereby accepts the foregoing donation from the Donor and for which he/his expresses his/her sincere appreciation and gratitude for the kindness shown by the Donor.</p>
-          <div className="grid grid-cols-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <FormField
               control={form.control}
-              name="date"
-              disabled={isLoading}
+              name="category"
               render={({ field }) => (
-                <FormItem className="flex flex-col col-span-1">
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-[240px] pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          {field.value ? (
-                            format(field.value, "PPP")
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
-                        }
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <Select onValueChange={(newValue) => {
+                    field.onChange(newValue);
+                    setChosenCategory(newValue);
+                  }}
+                    defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a category..." />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value={Category.FRESH_FRUIT}>Fresh Fruit</SelectItem>
+                      <SelectItem value={Category.VEGETABLES}>Vegetables</SelectItem>
+                      <SelectItem value={Category.TOOLS}>Tools</SelectItem>
+                      <SelectItem value={Category.EQUIPMENTS}>Equipments</SelectItem>
+                      <SelectItem value={Category.SEEDS}>Seeds</SelectItem>
+                      <SelectItem value={Category.SOILS}>Soils</SelectItem>
+                      <SelectItem value={Category.FERTILIZER}>Fertilizer</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="subcategory"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Subcategory</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a subcategory..." />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {chosenCategory === Category.VEGETABLES && (
+                        <>
+                          <SelectItem value={Subcategory.LEAFY_VEGETABLES}>Leafy Vegetables</SelectItem>
+                          <SelectItem value={Subcategory.PODDED_VEGETABLES}>Podded Vegetables</SelectItem>
+                          <SelectItem value={Subcategory.FRUIT_VEGETABLES}>Fruit Vegetables</SelectItem>
+                          <SelectItem value={Subcategory.ROOT_VEGETABLES}>Root Vegetables</SelectItem>
+                          <SelectItem value={Subcategory.HERBS_VEGETABLES}>Herbs Vegetables</SelectItem>
+                        </>
+                      )}
+                      {chosenCategory === Category.FRESH_FRUIT && (
+                        <>
+                          <SelectItem value={Subcategory.FRUIT1}>Fruit 1</SelectItem>
+                          <SelectItem value={Subcategory.FRUIT2}>Fruit 2</SelectItem>
+                        </>
+                      )}
+                      {chosenCategory === Category.EQUIPMENTS && (
+                        <>
+                          <SelectItem value={Subcategory.EQUIPMENTS1}>Equipment 1</SelectItem>
+                        </>
+                      )}
+                      {chosenCategory === Category.FERTILIZER && (
+                        <>
+                          <SelectItem value={Subcategory.FERTILIZER1}>Fertilizer 1</SelectItem>
+                        </>
+                      )}
+                      {chosenCategory === Category.SEEDS && (
+                        <>
+                          <SelectItem value={Subcategory.SEEDS1}>Seeds 1</SelectItem>
+                          <SelectItem value={Subcategory.SEEDS2}>Seeds 2</SelectItem>
+                        </>
+                      )}
+                      {chosenCategory === Category.TOOLS && (
+                        <>
+                          <SelectItem value={Subcategory.TOOLS1}>Tools 1</SelectItem>
+                        </>
+                      )}
+                      {chosenCategory === Category.SOILS && (
+                        <>
+                          <SelectItem value={Subcategory.SOILS1}>Soils 1</SelectItem>
+                          <SelectItem value={Subcategory.SOILS2}>Soils 2</SelectItem>
+                          <SelectItem value={Subcategory.SOILS3}>Soils 3</SelectItem>
+                        </>
+                      )}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
+
+          <p className="text-xl font-poppins font-medium leading-6 mt-5 px-5 text-justify">We further certify that this is for free and that there is no payment exchange of monetary value for the distribution of said merchandise but you are required to fill out and give back to the CUAI office the evaluation form attached here.</p>
+
+          <h1 className="text-center text-2xl font-semibold my-10 mt-2 md:mt-10">Acceptance</h1>
+          <p className="text-xl font-poppins font-medium leading-6 mb-5 px-5 text-justify">That the Donee hereby accepts the foregoing donation from the Donor and for which he/his expresses his/her sincere appreciation and gratitude for the kindness shown by the Donor.</p>
           {/* Replace it with upload image */}
           <div>
             {!imageUrl.length && <h1 className="my-5">Upload E-Signature</h1>}

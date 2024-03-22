@@ -45,23 +45,28 @@ export const UserNotifs = () => {
         <Popover>
             <PopoverTrigger>
                 <div className='relative'>
-                    <CiBellOn /> 
+                    <CiBellOn />
                     {hasUnread && (
-                         <span className='text-red-600 text-lg absolute right-[-1px] top-[-1px]'><GoDotFill /></span>
+                        <span className='text-red-600 text-lg absolute right-[-1px] top-[-1px]'><GoDotFill /></span>
                     )}
                 </div>
             </PopoverTrigger>
             <PopoverContent className='p-0'>
                 <ScrollArea className="h-72 w-full rounded-md border">
                     <div className="p-1 py-4">
-                        {/* pag merong isRead false, then render yung pulang notif parang sa add to cart natin sa agreen nature connect pero kahit wag na may number khit pula nlng */}
+                        <h4 className="mb-2 text-[16px] leading-none ml-2 font-semibold">Notifications</h4>
+
+                        {notifications.length === 0 && !loading && !error && (
+                            <div className="text-gray-500 text-center">You currently have no notifications yet.</div>
+                        )}
+
                         {loading && <div className="flex items-center justify-center"><BeatLoader /></div>}
 
                         {error && <div className="text-red-500">Error fetching notifications!</div>}
 
                         {!loading && !error && (
                             <>
-                                <h4 className="mb-2 text-[16px] leading-none ml-2 font-semibold">Notifications</h4>
+
 
                                 {notifications.map((notification) => (
                                     <div key={notification.id} className="grid gap-1 p-1 text-sm">
@@ -85,7 +90,6 @@ export const UserNotifs = () => {
                                         </Link>
 
                                     </div>
-
                                 ))}
                             </>
                         )}

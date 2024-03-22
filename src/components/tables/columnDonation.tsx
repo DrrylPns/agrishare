@@ -76,7 +76,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
             )
         },
         cell: ({ row }) => {
-            const points = row.original.pointsToGain
+            const points = row.original.pointsToGain.toFixed(2)
 
             return <div
                 className=""
@@ -189,7 +189,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                                     <p>Item: {donatorProduct}</p>
                                                     <p>Quantity: {donatoryQty}</p>
                                                     <p>
-                                                        Accumulated Points: <span className="text-green-500">{donatorPoints} Point(s)</span>
+                                                        Accumulated Points: <span className="text-green-500">{donatorPoints.toFixed(2)} Point(s)</span>
                                                     </p>
                                                     <p>Date: {format(dateDonated, "PPP")}</p>
                                                     {/* redirect to uploadthing when clicked. */}

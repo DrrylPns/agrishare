@@ -16,7 +16,8 @@ export const UserAccountAvatar = () => {
         setIsOpen((value) => !value);
     }, []);
 
-    const isImageNull = session?.user.image === null
+    const firstLetterName = session?.user.name?.charAt(0)
+    const firstLetterLast = session?.user?.lastName.charAt(0)
 
     return (
         <>
@@ -26,11 +27,11 @@ export const UserAccountAvatar = () => {
                         <Avatar>
                             <AvatarImage
                                 className='cursor-pointer'
-                                src={`${isImageNull ? "/avatar-placeholder.jpg" : session?.user.image}`}
+                                src={session?.user.image as string}
                                 width={25}
                                 height={25}
                                 alt='User Profile' />
-                            <AvatarFallback>User Profile</AvatarFallback>
+                            <AvatarFallback>{firstLetterName}{firstLetterLast}</AvatarFallback>
                         </Avatar>
                         <span className="sr-only">Toggle user menu</span>
                     </Button>

@@ -142,6 +142,7 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
             const traderQty = row.original.quantity
             const traderPts = row.original.trader.points
             const traderShelfLife = row.original.shelfLife
+            const traderSubcategory = row.original.subcategory
 
             const tradeeName = row.original.tradee.name
             const tradeeLastName = row.original.tradee.lastName
@@ -150,12 +151,17 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
             const tradeeQty = row.original.tradedQuantity
             const tradeePts = row.original.tradee.points
             const tradeeShelfLife = row.original.post.shelfLife
+            const tradeeSubcategory = row.original.post.subcategory
 
             const tradeStatus = row.original.status
             const tradeDate = row.original.createdAt
 
+            const firstLetterOfTraderName = traderName?.charAt(0);
+            const firstLetterOfTraderLastName = traderLastName?.charAt(0);
 
-            const isImageNull = tradeeImage || traderImage === null;
+            const firstLetterOfTradeeName = tradeeName?.charAt(0);
+            const firstLetterOfTradeeLastName = tradeeLastName?.charAt(0);
+
             return (
                 <>
                     <DropdownMenu>
@@ -194,8 +200,8 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                         <div className="bg-white p-6 rounded-lg shadow-md flex flex-col md:flex-row items-center justify-between max-w-4xl mx-auto">
                                             <div className="flex flex-col items-center md:items-start">
                                                 <Avatar>
-                                                    <AvatarImage src={`${isImageNull ? "/avatar-placeholder.jpg" : traderImage}`} alt="profile" />
-                                                    <AvatarFallback>CN</AvatarFallback>
+                                                    <AvatarImage src={traderImage as string} alt="profile" />
+                                                    <AvatarFallback>{firstLetterOfTraderName}{firstLetterOfTraderLastName}</AvatarFallback>
                                                 </Avatar>
                                                 <div className="mt-4 text-sm text-center md:text-left">
                                                     {/* <p className="font-semibold">Trade ID: {id}</p> */}
@@ -203,7 +209,7 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                                     <p>Item: {traderItem}</p>
                                                     <p>Quantity: {traderQty}</p>
                                                     <p>
-                                                        Accumulated Points: <span className="text-green-500">{traderPts} Point(s)</span>
+                                                        Accumulated Points: <span className="text-green-500">{traderPts.toFixed(2)} Point(s)</span>
                                                     </p>
                                                     <p>Shelf Life: {traderShelfLife} Day(s)</p>
                                                     <p>Date: {format(tradeDate, "PPP")}</p>
@@ -218,16 +224,15 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
 
                                             <div className="flex flex-col items-center md:items-start">
                                                 <Avatar>
-                                                    <AvatarImage src={`${isImageNull ? "/avatar-placeholder.jpg" : tradeeImage}`} alt="profile" />
-                                                    <AvatarFallback>CN</AvatarFallback>
+                                                    <AvatarImage src={tradeeImage as string} alt="profile" />
+                                                    <AvatarFallback>{firstLetterOfTradeeName}{firstLetterOfTradeeLastName}</AvatarFallback>
                                                 </Avatar>
                                                 <div className="mt-4 text-sm text-center md:text-left">
-                                                    {/* <p className="font-semibold">Trade ID: {id}</p> */}
                                                     <p>Name: {tradeeName} {" "} {tradeeLastName}</p>
                                                     <p>Item: {tradeeItem}</p>
                                                     <p>Quantity: {tradeeQty}</p>
                                                     <p>
-                                                        Accumulated Points: <span className="text-green-500">{tradeePts} Point(s)</span>
+                                                        Accumulated Points: <span className="text-green-500">{tradeePts.toFixed(2)} Point(s)</span>
                                                     </p>
                                                     <p>Shelf Life: {tradeeShelfLife} Day(s)</p>
                                                     <p>Date: {format(tradeDate, "PPP")}</p>
@@ -272,7 +277,7 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleTrade("COMPLETED", tradeId, tradeeId, traderId, tradeeQty, traderQty, postId).then((callback) => {
+                                                handleTrade("COMPLETED", tradeId, tradeeId, traderId, tradeeQty, traderQty, postId, traderSubcategory, tradeeSubcategory).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,
@@ -310,7 +315,7 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleTrade("CANCELLED", tradeId, tradeeId, traderId, tradeeQty, traderQty, postId).then((callback) => {
+                                                handleTrade("CANCELLED", tradeId, tradeeId, traderId, tradeeQty, traderQty, postId, traderSubcategory, tradeeSubcategory).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,

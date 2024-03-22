@@ -1,4 +1,4 @@
-import { Post, Role, StatusType, User, DonationStatus, TransactionType, Trade } from "@prisma/client";
+import { Post, Role, StatusType, User, DonationStatus, TransactionType, Trade, Subcategory } from "@prisma/client";
 
 export interface Posts {
     id: string;
@@ -33,6 +33,7 @@ export interface TradeWithTradeeTraders {
     weight: number;
     value: number;
     description: string;
+    subcategory: Subcategory | null;
     status: StatusType;
     createdAt: Date;
     updatedAt: Date;
@@ -72,10 +73,10 @@ export interface DonationWithDonators {
     name: string;
     product: string;
     quantity: number;
-    date: Date;
     image: string;
     pointsToGain: number;
     status: DonationStatus;
+    subcategory: Subcategory | null;
     createdAt: Date;
     updatedAt: Date;
     donatorId: string;

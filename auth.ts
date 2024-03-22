@@ -51,6 +51,7 @@ export const {
         session.user.email = token.email;
         session.user.image = token.picture;
         session.user.role = token.role;
+        session.user.lastName = token.lastName as string;
       }
 
       return session;
@@ -71,6 +72,7 @@ export const {
       token.role = existingUser.role;
       token.picture = existingUser.image;
       token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
+      token.lastName = existingUser.lastName;
 
       return token;
     }

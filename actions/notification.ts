@@ -46,7 +46,7 @@ export const notificationRead = async (notificationId: string) => {
             data: { isRead: true }
         })
 
-        revalidatePath("/(admin)", 'layout')
+        revalidatePath("/(admin)")
         return { success: "Notification read." }
     }
 }

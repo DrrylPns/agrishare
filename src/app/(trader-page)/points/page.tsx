@@ -66,16 +66,15 @@ const page = async () => {
         <div className='flex flex-col justify-start items-center w-full gap-3'>
           {user.points >= 3000 ? (
             <Image src="/images/seedling5.svg" alt="seedling5" width={200} height={200} />
-          ) : user.points >= 1000 && user.points < 3000 ? (
+          ) : user.points >= 1000 ? (
             <Image src="/images/seedling4.svg" alt="seedling4" width={200} height={200} />
-          ) : user.points >= 500 && user.points < 1000 ? (
+          ) : user.points >= 500 ? (
             <Image src="/images/seedling3.svg" alt="seedling3" width={200} height={200} />
-          ) : user.points >= 100 && user.points < 500 ? (
+          ) : user.points >= 100 ? (
             <Image src="/images/seedling2.svg" alt="seedling2" width={200} height={200} />
-          ) : user.points === 0 ? (
+          ) : (
             <Image src="/images/seedling1.svg" alt="seedling1" width={200} height={200} />
-          ) : (<></>)
-          }
+          )}
         </div>
 
         <div className='flex flex-row gap-[40px] mx-2 md:mx-0 md:gap-[60px] items-center justify-center max-sm:mt-11 mt-7'>

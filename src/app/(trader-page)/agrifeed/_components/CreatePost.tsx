@@ -410,7 +410,7 @@ function CreatePost() {
                                   </FormControl>
                                   <SelectContent>
                                     <SelectItem value={Types.ORGANIC}>Organic</SelectItem>
-                                    <SelectItem value={Types.INORGANIC}>Inorganic</SelectItem>
+                                    <SelectItem value={Types.INORGANIC}>Not Organic</SelectItem>
                                   </SelectContent>
                                 </Select>
                               </FormControl>

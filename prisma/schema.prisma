@@ -196,6 +196,7 @@ enum Status {
 enum Types {
   ORGANIC
   INORGANIC
+  NOT_ORGANIC
 }
 
 model Reviews {
@@ -248,10 +249,11 @@ model Donation {
   name         String
   product      String
   quantity     Float
-  date         DateTime
   image        String
   pointsToGain Float
   status       DonationStatus @default(PENDING)
+  category     Category?
+  subcategory  Subcategory?
   // name                String
   // lastName            String
   // phoneNumber         String
@@ -275,7 +277,7 @@ model Donation {
   donator   User   @relation(fields: [donatorId], references: [id], onDelete: Cascade)
   donatorId String
 
-  Community   Community? @relation(fields: [communityId], references: [id])
+  Community   Community? @relation(fields: [communityId], references: [id], onDelete: Cascade)
   communityId String?
 }
 
@@ -299,7 +301,7 @@ model Transaction {
   postId String?
   post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
 
-  agrichange   AgriChange? @relation(fields: [agrichangeId], references: [id])
+  agrichange   AgriChange? @relation(fields: [agrichangeId], references: [id], onDelete: Cascade)
   agrichangeId String?
 }
 
@@ -313,18 +315,20 @@ enum TransactionType {
 // dito iffetch yung product na gustong ipang trade
 // once trade is COMPLETED make a transaction.create based on trade values para mapalabas siya sa transaction history.
 model Trade {
-  id             String     @id @default(cuid())
+  id             String       @id @default(cuid())
   item           String
-  image          String     @db.Text
+  image          String       @db.Text
   quantity       Float
   shelfLife      String
   tradedQuantity Float
   weight         Float
   value          Float
-  description    String     @db.Text
-  status         StatusType @default(PENDING)
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @updatedAt
+  description    String       @db.Text
+  status         StatusType   @default(PENDING)
+  category       Category?
+  subcategory    Subcategory? // trader PE
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
   // yung nag post, pwede ma-fetch dito yung pinost na product
   tradeeId String
@@ -334,7 +338,7 @@ model Trade {
   traderId String
   trader   User   @relation(fields: [traderId], references: [id], onDelete: Cascade, name: "Trader")
 
-  post   Post   @relation(fields: [postId], references: [id])
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId String
 
   notifications Notification[]
