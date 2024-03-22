@@ -347,7 +347,10 @@ export const fetchTradeByUser = async () => {
             createdAt: "desc"
         },
         where: {
-            tradeeId: user.id
+            OR: [
+                { tradeeId: user.id },
+                { traderId: user.id },
+            ]
         }
     })
 

@@ -101,11 +101,11 @@ function Navbar() {
 
                                 </Link>
                                 <Link
-                                    href={'/catergories'}
-                                    className={`link ${pathname === '/catergories' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
+                                    href={'/categories'}
+                                    className={`link ${pathname === '/categories' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
                                 >
                                     <span><GiHamburgerMenu /></span>
-                                    <h1>Catergories</h1>
+                                    <h1>Categories</h1>
                                 </Link>
                                 <Link
                                     href={'/donation'}
