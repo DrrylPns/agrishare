@@ -18,12 +18,12 @@ const page = async () => {
   const transactions = await fetchTransactionByUser()
 
   return (
-    <div className='md:max-w-[1260px]'>
+    <div className='max-w-[1260px]'>
       <div className='my-5 flex flex-row items-center gap-3'>
         <h1 className='text-[#1C2A53] text-xl font-semibold'>History</h1>
       </div>
 
-      <Card className="mx-auto md:max-w-[1260px] h-full drop-shadow-lg">
+      <Card className="mx-auto max-w-[1260px] h-full drop-shadow-lg">
         <TabGroup>
           <TabList className="mt-4">
             <Tab>Trade</Tab>

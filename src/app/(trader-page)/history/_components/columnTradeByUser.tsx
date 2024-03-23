@@ -14,6 +14,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { FolderSyncIcon, MoreHorizontalIcon } from "lucide-react"
 // import AdminTitle from "../AdminTitle"
 import Link from "next/link"
+import Image from "next/image"
+import { UploadDropzone } from "@/lib/uploadthing"
+import { handleTradeProof } from "../../../../../actions/trade"
 // import { handleTrade } from "../../../actions/trade"
 
 export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
@@ -55,7 +58,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
         accessorKey: "trader",
         header: ({ column }) => {
             return (
-                <DataTableColumnHeader column={column} title="USER" />
+                <DataTableColumnHeader column={column} title="TRADER" />
             )
         },
         cell: ({ row }) => {
@@ -125,6 +128,8 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
         header: "Actions",
         cell: ({ row }) => {
             const [isReviewOpen, setIsReviewOpen] = useState<boolean>()
+            const [isProofOpen, setIsProofOpen] = useState<boolean>()
+            const [imageUrl, setImageUrl] = useState<string>("")
             const [isPending, startTransition] = useTransition()
             const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false)
             const [isRejectOpen, setIsRejectOpen] = useState<boolean>(false)
@@ -162,6 +167,10 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
             const firstLetterOfTradeeName = tradeeName?.charAt(0);
             const firstLetterOfTradeeLastName = tradeeLastName?.charAt(0);
 
+            // const imageIsEmpty = row.original.proofTradee?.length === 0 && row.original.proofTrader?.length === 0
+            const imageIsEmpty = imageUrl.length === 0
+            const checkStatus = tradeStatus === "PROCESSING"
+            // const imageIsEmpty = imageUrl.length === 0
             // kalkulasyon at rebolusyon
 
             let conditionRate = 1.5
@@ -222,6 +231,12 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                 Review
                             </DropdownMenuItem>
 
+                            {checkStatus && <DropdownMenuItem
+                                onClick={() => setIsProofOpen(true)}
+                            >
+                                Upload Proof
+                            </DropdownMenuItem>}
+
                         </DropdownMenuContent>
                     </DropdownMenu>
 
@@ -280,7 +295,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                             </div>
                                         </div>
 
-                                        <div className="flex gap-3 mt-3">
+                                        {/* <div className="flex gap-3 mt-3">
                                             <Button
                                                 variant="primary"
                                                 isLoading={isPending}
@@ -291,7 +306,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                                 isLoading={isPending}
                                                 onClick={() => setIsRejectOpen(true)}
                                             >Decline</Button>
-                                        </div>
+                                        </div> */}
                                     </>
                                 </DialogDescription>
                             </DialogHeader>
@@ -373,6 +388,84 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>
+
+
+                    <Dialog open={isProofOpen} onOpenChange={setIsProofOpen}>
+                        <DialogContent className="lg:max-w-2xl">
+                            <DialogHeader>
+                                <DialogTitle>
+                                    {/* <AdminTitle entry="4" title="Trade Review" /> */}
+                                    <p className="">Status: {tradeStatus}</p>
+                                    <p className="text-sm text-muted-foreground">Kindly upload your proof so we can review it.</p>
+                                </DialogTitle>
+                                <DialogDescription>
+                                    <>
+                                        {imageUrl.length ? <div className="w-full flex flex-col items-center justify-center mt-5">
+                                            <Image
+                                                alt='Done Upload'
+                                                src={"/done.svg"}
+                                                width={250}
+                                                height={250}
+                                                className='mb-3'
+                                            />
+                                            <h1 className='text-xl text-muted-foreground'>Image Uploaded!</h1>
+                                        </div> : <UploadDropzone
+                                            className="text-green"
+                                            appearance={{
+                                                button: "bg-[#00B207] p-2 mb-3",
+                                                label: "text-green",
+                                                allowedContent: "flex h-8 flex-col items-center justify-center px-2 text-green",
+                                            }}
+                                            endpoint="imageUploader"
+                                            onClientUploadComplete={(res) => {
+                                                console.log('Files: ', res);
+                                                if (res && res.length > 0 && res[0].url) {
+                                                    setImageUrl(res[0].url);
+                                                } else {
+                                                    console.error('Please input a valid image:', res);
+                                                }
+                                            }}
+                                            onUploadError={(error: Error) => {
+                                                toast({
+                                                    title: 'Error!',
+                                                    description: error.message,
+                                                    variant: 'destructive',
+                                                })
+                                            }}
+                                        />
+                                        }
+
+                                        <div className="flex gap-3 mt-3">
+                                            <Button
+                                                variant="primary"
+                                                disabled={imageIsEmpty || !checkStatus}
+                                                isLoading={isPending}
+                                                onClick={() => {
+                                                    startTransition(() => {
+                                                        handleTradeProof(imageUrl, tradeId).then((callback) => {
+                                                            if (callback?.error) {
+                                                                toast({
+                                                                    description: callback.error,
+                                                                    variant: "destructive"
+                                                                })
+                                                            }
+
+                                                            if (callback?.success) {
+                                                                setIsProofOpen(false)
+                                                                toast({
+                                                                    description: callback.success
+                                                                })
+                                                            }
+                                                        })
+                                                    })
+                                                }}
+                                            >Confirm</Button>
+                                        </div>
+                                    </>
+                                </DialogDescription>
+                            </DialogHeader>
+                        </DialogContent>
+                    </Dialog>
                 </>
             )
         },

@@ -415,3 +415,47 @@ export const tradeIntent = async (status: StatusType, tradeId: string, email: st
     revalidatePath("/trades/[traderId]")
     return { success: "Trade Accepted." }
 }
+
+export const handleTradeProof = async (img: string, tradeId: string) => {
+    const session = await auth()
+
+    if (!session) return { error: "Unauthorized" }
+
+    const user = await getUserById(session.user.id)
+
+    if (!user) return { error: "No user found." }
+
+    const findTrader = await prisma.trade.findFirst({
+        where: {
+            id: tradeId,
+            traderId: user.id
+        },
+    })
+
+    const findTradee = await prisma.trade.findFirst({
+        where: {
+            id: tradeId,
+            tradeeId: user.id
+        }
+    })
+
+    if (findTrader) {
+        await prisma.trade.update({
+            where: { id: findTrader?.id },
+            data: {
+                proofTrader: img
+            },
+        })
+    }
+
+    if (findTradee) {
+        await prisma.trade.update({
+            where: { id: findTradee?.id },
+            data: {
+                proofTradee: img
+            }
+        })
+    }
+
+    return { success: "Proof uploaded." }
+}

@@ -1,4 +1,4 @@
-import { Post, Role, StatusType, User, DonationStatus, TransactionType, Trade, Subcategory } from "@prisma/client";
+import { Post, Role, StatusType, User, DonationStatus, TransactionType, Notification, Subcategory } from "@prisma/client";
 
 export interface Posts {
     id: string;
@@ -32,7 +32,8 @@ export interface TradeWithTradeeTraders {
     tradedQuantity: number;
     shelfLife: string;
     weight: number;
-    proof: string | null;
+    proofTradee: string | null;
+    proofTrader: string | null;
     value: number;
     description: string;
     subcategory: Subcategory | null;
@@ -102,6 +103,7 @@ export interface TransactionWithUserAndPost {
     post: Post | null;
 }
 
+
 export interface NotificationWithUser {
     id: string;
     type: StatusType;
@@ -119,7 +121,8 @@ interface TradeWithTradersAndPost {
     item: string;
     image: string;
     quantity: number;
-    proof: string | null;
+    proofTradee: string | null;
+    proofTrader: string | null;
     tradedQuantity: number;
     shelfLife: string;
     weight: number;

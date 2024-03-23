@@ -331,7 +331,8 @@ model Trade {
   weight         Float
   value          Float
   description    String       @db.Text
-  proof          String?
+  proofTradee    String? // gamitan ng OR method para maipasa value
+  proofTrader    String? // gamitan ng OR method para maipasa value
   status         StatusType   @default(PENDING)
   category       Category?
   subcategory    Subcategory? // trader PE
