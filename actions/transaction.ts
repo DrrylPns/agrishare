@@ -30,7 +30,7 @@ export const fetchTransactionByUser = async () => {
         orderBy: {
             createdAt: "desc"
         },
-        where: { id: session.user.id }
+        where: { userId: session.user.id }
     })
 
     return transactions

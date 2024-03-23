@@ -31,7 +31,7 @@ export const fetchDonationsByUser = async () => {
         orderBy: {
             createdAt: "desc"
         },
-        where: { id: session.user.id }
+        where: { donatorId: session.user.id }
     })
 
     return donations
