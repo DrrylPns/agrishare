@@ -55,7 +55,6 @@ function Products() {
     getNextPageParam: (lastPage) => lastPage.nextId || undefined
   })
 
-  console.log(Posts)
   if (isLoading) return <div>
     <BeatLoader />
   </div>

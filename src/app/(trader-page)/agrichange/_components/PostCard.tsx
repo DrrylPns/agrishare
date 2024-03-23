@@ -1,3 +1,4 @@
+'use client'
 import {
     Card,
     CardContent,
@@ -7,23 +8,27 @@ import {
     CardTitle,
   } from "@/components/ui/card"
 import Image from "next/image"
-import { Post } from "../../agrifeed/_components/_types"
+import { Agrichange, Post } from "../../agrifeed/_components/_types"
 import { LiaExchangeAltSolid } from "react-icons/lia"
 import { FaLeaf } from "react-icons/fa"
 import Link from "next/link"
+import ExchangeDialog from "./ExchangeDialog"
+import { useState } from "react"
 
 function PostCard({
     post
 }:{
-    post: Post
+    post: Agrichange 
 }) {
-  return (
 
+    const [selectedItem, setSelectedItem] = useState<Agrichange>()
+
+  return (
     <Card className="py-5 hover:shadow-green-600 shadow-md hover:right-1 ring-green-400">
        
         <div className="flex justify-center text-white w-20 gap-3 bg-green-400 rounded-full items-center">
             <FaLeaf />
-            <h1>100</h1>
+            <h1>{post.pointsNeeded}</h1>
         </div>
         <div className="w-full border-y border-y-gray-100">
             <Image 
@@ -38,7 +43,7 @@ function PostCard({
             <div className="flex items-center justify-between">
                 <h1>{post.name}</h1>
                 <div className='flex just-center items-center px-3 text-green-500 bg-slate-300 cursor-pointer hover:text-white py-3 rounded-full hover:bg-green-500'>
-                <span ><LiaExchangeAltSolid /></span>
+                    <ExchangeDialog selectedItem={post}/>
                 </div>
             </div>
         </CardContent>

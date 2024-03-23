@@ -51,3 +51,22 @@ export type Reviews = {
 
   postId: string
 }
+
+export type Agrichange = {
+  id:           string        
+  image:        string      
+  name:         string
+  description:  string        
+  quantity:     number       
+  weight:       number
+  color:        string
+  type:         string
+  isFavorite:   Boolean     
+  category:     string
+  subcategory:  string
+  status:       Status
+  shelfLife:    string
+  pointsNeeded: number
+  createdAt:    Date   
+  updatedAt:    Date  
+}
