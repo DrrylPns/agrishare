@@ -8,6 +8,7 @@ import { Post } from "../../agrifeed/_components/_types";
 import PostCard from "./PostCard";
 import Link from "next/link";
 import PaginationSection from "@/components/PaginationSection";
+import SelectSort from "./SelectSort";
 
 const Categories = [
   'FRESH_FRUIT',
@@ -49,11 +50,16 @@ function Category({
  
   return (
     <>
-   
+    <div className='flex'>
+      <div className='flex items-center'>
+        <h1>Sort by:</h1>
+        <SelectSort/>
+      </div>
+    </div>
     <div className='grid grid-cols-12 w-full gap-x-2 '>
-    <h1 className="text-right col-span-9">{post?.length} Results found</h1>
+    <h1 className="text-right col-span-9">{currentItems?.length} Results found</h1>
         <div className='grid grid-cols-3 w-full  gap-3 col-span-9 '>
-            {post && post.map((item)=>(
+            {currentItems && currentItems.map((item)=>(
                 <Link href={`/agrifeed/${item.id}`} key={item.id}>
                     <PostCard post={item} />
                 </Link>
