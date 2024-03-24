@@ -8,6 +8,16 @@ import { Agrichange } from "../../agrifeed/_components/_types";
 import PostCard from "./PostCard";
 import Link from "next/link";
 import { PostCardSkeleton } from "./skeleton/PostCardSkeleton";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
+
 
 const Categories = [
     'FRESH_FRUIT',
@@ -20,7 +30,7 @@ const Categories = [
    
   ]
 
-function Category({
+export default function Category({
 
 }:{
 
@@ -28,6 +38,12 @@ function Category({
     const [selectedCategory, setSelectedCategory] = useState<string>(Categories[0])
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [post, setPost] = useState<Agrichange[]>()
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(9);
+
+    const lastItemIndex = currentPage * itemsPerPage;
+    const firstItemIndex = lastItemIndex - itemsPerPage;
+    const currentItems = post?.slice(firstItemIndex, lastItemIndex)
 
    useEffect(()=>{
     getPostByCategory()
@@ -53,10 +69,9 @@ function Category({
           {isLoading && (
             <PostCardSkeleton/>
           )}
-          {post && post.length > 0 ? post.map((item)=>(
-              
+          {currentItems && currentItems.length > 0 ? currentItems.map((item)=>(
             <PostCard post={item} key={item.id}/>
-
+          
           )) :(
             <>
               No Items found
@@ -64,6 +79,7 @@ function Category({
           )
         
           }
+          
         </div>
         <div className='col-span-3 '>
             <RadioGroup value={selectedCategory} onChange={setSelectedCategory} className="shadow-md drop-shadow-md p-5">
@@ -84,8 +100,69 @@ function Category({
             </RadioGroup>
         </div>
     </div>
+    <PaginationSection
+      totalItems={post?.length}
+      itemsPerPage={itemsPerPage}
+      currentPage={currentPage}
+      setCurrentPage={setCurrentPage}
+    />
     </>
   )
-}
+};
 
-export default Category
+function PaginationSection ({
+  totalItems,
+  itemsPerPage,
+  currentPage,
+  setCurrentPage
+
+}:{
+  totalItems:any,
+  itemsPerPage:any,
+  currentPage:any,
+  setCurrentPage:any
+  
+}){
+  let pages = [];
+  for (let i = 1; i <= Math.ceil(totalItems / itemsPerPage); i++){
+    pages.push(i)
+  }
+
+  const handleNextPage = () =>{
+    if(currentPage < pages.length){
+      setCurrentPage(currentPage + 1);
+      console.log(currentPage)
+    }
+  };
+  const handlePrevPage = () =>{
+    if(currentPage > 1){
+      setCurrentPage(currentPage - 1);
+      console.log(currentPage)
+    }
+  };
+
+  
+  return (
+   <Pagination>
+    <PaginationContent>
+      <PaginationItem className=" hover:cursor-pointer">
+        <PaginationPrevious onClick={() => handlePrevPage()} />
+      </PaginationItem>
+
+      {pages.map((page, idx) => (
+        <PaginationItem 
+          key={idx} 
+          className={currentPage === page ? "bg-neutral-100 rounded-md" : "hover:cursor-pointer"}
+        >
+          <PaginationLink onClick={() => setCurrentPage(page)}>
+            {page}
+          </PaginationLink>
+        </PaginationItem>
+      ))}
+      <PaginationItem  className=" hover:cursor-pointer">
+        <PaginationNext onClick={()=> handleNextPage()}/>
+      </PaginationItem>
+    </PaginationContent>
+  </Pagination>
+  )
+}
