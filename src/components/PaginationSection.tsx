@@ -7,7 +7,7 @@ import {
     PaginationNext,
     PaginationPrevious,
   } from "@/components/ui/pagination"
-  
+
 export default function PaginationSection ({
     totalItems,
     itemsPerPage,
@@ -41,7 +41,7 @@ export default function PaginationSection ({
   
     
     return (
-     <Pagination>
+     <Pagination className="my-10">
       <PaginationContent>
         <PaginationItem className=" hover:cursor-pointer">
           <PaginationPrevious onClick={() => handlePrevPage()} />

@@ -7,9 +7,10 @@ import { IoIosAddCircleOutline, IoIosRadioButtonOff, IoIosRadioButtonOn } from '
 import { Post } from "../../agrifeed/_components/_types";
 import PostCard from "./PostCard";
 import Link from "next/link";
+import PaginationSection from "@/components/PaginationSection";
 
 const Categories = [
-    'FRESH_FRUIT',
+  'FRESH_FRUIT',
   'VEGETABLES',
   'TOOLS',
   'EQUIPMENTS',
@@ -26,6 +27,12 @@ function Category({
 }) {
     const [selectedCategory, setSelectedCategory] = useState<string>(Categories[0])
     const [post, setPost] = useState<Post[]>()
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(9);
+
+    const lastItemIndex = currentPage * itemsPerPage;
+    const firstItemIndex = lastItemIndex - itemsPerPage;
+    const currentItems = post?.slice(firstItemIndex, lastItemIndex)
 
    useEffect(()=>{
     getPostByCategory()
@@ -33,7 +40,7 @@ function Category({
 
    const getPostByCategory = async () => {
     try {
-        const res = (await axios.post('/api/getPostByCategory',{category: selectedCategory})).data;
+        const res = (await axios.post('/api/getAgrichangePost',{category: selectedCategory})).data;
         setPost(res)
     } catch (error) {
         console.log(error)
@@ -71,6 +78,12 @@ function Category({
             </RadioGroup>
         </div>
     </div>
+    <PaginationSection
+      totalItems={post?.length}
+      itemsPerPage={itemsPerPage}
+      currentPage={currentPage}
+      setCurrentPage={setCurrentPage}
+    />
     </>
   )
 }
