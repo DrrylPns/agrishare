@@ -8,6 +8,7 @@ import { Post } from "../../agrifeed/_components/_types";
 import PostCard from "./PostCard";
 import Link from "next/link";
 import { PostCardSkeleton } from "./skeleton/PostCardSkeleton";
+import PaginationSection from "@/components/PaginationSection";
 
 const Categories = [
     'FRESH_FRUIT',
@@ -20,7 +21,7 @@ const Categories = [
    
   ]
 
-function Category({
+export default function Category({
 
 }:{
 
@@ -28,6 +29,12 @@ function Category({
     const [selectedCategory, setSelectedCategory] = useState<string>(Categories[0])
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [post, setPost] = useState<Post[]>()
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(9);
+
+    const lastItemIndex = currentPage * itemsPerPage;
+    const firstItemIndex = lastItemIndex - itemsPerPage;
+    const currentItems = post?.slice(firstItemIndex, lastItemIndex)
 
    useEffect(()=>{
     getPostByCategory()
@@ -78,8 +85,12 @@ function Category({
             </RadioGroup>
         </div>
     </div>
+    <PaginationSection
+      totalItems={post?.length}
+      itemsPerPage={itemsPerPage}
+      currentPage={currentPage}
+      setCurrentPage={setCurrentPage}
+    />
     </>
   )
 }
-
-export default Category
