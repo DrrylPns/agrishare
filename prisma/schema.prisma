@@ -51,6 +51,7 @@ model User {
   updatedAt             DateTime               @updatedAt
   companyName           String?
   points                Float                  @default(0)
+  requestLeft           Float                  @default(3) // claimed items in agriquest. 3 requests per trader only // if successful claim then - 1 the request of claimer
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
   role                  Role                   @default(DONATOR)
@@ -65,6 +66,10 @@ model User {
   Donation              Donation[]
   notificationsReceived Notification[]
   AgriChange            AgriChange[]
+  // user (ADMIN) can create many agriquest items
+  createdAgriquests     Agriquest[]            @relation("CreatedBy")
+  // user (TRADER) can request and claim many agriquest items
+  claimedAgriquests     Agriquest[]            @relation("Claimed")
 }
 
 enum Role {
@@ -186,6 +191,28 @@ model AgriChange {
 
   User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
+}
+
+model Agriquest {
+  id          String      @id @default(cuid())
+  image       String      @db.Text
+  name        String
+  description String
+  quantity    Float       @default(0)
+  weight      Float
+  color       String
+  shelfLife   String
+  type        Types?
+  category    Category
+  subcategory Subcategory
+  harvestDate DateTime
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  // user relation who created the agriquest (ADMIN)
+  createdBy   User        @relation("CreatedBy", fields: [createdById], references: [id])
+  createdById String
+  // relation to users who claimed the agriquest (TRADER)
+  claimedBy   User[]      @relation("Claimed")
 }
 
 enum Status {

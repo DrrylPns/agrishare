@@ -1,4 +1,5 @@
 import prisma from "@/lib/db";
+import { Session } from "next-auth/types";
 
 
 export const getUserByEmail = async (email: string) => {
