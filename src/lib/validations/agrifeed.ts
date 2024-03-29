@@ -11,14 +11,16 @@ const Subcategory = z.enum([
     "HERBS_VEGETABLES",
     "FRUIT1",
     "FRUIT2",
-    "TOOLS1",
-    "EQUIPMENTS1",
+    "SMALL",
+    "MEDIUM",
+    "LARGE",
     "SEEDS1",
     "SEEDS2",
-    "SOILS1",
-    "SOILS2",
-    "SOILS3",
-    "FERTILIZER1"])
+    "ORGANIC_SOIL",
+    "NOT_ORGANIC_SOIL",
+    "ORGANIC_FERTILIZER",
+    "NOT_ORGANIC_FERTILIZER",
+])
 
 export const AgrifeedSchema = z.object({
     image: z.string().optional(),
@@ -30,7 +32,7 @@ export const AgrifeedSchema = z.object({
     shelfLife: z.string().min(2, { message: "Shelf life should be valid." }),
     category: Category,
     subcategory: Subcategory,
-    type: z.optional(z.enum(["ORGANIC", "INORGANIC"])),
+    type: z.optional(z.enum(["ORGANIC", "NOT_ORGANIC"])),
     harvestDate: z.coerce.date(),
     preferedOffers: z.string().min(2, { message: "Preferred Offer should be valid." }),
 })

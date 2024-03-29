@@ -237,152 +237,156 @@ function Page({
                         </div>
 
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-10'>
-                                <FormField
-                                    control={form.control}
-                                    name="category"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Category</FormLabel>
-                                            <Select onValueChange={(newValue) => {
-                                                field.onChange(newValue);
-                                                setChosenCategory(newValue);
-                                            }}
-                                                defaultValue={field.value}>
-                                                <FormControl>
-                                                    <SelectTrigger>
-                                                        <SelectValue placeholder="Select a category..." />
-                                                    </SelectTrigger>
-                                                </FormControl>
-                                                <SelectContent>
-                                                    <SelectItem value={Category.FRESH_FRUIT}>Fresh Fruit</SelectItem>
-                                                    <SelectItem value={Category.VEGETABLES}>Vegetables</SelectItem>
-                                                    <SelectItem value={Category.TOOLS}>Tools</SelectItem>
-                                                    <SelectItem value={Category.EQUIPMENTS}>Equipments</SelectItem>
-                                                    <SelectItem value={Category.SEEDS}>Seeds</SelectItem>
-                                                    <SelectItem value={Category.SOILS}>Soils</SelectItem>
-                                                    <SelectItem value={Category.FERTILIZER}>Fertilizer</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-
-                                <FormField
-                                    control={form.control}
-                                    name="subcategory"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Subcategory</FormLabel>
-                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                <FormControl>
-                                                    <SelectTrigger>
-                                                        <SelectValue placeholder="Select a subcategory..." />
-                                                    </SelectTrigger>
-                                                </FormControl>
-                                                <SelectContent>
-                                                    {chosenCategory === Category.VEGETABLES && (
-                                                        <>
-                                                            <SelectItem value={Subcategory.LEAFY_VEGETABLES}>Leafy Vegetables</SelectItem>
-                                                            <SelectItem value={Subcategory.PODDED_VEGETABLES}>Podded Vegetables</SelectItem>
-                                                            <SelectItem value={Subcategory.FRUIT_VEGETABLES}>Fruit Vegetables</SelectItem>
-                                                            <SelectItem value={Subcategory.ROOT_VEGETABLES}>Root Vegetables</SelectItem>
-                                                            <SelectItem value={Subcategory.HERBS_VEGETABLES}>Herbs Vegetables</SelectItem>
-                                                        </>
-                                                    )}
-                                                    {chosenCategory === Category.FRESH_FRUIT && (
-                                                        <>
-                                                            <SelectItem value={Subcategory.FRUIT1}>Fruit 1</SelectItem>
-                                                            <SelectItem value={Subcategory.FRUIT2}>Fruit 2</SelectItem>
-                                                        </>
-                                                    )}
-                                                    {chosenCategory === Category.EQUIPMENTS && (
-                                                        <>
-                                                            <SelectItem value={Subcategory.EQUIPMENTS1}>Equipment 1</SelectItem>
-                                                        </>
-                                                    )}
-                                                    {chosenCategory === Category.FERTILIZER && (
-                                                        <>
-                                                            <SelectItem value={Subcategory.FERTILIZER1}>Fertilizer 1</SelectItem>
-                                                        </>
-                                                    )}
-                                                    {chosenCategory === Category.SEEDS && (
-                                                        <>
-                                                            <SelectItem value={Subcategory.SEEDS1}>Seeds 1</SelectItem>
-                                                            <SelectItem value={Subcategory.SEEDS2}>Seeds 2</SelectItem>
-                                                        </>
-                                                    )}
-                                                    {chosenCategory === Category.TOOLS && (
-                                                        <>
-                                                            <SelectItem value={Subcategory.TOOLS1}>Tools 1</SelectItem>
-                                                        </>
-                                                    )}
-                                                    {chosenCategory === Category.SOILS && (
-                                                        <>
-                                                            <SelectItem value={Subcategory.SOILS1}>Soils 1</SelectItem>
-                                                            <SelectItem value={Subcategory.SOILS2}>Soils 2</SelectItem>
-                                                            <SelectItem value={Subcategory.SOILS3}>Soils 3</SelectItem>
-                                                        </>
-                                                    )}
-                                                </SelectContent>
-                                            </Select>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
-
-                            <div className='grid grid-cols-1 md:grid-cols-2 gap-10'>
-                                <FormField
-                                    control={form.control}
-                                    name="quantity"
-                                    render={({ field }) => (
-                                        <FormItem className='col'>
-                                            <FormLabel>Quantity</FormLabel>
-                                            <FormControl>
-                                                <Input placeholder="100" {...field} disabled={isPending} type="number" />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="weight"
-                                    render={({ field }) => (
-                                        <FormItem className='col'>
-                                            <FormLabel>Weight by (kg)</FormLabel>
-                                            <FormControl>
-                                                <Input placeholder="1 Kg" {...field} disabled={isPending} type="number" />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
                             <FormField
                                 control={form.control}
-                                name="description"
+                                name="category"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Description</FormLabel>
+                                        <FormLabel>Category</FormLabel>
+                                        <Select onValueChange={(newValue) => {
+                                            field.onChange(newValue);
+                                            setChosenCategory(newValue);
+                                        }}
+                                            defaultValue={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select a category..." />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value={Category.FRESH_FRUIT}>Fresh Fruit</SelectItem>
+                                                <SelectItem value={Category.VEGETABLES}>Vegetables</SelectItem>
+                                                <SelectItem value={Category.TOOLS}>Tools</SelectItem>
+                                                <SelectItem value={Category.EQUIPMENTS}>Equipments</SelectItem>
+                                                <SelectItem value={Category.SEEDS}>Seeds</SelectItem>
+                                                <SelectItem value={Category.SOILS}>Soils</SelectItem>
+                                                <SelectItem value={Category.FERTILIZER}>Fertilizer</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="subcategory"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Subcategory</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select a subcategory..." />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {chosenCategory === Category.VEGETABLES && (
+                                                    <>
+                                                        <SelectItem value={Subcategory.LEAFY_VEGETABLES}>Leafy Vegetables</SelectItem>
+                                                        <SelectItem value={Subcategory.PODDED_VEGETABLES}>Podded Vegetables</SelectItem>
+                                                        <SelectItem value={Subcategory.FRUIT_VEGETABLES}>Fruit Vegetables</SelectItem>
+                                                        <SelectItem value={Subcategory.ROOT_VEGETABLES}>Root Vegetables</SelectItem>
+                                                        <SelectItem value={Subcategory.HERBS_VEGETABLES}>Herbs Vegetables</SelectItem>
+                                                    </>
+                                                )}
+                                                {chosenCategory === Category.FRESH_FRUIT && (
+                                                    <>
+                                                        <SelectItem value={Subcategory.FRUIT1}>Fruit 1</SelectItem>
+                                                        <SelectItem value={Subcategory.FRUIT2}>Fruit 2</SelectItem>
+                                                    </>
+                                                )}
+                                                {chosenCategory === Category.EQUIPMENTS && (
+                                                    <>
+                                                        <SelectItem value={Subcategory.SMALL}>Small</SelectItem>
+                                                        <SelectItem value={Subcategory.MEDIUM}>Medium</SelectItem>
+                                                        <SelectItem value={Subcategory.LARGE}>Large</SelectItem>
+                                                    </>
+                                                )}
+                                                {chosenCategory === Category.FERTILIZER && (
+                                                    <>
+                                                        <SelectItem value={Subcategory.ORGANIC_FERTILIZER}>Organic Fertilizer</SelectItem>
+                                                        <SelectItem value={Subcategory.NOT_ORGANIC_FERTILIZER}>Not Organic Fertilizer</SelectItem>
+                                                    </>
+                                                )}
+                                                {chosenCategory === Category.SEEDS && (
+                                                    <>
+                                                        <SelectItem value={Subcategory.SEEDS1}>Seeds 1</SelectItem>
+                                                        <SelectItem value={Subcategory.SEEDS2}>Seeds 2</SelectItem>
+                                                    </>
+                                                )}
+                                                {chosenCategory === Category.TOOLS && (
+                                                    <>
+                                                        <SelectItem value={Subcategory.SMALL}>Small</SelectItem>
+                                                        <SelectItem value={Subcategory.MEDIUM}>Medium</SelectItem>
+                                                        <SelectItem value={Subcategory.LARGE}>Large</SelectItem>
+                                                    </>
+                                                )}
+                                                {chosenCategory === Category.SOILS && (
+                                                    <>
+                                                        <SelectItem value={Subcategory.ORGANIC_SOIL}>Organic Soil</SelectItem>
+                                                        <SelectItem value={Subcategory.NOT_ORGANIC_SOIL}>Not Organic Soil</SelectItem>
+                                                    </>
+                                                )}
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-10'>
+                            <FormField
+                                control={form.control}
+                                name="quantity"
+                                render={({ field }) => (
+                                    <FormItem className='col'>
+                                        <FormLabel>Quantity</FormLabel>
                                         <FormControl>
-                                            <Textarea
-                                                placeholder="Describe your item here"
-                                                className="resize-none"
-                                                {...field}
-                                                disabled={isPending}
-                                            />
+                                            <Input placeholder="100" {...field} disabled={isPending} type="number" />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
-                            <div className='text-center space-y-2'>
-                                <FormError message={error} />
-                                <FormSuccess message={success} />
-                                <Button type="submit" disabled={imageIsEmpty || isPending}>Send Offer</Button>
-                            </div>
+                            <FormField
+                                control={form.control}
+                                name="weight"
+                                render={({ field }) => (
+                                    <FormItem className='col'>
+                                        <FormLabel>Weight by (kg)</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="1 Kg" {...field} disabled={isPending} type="number" />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                        <FormField
+                            control={form.control}
+                            name="description"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Description</FormLabel>
+                                    <FormControl>
+                                        <Textarea
+                                            placeholder="Describe your item here"
+                                            className="resize-none"
+                                            {...field}
+                                            disabled={isPending}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <div className='text-center space-y-2'>
+                            <FormError message={error} />
+                            <FormSuccess message={success} />
+                            <Button type="submit" disabled={imageIsEmpty || isPending}>Send Offer</Button>
+                        </div>
                     </form>
                 </Form>
             </div>

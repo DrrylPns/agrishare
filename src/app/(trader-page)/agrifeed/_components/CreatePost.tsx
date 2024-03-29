@@ -1,7 +1,6 @@
 "use client"
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, ArrowRight, CalendarIcon, LucideImagePlus } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import { Calendar } from '@/components/ui/calendar'
 import {
   Dialog,
   DialogContent,
@@ -10,31 +9,31 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { UploadDropzone } from '@/lib/uploadthing'
-import { toast } from '@/components/ui/use-toast'
-import { cn } from '@/lib/utils'
-import Image from 'next/image'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { AgrifeedSchema, AgrifeedType } from '@/lib/validations/agrifeed'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form"
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { useForm } from 'react-hook-form'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Calendar } from '@/components/ui/calendar'
-import { format, sub } from 'date-fns'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { toast } from '@/components/ui/use-toast'
+import { UploadDropzone } from '@/lib/uploadthing'
+import { cn } from '@/lib/utils'
+import { AgrifeedSchema, AgrifeedType } from '@/lib/validations/agrifeed'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Category, Subcategory, Types } from '@prisma/client'
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
-import { Category, Subcategory, Types } from '@prisma/client'
+import { format, sub } from 'date-fns'
+import { ArrowLeft, ArrowRight, CalendarIcon, LucideImagePlus } from 'lucide-react'
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 
 function CreatePost() {
@@ -43,7 +42,6 @@ function CreatePost() {
   const [chosenCategory, setChosenCategory] = useState("")
 
   const imageIsEmpty = imageUrl.length === 0
-
 
 
   const form = useForm<AgrifeedType>({
@@ -357,12 +355,15 @@ function CreatePost() {
                                 )}
                                 {chosenCategory === Category.EQUIPMENTS && (
                                   <>
-                                    <SelectItem value={Subcategory.EQUIPMENTS1}>Equipment 1</SelectItem>
+                                    <SelectItem value={Subcategory.SMALL}>Small</SelectItem>
+                                    <SelectItem value={Subcategory.MEDIUM}>Medium</SelectItem>
+                                    <SelectItem value={Subcategory.LARGE}>Large</SelectItem>
                                   </>
                                 )}
                                 {chosenCategory === Category.FERTILIZER && (
                                   <>
-                                    <SelectItem value={Subcategory.FERTILIZER1}>Fertilizer 1</SelectItem>
+                                    <SelectItem value={Subcategory.ORGANIC_FERTILIZER}>Organic Fertilizer</SelectItem>
+                                    <SelectItem value={Subcategory.NOT_ORGANIC_FERTILIZER}>Not Organic Fertilizer</SelectItem>
                                   </>
                                 )}
                                 {chosenCategory === Category.SEEDS && (
@@ -373,14 +374,15 @@ function CreatePost() {
                                 )}
                                 {chosenCategory === Category.TOOLS && (
                                   <>
-                                    <SelectItem value={Subcategory.TOOLS1}>Tools 1</SelectItem>
+                                    <SelectItem value={Subcategory.SMALL}>Small</SelectItem>
+                                    <SelectItem value={Subcategory.MEDIUM}>Medium</SelectItem>
+                                    <SelectItem value={Subcategory.LARGE}>Large</SelectItem>
                                   </>
                                 )}
                                 {chosenCategory === Category.SOILS && (
                                   <>
-                                    <SelectItem value={Subcategory.SOILS1}>Soils 1</SelectItem>
-                                    <SelectItem value={Subcategory.SOILS2}>Soils 2</SelectItem>
-                                    <SelectItem value={Subcategory.SOILS3}>Soils 3</SelectItem>
+                                    <SelectItem value={Subcategory.ORGANIC_SOIL}>Organic Soil</SelectItem>
+                                    <SelectItem value={Subcategory.NOT_ORGANIC_SOIL}>Not Organic Soil</SelectItem>
                                   </>
                                 )}
                               </SelectContent>
@@ -389,6 +391,7 @@ function CreatePost() {
                           </FormItem>
                         )}
                       />
+
                       {(chosenCategory === Category.VEGETABLES || chosenCategory === Category.FRESH_FRUIT) && (
                         <FormField
                           control={form.control}
@@ -410,7 +413,7 @@ function CreatePost() {
                                   </FormControl>
                                   <SelectContent>
                                     <SelectItem value={Types.ORGANIC}>Organic</SelectItem>
-                                    <SelectItem value={Types.INORGANIC}>Not Organic</SelectItem>
+                                    <SelectItem value={Types.NOT_ORGANIC}>Not Organic</SelectItem>
                                   </SelectContent>
                                 </Select>
                               </FormControl>

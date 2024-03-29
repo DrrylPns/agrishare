@@ -48,7 +48,7 @@ export function generatePointsHistoryID(): string {
 
 export function generateClaimedHistoryID(): string {
   const randomBytesHex = randomBytes(3).toString('hex').toUpperCase();
-  return `IT#${randomBytesHex}`;
+  return `ITM#${randomBytesHex}`;
 }
 
 export function generateAgriquestHistoryID(): string {

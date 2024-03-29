@@ -55,7 +55,7 @@ function Products() {
     getNextPageParam: (lastPage) => lastPage.nextId || undefined
   })
 
-  if (isLoading) return <div>
+  if (isLoading) return <div className='w-full flex items-center justify-center'>
     <BeatLoader />
   </div>
 

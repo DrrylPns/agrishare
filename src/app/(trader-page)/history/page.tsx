@@ -8,6 +8,8 @@ import { fetchTransactionByUser } from '../../../../actions/transaction'
 import { columnTradeByUser } from './_components/columnTradeByUser'
 import { columnDonationByUser } from './_components/columnDonationByUser'
 import { columnPointsByUser } from './_components/columnPointsByUser'
+import { fecthAgriChangeTransactionsByUser } from '../../../../actions/agrichange'
+import { columnClaimsByUser } from './_components/columnClaimsByUser'
 
 export const dynamic = 'force-dynamic';
 
@@ -16,6 +18,7 @@ const page = async () => {
   const trades = await fetchTradeByUser()
   const donations = await fetchDonationsByUser()
   const transactions = await fetchTransactionByUser()
+  const claims = await fecthAgriChangeTransactionsByUser()
 
   return (
     <div className='max-w-[1260px]'>
@@ -57,7 +60,10 @@ const page = async () => {
               />
             </TabPanel>
             <TabPanel>
-              {/* <DataTable data={ } columns={ } /> */}
+              <DataTable
+                //@ts-ignore
+                data={claims}
+                columns={columnClaimsByUser} />
             </TabPanel>
           </TabPanels>
         </TabGroup>

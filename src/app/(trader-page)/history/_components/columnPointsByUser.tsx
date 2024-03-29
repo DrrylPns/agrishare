@@ -67,7 +67,7 @@ export const columnPointsByUser: ColumnDef<TransactionWithUserAndPost>[] = [
         cell: ({ row }) => {
             const type = row.original.type
 
-            const formattedType = type === "DONATE" ? "Donation" : type === "TRADE" ? "Trading" : ""
+            const formattedType = type === "DONATE" ? "Donation" : type === "TRADE" ? "Trading" : type === "CLAIM" ? "Claim" : ""
 
             return <div
                 className=""

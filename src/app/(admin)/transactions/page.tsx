@@ -8,6 +8,8 @@ import { fetchTransaction } from '../../../../actions/transaction'
 import { columnTrade } from '@/components/tables/columnTrade'
 import { columnDonation } from '@/components/tables/columnDonation'
 import { columnPoints } from '@/components/tables/columnPoints'
+import { fetchAgriChangeTransactions } from '../../../../actions/agrichange'
+import { columnClaims } from '@/components/tables/columnClaims'
 
 export const dynamic = 'force-dynamic';
 
@@ -16,6 +18,7 @@ const page = async () => {
   const trades = await fetchTrades()
   const donations = await fetchDonations()
   const transactions = await fetchTransaction()
+  const claims = await fetchAgriChangeTransactions()
 
   return (
     <div className=''>
@@ -52,7 +55,12 @@ const page = async () => {
               />
             </TabPanel>
             <TabPanel>
-              {/* <DataTable data={ } columns={ } /> */}
+              <DataTable
+                //@ts-ignore
+                data={claims}
+                columns={columnClaims}
+                isHistory
+              />
             </TabPanel>
           </TabPanels>
         </TabGroup>

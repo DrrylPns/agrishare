@@ -5,9 +5,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// prisma/schema.prisma
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  // uncomment next line if you use Prisma <5.10
+  directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 model Account {
@@ -66,10 +69,12 @@ model User {
   Donation              Donation[]
   notificationsReceived Notification[]
   AgriChange            AgriChange[]
+  claimedAgrichange     Claim[]
+
   // user (ADMIN) can create many agriquest items
-  createdAgriquests     Agriquest[]            @relation("CreatedBy")
+  createdAgriquests Agriquest[] @relation("CreatedBy")
   // user (TRADER) can request and claim many agriquest items
-  claimedAgriquests     Agriquest[]            @relation("Claimed")
+  claimedAgriquests Agriquest[] @relation("Claimed")
 }
 
 enum Role {
@@ -159,14 +164,15 @@ enum Subcategory {
   HERBS_VEGETABLES
   FRUIT1
   FRUIT2
-  TOOLS1
-  EQUIPMENTS1
+  SMALL
+  MEDIUM
+  LARGE
   SEEDS1
   SEEDS2
-  SOILS1
-  SOILS2
-  SOILS3
-  FERTILIZER1
+  ORGANIC_SOIL
+  NOT_ORGANIC_SOIL
+  ORGANIC_FERTILIZER
+  NOT_ORGANIC_FERTILIZER
   // TO BE ADDED
 }
 
@@ -186,10 +192,27 @@ model AgriChange {
   shelfLife    String
   pointsNeeded Float
   transaction  Transaction[]
+  harvestDate  DateTime
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 
-  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  claim Claim[]
+}
+
+model Claim {
+  id        String      @id @default(cuid())
+  itm       String      @unique
+  status    ClaimStatus @default(PENDING)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  agriChange   AgriChange @relation(fields: [agriChangeId], references: [id], onDelete: Cascade)
+  agriChangeId String
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 }
 
@@ -203,16 +226,23 @@ model Agriquest {
   color       String
   shelfLife   String
   type        Types?
+  status      ClaimStatus @default(PENDING)
   category    Category
   subcategory Subcategory
   harvestDate DateTime
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   // user relation who created the agriquest (ADMIN)
-  createdBy   User        @relation("CreatedBy", fields: [createdById], references: [id])
+  createdBy   User        @relation("CreatedBy", fields: [createdById], references: [id], onDelete: Cascade)
   createdById String
   // relation to users who claimed the agriquest (TRADER)
   claimedBy   User[]      @relation("Claimed")
+}
+
+enum ClaimStatus {
+  PENDING
+  APPROVED
+  DECLINED
 }
 
 enum Status {
@@ -223,7 +253,6 @@ enum Status {
 
 enum Types {
   ORGANIC
-  INORGANIC
   NOT_ORGANIC
 }
 
@@ -233,10 +262,10 @@ model Reviews {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  User   User   @relation(fields: [userId], references: [id])
+  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
-  Post   Post   @relation(fields: [postId], references: [id])
+  Post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId String
 }
 

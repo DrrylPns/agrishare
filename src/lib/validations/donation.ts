@@ -11,14 +11,16 @@ const Subcategory = z.enum([
     "HERBS_VEGETABLES",
     "FRUIT1",
     "FRUIT2",
-    "TOOLS1",
-    "EQUIPMENTS1",
+    "SMALL",
+    "MEDIUM",
+    "LARGE",
     "SEEDS1",
     "SEEDS2",
-    "SOILS1",
-    "SOILS2",
-    "SOILS3",
-    "FERTILIZER1"])
+    "ORGANIC_SOIL",
+    "NOT_ORGANIC_SOIL",
+    "ORGANIC_FERTILIZER",
+    "NOT_ORGANIC_FERTILIZER",
+])
 
 export const DonationSchema = z.object({
     donatee: z.string().min(2, { message: "Invalid donatee." }).max(35, { message: "Invalid input, you exceeded the amount of characters." }),

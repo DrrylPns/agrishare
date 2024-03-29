@@ -3,20 +3,20 @@ import prisma from "@/lib/db"
 export async function POST(req: Request) {
     try {
         const body = await req.json()
-        const {category, sort} = body
+        const { category, sort } = body
 
         if (sort === 'Transaction') {
             const postByCtegory = await prisma.agriChange.findMany({
-                where:{
+                where: {
                     category,
                     status: {
-                        not:{
+                        not: {
                             equals: 'OUTOFSTOCK'
                         }
                     }
                 },
                 orderBy: {
-                    transaction:{
+                    transaction: {
                         _count: 'desc'
                     }
                 }
@@ -25,16 +25,16 @@ export async function POST(req: Request) {
         }
         if (sort === 'Latest') {
             const postByCtegory = await prisma.agriChange.findMany({
-                where:{
+                where: {
                     category,
                     status: {
-                        not:{
+                        not: {
                             equals: 'OUTOFSTOCK'
                         }
                     }
                 },
                 orderBy: {
-                   createdAt: 'desc'
+                    createdAt: 'desc'
                 }
             })
             return new Response(JSON.stringify(postByCtegory))

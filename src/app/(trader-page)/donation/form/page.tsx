@@ -216,12 +216,15 @@ export default function Page() {
                       )}
                       {chosenCategory === Category.EQUIPMENTS && (
                         <>
-                          <SelectItem value={Subcategory.EQUIPMENTS1}>Equipment 1</SelectItem>
+                          <SelectItem value={Subcategory.SMALL}>Small</SelectItem>
+                          <SelectItem value={Subcategory.MEDIUM}>Medium</SelectItem>
+                          <SelectItem value={Subcategory.LARGE}>Large</SelectItem>
                         </>
                       )}
                       {chosenCategory === Category.FERTILIZER && (
                         <>
-                          <SelectItem value={Subcategory.FERTILIZER1}>Fertilizer 1</SelectItem>
+                          <SelectItem value={Subcategory.ORGANIC_FERTILIZER}>Organic Fertilizer</SelectItem>
+                          <SelectItem value={Subcategory.NOT_ORGANIC_FERTILIZER}>Not Organic Fertilizer</SelectItem>
                         </>
                       )}
                       {chosenCategory === Category.SEEDS && (
@@ -232,14 +235,15 @@ export default function Page() {
                       )}
                       {chosenCategory === Category.TOOLS && (
                         <>
-                          <SelectItem value={Subcategory.TOOLS1}>Tools 1</SelectItem>
+                          <SelectItem value={Subcategory.SMALL}>Small</SelectItem>
+                          <SelectItem value={Subcategory.MEDIUM}>Medium</SelectItem>
+                          <SelectItem value={Subcategory.LARGE}>Large</SelectItem>
                         </>
                       )}
                       {chosenCategory === Category.SOILS && (
                         <>
-                          <SelectItem value={Subcategory.SOILS1}>Soils 1</SelectItem>
-                          <SelectItem value={Subcategory.SOILS2}>Soils 2</SelectItem>
-                          <SelectItem value={Subcategory.SOILS3}>Soils 3</SelectItem>
+                          <SelectItem value={Subcategory.ORGANIC_SOIL}>Organic Soil</SelectItem>
+                          <SelectItem value={Subcategory.NOT_ORGANIC_SOIL}>Not Organic Soil</SelectItem>
                         </>
                       )}
                     </SelectContent>

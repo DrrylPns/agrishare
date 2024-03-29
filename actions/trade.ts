@@ -58,6 +58,7 @@ export const trade = async (
             postId,
             shelfLife,
             category,
+            //@ts-ignore
             subcategory,
             trd
         }
