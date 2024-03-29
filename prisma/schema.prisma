@@ -70,6 +70,7 @@ model User {
   notificationsReceived Notification[]
   AgriChange            AgriChange[]
   claimedAgrichange     Claim[]
+  requests              Request[]
 
   // user (ADMIN) can create many agriquest items
   createdAgriquests Agriquest[] @relation("CreatedBy")
@@ -226,7 +227,6 @@ model Agriquest {
   color       String
   shelfLife   String
   type        Types?
-  status      ClaimStatus @default(PENDING)
   category    Category
   subcategory Subcategory
   harvestDate DateTime
@@ -237,6 +237,22 @@ model Agriquest {
   createdById String
   // relation to users who claimed the agriquest (TRADER)
   claimedBy   User[]      @relation("Claimed")
+
+  request Request[]
+}
+
+model Request {
+  id        String      @id @default(cuid())
+  aq        String      @unique
+  status    ClaimStatus @default(PENDING)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  agriQuest   Agriquest @relation(fields: [agriQuestId], references: [id], onDelete: Cascade)
+  agriQuestId String
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
 }
 
 enum ClaimStatus {
@@ -347,10 +363,11 @@ enum DonationStatus {
 
 model Transaction {
   id     String          @id @default(cuid())
-  ps     String? // mali ps explain sakanila kung bakit
+  ps     String? // mali ps explain sakanila kung bakit // no need Points ID sa points table
   itm    String? // eto tama to kaso to do pa dahil wala pang claiming functionality.
   dn     String?
   trd    String?
+  aq     String?
   type   TransactionType
   points Float           @default(0)
 
