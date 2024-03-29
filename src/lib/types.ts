@@ -1,4 +1,4 @@
-import { Post, Role, StatusType, User, DonationStatus, TransactionType, Notification, Subcategory, ClaimStatus, AgriChange } from "@prisma/client";
+import { AgriChange, Agriquest, ClaimStatus, DonationStatus, Post, Role, StatusType, Subcategory, TransactionType, User } from "@prisma/client";
 
 export interface Posts {
     id: string;
@@ -145,4 +145,16 @@ export interface ClaimsWithAgrichangeAndUsers {
     user: User;
     agriChangeId: string;
     userId: string;
+}
+
+export interface RequestWithAgriquestAndUsers {
+    id: string;
+    aq: string;
+    status: ClaimStatus;
+    createdAt: Date;
+    updatedAt: Date;
+    agriQuestId: string;
+    userId: string;
+    user: User
+    agriquest: Agriquest
 }

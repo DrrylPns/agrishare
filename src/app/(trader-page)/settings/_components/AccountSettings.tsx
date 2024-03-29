@@ -227,6 +227,9 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
                         </div>
 
                         <div className="lg:w-[50%] lg:flex lg:flex-col lg:gap-3 space-y-3 md:space-y-1">
+                            <h1 className="text-sm mt-3 font-[550]">User ID</h1>
+                            <p>{user?.userId}</p>
+
                             <FormField
                                 control={form.control}
                                 name="name"

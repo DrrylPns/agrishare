@@ -27,6 +27,7 @@ import { cn } from "@/lib/utils"
 import { format, sub } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import { Calendar } from "@/components/ui/calendar"
+import AdminTitle from "@/components/AdminTitle"
 
 export const AgrichangeForm = () => {
     const [isPending, startTransition] = useTransition()
@@ -65,43 +66,8 @@ export const AgrichangeForm = () => {
         <>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-                    <div>
-                        <h1 className="font-medium">Image Product</h1>
-                        {imageUrl.length ? <div className="w-full flex flex-col items-center justify-center mt-5">
-                            <Image
-                                alt='product image'
-                                src={imageUrl}
-                                width={250}
-                                height={250}
-                                className='mb-3'
-                            />
-                            <Button variant="outline" onClick={() => setImageUrl("")}>Change</Button>
-                        </div> : <UploadDropzone
-                            className="text-green"
-                            appearance={{
-                                button: "bg-[#00B207] p-2 mb-3",
-                                label: "text-green",
-                                allowedContent: "flex h-8 flex-col items-center justify-center px-2 text-green",
-                            }}
-                            endpoint="imageUploader"
-                            onClientUploadComplete={(res) => {
-                                console.log('Files: ', res);
-                                if (res && res.length > 0 && res[0].url) {
-                                    setImageUrl(res[0].url);
-                                } else {
-                                    console.error('Please input a valid image.', res);
-                                }
-                            }}
-                            onUploadError={(error: Error) => {
-                                toast({
-                                    title: 'Error!',
-                                    description: error.message,
-                                    variant: 'destructive',
-                                })
-                            }}
-                        />
-                        }
-                    </div>
+
+                    <AdminTitle entry="1" title="Agrichange Info" />
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                         <FormField
@@ -382,6 +348,44 @@ export const AgrichangeForm = () => {
                                 </FormItem>
                             )}
                         />
+                    </div>
+
+                    <div>
+                        <AdminTitle entry="2" title="Upload" />
+                        {imageUrl.length ? <div className="w-full flex flex-col items-center justify-center mt-5">
+                            <Image
+                                alt='product image'
+                                src={imageUrl}
+                                width={250}
+                                height={250}
+                                className='mb-3'
+                            />
+                            <Button variant="outline" onClick={() => setImageUrl("")}>Change</Button>
+                        </div> : <UploadDropzone
+                            className="text-green"
+                            appearance={{
+                                button: "bg-[#00B207] p-2 mb-3",
+                                label: "text-green",
+                                allowedContent: "flex h-8 flex-col items-center justify-center px-2 text-green",
+                            }}
+                            endpoint="imageUploader"
+                            onClientUploadComplete={(res) => {
+                                console.log('Files: ', res);
+                                if (res && res.length > 0 && res[0].url) {
+                                    setImageUrl(res[0].url);
+                                } else {
+                                    console.error('Please input a valid image.', res);
+                                }
+                            }}
+                            onUploadError={(error: Error) => {
+                                toast({
+                                    title: 'Error!',
+                                    description: error.message,
+                                    variant: 'destructive',
+                                })
+                            }}
+                        />
+                        }
                     </div>
 
                     <Separator />

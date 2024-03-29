@@ -3,6 +3,7 @@ import { UrbanFarmerSchema } from "@/lib/validations/user-settings";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs"
 import { auth } from "../../../../auth";
+import { generateUserId } from "@/lib/utils";
 
 export async function POST(req: Request) {
     try {

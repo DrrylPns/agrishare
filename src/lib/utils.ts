@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { formatDistanceToNow } from 'date-fns';
 import { randomBytes } from 'crypto';
+import prisma from "./db";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -54,4 +55,28 @@ export function generateClaimedHistoryID(): string {
 export function generateAgriquestHistoryID(): string {
   const randomBytesHex = randomBytes(3).toString('hex').toUpperCase();
   return `AQ#${randomBytesHex}`;
+}
+
+// Function to generate userId in the format "XX-yyyy"
+export async function generateUserId() {
+  // Get the current year
+  const currentYear = new Date().getFullYear();
+  
+  // Count the number of users created in the current year
+  const usersCount = await prisma.user.count({
+    where: {
+      createdAt: {
+        gte: new Date(`${currentYear}-01-01T00:00:00.000Z`),
+        lte: new Date(`${currentYear}-12-31T23:59:59.999Z`),
+      },
+    },
+  });
+
+  // Increment the count and format it
+  const incrementedCount = (usersCount + 1).toString().padStart(2, '0');
+  
+  // Combine the incremented count with the current year to form userId
+  const userId = `${incrementedCount}-${currentYear}`;
+  
+  return userId;
 }

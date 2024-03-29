@@ -1,22 +1,22 @@
 "use client"
 
 import { DataTableColumnHeader } from "@/app/(admin)/users/_components/data-table-column-header"
-import { ClaimsWithAgrichangeAndUsers } from "@/lib/types"
+import { RequestWithAgriquestAndUsers } from "@/lib/types"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
 // import AdminTitle from "../AdminTitle"
 // import { handleDonations } from "../../../actions/donate"
 
-export const columnClaimsByUser: ColumnDef<ClaimsWithAgrichangeAndUsers>[] = [
+export const columnQuestByUser: ColumnDef<RequestWithAgriquestAndUsers>[] = [
     {
-        accessorKey: "itm",
+        accessorKey: "aq",
         header: ({ column }) => {
             return (
                 <DataTableColumnHeader column={column} title="ID" />
             )
         },
         cell: ({ row }) => {
-            const id = row.original.itm
+            const id = row.original.aq
 
             return <div
                 className=""
@@ -33,7 +33,7 @@ export const columnClaimsByUser: ColumnDef<ClaimsWithAgrichangeAndUsers>[] = [
             )
         },
         cell: ({ row }) => {
-            const item = row.original.agriChange.name
+            const item = row.original.agriquest.name
 
             return <div
                 className=""
@@ -42,23 +42,23 @@ export const columnClaimsByUser: ColumnDef<ClaimsWithAgrichangeAndUsers>[] = [
             </div>
         },
     },
-    {
-        accessorKey: "points",
-        header: ({ column }) => {
-            return (
-                <DataTableColumnHeader column={column} title="POINTS" />
-            )
-        },
-        cell: ({ row }) => {
-            const points = row.original.agriChange.pointsNeeded
+    // {
+    //     accessorKey: "points",
+    //     header: ({ column }) => {
+    //         return (
+    //             <DataTableColumnHeader column={column} title="POINTS" />
+    //         )
+    //     },
+    //     cell: ({ row }) => {
+    //         const points = row.original.agriquest.
 
-            return <div
-                className=""
-            >
-                {points} Points
-            </div>
-        },
-    },
+    //         return <div
+    //             className=""
+    //         >
+    //             {points} Points
+    //         </div>
+    //     },
+    // },
     {
         accessorKey: "status",
         header: ({ column }) => {

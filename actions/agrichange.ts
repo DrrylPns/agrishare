@@ -18,7 +18,7 @@ export const createAgrichange = async (values: AgrichangeType, image: string) =>
 
         if (!user) return { error: "No user found!" }
 
-        if (user.role !== "ADMIN") return { error: "Invalid action, can't create agriquest if you are not an admin!" }
+        if (user.role !== "ADMIN") return { error: "Invalid action, can't create agrichange if you are not an admin!" }
 
         const validatedFields = AgrichangeSchema.safeParse(values)
 
@@ -175,6 +175,7 @@ export const createAgrichange = async (values: AgrichangeType, image: string) =>
         //     pointsNeeded = (6 / 0.0125);
         // }
         // pointsNeeded = Math.round((pointsNeeded + Number.EPSILON) * 100) / 100
+
         let status: Status;
 
         if (quantity > 5) {
@@ -239,7 +240,7 @@ export const claimAgrichange = async (id: string) => {
             }
         })
 
-        revalidatePath("/history")
+        revalidatePath("/agrichange")
         return { success: "Agrichange claiming intent is now being reviewed!" }
     } catch (error: any) {
         throw new Error(error)

@@ -9,6 +9,7 @@ import { generateVerificationToken } from "@/lib/tokens";
 import { RegisterSchema } from "@/lib/validations/auth";
 import { getUserByEmail } from "../data/user";
 import prisma from "@/lib/db";
+import { generateUserId } from "@/lib/utils";
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
   const validatedFields = RegisterSchema.safeParse(values);
@@ -26,12 +27,15 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     return { error: "Email already in use!" };
   }
 
+  const userId = await generateUserId()
+
   await prisma.user.create({
     data: {
       name,
       email,
       hashedPassword: hashedPassword,
       lastName,
+      userId
     },
   });
 

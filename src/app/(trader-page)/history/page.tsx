@@ -1,15 +1,15 @@
-import AdminTitle from '@/components/AdminTitle'
-import { Card, Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react'
-import React from 'react'
 import { DataTable } from '@/app/(admin)/users/_components/data-table'
-import { fetchTradeByUser } from '../../../../actions/trade'
+import { Card, Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react'
+import { fecthAgriChangeTransactionsByUser } from '../../../../actions/agrichange'
+import { fecthAgriQuestTransactionsByUser } from '../../../../actions/agriquest'
 import { fetchDonationsByUser } from '../../../../actions/donate'
+import { fetchTradeByUser } from '../../../../actions/trade'
 import { fetchTransactionByUser } from '../../../../actions/transaction'
-import { columnTradeByUser } from './_components/columnTradeByUser'
+import { columnClaimsByUser } from './_components/columnClaimsByUser'
 import { columnDonationByUser } from './_components/columnDonationByUser'
 import { columnPointsByUser } from './_components/columnPointsByUser'
-import { fecthAgriChangeTransactionsByUser } from '../../../../actions/agrichange'
-import { columnClaimsByUser } from './_components/columnClaimsByUser'
+import { columnQuestByUser } from './_components/columnQuestByUser'
+import { columnTradeByUser } from './_components/columnTradeByUser'
 
 export const dynamic = 'force-dynamic';
 
@@ -19,6 +19,7 @@ const page = async () => {
   const donations = await fetchDonationsByUser()
   const transactions = await fetchTransactionByUser()
   const claims = await fecthAgriChangeTransactionsByUser()
+  const quests = await fecthAgriQuestTransactionsByUser()
 
   return (
     <div className='max-w-[1260px]'>
@@ -33,6 +34,7 @@ const page = async () => {
             <Tab>Donation</Tab>
             <Tab>Points</Tab>
             <Tab>Claims</Tab>
+            <Tab>Agriquest</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -64,6 +66,12 @@ const page = async () => {
                 //@ts-ignore
                 data={claims}
                 columns={columnClaimsByUser} />
+            </TabPanel>
+            <TabPanel>
+              <DataTable
+                //@ts-ignore
+                data={quests}
+                columns={columnQuestByUser} />
             </TabPanel>
           </TabPanels>
         </TabGroup>

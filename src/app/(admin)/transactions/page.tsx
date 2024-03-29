@@ -10,6 +10,8 @@ import { columnDonation } from '@/components/tables/columnDonation'
 import { columnPoints } from '@/components/tables/columnPoints'
 import { fetchAgriChangeTransactions } from '../../../../actions/agrichange'
 import { columnClaims } from '@/components/tables/columnClaims'
+import { fetchAgriQuestTransactions } from '../../../../actions/agriquest'
+import { columnQuest } from '@/components/tables/columnQuest'
 
 export const dynamic = 'force-dynamic';
 
@@ -19,6 +21,7 @@ const page = async () => {
   const donations = await fetchDonations()
   const transactions = await fetchTransaction()
   const claims = await fetchAgriChangeTransactions()
+  const requests = await fetchAgriQuestTransactions()
 
   return (
     <div className=''>
@@ -31,6 +34,7 @@ const page = async () => {
             <Tab>Donation</Tab>
             <Tab>Points</Tab>
             <Tab>Claims</Tab>
+            <Tab>Agriquest</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -59,6 +63,14 @@ const page = async () => {
                 //@ts-ignore
                 data={claims}
                 columns={columnClaims}
+                isHistory
+              />
+            </TabPanel>
+            <TabPanel>
+              <DataTable
+                //@ts-ignore
+                data={requests}
+                columns={columnQuest}
                 isHistory
               />
             </TabPanel>

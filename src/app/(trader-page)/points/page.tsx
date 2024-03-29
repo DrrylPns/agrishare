@@ -13,6 +13,7 @@ import { Info } from 'lucide-react'
 import { PageNF } from '@/components/not-found'
 import { fetchUser } from '../../../../actions/users'
 import { User } from '@prisma/client'
+import { CTAButtons } from './_components/CTAButtons'
 
 const page = async () => {
 
@@ -77,22 +78,7 @@ const page = async () => {
           )}
         </div>
 
-        <div className='flex flex-row gap-[40px] mx-2 md:mx-0 md:gap-[60px] items-center justify-center max-sm:mt-11 mt-7'>
-          <Card className='relative drop-shadow-md cursor-pointer w-fit p-1'>
-            <Image src="/images/qr.png" alt="qr" width={90} height={90} />
-            <p className='absolute -bottom-7 left-[27px] max-sm:left-[20px] font-semibold text-white'>Scan</p>
-          </Card>
-
-          <Card className='drop-shadow-md cursor-pointer w-fit p-1'>
-            <Image src="/images/transfer.png" alt="transfer" width={90} height={90} />
-            <p className='absolute -bottom-7 left-[20px] max-sm:left-[7px] font-semibold text-white'>Transfer</p>
-          </Card>
-
-          <Card className='drop-shadow-md cursor-pointer w-fit p-1'>
-            <Image src="/images/earn.png" alt="earn" width={90} height={90} />
-            <p className='absolute -bottom-7 left-[27px] max-sm:left-[20px] font-semibold text-white'>Earn</p>
-          </Card>
-        </div>
+        <CTAButtons />
       </div>
 
 

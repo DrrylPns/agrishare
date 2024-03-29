@@ -1,6 +1,6 @@
 import prisma from "@/lib/db";
 import { ChangePasswordSchema } from "@/lib/validations/user-settings";
-import bcrypt from "bcryptjs"
+import bcryptjs from "bcryptjs"
 import { z } from "zod";
 import { auth } from "../../../../auth";
 
@@ -20,13 +20,13 @@ export async function POST(req: Request) {
         where: { id: session?.user.id }
       })
   
-      const passwordMatch = await bcrypt.compare(oldPassword, user?.hashedPassword as string);
+      const passwordMatch = await bcryptjs.compare(oldPassword, user?.hashedPassword as string);
   
       if (!passwordMatch) {
         return new Response("Old password is incorrect", { status: 400 })
       }
   
-      const hashedNewPassword = await bcrypt.hash(newPassword, 12);
+      const hashedNewPassword = await bcryptjs.hash(newPassword, 12);
   
       await prisma.user.update({
         where: { id: user?.id },

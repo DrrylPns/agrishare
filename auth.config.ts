@@ -1,5 +1,5 @@
 import Credentials from "next-auth/providers/credentials"
-import bcrypt from "bcryptjs"
+import bcryptjs from "bcryptjs"
 import type { NextAuthConfig } from "next-auth"
 import { LoginSchema } from "@/lib/validations/auth";
 import { getUserByEmail } from "./data/user";
@@ -16,7 +16,7 @@ export default {
                     const user = await getUserByEmail(email);
                     if (!user || !user.hashedPassword) return null;
 
-                    const passwordsMatch = await bcrypt.compare(
+                    const passwordsMatch = await bcryptjs.compare(
                         password,
                         user.hashedPassword,
                     );
