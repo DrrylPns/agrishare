@@ -8,7 +8,7 @@ export const sendAcceptedTradeNotification = async (email: string, tradeeName: s
     const tradeLink = `${domain}/history`
 
     await resend.emails.send({
-        from: "onboarding@resend.dev",
+        from: "agrimail@support.com",
         to: email,
         subject: `Agrishare: Your trade request ${postName} has been accepted.`,
         html: `<div>
@@ -24,7 +24,7 @@ export const sendDeclinedNotification = async (email: string, tradeeName: string
     const tradeLink = `${domain}/history`
 
     await resend.emails.send({
-        from: "onboarding@resend.dev",
+        from: "agrimail@support.com",
         to: email,
         subject: `Agrishare: Your trade request ${postName} has been declined.`,
         html: `<div>
@@ -39,7 +39,7 @@ export const sendTradeNotification = async (email: string, traderName: string, p
     const tradeLink = `${domain}/trades/${tradeId}`
 
     await resend.emails.send({
-        from: "onboarding@resend.dev",
+        from: "agrimail@support.com",
         to: email,
         subject: `Agrishare: ${traderName} has requested a trade to your ${postName}.`,
         html: `<div>
@@ -52,7 +52,7 @@ export const sendTradeNotification = async (email: string, traderName: string, p
 
 export const sendTwoFactorTokenEmail = async (email: string, token: string) => {
     await resend.emails.send({
-        from: "onboarding@resend.dev",
+        from: "agrimail@support.com",
         to: email,
         subject: "Agrishare: Two-factor authentication code.",
         html: `<div>
@@ -67,7 +67,7 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
     const resetLink = `${domain}/new-password?token=${token}`
 
     await resend.emails.send({
-        from: "onboarding@resend.dev",
+        from: "agrimail@support.com",
         to: email,
         subject: "Agrishare: Reset your password",
         html: `<div>
@@ -82,7 +82,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
     const confirmLink = `${domain}/new-verification?token=${token}`;
 
     await resend.emails.send({
-        from: "onboarding@resend.dev",
+        from: "agrimail@support.com",
         to: email,
         subject: "Agrishare: Confirm your email.",
         html: `<div>
