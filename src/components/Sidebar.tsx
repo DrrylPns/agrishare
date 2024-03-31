@@ -45,7 +45,7 @@ export const Sidebar = () => {
                         </PopoverTrigger>
                         <PopoverContent>
                             <div className='space-y-2'>
-                                <Link href="adminSettings" className={`w-full flex items-center space-x-2 py-2 px-2 rounded-lg ${url === "adminSettings" ? "bg-[#00B207] hover:bg-[#00B207]/80 text-white" : "hover:bg-gray-200 text-gray-500"}`}>
+                                <Link href="settings" className={`w-full flex items-center space-x-2 py-2 px-2 rounded-lg ${url === "adminSettings" ? "bg-[#00B207] hover:bg-[#00B207]/80 text-white" : "hover:bg-gray-200 text-gray-500"}`}>
                                     <Cog className='w-4 h-4' />
                                     <span className='text-sm font-medium'>Settings</span>
                                 </Link>
@@ -95,7 +95,7 @@ export const Sidebar = () => {
 
                     </nav>
                     <div className='space-y-2 absolute bottom-10 w-[85%]'>
-                        <Link href="adminSettings" className={`w-full flex items-center space-x-2 py-2 px-2 rounded-lg ${url === "adminSettings" ? "bg-[#00B207] hover:bg-[#00B207]/80 text-white" : "hover:bg-gray-200 text-gray-500"}`}>
+                        <Link href="settings" className={`w-full flex items-center space-x-2 py-2 px-2 rounded-lg ${url === "adminSettings" ? "bg-[#00B207] hover:bg-[#00B207]/80 text-white" : "hover:bg-gray-200 text-gray-500"}`}>
                             <Cog className='w-4 h-4' />
                             <span className='text-sm font-medium'>Settings</span>
                         </Link>

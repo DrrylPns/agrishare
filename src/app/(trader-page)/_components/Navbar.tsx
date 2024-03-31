@@ -42,9 +42,9 @@ function Navbar() {
                 <Logo />
             </div>
 
-            <div>
+            {/* <div>
                 <SearchInput />
-            </div>
+            </div> */}
 
             {status === "unauthenticated" ? (
                 <div className="flex flex-row gap-3 max-sm:hidden">

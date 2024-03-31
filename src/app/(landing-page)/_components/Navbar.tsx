@@ -14,6 +14,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { Separator } from "@/components/ui/separator";
+import { usePathname } from "next/navigation";
 
 
 const Navbar = () => {
@@ -22,6 +23,9 @@ const Navbar = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [open, setIsOpenChange] = useState(false);
     const { data: session, status } = useSession()
+    const pathname = usePathname()
+
+    console.log(pathname)
 
     const scrollToSection = (id: string) => {
         const element = document.getElementById(id);
@@ -55,7 +59,7 @@ const Navbar = () => {
 
             <Logo />
 
-            <div className="flex flex-row justify-center w-full max-lg:hidden space-x-16">
+            <div className={`flex flex-row justify-center w-full max-lg:hidden space-x-16 ${pathname === "/terms-and-condition" && "hidden"}`}>
                 <Button
                     onClick={() => scrollToSection("home")}
                     className="text-[16px] font-normal"
@@ -118,32 +122,35 @@ const Navbar = () => {
                 {/* Mobile dropdown menu */}
 
                 <PopoverContent className="flex flex-col items-start justify-start lg:hidden">
-                    <div className={cn(buttonVariants({ variant: "ghost" }), "w-full")}
-                        onClick={() => {
-                            scrollToSection("home")
-                            setIsOpenChange(false)
-                        }}
-                    >Home</div>
-                    <div className={cn(buttonVariants({ variant: "ghost" }), "w-full")}
-                        onClick={() => {
-                            scrollToSection("aboutus")
-                            setIsOpenChange(false)
-                        }}
-                    >About Us</div>
-                    <div className={cn(buttonVariants({ variant: "ghost" }), "w-full")}
-                        onClick={() => {
-                            scrollToSection("news")
-                            setIsOpenChange(false)
-                        }}
-                    >News</div>
-                    <div className={cn(buttonVariants({ variant: "ghost" }), "w-full")}
-                        onClick={() => {
-                            scrollToSection("contactus")
-                            setIsOpenChange(false)
-                        }}
-                    >Contact Us</div>
+                    <div className={`${pathname === "/terms-and-condition" && "hidden"}`}>
+                        <div className={cn(buttonVariants({ variant: "ghost" }), `w-full`)}
+                            onClick={() => {
+                                scrollToSection("home")
+                                setIsOpenChange(false)
+                            }}
+                        >Home</div>
+                        <div className={cn(buttonVariants({ variant: "ghost" }), "w-full")}
+                            onClick={() => {
+                                scrollToSection("aboutus")
+                                setIsOpenChange(false)
+                            }}
+                        >About Us</div>
+                        <div className={cn(buttonVariants({ variant: "ghost" }), "w-full")}
+                            onClick={() => {
+                                scrollToSection("news")
+                                setIsOpenChange(false)
+                            }}
+                        >News</div>
+                        <div className={cn(buttonVariants({ variant: "ghost" }), "w-full")}
+                            onClick={() => {
+                                scrollToSection("contactus")
+                                setIsOpenChange(false)
+                            }}
+                        >Contact Us</div>
 
-                    <Separator />
+                        <Separator />
+                    </div>
+
 
                     {status === "unauthenticated" ? (
                         <div className="grid grid-cols-2 mt-5 gap-5 justify-center items-center">
