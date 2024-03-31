@@ -446,8 +446,8 @@ model Notification {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // dito iffetch yung current trade intent na pending shempre.
-  tradeId String
-  trade   Trade  @relation(fields: [tradeId], references: [id], onDelete: Cascade)
+  tradeId String?
+  trade   Trade?  @relation(fields: [tradeId], references: [id], onDelete: Cascade)
 }
 
 //NOT SURE PA DITO -- di na ata kailangan to, i-fetch nalang to sa model Transaction at dagdagan ang transaction type ng CLAIM.

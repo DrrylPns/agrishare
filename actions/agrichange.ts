@@ -232,10 +232,26 @@ export const claimAgrichange = async (id: string) => {
 
         if (!currentAgriChange) return { error: "No agrichange item found!" }
 
+        if (user.points < currentAgriChange.pointsNeeded) return { error: "Insufficient points" }
+
+        await prisma.user.update({
+            where: { id: user.id },
+            data: {
+                points: user.points - currentAgriChange.pointsNeeded
+            }
+        })
+
         await prisma.claim.create({
             data: {
                 itm,
                 agriChangeId: currentAgriChange.id,
+                userId: user.id,
+            }
+        })
+
+        await prisma.notification.create({
+            data: {
+                type: "PROCESSING",
                 userId: user.id,
             }
         })
@@ -342,14 +358,14 @@ export const handleClaim = async (status: ClaimStatus, claimId: string, userId: 
 
         if (status === "APPROVED") {
 
-            if (processClaim) {
-                await prisma.user.update({
-                    data: {
-                        points: claimer.points - points
-                    },
-                    where: { id: claimer.id }
-                })
-            }
+            // if (processClaim) {
+            //     await prisma.user.update({
+            //         data: {
+            //             points: claimer.points - points
+            //         },
+            //         where: { id: claimer.id }
+            //     })
+            // }
 
             await prisma.transaction.create({
                 data: {
@@ -357,6 +373,13 @@ export const handleClaim = async (status: ClaimStatus, claimId: string, userId: 
                     points: points,
                     userId: claimer.id,
                     itm: currentClaim.itm,
+                }
+            })
+
+            await prisma.notification.create({
+                data: {
+                    userId: claimer.id,
+                    type: "COMPLETED",
                 }
             })
 
@@ -369,6 +392,21 @@ export const handleClaim = async (status: ClaimStatus, claimId: string, userId: 
             // TODO: CREATE TRANSACTION FOR CANCELLED DONATIONS CAN EVEN IMPLEMENT PENALTY WHEREIN USERS CAN RECEIVE MINUS LOYALTY POINTS
 
             // magccreate pa rin ng transaction pero cancelled at walang maggain na points?
+
+            // ibalik yung onhold points if declined
+            await prisma.user.update({
+                data: {
+                    points: claimer.points + points
+                },
+                where: { id: claimer.id }
+            })
+
+            await prisma.notification.create({
+                data: {
+                    userId: claimer.id,
+                    type: "CANCELLED",
+                }
+            })
 
             revalidatePath("/transactions")
             return { success: "Cancelled the claim intent" }

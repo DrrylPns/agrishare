@@ -75,7 +75,7 @@ export const UserNotifs = () => {
                                     <div key={notification.id} className="grid gap-1 p-1 text-sm">
                                         <Link
                                             className={`flex flex-col items-start p-2 rounded-md dark:bg-gray-800 ${!notification.isRead ? "bg-gray-100" : ""}`}
-                                            href={`/trades/${notification.tradeId}`}
+                                            href={`${notification.type === "PENDING" ? `/trades/${notification.tradeId}` : notification.type === "CANCELLED" ? "/points" : "/history"}`}
                                             onClick={async () => {
                                                 notificationRead(notification.id, pathname)
                                             }}
@@ -84,6 +84,15 @@ export const UserNotifs = () => {
                                                 {/* <MailIcon className="mr-2 h-7 w-7" /> */}
                                                 {notification.type === "PENDING" && (
                                                     <div> <span className='font-bold'>{notification.trade.trader.name}</span> has requested a trade to your <span className='font-bold'>{notification.trade.post.name}</span>.</div>
+                                                )}
+                                                {notification.type === "PROCESSING" && (
+                                                    <div><span className='font-bold'>Claiming processed!</span> Your current points is on hold!</div>
+                                                )}
+                                                {notification.type === "CANCELLED" && (
+                                                    <div><span className='font-bold'>Claiming cancelled!</span> Your points has been returned!</div>
+                                                )}
+                                                {notification.type === "COMPLETED" && (
+                                                    <div><span className='font-bold'>Claiming successful!</span> Your points has been officialy deducted!</div>
                                                 )}
                                             </div>
 

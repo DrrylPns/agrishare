@@ -1,35 +1,54 @@
 'use client'
-import React from 'react'
+import { Button } from '@/components/ui/button';
 import {
     Card,
-    CardContent,
     CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
-import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { LiaExchangeAltSolid } from "react-icons/lia";
-import { BiMessageDetail } from 'react-icons/bi';
-import { CiHeart } from 'react-icons/ci';
-import { ReviewsType } from './Products';
-import Link from 'next/link';
+    CardTitle
+} from "@/components/ui/card";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 import { formattedCategory } from '@/lib/utils';
+import { CircleEllipsisIcon, Trash2 } from "lucide-react";
+import Image from 'next/image';
+import Link from 'next/link';
+import { LiaExchangeAltSolid } from "react-icons/lia";
+import { ReviewsType } from './Products';
+import { User } from './_types';
+import { useSession } from 'next-auth/react';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { useState, useTransition } from 'react';
+import { deleteAgrifeed } from '../../../../../actions/agrifeed';
+import { toast } from '@/components/ui/use-toast';
+
 
 function ProductCard({
     id,
     productImage,
-    user,
+    name,
     productName,
     description,
     category,
     status,
     reviews,
     lastName,
+    user
 }: {
     id: string;
-    user: string | null;
+    name: string | null;
     productImage: string;
     productName: string;
     description: string;
@@ -37,20 +56,80 @@ function ProductCard({
     status: string;
     lastName: string | null;
     reviews: ReviewsType[]
+    user: User
 }) {
+    const { data: session } = useSession()
+    const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [isPending, startTransition] = useTransition()
+
     return (
         <Card className='transition-all duration-700 ease-in-out border-gray-400 border p-10 rounded-2xl drop-shadow-md hover:drop-shadow-md hover:shadow-xl font-poppins'>
-            <CardTitle className='text-4xl font-semibold'>{user} {" "} {lastName}</CardTitle>
+
+            <div className='flex justify-between'>
+                <CardTitle className='text-4xl font-semibold'>{name} {" "} {lastName}</CardTitle>
+
+                {session?.user.id === user.id && (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger>
+                            <Trash2 className='text-rose-500' />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem
+                                className='cursor-pointer'
+                                onClick={() => setIsOpen(true)}
+                            >
+                                Delete
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                )}
+
+                <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                This action cannot be undone. This will permanently delete your post.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                                onClick={() => {
+                                    startTransition(() => {
+                                        deleteAgrifeed(user.id, id)
+                                            .then((data) => {
+                                                if (data.error) toast({
+                                                    description: data.error,
+                                                    variant: "destructive"
+                                                })
+
+                                                if (data.success) {
+                                                    toast({
+                                                        description: data.success
+                                                    })
+                                                }
+                                            })
+                                    })
+                                }}
+                            >
+                                Continue
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+
+            </div>
 
             <div className='flex justify-around gap-5 mt-5'>
                 <Link href={`/agrifeed/${id}`} className='w-2/5'>
-                <Image
-                    src={productImage}
-                    alt={productName}
-                    width={300}
-                    height={300}
-                    className=' w-full h-72  object-center border border-gray-300'
-                />
+                    <Image
+                        src={productImage}
+                        alt={productName}
+                        width={300}
+                        height={300}
+                        className=' w-full h-72  object-center border border-gray-300'
+                    />
                 </Link>
                 <div className='w-1/2'>
 
@@ -60,7 +139,7 @@ function ProductCard({
                     <Link href={`/agrifeed/${id}`}>
                         <CardDescription className='min-h-24 line-clamp-5 text-ellipsis'>{description}</CardDescription>
                     </Link>
-                    <Link href={{pathname:`/agrifeed/${id}`}} className='flex gap-3 justify-between items-center border-y-2 border-gray-300 py-5'>
+                    <Link href={{ pathname: `/agrifeed/${id}` }} className='flex gap-3 justify-between items-center border-y-2 border-gray-300 py-5'>
                         <Button variant={'default'} className='rounded-full w-2/5'>
                             Trade
                             <span className='ml-3'><LiaExchangeAltSolid /></span>

@@ -70,7 +70,7 @@ function Products() {
               <ProductCard
                 key={product.id}
                 id={product.id}
-                user={product.User.name}
+                name={product.User.name}
                 lastName={product.User.lastName}
                 productImage={product.image}
                 productName={product.name}
@@ -78,6 +78,7 @@ function Products() {
                 category={product.category}
                 status={product.status}
                 reviews={product.reviews}
+                user={product.User as User}
               />
             </div>
           ))}
