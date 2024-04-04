@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { BeatLoader } from "react-spinners";
 
 
 
@@ -122,7 +123,7 @@ export default function Category({
       <h1 className="text-right col-span-12 my-3 md:col-span-9 text-[0.6rem] sm:text-sm">{post?.length} Results found</h1>
         <div className='grid grid-cols-2 md:grid-cols-3 w-full  gap-3 col-span-12 sm:col-span-9 '>
           {isLoading ? (
-            <PostCardSkeleton/>
+            <BeatLoader />
           ) : (
           <>
           {currentItems && currentItems.length > 0 ? currentItems.map((item)=>(
