@@ -23,6 +23,7 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 import { TbClover2 } from 'react-icons/tb';
 import { FaRegFileAlt } from 'react-icons/fa';
 import { UserNotifs } from './UserNotifs';
+import { FiRefreshCw } from 'react-icons/fi';
 
 
 function Navbar() {
@@ -92,6 +93,8 @@ function Navbar() {
                         </SheetTitle>
                         <SheetDescription>
                             <div className='text-gray-500 transition-all duration-700 ease-in-out mt-3'>
+                            {session?.user.role === 'TRADER' ||  session?.user.role === "ADMIN" &&(
+                                <>
                                 <Link
                                     href={'/agrifeed'}
                                     className={`link ${pathname === '/agrifeed' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
@@ -107,6 +110,8 @@ function Navbar() {
                                     <span><GiHamburgerMenu /></span>
                                     <h1>Categories</h1>
                                 </Link>
+                                </>
+                                )}
                                 <Link
                                     href={'/donation'}
                                     className={`link ${pathname === '/donation' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
@@ -121,22 +126,32 @@ function Navbar() {
                                 >
                                     <span><TbClover2 /></span>
                                     <h1>Points</h1>
-
+ 
                                 </Link>
+                                
                                 <Link
-                                    href={'/agrineeds'}
-                                    className={`link ${pathname === '/agrineeds' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
-                                >
-                                    <span><CiHeart /></span>
-                                    <h1>Agrineeds</h1>
-                                </Link>
-                                <Link
-                                    href={'/news'}
-                                    className={`link ${pathname === '/news' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
+                                    href={'/agrimaps'}
+                                    className={`link ${pathname === '/agrimaps' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
                                 >
                                     <span><FaRegFileAlt /></span>
-                                    <h1>News</h1>
+                                    <h1>Agrimaps</h1>
                                 </Link>
+                                <Link
+                                    href={'/agrichange'}
+                                    className={`link ${pathname === '/agrichange' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
+                                >
+                                    <span><FiRefreshCw /></span>
+                                    <h1>Agrichange</h1>
+                                </Link>
+                                {session?.user.role === 'TRADER' ||  session?.user.role === "ADMIN" &&(
+                                <Link
+                                    href={'/agriquest'}
+                                    className={`link ${pathname === '/agriquest' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
+                                >
+                                    <span><FiRefreshCw /></span>
+                                    <h1>Agriquest</h1>
+                                </Link>
+                                )}
                                 <Link
                                     href={'/history'}
                                     className={`link ${pathname === '/history' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
