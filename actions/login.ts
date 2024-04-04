@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/db"
 import { sendTwoFactorTokenEmail, sendVerificationEmail } from "@/lib/mail"
-import { DEFAULT_LOGIN_REDIRECT } from "@/lib/routes"
+import { DEFAULT_LOGIN_REDIRECT, DEFAULT_ADMIN_REDIRECT, DEFAULT_DONATOR_REDIRECT } from "@/lib/routes"
 import { generateTwoFactorToken, generateVerificationToken } from "@/lib/tokens"
 import { LoginSchema, LoginType } from "@/lib/validations/auth"
 import { AuthError } from "next-auth"
@@ -91,27 +91,28 @@ export const login = async (values: LoginType) => {
     }
 
     try {
-        const existingUser = await getUserByEmail(email);
-
-        if(!existingUser) return {error: "No user found!"}
-        
-        // let DEFAULT_LOGIN: string
-
-        // if(existingUser.role === "ADMIN") {
-        //     DEFAULT_LOGIN = "/dashboard"
-        //   } else if(existingUser.role === "TRADER") {
-        //     DEFAULT_LOGIN = "/agrifeed"
-        //   } else if (existingUser.role === "DONATOR") {
-        //     DEFAULT_LOGIN = "/donation"
-        //   }
-        
-        await signIn("credentials", {
-            email,
-            password,
-            // redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
-            redirectTo: DEFAULT_LOGIN_REDIRECT,
-        })
-
+        if(existingUser.role === "ADMIN") {
+            await signIn("credentials", {
+                email,
+                password,
+                // redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
+                redirectTo: DEFAULT_ADMIN_REDIRECT,
+            })
+        } else if (existingUser.role === "TRADER") {
+            await signIn("credentials", {
+                email,
+                password,
+                // redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
+                redirectTo: DEFAULT_LOGIN_REDIRECT,
+            })
+        } else if (existingUser.role === "DONATOR") {
+            await signIn("credentials", {
+                email,
+                password,
+                // redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
+                redirectTo: DEFAULT_DONATOR_REDIRECT,
+            })
+        }
     } catch (error) {
         if (error instanceof AuthError) {
             switch (error.type) {
