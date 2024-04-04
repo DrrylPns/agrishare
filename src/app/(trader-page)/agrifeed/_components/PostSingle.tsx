@@ -33,58 +33,29 @@ export const PostSingle: React.FC<PostSingleProps> = ({ post }) => {
 
     return (
         <>
-            <div className='flex justify-around gap-5 mt-5'>
+            <div className='flex justify-around gap-5 px-5 sm:px-0 mt-10 sm:mt-5'>
                 <Image
                     src={post.image}
                     alt={post.name}
                     width={300}
                     height={300}
-                    className=' w-2/5 h-72  object-center border border-gray-300'
+                    className=' w-2/5 h-40 sm:h-72  object-center border border-gray-300'
                 />
                 <div className='w-1/2'>
-                    <h1 className='text-3xl font-medium'>{post.name}</h1>
-                    <p className='min-h-24 line-clamp-5 text-ellipsis'>{post.description}</p>
-                    <div className='flex gap-3  items-center border-y-2 border-gray-300 py-5'>
-                        {/* <AddOrSubtractBtn post={post} /> */}
-
-                        {/* <div className='w-1/3 flex items-center justify-evenly '>
-                            <Button variant={'secondary'}
-                                onClick={handleSubtract}
-                            >
-                                -
-                            </Button>
-                            <h1 className='px-3'>{number}</h1>
-                            <Button variant={'secondary'}
-                                onClick={handleAdd}
-                            >
-                                +
-                            </Button>
-                        </div> */}
-
+                    <h1 className='text-xl sm:text-3xl font-medium'>{post.name}</h1>
+                    <p className='min-h-10 sm:min-h-24 text-[0.6rem] text-xs'>{post.description}</p>
+                    <div className='flex gap-3  items-center border-y-2 border-gray-300 py-2 sm:py-5'>
+                      
                         <Link className={cn(buttonVariants({
                             variant: "primary"
-                        }), "rounded-full w-2/5")}
+                        }), "rounded-full w-1/2 sm:w-2/5 ")}
                             href={`/propose-offer/${post.id}`}
                         >
                             Trade
                             <span className='ml-3'><LiaExchangeAltSolid /></span>
                         </Link>
-
-                        {/* <Button
-                            variant="primary"
-                            className='w-2/5 rounded-full'
-                            disabled={isPending}
-                            isLoading={isPending}
-                            onClick={async () => {
-                                startTransition(() => {
-
-                                })
-                            }}
-                        >
-                            Trade <span className='ml-3'><LiaExchangeAltSolid /></span>
-                        </Button> */}
                     </div>
-                    <h1 className='text-sm text-gray-700 my-3'>Category: <span className='text-gray-500'>{formattedCategory(post.category)}</span></h1>
+                    <h1 className='text-[0.6rem] sm:text-sm text-gray-700 my-1 sm:my-3'>Category: <span className='text-gray-500'>{formattedCategory(post.category)}</span></h1>
                 </div>
             </div>
             <div>

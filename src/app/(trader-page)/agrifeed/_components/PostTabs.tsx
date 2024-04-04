@@ -12,14 +12,14 @@ function PostTabs({
   post: Post
 }) {
   return (
-    <Tabs defaultValue="account" className="w-full mt-10" >
+    <Tabs defaultValue="account" className="w-full mt-5 px-5 sm:mt-10" >
       <TabsList className='bg-transparent w-full mx-auto'>
         <TabsTrigger value="description">Description</TabsTrigger>
         <TabsTrigger value="adddtional information">Additional Information</TabsTrigger>
         {/* <TabsTrigger value="feedback">Agritzens Feedback</TabsTrigger> */}
       </TabsList>
-      <TabsContent value="description">{post.description}</TabsContent>
-      <TabsContent value="adddtional information">
+      <TabsContent value="description" className='text-[0.6rem] sm:text-sm ui-selected:text-primary-green'>{post.description}</TabsContent>
+      <TabsContent value="adddtional information" className='text-[0.7rem] sm:text-sm ui-selected:text-primary-green'>
         <div>
           <div className='flex'>
             <h1 className='w-1/3'>Weight:</h1>

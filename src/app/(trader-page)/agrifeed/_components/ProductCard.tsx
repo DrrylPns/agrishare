@@ -137,7 +137,7 @@ function ProductCard({
                         <h1 className='text-xl sm:text-3xl font-medium'>{productName}</h1>
                     </Link>
                     <Link href={`/agrifeed/${id}`}>
-                        <CardDescription className='text-[0.6rem] sm:min-h-24 line-clamp-4 sm:line-clamp-5'>{description}</CardDescription>
+                        <CardDescription className='text-[0.6rem] min-h-10 sm:min-h-24 line-clamp-4 sm:line-clamp-5'>{description}</CardDescription>
                     </Link>
                     <Link href={{ pathname: `/agrifeed/${id}` }} className='flex gap-3 justify-between items-center border-y-2 border-gray-300 py-2 sm:py-5'>
                         <Button variant={'default'} className='rounded-full w-1/2 py-2 px-3 text-[0.6rem] sm:w-2/5 '>
