@@ -6,6 +6,7 @@ import { getUserById } from "./data/user"
 import { getTwoFactorConfirmationByUserId } from "./data/two-factor-confirmation"
 import { Role } from "@prisma/client"
 import { getAccountByUserId } from "./data/account"
+import { redirect } from "next/navigation"
 
 export const {
   handlers: { GET, POST },
@@ -31,7 +32,7 @@ export const {
         });
       }
 
-      return true;
+      return true
     },
     async session({ token, session }) {
       if (token.sub && session.user) {

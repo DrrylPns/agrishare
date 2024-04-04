@@ -10,6 +10,7 @@ import { getTwoFactorConfirmationByUserId } from "../data/two-factor-confirmatio
 import prisma from "@/lib/db"
 import { DEFAULT_LOGIN_REDIRECT } from "@/lib/routes"
 import { AuthError } from "next-auth"
+import { redirect } from "next/navigation"
 
 export const login = async (values: LoginType) => {
     const validatedFields = LoginSchema.safeParse(values)
@@ -91,12 +92,27 @@ export const login = async (values: LoginType) => {
     }
 
     try {
+        const existingUser = await getUserByEmail(email);
+
+        if(!existingUser) return {error: "No user found!"}
+        
+        let DEFAULT_LOGIN: string = DEFAULT_LOGIN_REDIRECT;
+
+        if(existingUser.role === "ADMIN") {
+            DEFAULT_LOGIN = "/dashboard"
+          } else if(existingUser.role === "TRADER") {
+            DEFAULT_LOGIN = "/agrifeed"
+          } else if (existingUser.role === "DONATOR") {
+            DEFAULT_LOGIN = "/donation"
+          }
+        
         await signIn("credentials", {
             email,
             password,
             // redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
-            redirectTo: DEFAULT_LOGIN_REDIRECT,
+            redirectTo: DEFAULT_LOGIN,
         })
+
     } catch (error) {
         if (error instanceof AuthError) {
             switch (error.type) {

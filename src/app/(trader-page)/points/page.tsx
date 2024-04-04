@@ -59,22 +59,22 @@ const page = async () => {
 
 
             </DialogDescription>
-          </DialogHeader>
+          </DialogHeader>   
         </DialogContent>
       </Dialog>
 
-      <div className={`bg-[url(https://utfs.io/f/6cab600f-5d4b-4c30-94da-7af722f07000-cm65r5.png)] bg-no-repeat h-[400px]`}>
+      <div className={`bg-[url(https://utfs.io/f/6cab600f-5d4b-4c30-94da-7af722f07000-cm65r5.png)] bg-no-repeat h-[400px] relative flex flex-col gap-[40px]`}>
         <div className='flex flex-col justify-start items-center w-full gap-3'>
           {user.points >= 3000 ? (
-            <Image src="/images/seedling5.svg" alt="seedling5" width={200} height={200} />
+            <Image src="/images/seedling5.svg" alt="seedling5" width={200} height={200} className='max-h-[200px] max-w-[200px]' />
           ) : user.points >= 1000 ? (
-            <Image src="/images/seedling4.svg" alt="seedling4" width={200} height={200} />
+            <Image src="/images/seedling4.svg" alt="seedling4" width={200} height={200} className='max-h-[200px] max-w-[200px]' />
           ) : user.points >= 500 ? (
-            <Image src="/images/seedling3.svg" alt="seedling3" width={200} height={200} />
+            <Image src="/images/seedling3.svg" alt="seedling3" width={200} height={200} className='max-h-[200px] max-w-[200px]' />
           ) : user.points >= 100 ? (
-            <Image src="/images/seedling2.svg" alt="seedling2" width={200} height={200} />
+            <Image src="/images/seedling2.svg" alt="seedling2" width={200} height={200} className='max-h-[200px] max-w-[200px]' />
           ) : (
-            <Image src="/images/seedling1.svg" alt="seedling1" width={200} height={200} />
+            <Image src="/images/seedling1.svg" alt="seedling1" width={200} height={200} className='max-h-[200px] max-w-[200px]' />
           )}
         </div>
 
