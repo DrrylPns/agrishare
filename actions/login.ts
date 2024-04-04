@@ -91,21 +91,25 @@ export const login = async (values: LoginType) => {
     }
 
     try {
-        if(existingUser.role === "ADMIN") {
+        if (existingUser.role === "ADMIN") {
             await signIn("credentials", {
                 email,
                 password,
                 // redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
                 redirectTo: DEFAULT_ADMIN_REDIRECT,
             })
-        } else if (existingUser.role === "TRADER") {
+        }
+
+        if (existingUser.role === "TRADER") {
             await signIn("credentials", {
                 email,
                 password,
                 // redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
                 redirectTo: DEFAULT_LOGIN_REDIRECT,
             })
-        } else if (existingUser.role === "DONATOR") {
+        }
+
+        if (existingUser.role === "DONATOR") {
             await signIn("credentials", {
                 email,
                 password,
@@ -113,6 +117,7 @@ export const login = async (values: LoginType) => {
                 redirectTo: DEFAULT_DONATOR_REDIRECT,
             })
         }
+
     } catch (error) {
         if (error instanceof AuthError) {
             switch (error.type) {
