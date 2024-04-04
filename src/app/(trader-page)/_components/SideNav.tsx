@@ -17,10 +17,11 @@ function SideNav() {
     const pathname = usePathname();
     const { data: session, status } = useSession()
     return (
+        <div className={`w-[25%] hidden ${pathname === "/history" ? "hidden" : "md:block"}`}>
         <div className={` ${pathname === '/agrifeed/'} border border-gray-300 shadow-sm drop-shadow-sm bg-white`}>
             <h1 className='mx-5 py-2 mt-5 text-gray-500 text-xl font-poppins font-extralight '>Navigation</h1>
             <div className='text-gray-500 transition-all duration-700 ease-in-out mt-3'>
-                {session?.user.role === 'TRADER' ||  session?.user.role === "ADMIN" &&(
+                {session?.user.role === 'TRADER' || session?.user.role === "ADMIN" && (
                 <>
                     <Link
                     href={'/agrifeed'}
@@ -71,7 +72,7 @@ function SideNav() {
                     <h1>Agrichange</h1>
 
                 </Link>
-                {session?.user.role === 'TRADER' ||  session?.user.role === "ADMIN" &&(
+                {session?.user.role === 'TRADER' ||  session?.user.role === "ADMIN" && (
                 <Link
                     href={'/agriquest'}
                     className={`link ${pathname === '/agriquest' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
@@ -110,6 +111,7 @@ function SideNav() {
 
             </div>
 
+        </div>
         </div>
     )
 }

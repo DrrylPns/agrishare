@@ -21,13 +21,13 @@ const page = async () => {
   const claims = await fecthAgriChangeTransactionsByUser()
   const quests = await fecthAgriQuestTransactionsByUser()
 
-  return (
-    <div className='max-w-[1260px]'>
+  return (    
+    <div className='w-full md:w-[80%] p-6 mb-11 mt-4 md:mt-0'>    
       <div className='my-5 flex flex-row items-center gap-3'>
         <h1 className='text-[#1C2A53] text-xl font-semibold'>History</h1>
       </div>
 
-      <Card className="mx-auto max-w-[1260px] h-full drop-shadow-lg">
+      <Card className="mx-auto max-w-full h-full drop-shadow-lg">
         <TabGroup>
           <TabList className="mt-4">
             <Tab>Trade</Tab>
@@ -65,13 +65,17 @@ const page = async () => {
               <DataTable
                 //@ts-ignore
                 data={claims}
-                columns={columnClaimsByUser} />
+                columns={columnClaimsByUser} 
+                isHistory
+                />
             </TabPanel>
             <TabPanel>
               <DataTable
                 //@ts-ignore
                 data={quests}
-                columns={columnQuestByUser} />
+                columns={columnQuestByUser} 
+                isHistory
+                />
             </TabPanel>
           </TabPanels>
         </TabGroup>

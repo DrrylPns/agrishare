@@ -96,7 +96,7 @@ export const login = async (values: LoginType) => {
 
         if(!existingUser) return {error: "No user found!"}
         
-        let DEFAULT_LOGIN: string = DEFAULT_LOGIN_REDIRECT;
+        let DEFAULT_LOGIN: string
 
         if(existingUser.role === "ADMIN") {
             DEFAULT_LOGIN = "/dashboard"
@@ -110,7 +110,7 @@ export const login = async (values: LoginType) => {
             email,
             password,
             // redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
-            redirectTo: DEFAULT_LOGIN,
+            redirectTo: DEFAULT_LOGIN!,
         })
 
     } catch (error) {

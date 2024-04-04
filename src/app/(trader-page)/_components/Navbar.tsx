@@ -1,14 +1,6 @@
 "use client";
 import { Logo } from '@/components/logo';
 import { Button, buttonVariants } from '@/components/ui/button';
-import { UserAccountAvatar } from '@/components/user-account-avatar';
-import { cn } from '@/lib/utils';
-import { signOut, useSession } from 'next-auth/react';
-import Link from 'next/link';
-import React, { useState } from 'react'
-import { BiMenu, BiSolidDonateHeart } from 'react-icons/bi';
-import { SearchInput } from './SearchInput';
-import { CiBellOn, CiHeart, CiLogout, CiSettings } from 'react-icons/ci';
 import {
     Sheet,
     SheetContent,
@@ -16,14 +8,21 @@ import {
     SheetHeader,
     SheetTitle,
     SheetTrigger,
-} from "@/components/ui/sheet"
+} from "@/components/ui/sheet";
+import { UserAccountAvatar } from '@/components/user-account-avatar';
+import { cn } from '@/lib/utils';
+import { signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { MdDashboard, MdHistory } from 'react-icons/md';
-import { GiHamburgerMenu } from 'react-icons/gi';
-import { TbClover2 } from 'react-icons/tb';
+import { useState } from 'react';
+import { BiMenu, BiSolidDonateHeart } from 'react-icons/bi';
+import { CiHeart, CiLogout, CiSettings } from 'react-icons/ci';
 import { FaRegFileAlt } from 'react-icons/fa';
-import { UserNotifs } from './UserNotifs';
 import { FiRefreshCw } from 'react-icons/fi';
+import { GiHamburgerMenu } from 'react-icons/gi';
+import { MdDashboard, MdHistory } from 'react-icons/md';
+import { TbClover2 } from 'react-icons/tb';
+import { UserNotifs } from './UserNotifs';
 
 
 function Navbar() {
@@ -39,7 +38,7 @@ function Navbar() {
             className={`bg-white fixed flex justify-around items-center z-50 top-0 left-0 w-full h-[70px] px-4 sm:px-20 py-4 shadow transition-color duration-500 ${visible ? "" : "opacity-0"
                 }`}
         >
-            <div className='hidden md:block'>
+            <div className={`hidden ${pathname === "/history" ? "hidden" : "md:block"}`}>
                 <Logo />
             </div>
 
@@ -64,14 +63,14 @@ function Navbar() {
                     </Link>
                 </div>
             ) : status === "authenticated" ? (
-                <div className="max-sm:hidden flex items-center text-3xl gap-3 ">
-                    <Link
+                <div className={`max-md:hidden flex items-center text-3xl gap-3 ${pathname === "/history" && "hidden"}`}>
+                    {/* <Link
                         href={'/agrineeds'}
                         className='hover:scale-105'
                     >
                         <CiHeart />
 
-                    </Link>
+                    </Link> */}
                     <UserNotifs />
                     <UserAccountAvatar />
                 </div>
@@ -83,7 +82,7 @@ function Navbar() {
 
             {/* Mobile dropdown menu */}
             <Sheet>
-                <SheetTrigger className='md:hidden block'>
+                <SheetTrigger className={`block ${pathname === "/history" ? "block" : "md:hidden"} flex w-full items-start`}>
                     <BiMenu className='text-[32px]' />
                 </SheetTrigger>
                 <SheetContent className=''>
@@ -185,11 +184,6 @@ function Navbar() {
                     </SheetHeader>
                 </SheetContent>
             </Sheet>
-
-
-
-
-
         </nav>
     )
 }

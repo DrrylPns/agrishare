@@ -27,9 +27,9 @@ export default function RootLayout({
                     <Suspense fallback={<Loading />}>
                         <Navbar />
                         <div className="flex justify-around w-full min-h-dvh mt-[7%] transition-all duration-500 ease-in-out">
-                            <div className="w-[25%] hidden sm:block">
+                            
                                 <SideNav />
-                            </div>
+                            
                             {children}
                         </div>
                         <Toaster />

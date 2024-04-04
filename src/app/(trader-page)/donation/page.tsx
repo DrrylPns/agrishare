@@ -1,11 +1,12 @@
 import prisma from '@/lib/db'
 import React from 'react'
 import CommunityCard from './_components/CommunityCard'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import Image from 'next/image'
 import Front from './_components/images/front.png'
 import Back from './_components/images/back.png'
 import Link from 'next/link'
+import { cn } from '@/lib/utils'
 
 async function Page() {
 
@@ -17,9 +18,15 @@ async function Page() {
           <h1 className='text-lg sm:text-4xl font-semibold'>Deed of Donation</h1>
           <h3 className='text-green-500 font-poppins font-medium my-5'><span className='t text-violet-500'>C</span>enter of <span className='text-violet-500'>U</span>rban <span className='text-violet-500'>A</span>griculture and Innovation</h3>
           <h3 className='font-poppins uppercase text-sm font-semibold mb-5'>Know all men by these presents:</h3>
-          <p className='leading-7 text-lg'>That the <span className='font-semibold'>QUEZON CITY UNIVERSITY - CENTER FOR URBAN AGRICULTURE AND INNOVATION</span> in partnership with <span className='font-semibold'>JOY OF URBAN FARMING (JoUF) and PUBLIC EMPLOYEMENT OFFICE SERVICE</span> hereby donates the herein - identified items to the </p>         
-          <Link href={'/donation/form'} className='text-center w-full'>
-            <Button variant={'default'} className='w-1/2 h-20 text-center text-xl tracking-wider font-semibold my-10'>Donate now</Button>
+          <p className='leading-7 text-lg mb-11'>That the <span className='font-semibold'>QUEZON CITY UNIVERSITY - CENTER FOR URBAN AGRICULTURE AND INNOVATION</span> in partnership with <span className='font-semibold'>JOY OF URBAN FARMING (JoUF) and PUBLIC EMPLOYEMENT OFFICE SERVICE</span> hereby donates the herein - identified items to the </p>         
+          {/* <Link href='/donation/form' className=''>
+            <Button variant='default' className='text-center text-xl tracking-wider font-semibold'>Donate now</Button>
+          </Link> */}
+          <Link href="/donation/form" className={cn(
+            buttonVariants({ variant: "default"}),
+            "text-xl tracking-wider font-semibold h-[60px] mb-6 md:mb-0"
+          )}>
+            Donate Now
           </Link>
         </div>
         <div className='w-full '>
