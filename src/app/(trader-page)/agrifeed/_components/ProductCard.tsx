@@ -63,10 +63,10 @@ function ProductCard({
     const [isPending, startTransition] = useTransition()
 
     return (
-        <Card className='transition-all duration-700 ease-in-out border-gray-400 border p-10 rounded-2xl drop-shadow-md hover:drop-shadow-md hover:shadow-xl font-poppins'>
+        <Card className='transition-all duration-700 ease-in-out border-gray-400 border p-5 sm:p-10 rounded-2xl drop-shadow-md hover:drop-shadow-md hover:shadow-xl font-poppins'>
 
             <div className='flex justify-between'>
-                <CardTitle className='text-4xl font-semibold'>{name} {" "} {lastName}</CardTitle>
+                <CardTitle className='text-xl sm:text-4xl font-semibold'>{name} {" "} {lastName}</CardTitle>
 
                 {session?.user.id === user.id && (
                     <DropdownMenu>
@@ -128,24 +128,24 @@ function ProductCard({
                         alt={productName}
                         width={300}
                         height={300}
-                        className=' w-full h-72  object-center border border-gray-300'
+                        className=' w-full h-40 md:h-72  object-center border border-gray-300'
                     />
                 </Link>
                 <div className='w-1/2'>
 
-                    <Link href={`/agrifeed/${id}`} className='flex items-center gap-5 mb-3'>
-                        <h1 className='text-3xl font-medium'>{productName}</h1>
+                    <Link href={`/agrifeed/${id}`} className='flex items-center gap-5 mb-1 sm:mb-3'>
+                        <h1 className='text-xl sm:text-3xl font-medium'>{productName}</h1>
                     </Link>
                     <Link href={`/agrifeed/${id}`}>
-                        <CardDescription className='min-h-24 line-clamp-5 text-ellipsis'>{description}</CardDescription>
+                        <CardDescription className='text-[0.6rem] sm:min-h-24 line-clamp-4 sm:line-clamp-5'>{description}</CardDescription>
                     </Link>
-                    <Link href={{ pathname: `/agrifeed/${id}` }} className='flex gap-3 justify-between items-center border-y-2 border-gray-300 py-5'>
-                        <Button variant={'default'} className='rounded-full w-2/5'>
+                    <Link href={{ pathname: `/agrifeed/${id}` }} className='flex gap-3 justify-between items-center border-y-2 border-gray-300 py-2 sm:py-5'>
+                        <Button variant={'default'} className='rounded-full w-1/2 py-2 px-3 text-[0.6rem] sm:w-2/5 '>
                             Trade
-                            <span className='ml-3'><LiaExchangeAltSolid /></span>
+                            <span className='ml-3 text-[0.6rem]'><LiaExchangeAltSolid /></span>
                         </Button>
                     </Link>
-                    <h1 className='text-sm text-gray-700 my-3'>Category: <span className='text-gray-500'>{formattedCategory(category)}</span></h1>
+                    <h1 className='text-[0.6rem] sm:text-sm text-gray-700 my-1 sm:my-3'>Category: <span className='text-gray-500'>{formattedCategory(category)}</span></h1>
                 </div>
             </div>
         </Card>

@@ -136,16 +136,16 @@ function CreatePost() {
 
   return (
 
-    <div className='w-full px-10 py-5 border border-gray-700 rounded-3xl'>
+    <div className='w-full px-5 sm:px-10 py-5 border border-gray-700 rounded-3xl'>
       <h1 className='text-gray-300 text-lg'>Whats on your farm?</h1>
       <div className='flex text-[0.6rem] sm:text-sm mt-10 sm:mt-16 justify-between items-center border-t-2 pt-5 border-gray-300'>
-        <Button variant='primary' className='flex gap-3 w-36 py-2 rounded-2xl'>
+        <Button variant='primary' className='flex text-[0.6rem] sm:text-sm gap-3 w-1/3 sm:w-36 h-10 py-2 rounded-2xl'>
           <span><LucideImagePlus /></span>
           <span>Upload</span>
         </Button>
 
         <Dialog>
-          <DialogTrigger className='bg-[#00B207] hover:bg-[#00B207]/80 text-white w-36 py-2 rounded-2xl'>
+          <DialogTrigger className='bg-[#00B207] hover:bg-[#00B207]/80 text-white w-1/3 sm:w-36 h-10 py-2 rounded-2xl'>
             Post
           </DialogTrigger>
           <DialogContent>

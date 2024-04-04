@@ -62,7 +62,7 @@ function Products() {
   if (isError) return <div>Error fetching posts, try to refresh the page!</div>
 
   return (
-    <div>
+    <div className='px-5 sm:px-0'>
       {Posts?.pages.length > 0 ? Posts?.pages.map((page) => (
         <div key={page.nextId} >
           {page.getAllPost !== undefined && page.getAllPost.map((product) => (
