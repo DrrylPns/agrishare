@@ -22,7 +22,7 @@ export async function POST(req: Request) {
                 }
             })
             return new Response(JSON.stringify(postByCtegory))
-        }
+        } 
         if (sort === 'Latest') {
             const postByCtegory = await prisma.agriquest.findMany({
                 where: {

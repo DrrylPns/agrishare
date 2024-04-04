@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog"
 import Image from "next/image"
 import { LiaExchangeAltSolid } from "react-icons/lia"
-import { Agrichange } from "../../agrifeed/_components/_types"
+import { Post } from "../../agrifeed/_components/_types"
 import HearthwihGirl from './images/image1.png'
 import { useTransition } from "react"
 import { claimAgrichange } from "../../../../../actions/agrichange"
@@ -18,7 +18,7 @@ import { toast } from "@/components/ui/use-toast"
 export default function ExchangeDialog({
     selectedItem
 }: {
-    selectedItem: Agrichange
+    selectedItem: Post
 }) {
     const [isPending, startTransition] = useTransition()
 

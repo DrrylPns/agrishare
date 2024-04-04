@@ -1,14 +1,22 @@
 'use client'
 import { formattedCategory } from "@/lib/utils";
-import { RadioGroup } from "@headlessui/react"
+import { Listbox, RadioGroup, Transition } from "@headlessui/react"
 import axios from "axios"
-import { useEffect, useState } from "react"
-import { IoIosAddCircleOutline, IoIosRadioButtonOff, IoIosRadioButtonOn } from 'react-icons/io';
-import { Post } from "../../agrifeed/_components/_types";
+import { Fragment, useEffect, useState } from "react"
+import { IoIosAddCircleOutline, IoIosArrowDown, IoIosRadioButtonOff, IoIosRadioButtonOn } from 'react-icons/io';
+import { Agrichange, Post } from "../../agrifeed/_components/_types";
 import PostCard from "./PostCard";
-import Link from "next/link";
 import { PostCardSkeleton } from "./skeleton/PostCardSkeleton";
 import PaginationSection from "@/components/PaginationSection";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+
 
 const Categories = [
     'FRESH_FRUIT',
@@ -31,42 +39,104 @@ export default function Category({
     const [post, setPost] = useState<Post[]>()
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(9);
+    const [selectedSort, setSelectedSort] = useState<string>('Latest');
 
     const lastItemIndex = currentPage * itemsPerPage;
     const firstItemIndex = lastItemIndex - itemsPerPage;
     const currentItems = post?.slice(firstItemIndex, lastItemIndex)
 
-   useEffect(()=>{
-    getPostByCategory()
-  
-   },[selectedCategory])
+    useEffect(() => {
+      getPostsByCategory();
+  }, [selectedCategory, selectedSort]); 
 
-   const getPostByCategory = async () => {
+   const getPostsByCategory = async () => {
+    setIsLoading(true);
     try {
-        const res = (await axios.post('/api/getPostByCategory',{category: selectedCategory})).data;
-        setPost(res)
-        setIsLoading(false)
+        const res = await axios.post('/api/getPostByCategory', {
+            category: selectedCategory,
+            sort: selectedSort 
+        });
+        setPost(res.data);
     } catch (error) {
-        console.log(error)
+        console.log(error);
+    } finally {
+        setIsLoading(false);
     }
-   }
- 
+}
   return (
     <>
-   
+    <div className='flex justify-between'>
+      <div className='relative flex flex-col md:flex-row md:items-center justify-around'>
+        <h1 className="text-xs sm:text-sm mr-2 sm:mr-5">Sort by:</h1>
+        <Listbox value={selectedSort} onChange={setSelectedSort}>
+          <Listbox.Button className={'relative w-28 sm:w-40 py-1 md:py-3 text-xs md:text-lg rounded-md flex items-center justify-around bg-white shadow-md ui-open::ring-2 ring-black'}>{selectedSort} <IoIosArrowDown /></Listbox.Button>
+          <Transition
+            as={Fragment}
+            leave="transition ease-in duration-100"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <Listbox.Options className="absolute top-10 sm:top-14 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                <Listbox.Option
+                  value={'Latest'}
+                  className='relative cursor-default select-none py-2 px-2 md:pl-10 md:pr-4 text-xs md:text-lg hover:bg-slate-100 text-gray-900'
+                >
+                  Latest
+                </Listbox.Option>
+                <Listbox.Option
+                  value={'Transaction'}
+                  className='relative cursor-default select-none py-2 px-2 md:pl-10 md:pr-4 text-xs md:text-lg hover:bg-slate-100 text-gray-900'
+                >
+                  Transaction
+                </Listbox.Option>
+            </Listbox.Options>
+          </Transition>
+        </Listbox>
+      </div>
+      <div className='md:hidden relative flex flex-col md:flex-row md:items-center justify-around'>
+        <h1 className="text-xs sm:text-sm mr-2 sm:mr-5">All Categories:</h1>
+        <Listbox value={selectedCategory} onChange={setSelectedCategory}>
+          <Listbox.Button className={'relative w-28 sm:w-40 py-1 md:py-3 bg-green-400 text-white tracking-wider text-xs md:text-lg rounded-md flex items-center justify-around shadow-md ui-open::ring-2 ring-black'}>{formattedCategory(selectedCategory)} <IoIosArrowDown /></Listbox.Button>
+          <Transition
+            as={Fragment}
+            leave="transition ease-in duration-100"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <Listbox.Options className="absolute top-10 sm:top-14 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                {Categories.map((category)=>(
+                    <Listbox.Option
+                      value={category}
+                      className='relative cursor-default select-none py-2 px-2 md:pl-10 md:pr-4 text-xs hover:bg-slate-100 text-gray-900'
+                    >
+                    {formattedCategory(category)}
+                    </Listbox.Option>
+                ))}
+                
+            </Listbox.Options>
+          </Transition>
+        </Listbox>
+      </div>
+    </div>
     <div className='grid grid-cols-12 w-full gap-x-2 '>
-    <h1 className="text-right col-span-9">{currentItems?.length} Results found</h1>
-        <div className='grid grid-cols-3 w-full  gap-3 col-span-9 '>
-          {isLoading && (
+      <h1 className="text-right col-span-12 my-3 md:col-span-9 text-[0.6rem] sm:text-sm">{post?.length} Results found</h1>
+        <div className='grid grid-cols-2 md:grid-cols-3 w-full  gap-3 col-span-12 sm:col-span-9 '>
+          {isLoading ? (
             <PostCardSkeleton/>
+          ) : (
+          <>
+          {currentItems && currentItems.length > 0 ? currentItems.map((item)=>(
+            <PostCard post={item} key={item.id}/>
+          
+          )) :(
+            <>
+              No Items found
+            </>
           )}
-          {currentItems && currentItems.map((item)=>(
-              <Link href={`/agrifeed/${item.id}`} key={item.id}>
-                  <PostCard post={item} />
-              </Link>
-          ))}
+          </>
+          )}
         </div>
-        <div className='col-span-3 '>
+        <div className='col-span-3 hidden md:block'>
             <RadioGroup value={selectedCategory} onChange={setSelectedCategory} className="shadow-md drop-shadow-md p-5">
                       <RadioGroup.Label className="text-lg font-semibold">All Categories:</RadioGroup.Label>
                       {Categories.map((category) => (
@@ -93,4 +163,5 @@ export default function Category({
     />
     </>
   )
-}
+};
+

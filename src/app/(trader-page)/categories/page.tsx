@@ -1,27 +1,19 @@
-import React from 'react'
-import Category from './_components/Category'
-import SelectSort from './_components/SelectSort'
-import { useSession } from 'next-auth/react'
 import { RoleBasedRender } from '@/components/RolebasedRender'
+import React from 'react'
+import SelectSort from './_components/SelectSort'
+import Category from './_components/Category'
 
 function page() {
- 
   return (
     <RoleBasedRender traderFallback={<div className='w-full sm:w-3/5 mt-5 sm:mt-0'>Unauthorized! You are not a trader</div>}>
-    <div  className='w-full sm:w-3/5 mt-5 sm:mt-0'>
-      <div className='flex'>
-        <div className='flex items-center'>
-          <h1>Sort by:</h1>
-          <SelectSort/>
-        </div>
-      
-      </div>
-      <div className='mt-5 w-full'>
+      <div className='w-full sm:w-3/5 mt-10 px-5 md:px-0 sm:mt-0'>
         
-      <Category />
-      </div>
-    </div>
-  </RoleBasedRender>
+        <div className='mt-5 w-full'>
+        <h1 className='block md:hidden mb-5 text-center font-semibold font-livvic text-xl'>Categories</h1>
+        <Category />
+        </div>
+      </div> 
+    </RoleBasedRender>
   )
 }
 

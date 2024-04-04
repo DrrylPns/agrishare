@@ -24,10 +24,9 @@ function PostCard({
     const [selectedItem, setSelectedItem] = useState<Agrichange>()
 
   return (
-    <Card className="py-5 hover:shadow-green-600 shadow-md hover:right-1 ring-green-400">
+    <Card className="py-3 md:py-5 hover:shadow-green-600 shadow-md hover:right-1 ring-green-400">
        
-        <div className="flex justify-center text-white w-20 gap-3 bg-green-400 rounded-full items-center">
-            <FaLeaf />
+        <div className="text-white px-3 gap-3 text-center bg-green-400 rounded-full w-2/5">
             <h1>{post.pointsNeeded}</h1>
         </div>
         <div className="w-full border-y border-y-gray-100">
@@ -36,13 +35,13 @@ function PostCard({
                 alt={post.name}
                 width={100}
                 height={160}
-                className="w-full max-h-52 min-h-52 h-1/2 object-contain"
+                className="w-full object-contain h-36"
             />    
         </div>
         <CardContent className="mt-3">
             <div className="flex items-center justify-between">
-                <h1>{post.name}</h1>
-                <div className='flex just-center items-center px-3 text-green-500 bg-slate-300 cursor-pointer hover:text-white py-3 rounded-full hover:bg-green-500'>
+                <h1 className="text-xs md:text-sm">{post.name}</h1>
+                <div className='flex just-center items-center  p-3 text-green-500 bg-slate-300 cursor-pointer hover:text-white rounded-full hover:bg-green-500'>
                     <ExchangeDialog selectedItem={post}/>
                 </div>
             </div>

@@ -60,7 +60,7 @@ export default function ExchangeDialog({
                     <DialogClose asChild>
                         <Button variant={'destructive'} className="rounded-full px-10">No</Button>
                     </DialogClose>
-                    <Image src={HearthwihGirl} alt="" width={100} height={400} className="absolute top-0 right-0" />
+                    <Image src={HearthwihGirl} alt="" width={100} height={400} className="absolute hiddem md:block top-0 right-0" />
                 </div>
             </DialogContent>
         </Dialog>
