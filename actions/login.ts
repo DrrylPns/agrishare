@@ -1,16 +1,15 @@
 "use server"
 
-import { LoginSchema, LoginType } from "@/lib/validations/auth"
-import { signIn } from "../auth"
-import { getUserByEmail } from "../data/user"
-import { generateTwoFactorToken, generateVerificationToken } from "@/lib/tokens"
-import { sendTwoFactorTokenEmail, sendVerificationEmail } from "@/lib/mail"
-import { getTwoFactorTokenByEmail } from "../data/two-factor-token"
-import { getTwoFactorConfirmationByUserId } from "../data/two-factor-confirmation"
 import prisma from "@/lib/db"
+import { sendTwoFactorTokenEmail, sendVerificationEmail } from "@/lib/mail"
 import { DEFAULT_LOGIN_REDIRECT } from "@/lib/routes"
+import { generateTwoFactorToken, generateVerificationToken } from "@/lib/tokens"
+import { LoginSchema, LoginType } from "@/lib/validations/auth"
 import { AuthError } from "next-auth"
-import { redirect } from "next/navigation"
+import { signIn } from "../auth"
+import { getTwoFactorConfirmationByUserId } from "../data/two-factor-confirmation"
+import { getTwoFactorTokenByEmail } from "../data/two-factor-token"
+import { getUserByEmail } from "../data/user"
 
 export const login = async (values: LoginType) => {
     const validatedFields = LoginSchema.safeParse(values)
@@ -96,21 +95,21 @@ export const login = async (values: LoginType) => {
 
         if(!existingUser) return {error: "No user found!"}
         
-        let DEFAULT_LOGIN: string
+        // let DEFAULT_LOGIN: string
 
-        if(existingUser.role === "ADMIN") {
-            DEFAULT_LOGIN = "/dashboard"
-          } else if(existingUser.role === "TRADER") {
-            DEFAULT_LOGIN = "/agrifeed"
-          } else if (existingUser.role === "DONATOR") {
-            DEFAULT_LOGIN = "/donation"
-          }
+        // if(existingUser.role === "ADMIN") {
+        //     DEFAULT_LOGIN = "/dashboard"
+        //   } else if(existingUser.role === "TRADER") {
+        //     DEFAULT_LOGIN = "/agrifeed"
+        //   } else if (existingUser.role === "DONATOR") {
+        //     DEFAULT_LOGIN = "/donation"
+        //   }
         
         await signIn("credentials", {
             email,
             password,
             // redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
-            redirectTo: DEFAULT_LOGIN!,
+            redirectTo: DEFAULT_LOGIN_REDIRECT,
         })
 
     } catch (error) {
