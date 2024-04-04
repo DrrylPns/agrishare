@@ -12,7 +12,7 @@ function page() {
           
         <Category />
         </div>
-      </div>
+      </div> 
     </RoleBasedRender>
   )
 }

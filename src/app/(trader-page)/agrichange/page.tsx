@@ -3,7 +3,7 @@ import SelectSort from './_components/SelectSort'
 import Category from './_components/Category'
 import prisma from '@/lib/db'
 
-async function page() {
+async function page() { 
 
  
   return (
