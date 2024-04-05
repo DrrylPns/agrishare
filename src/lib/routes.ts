@@ -35,4 +35,4 @@ export const apiAuthPrefix = "/api/auth";
  */
 export const DEFAULT_LOGIN_REDIRECT = "/agrifeed";
 export const DEFAULT_ADMIN_REDIRECT = "/dashboard";
-export const DEFAULT_DONATOR_REDIRECT = "/donation"
+export const DEFAULT_DONATOR_REDIRECT = "/donation";

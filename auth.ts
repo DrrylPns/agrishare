@@ -13,6 +13,10 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  pages: {
+    signIn: "/login",
+    error: "/auth-error",
+  },
   callbacks: {
     async signIn({ user, account }) {
 
