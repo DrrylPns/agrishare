@@ -1,12 +1,12 @@
 "use client";
 
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useCallback, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Separator } from "./ui/separator";
-import Link from "next/link";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import { LogoutButton } from "./LogoutButton";
 
 export const UserAccountAvatar = () => {
     const { data: session } = useSession();
@@ -59,7 +59,11 @@ export const UserAccountAvatar = () => {
                     </DropdownMenuItem>
 
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => signOut()}>Logout</DropdownMenuItem>
+                    <DropdownMenuItem>
+                        <LogoutButton>
+                            Logout
+                        </LogoutButton>
+                    </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
             {/* <div className="md:block hidden">

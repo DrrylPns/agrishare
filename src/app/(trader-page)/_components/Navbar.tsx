@@ -1,4 +1,5 @@
 "use client";
+import { LogoutButton } from '@/components/LogoutButton';
 import { Logo } from '@/components/logo';
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
@@ -11,12 +12,12 @@ import {
 } from "@/components/ui/sheet";
 import { UserAccountAvatar } from '@/components/user-account-avatar';
 import { cn } from '@/lib/utils';
-import { signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { BiMenu, BiSolidDonateHeart } from 'react-icons/bi';
-import { CiHeart, CiLogout, CiSettings } from 'react-icons/ci';
+import { CiLogout, CiSettings } from 'react-icons/ci';
 import { FaRegFileAlt } from 'react-icons/fa';
 import { FiRefreshCw } from 'react-icons/fi';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -92,24 +93,24 @@ function Navbar() {
                         </SheetTitle>
                         <SheetDescription>
                             <div className='text-gray-500 transition-all duration-700 ease-in-out mt-3'>
-                            {session?.user.role === 'TRADER' ||  session?.user.role === "ADMIN" &&(
-                                <>
-                                <Link
-                                    href={'/agrifeed'}
-                                    className={`link ${pathname === '/agrifeed' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
-                                >
-                                    <span><MdDashboard /></span>
-                                    <h1>Agrifeed</h1>
+                                {session?.user.role === 'TRADER' || session?.user.role === "ADMIN" && (
+                                    <>
+                                        <Link
+                                            href={'/agrifeed'}
+                                            className={`link ${pathname === '/agrifeed' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
+                                        >
+                                            <span><MdDashboard /></span>
+                                            <h1>Agrifeed</h1>
 
-                                </Link>
-                                <Link
-                                    href={'/categories'}
-                                    className={`link ${pathname === '/categories' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
-                                >
-                                    <span><GiHamburgerMenu /></span>
-                                    <h1>Categories</h1>
-                                </Link>
-                                </>
+                                        </Link>
+                                        <Link
+                                            href={'/categories'}
+                                            className={`link ${pathname === '/categories' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
+                                        >
+                                            <span><GiHamburgerMenu /></span>
+                                            <h1>Categories</h1>
+                                        </Link>
+                                    </>
                                 )}
                                 <Link
                                     href={'/donation'}
@@ -125,9 +126,9 @@ function Navbar() {
                                 >
                                     <span><TbClover2 /></span>
                                     <h1>Points</h1>
- 
+
                                 </Link>
-                                
+
                                 <Link
                                     href={'/agrimaps'}
                                     className={`link ${pathname === '/agrimaps' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
@@ -142,14 +143,14 @@ function Navbar() {
                                     <span><FiRefreshCw /></span>
                                     <h1>Agrichange</h1>
                                 </Link>
-                                {session?.user.role === 'TRADER' ||  session?.user.role === "ADMIN" &&(
-                                <Link
-                                    href={'/agriquest'}
-                                    className={`link ${pathname === '/agriquest' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
-                                >
-                                    <span><FiRefreshCw /></span>
-                                    <h1>Agriquest</h1>
-                                </Link>
+                                {session?.user.role === 'TRADER' || session?.user.role === "ADMIN" && (
+                                    <Link
+                                        href={'/agriquest'}
+                                        className={`link ${pathname === '/agriquest' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
+                                    >
+                                        <span><FiRefreshCw /></span>
+                                        <h1>Agriquest</h1>
+                                    </Link>
                                 )}
                                 <Link
                                     href={'/history'}
@@ -169,14 +170,16 @@ function Navbar() {
                                     <></>
                                 )}
                                 {status === 'authenticated' && (
-                                    <Button
-                                        onClick={() => { signOut() }}
-                                        variant={'outline'}
-                                        className='flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3'
-                                    >
-                                        <span><CiLogout /></span>
-                                        <h1>Logout</h1>
-                                    </Button>
+                                    <LogoutButton>
+                                        <Button
+                                            variant={'outline'}
+                                            className='flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3'
+                                        >
+                                            <span><CiLogout /></span>
+                                            <h1>Logout</h1>
+                                        </Button>
+                                    </LogoutButton>
+
                                 )}
 
                             </div>

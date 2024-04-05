@@ -8,6 +8,7 @@ import { Cog, LayoutDashboard, LogOutIcon, Settings, TicketIcon, UserPlus, Users
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FiRefreshCw } from 'react-icons/fi'
+import { LogoutButton } from "./LogoutButton"
 
 
 export const Sidebar = () => {
@@ -99,11 +100,13 @@ export const Sidebar = () => {
                             <Cog className='w-4 h-4' />
                             <span className='text-sm font-medium'>Settings</span>
                         </Link>
+                        <LogoutButton>
+                            <div className={`w-full flex items-center space-x-2 py-2 px-2 rounded-lg cursor-pointer hover:bg-gray-200 text-gray-500`}>
+                                <LogOutIcon className='w-4 h-4' />
+                                <span className='text-sm font-medium'>Log Out</span>
+                            </div>
+                        </LogoutButton>
 
-                        <div className={`w-full flex items-center space-x-2 py-2 px-2 rounded-lg cursor-pointer hover:bg-gray-200 text-gray-500`}>
-                            <LogOutIcon className='w-4 h-4' />
-                            <span className='text-sm font-medium'>Log Out</span>
-                        </div>
                     </div>
                 </aside>
             </div>
