@@ -1,4 +1,4 @@
-import { AgriChange, Agriquest, ClaimStatus, DonationStatus, Post, Role, StatusType, Subcategory, TransactionType, User } from "@prisma/client";
+import { AgriChange, Agriquest, Category, ClaimStatus, DonationStatus, Post, Role, Status, StatusType, Subcategory, TransactionType, Types, User } from "@prisma/client";
 
 export interface Posts {
     id: string;
@@ -157,4 +157,38 @@ export interface RequestWithAgriquestAndUsers {
     userId: string;
     user: User
     agriquest: Agriquest
+}
+
+export type AgriChangeType = {
+    id: string;
+    image: string;
+    name: string;
+    description: string;
+    quantity: number;
+    weight: number;
+    color: string;
+    type: Types;
+    isFavorite: boolean;
+    category: Category | null;
+    subcategory: Subcategory | null;
+    status: Status;
+    shelfLife: string;
+    pointsNeeded: number;
+    harvestDate: Date;
+    createdAt: Date;
+    updatedAt: Date;
+    userId: string;
+}
+
+export type AgriQuestType = {
+    id: string;
+    image: string;
+    name: string;
+    description: string;
+    quantity: number;
+    shelfLife: string;
+    category: Category;
+    createdAt: Date;
+    updatedAt: Date;
+    createdById: string;
 }

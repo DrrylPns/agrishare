@@ -76,7 +76,6 @@ const page = async () => {
             </TabPanel>
           </TabPanels>
         </TabGroup>
-
       </Card>
     </div>
   )

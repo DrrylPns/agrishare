@@ -7,13 +7,13 @@ import {
     DialogContent,
     DialogTrigger
 } from "@/components/ui/dialog"
-import Image from "next/image"
-import { LiaExchangeAltSolid } from "react-icons/lia"
-import HearthwihGirl from './images/image1.png'
-import { useTransition } from "react"
-import { claimAgrichange } from "../../../../../actions/agrichange"
 import { toast } from "@/components/ui/use-toast"
+import Image from "next/image"
+import { useTransition } from "react"
+import { LiaExchangeAltSolid } from "react-icons/lia"
+import { claimAgriquest } from "../../../../../actions/agriquest"
 import { Agriquest } from "../_types"
+import HearthwihGirl from './images/image1.png'
 
 export default function ExchangeDialog({
     selectedItem
@@ -38,7 +38,7 @@ export default function ExchangeDialog({
                         isLoading={isPending}
                         onClick={() => {
                             startTransition(() => {
-                                claimAgrichange(selectedItem.id).then((data) => {
+                                claimAgriquest(selectedItem.id).then((data) => {
                                     if (data.error) {
                                         toast({
                                             description: data.error,

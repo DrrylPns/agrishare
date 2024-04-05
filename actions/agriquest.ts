@@ -54,13 +54,14 @@ export const createAgriquest = async (values: AgriquestType, image: string) => {
             }
         })
 
+        revalidatePath("/add-agriquest")
         return { success: "Agriquest created" }
     } catch (error) {
         throw new Error(`Error:, ${error}`)
     }
 }
 
-export const claimAgrichange = async (id: string) => {
+export const updateAgriquest = async (values: AgriquestType, image: string, id: string) => {
     try {
         const session = await auth()
 
@@ -69,6 +70,55 @@ export const claimAgrichange = async (id: string) => {
         const user = await getUserById(session.user.id)
 
         if (!user) return { error: "No user found!" }
+
+        if (user.role !== "ADMIN") return { error: "Invalid action, can't update agriquest if you are not an admin!" }
+
+        const validatedFields = AgriQuestSchema.safeParse(values)
+
+        if (!validatedFields.success) {
+            return { error: "Invalid fields" }
+        }
+
+        const {
+            category,
+            description,
+            name,
+            quantity,
+            shelfLife,
+        } = validatedFields.data
+
+
+        await prisma.agriquest.update({
+            where: { id },
+            data: {
+                category,
+                description,
+                image: image as string,
+                name,
+                shelfLife,
+                quantity,
+                createdById: user.id,
+            },
+        })
+
+        revalidatePath("/add-agriquest")
+        return { success: "Agriquest updated" }
+    } catch (error) {
+        throw new Error(`Error:, ${error}`)
+    }
+}
+
+export const claimAgriquest = async (id: string) => {
+    try {
+        const session = await auth()
+
+        if (!session) return { error: "Unauthorized!" }
+
+        const user = await getUserById(session.user.id)
+
+        if (!user) return { error: "No user found!" }
+
+        if (user.requestLeft <= 0) return { error: `You can't claim anymore, you have ${user.requestLeft} requests.` }
 
         const aq = generateAgriquestHistoryID()
 
@@ -87,7 +137,7 @@ export const claimAgrichange = async (id: string) => {
         })
 
         revalidatePath("/agriquest")
-        return { success: "Agrichange claiming intent is now being reviewed!" }
+        return { success: "Agriquest claiming intent is now being reviewed!" }
     } catch (error: any) {
         throw new Error(error)
     }
@@ -186,6 +236,8 @@ export const handleRequest = async (status: ClaimStatus, requestId: string, user
             where: { id: currentRequest.id }
         })
 
+        if (requester.requestLeft <= 0) return { error: "This user has no requests left!" }
+
         if (status === "APPROVED") {
 
             if (processRequest) {
@@ -198,16 +250,6 @@ export const handleRequest = async (status: ClaimStatus, requestId: string, user
                     where: { id: requester.id }
                 })
             }
-
-            // KAYA KO CINOMMENT OUT DAHIL HINDI NIYA NEED MPAUNTA SA TRANSACTION / POINTS HISTORY DAHI LWALA NAMAN NABAWAS OR NADAGDAG NA POINTS KAY USER
-            // await prisma.transaction.create({
-            //     data: {
-            //         type: "",
-            //         points: points,
-            //         userId: claimer.id,
-            //         itm: currentClaim.itm,
-            //     }
-            // })
 
             revalidatePath("/transactions")
             return { success: "Approved the request intent." }
@@ -222,6 +264,24 @@ export const handleRequest = async (status: ClaimStatus, requestId: string, user
             revalidatePath("/transactions")
             return { success: "Cancelled the request intent" }
         }
+    } catch (error: any) {
+        throw new Error(error)
+    }
+}
+
+export const fetchAgriquest = async () => {
+    try {
+        const session = await auth()
+
+        if (!session) return { error: "Unauthorized!" }
+
+        const agriquest = await prisma.agriquest.findMany({
+            orderBy: {
+                createdAt: "desc"
+            }
+        })
+
+        return agriquest
     } catch (error: any) {
         throw new Error(error)
     }
