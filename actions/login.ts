@@ -90,44 +90,31 @@ export const login = async (values: LoginType) => {
         }
     }
 
-    try {
-        if (existingUser.role === "ADMIN") {
-            await signIn("credentials", {
-                email,
-                password,
-                // redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
-                redirectTo: DEFAULT_ADMIN_REDIRECT,
-            })
-        }
-
-        if (existingUser.role === "TRADER") {
-            await signIn("credentials", {
-                email,
-                password,
-                // redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
-                redirectTo: DEFAULT_LOGIN_REDIRECT,
-            })
-        }
-
-        if (existingUser.role === "DONATOR") {
-            await signIn("credentials", {
-                email,
-                password,
-                // redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
-                redirectTo: DEFAULT_DONATOR_REDIRECT,
-            })
-        }
-
-    } catch (error) {
-        if (error instanceof AuthError) {
-            switch (error.type) {
-                case "CredentialsSignin":
-                    return { error: "Invalid credentials!" }
-                default:
-                    return { error: "Something went wrong!" }
-            }
-        }
-
-        throw error;
+    if (existingUser.role === "ADMIN") {
+        await signIn("credentials", {
+            email,
+            password,
+            // redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
+            redirectTo: DEFAULT_ADMIN_REDIRECT,
+        })
     }
+
+    if (existingUser.role === "TRADER") {
+        await signIn("credentials", {
+            email,
+            password,
+            // redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
+            redirectTo: DEFAULT_LOGIN_REDIRECT,
+        })
+    }
+
+    if (existingUser.role === "DONATOR") {
+        await signIn("credentials", {
+            email,
+            password,
+            // redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
+            redirectTo: DEFAULT_DONATOR_REDIRECT,
+        })
+    }
+
 }
