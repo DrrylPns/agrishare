@@ -93,8 +93,9 @@ function Navbar() {
                         </SheetTitle>
                         <SheetDescription>
                             <div className='text-gray-500 transition-all duration-700 ease-in-out mt-3'>
-                                {session?.user.role === 'TRADER' || session?.user.role === "ADMIN" && (
-                                    <>
+                                {session?.user.role === 'DONATOR' ? (
+                                        <></>
+                                    ):(<>
                                         <Link
                                             href={'/agrifeed'}
                                             className={`link ${pathname === '/agrifeed' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
@@ -143,7 +144,9 @@ function Navbar() {
                                     <span><FiRefreshCw /></span>
                                     <h1>Agrichange</h1>
                                 </Link>
-                                {session?.user.role === 'TRADER' || session?.user.role === "ADMIN" && (
+                                {session?.user.role === 'DONATOR' ? (
+                                    <></>
+                                    ):(
                                     <Link
                                         href={'/agriquest'}
                                         className={`link ${pathname === '/agriquest' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
