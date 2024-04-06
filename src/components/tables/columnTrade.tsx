@@ -143,6 +143,7 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
             const traderPts = row.original.trader.points
             const traderShelfLife = row.original.shelfLife
             const traderSubcategory = row.original.subcategory
+            const traderProof = row.original.proofTrader
 
             const tradeeName = row.original.tradee.name
             const tradeeLastName = row.original.tradee.lastName
@@ -152,6 +153,7 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
             const tradeePts = row.original.tradee.points
             const tradeeShelfLife = row.original.post.shelfLife
             const tradeeSubcategory = row.original.post.subcategory
+            const tradeeProof = row.original.proofTradee
 
             const tradeStatus = row.original.status
             const tradeDate = row.original.createdAt
@@ -251,9 +253,13 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                                     <p>Shelf Life: {traderShelfLife}</p>
                                                     <p>Date: {format(tradeDate, "PPP")}</p>
                                                     {/* redirect to uploadthing when clicked. */}
-                                                    <Link className="text-blue-500" href="#">
-                                                        Proof: image.jpg
-                                                    </Link>
+                                                    {traderProof !== null ? (
+                                                        <a target="_blank" className="text-blue-500" href={traderProof}>
+                                                            Proof: See Proof
+                                                        </a>
+                                                    ):(
+                                                        <>Proof: Haven't Uploaded yet</>
+                                                    )}
                                                 </div>
                                             </div>
 
@@ -273,9 +279,13 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                                     </p>
                                                     <p>Shelf Life: {tradeeShelfLife}</p>
                                                     <p>Date: {format(tradeDate, "PPP")}</p>
-                                                    <Link className="text-blue-500" href="#">
-                                                        Proof: image.jpg
-                                                    </Link>
+                                                    {tradeeProof !== null ? (
+                                                        <a target="_blank" className="text-blue-500" href={tradeeProof}>
+                                                            Proof: See Proof
+                                                        </a>
+                                                    ):(
+                                                        <>Proof: Haven't Uploaded yet</>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>

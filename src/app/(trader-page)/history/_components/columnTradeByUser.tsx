@@ -4,7 +4,7 @@ import { DataTableColumnHeader } from "@/app/(admin)/users/_components/data-tabl
 import { TradeWithTradeeTraders } from "@/lib/types"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
-import { useState, useTransition } from "react"
+import { useRef, useState, useTransition } from "react"
 import { toast } from "@/components/ui/use-toast"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
@@ -12,7 +12,9 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { FolderSyncIcon, MoreHorizontalIcon } from "lucide-react"
-// import AdminTitle from "../AdminTitle"
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
+
 import Link from "next/link"
 import Image from "next/image"
 import { UploadDropzone } from "@/lib/uploadthing"
@@ -129,6 +131,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
         cell: ({ row }) => {
             const [isReviewOpen, setIsReviewOpen] = useState<boolean>()
             const [isProofOpen, setIsProofOpen] = useState<boolean>()
+            const [isDownloadOpen, setIsDownloadOpen] = useState<boolean>()
             const [imageUrl, setImageUrl] = useState<string>("")
             const [isPending, startTransition] = useTransition()
             const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false)
@@ -139,6 +142,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
             const traderId = row.original.trader.id
             const tradeeId = row.original.tradee.id
             const postId = row.original.post.id
+            const proofTradeeimage = row.original.proofTradee
 
             const traderName = row.original.trader.name
             const traderLastName = row.original.trader.lastName
@@ -148,6 +152,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
             const traderPts = row.original.trader.points
             const traderShelfLife = row.original.shelfLife
             const traderSubcategory = row.original.subcategory
+            const proofTraderimage = row.original.proofTrader
 
             const tradeeName = row.original.tradee.name
             const tradeeLastName = row.original.tradee.lastName
@@ -170,6 +175,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
             // const imageIsEmpty = row.original.proofTradee?.length === 0 && row.original.proofTrader?.length === 0
             const imageIsEmpty = imageUrl.length === 0
             const checkStatus = tradeStatus === "PROCESSING"
+            const isCompleted = tradeStatus === "COMPLETED"
             // const imageIsEmpty = imageUrl.length === 0
             // kalkulasyon at rebolusyon
 
@@ -208,6 +214,30 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
             const tradeeCalculatedPoints = (6 / ptsEquivalentTradee) * tradeeQty * conditionRate
             const traderCalculatedPoints = (6 / ptsEquivalentTrader) * tradeeQty * conditionRate
 
+            const pdfRef = useRef<HTMLDivElement>(null);
+
+            const dowloadPDF = () =>{
+                const input = pdfRef.current;
+                if (!input) {
+                    console.error("PDF reference is not available");
+                    return;
+                }
+                html2canvas(input).then((canvas)=>{
+                    const imgData = canvas.toDataURL('image/png')
+                    const pdf = new jsPDF('p', 'mm', 'a4', true);
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = pdf.internal.pageSize.getHeight();
+                    const imgWidth = canvas.width;
+                    const imgHeight = canvas.height;
+                    const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight)
+                    const imgX = (pdfWidth - imgWidth * ratio) / 2;
+                    const imgY = 30;
+                    pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+                    pdf.save('Reciept.pdf')
+
+                })
+            }
+
             return (
                 <>
                     <DropdownMenu>
@@ -220,22 +250,35 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-
-                            <DropdownMenuItem className="cursor-pointer">
+                            
+                            {checkStatus && (
+                            <DropdownMenuItem className="cursor-pointer"
+                                onClick={() => setIsDownloadOpen(true)}
+                            >
                                 Download
                             </DropdownMenuItem>
-
+                            )}
+                            {isCompleted && (
+                            <DropdownMenuItem className="cursor-pointer"
+                                onClick={() => setIsDownloadOpen(true)}
+                            >
+                                Download
+                            </DropdownMenuItem>
+                            )}
+                            
+                            {tradeStatus === "PENDING" && (
+                            <DropdownMenuItem
+                                onClick={() => setIsProofOpen(true)}
+                            >
+                                Upload Proof
+                            </DropdownMenuItem>
+                       
+                            )}   
                             <DropdownMenuItem
                                 onClick={() => setIsReviewOpen(true)}
                             >
                                 Review
                             </DropdownMenuItem>
-
-                            {checkStatus && <DropdownMenuItem
-                                onClick={() => setIsProofOpen(true)}
-                            >
-                                Upload Proof
-                            </DropdownMenuItem>}
 
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -265,10 +308,14 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                                     </p>
                                                     <p>Shelf Life: {traderShelfLife}</p>
                                                     <p>Date: {format(tradeDate, "PPP")}</p>
-                                                    {/* redirect to uploadthing when clicked. */}
-                                                    <Link className="text-blue-500" href="#">
-                                                        Proof: image.jpg
-                                                    </Link>
+                                                    {proofTradeeimage !== null ? (
+                                                        <a target="_blank" className="text-blue-500" href={proofTradeeimage}>
+                                                           Proof: See Proof
+                                                        </a>
+                                                    ):(
+                                                        <></>
+                                                    )}
+                                                    
                                                 </div>
                                             </div>
 
@@ -288,9 +335,14 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                                     </p>
                                                     <p>Shelf Life: {tradeeShelfLife}</p>
                                                     <p>Date: {format(tradeDate, "PPP")}</p>
-                                                    <Link className="text-blue-500" href="#">
-                                                        Proof: image.jpg
-                                                    </Link>
+                                                    {proofTraderimage !== null ? (
+                                                        <a target="_blank" className="text-blue-500" href={proofTraderimage}>
+                                                            Proof: See Proof
+                                                        </a>
+                                                    ):(
+                                                        <></>
+                                                    )}
+                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -311,6 +363,99 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                 </DialogDescription>
                             </DialogHeader>
                         </DialogContent>
+                    </Dialog>
+                    <Dialog open={isDownloadOpen} onOpenChange={setIsDownloadOpen}>
+                        <DialogContent className="lg:max-w-2xl">
+                        <div>
+                            <DialogHeader>
+                                <DialogTitle>
+                                    {/* <AdminTitle entry="4" title="Trade Review" /> */}
+                                    <p className="">Status: {tradeStatus}</p>
+                                </DialogTitle>
+                                <DialogDescription ref={pdfRef}>
+                                    <>
+                                        <div className="bg-white p-6 rounded-lg shadow-md flex flex-col md:flex-row items-center justify-between max-w-4xl mx-auto">
+                                            <div className="flex flex-col items-center md:items-start">
+                                                <Avatar>
+                                                    <AvatarImage src={traderImage as string} alt="profile" />
+                                                    <AvatarFallback>{firstLetterOfTraderName}{firstLetterOfTraderLastName}</AvatarFallback>
+                                                </Avatar>
+                                                <div className="mt-4 text-sm text-center md:text-left">
+                                                    {/* <p className="font-semibold">Trade ID: {id}</p> */}
+                                                    <p>Name: {traderName} {" "} {traderLastName}</p>
+                                                    <p>Item: {traderItem}</p>
+                                                    <p>Quantity: {traderQty}</p>
+                                                    <p>
+                                                        Accumulated Points: <span className="text-green-500">{traderCalculatedPoints.toFixed(2)} Point(s)</span>
+                                                    </p>
+                                                    <p>Shelf Life: {traderShelfLife}</p>
+                                                    <p>Date: {format(tradeDate, "PPP")}</p>
+                                                    {proofTradeeimage !== null ? (
+                                                        <Image 
+                                                            src={proofTradeeimage}
+                                                            alt=""
+                                                            width={100}
+                                                            height={100}
+                                                            className=""
+                                                        />
+                                                    ):(
+                                                        <></>
+                                                    )}
+                                                    
+                                                </div>
+                                            </div>
+
+                                            <FolderSyncIcon className="text-green-500 self-center mx-0 my-4 md:mx-8" />
+
+                                            <div className="flex flex-col items-center md:items-start">
+                                                <Avatar>
+                                                    <AvatarImage src={tradeeImage as string} alt="profile" />
+                                                    <AvatarFallback>{firstLetterOfTradeeName}{firstLetterOfTradeeLastName}</AvatarFallback>
+                                                </Avatar>
+                                                <div className="mt-4 text-sm text-center md:text-left">
+                                                    <p>Name: {tradeeName} {" "} {tradeeLastName}</p>
+                                                    <p>Item: {tradeeItem}</p>
+                                                    <p>Quantity: {tradeeQty}</p>
+                                                    <p>
+                                                        Accumulated Points: <span className="text-green-500">{tradeeCalculatedPoints.toFixed(2)} Point(s)</span>
+                                                    </p>
+                                                    <p>Shelf Life: {tradeeShelfLife}</p>
+                                                    <p>Date: {format(tradeDate, "PPP")}</p>
+                                                    {proofTraderimage !== null ? (
+                                                        <Image 
+                                                            src={proofTraderimage}
+                                                            alt=""
+                                                            width={100}
+                                                            height={100}
+                                                            className=""
+                                                        />
+                                                    ):(
+                                                        <></>
+                                                    )}
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* <div className="flex gap-3 mt-3">
+                                            <Button
+                                                variant="primary"
+                                                isLoading={isPending}
+                                                onClick={() => setIsConfirmOpen(true)}
+                                            >Confirm</Button>
+                                            <Button
+                                                variant="destructive"
+                                                isLoading={isPending}
+                                                onClick={() => setIsRejectOpen(true)}
+                                            >Decline</Button>
+                                        </div> */}
+                                    </>
+                                </DialogDescription>
+                            </DialogHeader>
+                        </div>
+                        <Button variant={'primary'} onClick={dowloadPDF}>Download</Button>
+                        </DialogContent>
+                     
                     </Dialog>
 
                     <AlertDialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
@@ -438,7 +583,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                         <div className="flex gap-3 mt-3">
                                             <Button
                                                 variant="primary"
-                                                disabled={imageIsEmpty || !checkStatus}
+                                                disabled={imageIsEmpty}
                                                 isLoading={isPending}
                                                 onClick={() => {
                                                     startTransition(() => {
