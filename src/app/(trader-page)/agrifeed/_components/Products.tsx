@@ -6,6 +6,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { useInView } from "react-intersection-observer";
 import { User } from './_types'
 import { BeatLoader } from "react-spinners"
+import { isExpired } from '@/lib/utils'
 
 type ProductPostType = {
   getAllPost: ProductType[],
@@ -25,7 +26,8 @@ type ProductType = {
   isFavorite: boolean,
   category: "FRESH_FRUIT" | "VEGETABLES" | "TOOLS" | "EQUIPMENTS" | "SEEDS" | "SOILS" | "FERTILIZER",
   status: string,
-  shelfLife: string,
+  shelfLifeDuration: number,
+  shelfLifeUnit: string,
   harvestDate: Date,
   reviews: ReviewsType[],
   createdAt: Date,
@@ -74,23 +76,28 @@ function Products() {
     <div className='px-5 sm:px-0'>
       {Posts?.pages.length > 0 ? Posts?.pages.map((page) => (
         <div key={page.nextId} >
-          {page.getAllPost !== undefined && page.getAllPost.map((product) => (
-            <div key={product.id} className='mb-3'>
-              <ProductCard
-                key={product.id}
-                id={product.id}
-                name={product.User.name}
-                lastName={product.User.lastName}
-                productImage={product.image}
-                productName={product.name}
-                description={product.description}
-                category={product.category}
-                status={product.status}
-                reviews={product.reviews}
-                user={product.User as User}
-              />
-            </div>
-          ))}
+          {page.getAllPost !== undefined && page.getAllPost.map((product) => {
+            if(isExpired(product.harvestDate.toString(), product.shelfLifeDuration , product.shelfLifeUnit)){
+              return null
+            } else {
+            return (
+              <div key={product.id} className='mb-3'>
+                <ProductCard
+                  key={product.id}
+                  id={product.id}
+                  name={product.User.name}
+                  lastName={product.User.lastName}
+                  productImage={product.image}
+                  productName={product.name}
+                  description={product.description}
+                  category={product.category}
+                  status={product.status}
+                  reviews={product.reviews}
+                  user={product.User as User}
+                />
+              </div>
+            )}
+          })}
           {isFetchingNextPage && (
             <div className='w-full flex items-center justify-center'>
               <BeatLoader />

@@ -91,3 +91,27 @@ export function formattedSLU(duration: number, unit: ShelfLifeUnit): string {
     return `${duration} ${formattedUnit}s`;
   }
 }
+
+export function isExpired(dateString: string, shelfLifeDuration: number, shelfLifeUnit: string) {
+  const currentDate = new Date();
+  const expirationDate = new Date(dateString);
+
+  switch (shelfLifeUnit) {
+      case 'DAY':
+          expirationDate.setDate(expirationDate.getDate() + shelfLifeDuration);
+          break;
+      case 'WEEK':
+          expirationDate.setDate(expirationDate.getDate() + (shelfLifeDuration * 7));
+          break;
+      case 'MONTH':
+          expirationDate.setMonth(expirationDate.getMonth() + shelfLifeDuration);
+          break;
+      case 'YEAR':
+          expirationDate.setFullYear(expirationDate.getFullYear() + shelfLifeDuration);
+          break;
+      default:
+          throw new Error('Invalid shelfLifeUnit');
+  }
+
+  return currentDate > expirationDate;
+}
