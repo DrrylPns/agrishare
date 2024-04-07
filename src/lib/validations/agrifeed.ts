@@ -29,6 +29,7 @@ const ShelfLifeUnit = z.enum([
 ])
 
 export const AgrifeedSchema = z.object({
+    id: z.optional(z.string()),
     image: z.string().optional(),
     name: z.string().min(2, { message: "Name should be valid." }).max(255, { message: "Name is too long." }),
     description: z.string().min(2, { message: "Description should be valid." }).max(1000, { message: "Description is too long." }),

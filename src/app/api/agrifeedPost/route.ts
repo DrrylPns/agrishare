@@ -23,6 +23,7 @@ export async function POST(req: Request) {
             type,
             weight,
             image,
+            id,
         } = AgrifeedSchema.parse(body)
 
         if (shelfLifeDuration <= 0) {
@@ -39,7 +40,10 @@ export async function POST(req: Request) {
             status = Status.OUTOFSTOCK
         }
 
-        await prisma.post.create({
+        await prisma.post.update({
+            where: {
+                id
+            },
             data: {
                 category,
                 color,
@@ -57,7 +61,7 @@ export async function POST(req: Request) {
                 userId: session?.user.id as string,
             }
         })
-        return new NextResponse(`Successfully posted a product!`)
+        return new NextResponse(`Successfully update the product!`)
     } catch (error) {
         return new NextResponse('Could not post' + error, { status: 500 })
     }

@@ -1,4 +1,14 @@
 'use client'
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle
+} from "@/components/ui/alert-dialog";
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -11,29 +21,18 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { toast } from '@/components/ui/use-toast';
 import { formattedCategory } from '@/lib/utils';
-import { CircleEllipsisIcon, MoreHorizontalIcon, Trash2 } from "lucide-react";
+import { MoreHorizontalIcon } from "lucide-react";
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { LiaExchangeAltSolid } from "react-icons/lia";
-import { ReviewsType } from './Products';
-import { User } from './_types';
-import { useSession } from 'next-auth/react';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
 import { useState, useTransition } from 'react';
+import { LiaExchangeAltSolid } from "react-icons/lia";
 import { deleteAgrifeed } from '../../../../../actions/agrifeed';
-import { toast } from '@/components/ui/use-toast';
-import { EditProductDialog } from './EditProductDialog';
+import { ReviewsType } from './Products';
+import { Post, User } from './_types';
+import UpdateAgrifeedForm from "./UpdateAgrifeedForm";
 
 
 function ProductCard({
@@ -46,7 +45,8 @@ function ProductCard({
     status,
     reviews,
     lastName,
-    user
+    user,
+    product
 }: {
     id: string;
     name: string | null;
@@ -56,11 +56,13 @@ function ProductCard({
     category: string;
     status: string;
     lastName: string | null;
-    reviews: ReviewsType[]
-    user: User
+    reviews: ReviewsType[];
+    user: User;
+    product: Post;
 }) {
     const { data: session } = useSession()
     const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [isUpdateOpen, setIsUpdateOpen] = useState<boolean>(false)
     const [isPending, startTransition] = useTransition()
 
     return (
@@ -70,27 +72,35 @@ function ProductCard({
                 <CardTitle className='text-xl sm:text-4xl font-semibold'>{name} {" "} {lastName}</CardTitle>
 
                 {session?.user.id === user.id && (
-                    <DropdownMenu>
-                        <DropdownMenuTrigger>
-                            <MoreHorizontalIcon className="h-4 w-4" />
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
+                    <>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger>
+                                <MoreHorizontalIcon className="h-4 w-4" />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
 
-                            <DropdownMenuItem
-                                className='cursor-pointer'
-                                onClick={() => setIsOpen(true)}
-                            >
-                                Edit
-                            </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    className='cursor-pointer'
+                                    onClick={() => setIsUpdateOpen(true)}
+                                >
+                                    Edit
+                                </DropdownMenuItem>
 
-                            <DropdownMenuItem
-                                className='cursor-pointer text-rose-500'
-                                onClick={() => setIsOpen(true)}
-                            >
-                                Delete
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                                <DropdownMenuItem
+                                    className='cursor-pointer text-rose-500'
+                                    onClick={() => setIsOpen(true)}
+                                >
+                                    Delete
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+
+                        <UpdateAgrifeedForm
+                            product={product}
+                            isUpdateOpen={isUpdateOpen}
+                            setIsUpdateOpen={setIsUpdateOpen}
+                        />
+                    </>
                 )}
 
                 <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
