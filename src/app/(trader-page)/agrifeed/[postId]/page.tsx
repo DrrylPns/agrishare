@@ -20,6 +20,7 @@ const Page = async ({
   return (
     <div className='w-full sm:w-3/5 mt-5 sm:mt-0'>
       {Post && (
+        //@ts-ignore
         <PostSingle post={Post} />
       )}
     </div>

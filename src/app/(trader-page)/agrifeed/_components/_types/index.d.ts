@@ -1,6 +1,6 @@
 'use server';
 
-import { ShelfLifeUnit } from "@prisma/client";
+import { ShelfLifeUnit, Types } from "@prisma/client";
 
 export type User = {
   id: string;
@@ -27,7 +27,7 @@ export type Post = {
   quantity: number
   weight: number
   color: string
-  type: string | null
+  type: Types
   isFavorite: boolean
   category: string
   subcategory: string | null

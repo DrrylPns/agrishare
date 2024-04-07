@@ -4,7 +4,7 @@ import ProductCard from './ProductCard'
 import axios from 'axios'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useInView } from "react-intersection-observer";
-import { User } from './_types'
+import { Post, User } from './_types'
 import { BeatLoader } from "react-spinners"
 import { isExpired } from '@/lib/utils'
 
@@ -77,26 +77,29 @@ function Products() {
       {Posts?.pages.length > 0 ? Posts?.pages.map((page) => (
         <div key={page.nextId} >
           {page.getAllPost !== undefined && page.getAllPost.map((product) => {
-            if(isExpired(product.harvestDate.toString(), product.shelfLifeDuration , product.shelfLifeUnit)){
+            if (isExpired(product.harvestDate.toString(), product.shelfLifeDuration, product.shelfLifeUnit)) {
               return null
             } else {
-            return (
-              <div key={product.id} className='mb-3'>
-                <ProductCard
-                  key={product.id}
-                  id={product.id}
-                  name={product.User.name}
-                  lastName={product.User.lastName}
-                  productImage={product.image}
-                  productName={product.name}
-                  description={product.description}
-                  category={product.category}
-                  status={product.status}
-                  reviews={product.reviews}
-                  user={product.User as User}
-                />
-              </div>
-            )}
+              return (
+                <div key={product.id} className='mb-3'>
+                  <ProductCard
+                    key={product.id}
+                    id={product.id}
+                    name={product.User.name}
+                    lastName={product.User.lastName}
+                    productImage={product.image}
+                    productName={product.name}
+                    description={product.description}
+                    category={product.category}
+                    status={product.status}
+                    reviews={product.reviews}
+                    user={product.User as User}
+                    //@ts-ignore
+                    product={product as Post}
+                  />
+                </div>
+              )
+            }
           })}
           {isFetchingNextPage && (
             <div className='w-full flex items-center justify-center'>
