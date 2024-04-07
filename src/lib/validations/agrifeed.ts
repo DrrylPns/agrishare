@@ -21,6 +21,12 @@ const Subcategory = z.enum([
     "ORGANIC_FERTILIZER",
     "NOT_ORGANIC_FERTILIZER",
 ])
+const ShelfLifeUnit = z.enum([
+    "DAY",
+    "WEEK",
+    "MONTH",
+    "YEAR",
+])
 
 export const AgrifeedSchema = z.object({
     image: z.string().optional(),
@@ -29,7 +35,8 @@ export const AgrifeedSchema = z.object({
     quantity: z.coerce.number(),
     weight: z.coerce.number(),
     color: z.string().min(2, { message: "Color should be valid." }),
-    shelfLife: z.string().min(2, { message: "Shelf life should be valid." }),
+    shelfLifeDuration: z.coerce.number().min(1),
+    shelfLifeUnit: ShelfLifeUnit,
     category: Category,
     subcategory: Subcategory,
     type: z.optional(z.enum(["ORGANIC", "NOT_ORGANIC"])),

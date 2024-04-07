@@ -18,11 +18,16 @@ export async function POST(req: Request) {
             name,
             preferedOffers,
             quantity,
-            shelfLife,
+            shelfLifeDuration,
+            shelfLifeUnit,
             type,
             weight,
             image,
         } = AgrifeedSchema.parse(body)
+
+        if (shelfLifeDuration <= 0) {
+            return new NextResponse(`The shelf life duration must be a positive number greater than 0. The value "${shelfLifeDuration}" is invalid.`);
+        }
 
         let status: Status;
 
@@ -44,7 +49,8 @@ export async function POST(req: Request) {
                 name,
                 preferedOffers,
                 quantity,
-                shelfLife,
+                shelfLifeDuration,
+                shelfLifeUnit,
                 type,
                 weight,
                 status,

@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge"
 import { formatDistanceToNow } from 'date-fns';
 import { randomBytes } from 'crypto';
 import prisma from "./db";
+import { ShelfLifeUnit } from "@prisma/client";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -61,7 +62,7 @@ export function generateAgriquestHistoryID(): string {
 export async function generateUserId() {
   // Get the current year
   const currentYear = new Date().getFullYear();
-  
+
   // Count the number of users created in the current year
   const usersCount = await prisma.user.count({
     where: {
@@ -74,9 +75,19 @@ export async function generateUserId() {
 
   // Increment the count and format it
   const incrementedCount = (usersCount + 1).toString().padStart(2, '0');
-  
+
   // Combine the incremented count with the current year to form userId
   const userId = `${incrementedCount}-${currentYear}`;
-  
+
   return userId;
+}
+
+export function formattedSLU(duration: number, unit: ShelfLifeUnit): string {
+  const formattedUnit = unit.toLowerCase().charAt(0) + unit.toLowerCase().slice(1).toLowerCase();
+
+  if (duration === 1) {
+    return `1 ${formattedUnit}`;
+  } else {
+    return `${duration} ${formattedUnit}s`;
+  }
 }

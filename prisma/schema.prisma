@@ -121,30 +121,38 @@ model TwoFactorConfirmation {
 }
 
 model Post {
-  id             String        @id @default(cuid())
-  image          String        @db.Text
-  name           String
-  description    String        @db.Text
-  quantity       Float         @default(0)
-  weight         Float
-  color          String
-  type           Types?
-  isFavorite     Boolean       @default(false)
-  category       Category
-  subcategory    Subcategory?
-  status         Status
-  shelfLife      String
-  preferedOffers String
-  harvestDate    DateTime
-  proof          String?
-  reviews        Reviews[]
-  transaction    Transaction[]
-  trades         Trade[]
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  id                String        @id @default(cuid())
+  image             String        @db.Text
+  name              String
+  description       String        @db.Text
+  quantity          Float         @default(0)
+  weight            Float
+  color             String
+  type              Types?
+  isFavorite        Boolean       @default(false)
+  category          Category
+  subcategory       Subcategory?
+  status            Status
+  shelfLifeDuration Int
+  shelfLifeUnit     ShelfLifeUnit
+  preferedOffers    String
+  harvestDate       DateTime
+  proof             String?
+  reviews           Reviews[]
+  transaction       Transaction[]
+  trades            Trade[]
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 
   User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
+}
+
+enum ShelfLifeUnit {
+  DAY
+  WEEK
+  MONTH
+  YEAR
 }
 
 enum Category {

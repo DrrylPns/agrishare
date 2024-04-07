@@ -15,6 +15,7 @@ import { FolderSyncIcon, MoreHorizontalIcon } from "lucide-react"
 import AdminTitle from "../AdminTitle"
 import Link from "next/link"
 import { handleTrade } from "../../../actions/trade"
+import { formattedSLU } from "@/lib/utils"
 
 export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
     {
@@ -151,9 +152,12 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
             const tradeeItem = row.original.post.name
             const tradeeQty = row.original.tradedQuantity
             const tradeePts = row.original.tradee.points
-            const tradeeShelfLife = row.original.post.shelfLife
             const tradeeSubcategory = row.original.post.subcategory
             const tradeeProof = row.original.proofTradee
+
+            const tradeeShelfLifeDuration = row.original.post.shelfLifeDuration
+            const tradeeShelfLifeUnit = row.original.post.shelfLifeUnit
+            const formattedShelfLifeUnit = formattedSLU(tradeeShelfLifeDuration, tradeeShelfLifeUnit)
 
             const tradeStatus = row.original.status
             const tradeDate = row.original.createdAt
@@ -183,7 +187,7 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
             } else {
                 ptsEquivalentTrader = 0.15
             }
-    
+
             if (tradeeSubcategory === "FRUIT_VEGETABLES") {
                 ptsEquivalentTradee = 0.18
             } else if (tradeeSubcategory === "HERBS_VEGETABLES") {
@@ -257,7 +261,7 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                                         <a target="_blank" className="text-blue-500" href={traderProof}>
                                                             Proof: See Proof
                                                         </a>
-                                                    ):(
+                                                    ) : (
                                                         <>Proof: Haven't Uploaded yet</>
                                                     )}
                                                 </div>
@@ -277,13 +281,13 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                                     <p>
                                                         Accumulated Points: <span className="text-green-500">{tradeeCalculatedPoints.toFixed(2)} Point(s)</span>
                                                     </p>
-                                                    <p>Shelf Life: {tradeeShelfLife}</p>
+                                                    <p>Shelf Life: {formattedShelfLifeUnit}</p>
                                                     <p>Date: {format(tradeDate, "PPP")}</p>
                                                     {tradeeProof !== null ? (
                                                         <a target="_blank" className="text-blue-500" href={tradeeProof}>
                                                             Proof: See Proof
                                                         </a>
-                                                    ):(
+                                                    ) : (
                                                         <>Proof: Haven't Uploaded yet</>
                                                     )}
                                                 </div>

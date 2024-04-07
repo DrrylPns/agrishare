@@ -12,6 +12,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -26,7 +27,7 @@ import { UploadDropzone } from '@/lib/uploadthing'
 import { cn } from '@/lib/utils'
 import { AgrifeedSchema, AgrifeedType } from '@/lib/validations/agrifeed'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Category, Subcategory, Types } from '@prisma/client'
+import { Category, ShelfLifeUnit, Subcategory, Types } from '@prisma/client'
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 import { format, sub } from 'date-fns'
@@ -43,7 +44,6 @@ function CreatePost() {
 
   const imageIsEmpty = imageUrl.length === 0
 
-
   const form = useForm<AgrifeedType>({
     resolver: zodResolver(AgrifeedSchema),
     defaultValues: {
@@ -52,7 +52,7 @@ function CreatePost() {
       description: "",
       name: "",
       preferedOffers: "",
-      shelfLife: "",
+      shelfLifeDuration: 0,
       quantity: 0,
       weight: 0,
     }
@@ -71,7 +71,8 @@ function CreatePost() {
       name,
       preferedOffers,
       quantity,
-      shelfLife,
+      shelfLifeDuration,
+      shelfLifeUnit,
       type,
       weight,
       image,
@@ -85,7 +86,8 @@ function CreatePost() {
         name,
         preferedOffers,
         quantity,
-        shelfLife,
+        shelfLifeDuration,
+        shelfLifeUnit,
         type,
         weight,
         image,
@@ -125,7 +127,8 @@ function CreatePost() {
       preferedOffers: values.preferedOffers,
       quantity: values.quantity,
       weight: values.weight,
-      shelfLife: values.shelfLife,
+      shelfLifeDuration: values.shelfLifeDuration,
+      shelfLifeUnit: values.shelfLifeUnit,
       type: values.type,
       harvestDate: values.harvestDate,
       subcategory: values.subcategory,
@@ -148,7 +151,7 @@ function CreatePost() {
             <span><LucideImagePlus /></span>
             <span>Upload</span>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className=''>
             <DialogHeader>
               <DialogTitle className='text-center'>
                 {formStep === 0 && "Upload Product Image"}
@@ -234,6 +237,45 @@ function CreatePost() {
 
                     {/* STEP 3 */}
                     <div className={`${formStep !== 2 && "hidden"} space-y-3 mb-1`}>
+
+                      <FormField
+                        control={form.control}
+                        name="shelfLifeDuration"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Shelf Life Duration</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter shelf life..." {...field} type='number' min={1} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="shelfLifeUnit"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Shelf Life Unit</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select a unit" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value={ShelfLifeUnit.DAY}>Day(s)</SelectItem>
+                                <SelectItem value={ShelfLifeUnit.WEEK}>Week(s)</SelectItem>
+                                <SelectItem value={ShelfLifeUnit.MONTH}>Month(s)</SelectItem>
+                                <SelectItem value={ShelfLifeUnit.YEAR}>Year(s)</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
                       <FormField
                         control={form.control}
                         name="quantity"
@@ -262,7 +304,6 @@ function CreatePost() {
                         )}
                       />
 
-
                       <FormField
                         control={form.control}
                         name="color"
@@ -277,19 +318,7 @@ function CreatePost() {
                         )}
                       />
 
-                      <FormField
-                        control={form.control}
-                        name="shelfLife"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Shelf Life</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Enter shelf life..." {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+
                     </div>
 
                     {/* STEP 4 */}
@@ -571,12 +600,13 @@ function CreatePost() {
                           })
                         }
                         onClick={() => {
-                          form.trigger(['quantity', 'weight', 'color', 'shelfLife'])
+                          form.trigger(['quantity', 'weight', 'color', 'shelfLifeDuration', 'shelfLifeUnit'])
 
                           const quantityState = form.getFieldState("quantity")
                           const weightState = form.getFieldState("weight")
                           const colorState = form.getFieldState("color")
-                          const shelfLifeState = form.getFieldState("shelfLife")
+                          const shelfLifeDuration = form.getFieldState("shelfLifeDuration")
+                          const shelfLifeUnit = form.getFieldState("shelfLifeUnit")
 
                           const quantityValue = form.getValues("quantity")
                           const weightValue = form.getValues("weight")
@@ -592,7 +622,8 @@ function CreatePost() {
                           if (!quantityState.isDirty || quantityState.invalid) return;
                           if (!weightState.isDirty || weightState.invalid) return;
                           if (!colorState.isDirty || colorState.invalid) return;
-                          if (!shelfLifeState.isDirty || shelfLifeState.invalid) return;
+                          if (!shelfLifeDuration.isDirty || shelfLifeDuration.invalid) return;
+                          if (!shelfLifeUnit.isDirty || shelfLifeUnit.invalid) return;
 
                           setFormStep(3)
                         }}

@@ -54,12 +54,12 @@ export const UserAccountAvatar = () => {
 
                     <DropdownMenuSeparator />
 
-                    <DropdownMenuItem>
-                        <Link href="/settings">My Account</Link>
+                    <DropdownMenuItem className="cursor-pointer">
+                        <Link href="/settings" className="w-full">My Account</Link>
                     </DropdownMenuItem>
 
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
                         <LogoutButton>
                             Logout
                         </LogoutButton>

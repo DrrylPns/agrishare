@@ -4,13 +4,14 @@ import { Post } from './_types'
 import RelativeDate from '@/components/RelativeDate'
 import Image from 'next/image'
 import DefaultImage from './images/default-user.jpg'
-import { formattedCategory } from '@/lib/utils'
+import { formattedCategory, formattedSLU } from '@/lib/utils'
 
 function PostTabs({
   post
 }: {
   post: Post
 }) {
+  const formattedShelfLifeUnit = formattedSLU(post.shelfLifeDuration, post.shelfLifeUnit)
   return (
     <Tabs defaultValue="account" className="w-full mt-5 px-5 sm:mt-10" >
       <TabsList className='bg-transparent w-full mx-auto'>
@@ -43,7 +44,7 @@ function PostTabs({
           </div>
           <div className='flex'>
             <h1 className='w-1/3'>Shelf Life: </h1>
-            <span className='text-gray-400'>{post.shelfLife}</span>
+            <span className='text-gray-400'>{formattedShelfLifeUnit}</span>
           </div>
           <div className='flex'>
             <h1 className='w-1/3'>Harvest Date: </h1>

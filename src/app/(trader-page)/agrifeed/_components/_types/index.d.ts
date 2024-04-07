@@ -1,5 +1,7 @@
 'use server';
 
+import { ShelfLifeUnit } from "@prisma/client";
+
 export type User = {
   id: string;
   name: string | null;
@@ -30,7 +32,8 @@ export type Post = {
   category: string
   subcategory: string | null
   status: string
-  shelfLife: string
+  shelfLifeDuration: number
+  shelfLifeUnit: ShelfLifeUnit
   preferedOffers: string
   harvestDate: Date
   reviews: Reviews[]
@@ -38,7 +41,6 @@ export type Post = {
   updatedAt: Date
   User: User
   userId: string
-
 }
 
 export type Reviews = {
@@ -53,20 +55,20 @@ export type Reviews = {
 }
 
 export type Agrichange = {
-  id:           string        
-  image:        string      
-  name:         string
-  description:  string        
-  quantity:     number       
-  weight:       number
-  color:        string
-  type:         string
-  isFavorite:   Boolean     
-  category:     string
-  subcategory:  string
-  status:       Status
-  shelfLife:    string
+  id: string
+  image: string
+  name: string
+  description: string
+  quantity: number
+  weight: number
+  color: string
+  type: string
+  isFavorite: Boolean
+  category: string
+  subcategory: string
+  status: Status
+  shelfLife: string
   pointsNeeded: number
-  createdAt:    Date   
-  updatedAt:    Date  
+  createdAt: Date
+  updatedAt: Date
 }

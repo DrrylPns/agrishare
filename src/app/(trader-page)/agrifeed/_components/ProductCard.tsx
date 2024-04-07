@@ -12,7 +12,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { formattedCategory } from '@/lib/utils';
-import { CircleEllipsisIcon, Trash2 } from "lucide-react";
+import { CircleEllipsisIcon, MoreHorizontalIcon, Trash2 } from "lucide-react";
 import Image from 'next/image';
 import Link from 'next/link';
 import { LiaExchangeAltSolid } from "react-icons/lia";
@@ -33,6 +33,7 @@ import {
 import { useState, useTransition } from 'react';
 import { deleteAgrifeed } from '../../../../../actions/agrifeed';
 import { toast } from '@/components/ui/use-toast';
+import { EditProductDialog } from './EditProductDialog';
 
 
 function ProductCard({
@@ -71,11 +72,19 @@ function ProductCard({
                 {session?.user.id === user.id && (
                     <DropdownMenu>
                         <DropdownMenuTrigger>
-                            <Trash2 className='text-rose-500' />
+                            <MoreHorizontalIcon className="h-4 w-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
+
                             <DropdownMenuItem
                                 className='cursor-pointer'
+                                onClick={() => setIsOpen(true)}
+                            >
+                                Edit
+                            </DropdownMenuItem>
+
+                            <DropdownMenuItem
+                                className='cursor-pointer text-rose-500'
                                 onClick={() => setIsOpen(true)}
                             >
                                 Delete

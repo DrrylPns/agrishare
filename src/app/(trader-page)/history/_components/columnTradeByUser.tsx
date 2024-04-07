@@ -19,6 +19,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { UploadDropzone } from "@/lib/uploadthing"
 import { handleTradeProof } from "../../../../../actions/trade"
+import { formattedSLU } from "@/lib/utils"
 // import { handleTrade } from "../../../actions/trade"
 
 export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
@@ -160,8 +161,12 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
             const tradeeItem = row.original.post.name
             const tradeeQty = row.original.tradedQuantity
             const tradeePts = row.original.tradee.points
-            const tradeeShelfLife = row.original.post.shelfLife
             const tradeeSubcategory = row.original.post.subcategory
+
+            const tradeeShelfLifeDuration = row.original.post.shelfLifeDuration
+            const tradeeShelfLifeUnit = row.original.post.shelfLifeUnit
+            const formattedShelfLifeUnit = formattedSLU(tradeeShelfLifeDuration, tradeeShelfLifeUnit)
+
 
             const tradeStatus = row.original.status
             const tradeDate = row.original.createdAt
@@ -216,13 +221,13 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
 
             const pdfRef = useRef<HTMLDivElement>(null);
 
-            const dowloadPDF = () =>{
+            const dowloadPDF = () => {
                 const input = pdfRef.current;
                 if (!input) {
                     console.error("PDF reference is not available");
                     return;
                 }
-                html2canvas(input).then((canvas)=>{
+                html2canvas(input).then((canvas) => {
                     const imgData = canvas.toDataURL('image/png')
                     const pdf = new jsPDF('p', 'mm', 'a4', true);
                     const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -250,30 +255,30 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            
+
                             {checkStatus && (
-                            <DropdownMenuItem className="cursor-pointer"
-                                onClick={() => setIsDownloadOpen(true)}
-                            >
-                                Download
-                            </DropdownMenuItem>
+                                <DropdownMenuItem className="cursor-pointer"
+                                    onClick={() => setIsDownloadOpen(true)}
+                                >
+                                    Download
+                                </DropdownMenuItem>
                             )}
                             {isCompleted && (
-                            <DropdownMenuItem className="cursor-pointer"
-                                onClick={() => setIsDownloadOpen(true)}
-                            >
-                                Download
-                            </DropdownMenuItem>
+                                <DropdownMenuItem className="cursor-pointer"
+                                    onClick={() => setIsDownloadOpen(true)}
+                                >
+                                    Download
+                                </DropdownMenuItem>
                             )}
-                            
+
                             {tradeStatus === "PENDING" && (
-                            <DropdownMenuItem
-                                onClick={() => setIsProofOpen(true)}
-                            >
-                                Upload Proof
-                            </DropdownMenuItem>
-                       
-                            )}   
+                                <DropdownMenuItem
+                                    onClick={() => setIsProofOpen(true)}
+                                >
+                                    Upload Proof
+                                </DropdownMenuItem>
+
+                            )}
                             <DropdownMenuItem
                                 onClick={() => setIsReviewOpen(true)}
                             >
@@ -310,12 +315,12 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                                     <p>Date: {format(tradeDate, "PPP")}</p>
                                                     {proofTradeeimage !== null ? (
                                                         <a target="_blank" className="text-blue-500" href={proofTradeeimage}>
-                                                           Proof: See Proof
+                                                            Proof: See Proof
                                                         </a>
-                                                    ):(
+                                                    ) : (
                                                         <></>
                                                     )}
-                                                    
+
                                                 </div>
                                             </div>
 
@@ -333,16 +338,16 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                                     <p>
                                                         Accumulated Points: <span className="text-green-500">{tradeeCalculatedPoints.toFixed(2)} Point(s)</span>
                                                     </p>
-                                                    <p>Shelf Life: {tradeeShelfLife}</p>
+                                                    <p>Shelf Life: {formattedShelfLifeUnit}</p>
                                                     <p>Date: {format(tradeDate, "PPP")}</p>
                                                     {proofTraderimage !== null ? (
                                                         <a target="_blank" className="text-blue-500" href={proofTraderimage}>
                                                             Proof: See Proof
                                                         </a>
-                                                    ):(
+                                                    ) : (
                                                         <></>
                                                     )}
-                                                    
+
                                                 </div>
                                             </div>
                                         </div>
@@ -366,78 +371,78 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                     </Dialog>
                     <Dialog open={isDownloadOpen} onOpenChange={setIsDownloadOpen}>
                         <DialogContent className="lg:max-w-2xl">
-                        <div>
-                            <DialogHeader>
-                                <DialogTitle>
-                                    {/* <AdminTitle entry="4" title="Trade Review" /> */}
-                                    <p className="">Status: {tradeStatus}</p>
-                                </DialogTitle>
-                                <DialogDescription ref={pdfRef}>
-                                    <>
-                                        <div className="bg-white p-6 rounded-lg shadow-md flex flex-col md:flex-row items-center justify-between max-w-4xl mx-auto">
-                                            <div className="flex flex-col items-center md:items-start">
-                                                <Avatar>
-                                                    <AvatarImage src={traderImage as string} alt="profile" />
-                                                    <AvatarFallback>{firstLetterOfTraderName}{firstLetterOfTraderLastName}</AvatarFallback>
-                                                </Avatar>
-                                                <div className="mt-4 text-sm text-center md:text-left">
-                                                    {/* <p className="font-semibold">Trade ID: {id}</p> */}
-                                                    <p>Name: {traderName} {" "} {traderLastName}</p>
-                                                    <p>Item: {traderItem}</p>
-                                                    <p>Quantity: {traderQty}</p>
-                                                    <p>
-                                                        Accumulated Points: <span className="text-green-500">{traderCalculatedPoints.toFixed(2)} Point(s)</span>
-                                                    </p>
-                                                    <p>Shelf Life: {traderShelfLife}</p>
-                                                    <p>Date: {format(tradeDate, "PPP")}</p>
-                                                    {proofTradeeimage !== null ? (
-                                                        <Image 
-                                                            src={proofTradeeimage}
-                                                            alt=""
-                                                            width={100}
-                                                            height={100}
-                                                            className=""
-                                                        />
-                                                    ):(
-                                                        <></>
-                                                    )}
-                                                    
+                            <div>
+                                <DialogHeader>
+                                    <DialogTitle>
+                                        {/* <AdminTitle entry="4" title="Trade Review" /> */}
+                                        <p className="">Status: {tradeStatus}</p>
+                                    </DialogTitle>
+                                    <DialogDescription ref={pdfRef}>
+                                        <>
+                                            <div className="bg-white p-6 rounded-lg shadow-md flex flex-col md:flex-row items-center justify-between max-w-4xl mx-auto">
+                                                <div className="flex flex-col items-center md:items-start">
+                                                    <Avatar>
+                                                        <AvatarImage src={traderImage as string} alt="profile" />
+                                                        <AvatarFallback>{firstLetterOfTraderName}{firstLetterOfTraderLastName}</AvatarFallback>
+                                                    </Avatar>
+                                                    <div className="mt-4 text-sm text-center md:text-left">
+                                                        {/* <p className="font-semibold">Trade ID: {id}</p> */}
+                                                        <p>Name: {traderName} {" "} {traderLastName}</p>
+                                                        <p>Item: {traderItem}</p>
+                                                        <p>Quantity: {traderQty}</p>
+                                                        <p>
+                                                            Accumulated Points: <span className="text-green-500">{traderCalculatedPoints.toFixed(2)} Point(s)</span>
+                                                        </p>
+                                                        <p>Shelf Life: {traderShelfLife}</p>
+                                                        <p>Date: {format(tradeDate, "PPP")}</p>
+                                                        {proofTradeeimage !== null ? (
+                                                            <Image
+                                                                src={proofTradeeimage}
+                                                                alt=""
+                                                                width={100}
+                                                                height={100}
+                                                                className=""
+                                                            />
+                                                        ) : (
+                                                            <></>
+                                                        )}
+
+                                                    </div>
+                                                </div>
+
+                                                <FolderSyncIcon className="text-green-500 self-center mx-0 my-4 md:mx-8" />
+
+                                                <div className="flex flex-col items-center md:items-start">
+                                                    <Avatar>
+                                                        <AvatarImage src={tradeeImage as string} alt="profile" />
+                                                        <AvatarFallback>{firstLetterOfTradeeName}{firstLetterOfTradeeLastName}</AvatarFallback>
+                                                    </Avatar>
+                                                    <div className="mt-4 text-sm text-center md:text-left">
+                                                        <p>Name: {tradeeName} {" "} {tradeeLastName}</p>
+                                                        <p>Item: {tradeeItem}</p>
+                                                        <p>Quantity: {tradeeQty}</p>
+                                                        <p>
+                                                            Accumulated Points: <span className="text-green-500">{tradeeCalculatedPoints.toFixed(2)} Point(s)</span>
+                                                        </p>
+                                                        <p>Shelf Life: {formattedShelfLifeUnit}</p>
+                                                        <p>Date: {format(tradeDate, "PPP")}</p>
+                                                        {proofTraderimage !== null ? (
+                                                            <Image
+                                                                src={proofTraderimage}
+                                                                alt=""
+                                                                width={100}
+                                                                height={100}
+                                                                className=""
+                                                            />
+                                                        ) : (
+                                                            <></>
+                                                        )}
+
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <FolderSyncIcon className="text-green-500 self-center mx-0 my-4 md:mx-8" />
-
-                                            <div className="flex flex-col items-center md:items-start">
-                                                <Avatar>
-                                                    <AvatarImage src={tradeeImage as string} alt="profile" />
-                                                    <AvatarFallback>{firstLetterOfTradeeName}{firstLetterOfTradeeLastName}</AvatarFallback>
-                                                </Avatar>
-                                                <div className="mt-4 text-sm text-center md:text-left">
-                                                    <p>Name: {tradeeName} {" "} {tradeeLastName}</p>
-                                                    <p>Item: {tradeeItem}</p>
-                                                    <p>Quantity: {tradeeQty}</p>
-                                                    <p>
-                                                        Accumulated Points: <span className="text-green-500">{tradeeCalculatedPoints.toFixed(2)} Point(s)</span>
-                                                    </p>
-                                                    <p>Shelf Life: {tradeeShelfLife}</p>
-                                                    <p>Date: {format(tradeDate, "PPP")}</p>
-                                                    {proofTraderimage !== null ? (
-                                                        <Image 
-                                                            src={proofTraderimage}
-                                                            alt=""
-                                                            width={100}
-                                                            height={100}
-                                                            className=""
-                                                        />
-                                                    ):(
-                                                        <></>
-                                                    )}
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* <div className="flex gap-3 mt-3">
+                                            {/* <div className="flex gap-3 mt-3">
                                             <Button
                                                 variant="primary"
                                                 isLoading={isPending}
@@ -449,13 +454,13 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                                 onClick={() => setIsRejectOpen(true)}
                                             >Decline</Button>
                                         </div> */}
-                                    </>
-                                </DialogDescription>
-                            </DialogHeader>
-                        </div>
-                        <Button variant={'primary'} onClick={dowloadPDF}>Download</Button>
+                                        </>
+                                    </DialogDescription>
+                                </DialogHeader>
+                            </div>
+                            <Button variant={'primary'} onClick={dowloadPDF}>Download</Button>
                         </DialogContent>
-                     
+
                     </Dialog>
 
                     <AlertDialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
