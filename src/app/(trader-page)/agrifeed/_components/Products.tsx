@@ -1,8 +1,9 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import ProductCard from './ProductCard'
 import axios from 'axios'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { useInView } from "react-intersection-observer";
 import { User } from './_types'
 import { BeatLoader } from "react-spinners"
 
@@ -41,6 +42,14 @@ export type ReviewsType = {
 }
 
 function Products() {
+  const pref = useRef<HTMLDivElement>(null);
+  const { ref, inView } = useInView();
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView]);
 
   const { isLoading, isError, data: Posts, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ['post'],
@@ -82,7 +91,14 @@ function Products() {
               />
             </div>
           ))}
-
+          {isFetchingNextPage && (
+            <div className='w-full flex items-center justify-center'>
+              <BeatLoader />
+            </div>
+          )}
+          <span ref={ref} className="invisible absolute">
+            intersection observer marker
+          </span>
         </div>
       )) : (
         <>
