@@ -336,6 +336,7 @@ model Donation {
   status       DonationStatus @default(PENDING)
   category     Category?
   subcategory  Subcategory?
+  proof        String?
   // name                String
   // lastName            String
   // phoneNumber         String

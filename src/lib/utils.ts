@@ -115,3 +115,5 @@ export function isExpired(dateString: string, shelfLifeDuration: number, shelfLi
 
   return currentDate > expirationDate;
 }
+
+export const conditionRates = [0.5, 1, 1.5]

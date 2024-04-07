@@ -37,7 +37,7 @@ export const fetchDonationsByUser = async () => {
     return donations
 }
 
-export const handleDonations = async (status: DonationStatus, pointsToGain: number, donationId: string, donatorId: string) => {
+export const handleDonations = async (status: DonationStatus, conditionRate: number, subcategory: string|null, donationId: string, donatorId: string) => {
     const session = await auth()
 
     if (!session) return { error: "Unauthorized" }
@@ -77,39 +77,66 @@ export const handleDonations = async (status: DonationStatus, pointsToGain: numb
         where: { id: currentDonation.id }
     })
 
-    if (status === "APPROVED") {
+    if (processDonate) {
 
-        if (processDonate) {
-            await prisma.user.update({
-                data: {
-                    points: donator.points + pointsToGain
-                },
-                where: { id: donator.id }
-            })
+        let ptsEquivalent
+
+        if (subcategory === "FRUIT_VEGETABLES") {
+            ptsEquivalent = 0.18
+        } else if (subcategory === "HERBS_VEGETABLES") {
+            ptsEquivalent = 0.17
+        } else if (subcategory === "LEAFY_VEGETABLES") {
+            ptsEquivalent = 0.15
+        } else if (subcategory === "PODDED_VEGETABLES") {
+            ptsEquivalent = 0.25
+        } else if (subcategory === "ROOT_VEGETABLES") {
+            ptsEquivalent = 0.20
+        } else {
+            ptsEquivalent = 0.15
         }
 
+        const calculatedPointsWithPE = (10 / ptsEquivalent) * processDonate.quantity * conditionRate
 
-
-        await prisma.transaction.create({
+        await prisma.donation.update({
             data: {
-                type: "DONATE",
-                points: pointsToGain,
-                userId: donator.id,
-                dn: currentDonation.dn
+                pointsToGain: calculatedPointsWithPE
+            },
+            where: {
+                id: donationId
             }
         })
-
-        revalidatePath("/transactions")
-        return { success: "Confirmed the donation." }
+        if (status === "APPROVED") {
+            if (processDonate) {
+                await prisma.user.update({
+                    data: {
+                        points: donator.points + calculatedPointsWithPE
+                    },
+                    where: { id: donator.id }
+                })
+            }
+            await prisma.transaction.create({
+                data: {
+                    type: "DONATE",
+                    points: calculatedPointsWithPE,
+                    userId: donator.id,
+                    dn: currentDonation.dn
+                }
+            })
+    
+            revalidatePath("/transactions")
+            return { success: "Confirmed the donation." }
+        }
+    
+        if (status === "CANCELLED") {
+    
+            // TODO: CREATE TRANSACTION FOR CANCELLED DONATIONS CAN EVEN IMPLEMENT PENALTY WHEREIN USERS CAN RECEIVE MINUS LOYALTY POINTS
+    
+            // magccreate pa rin ng transaction pero cancelled at walang maggain na points?
+    
+            revalidatePath("/transactions")
+            return { success: "Cancelled the donation" }
+        }
     }
 
-    if (status === "CANCELLED") {
-
-        // TODO: CREATE TRANSACTION FOR CANCELLED DONATIONS CAN EVEN IMPLEMENT PENALTY WHEREIN USERS CAN RECEIVE MINUS LOYALTY POINTS
-
-        // magccreate pa rin ng transaction pero cancelled at walang maggain na points?
-
-        revalidatePath("/transactions")
-        return { success: "Cancelled the donation" }
-    }
+   
 }

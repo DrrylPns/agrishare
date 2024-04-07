@@ -81,6 +81,7 @@ export interface DonationWithDonators {
     pointsToGain: number;
     status: DonationStatus;
     subcategory: Subcategory | null;
+    proof: string | null;
     createdAt: Date;
     updatedAt: Date;
     donatorId: string;

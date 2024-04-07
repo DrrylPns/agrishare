@@ -4,17 +4,20 @@ import { toast } from "@/components/ui/use-toast"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
+
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ColumnDef } from "@tanstack/react-table"
 import { DonationWithDonators } from "@/lib/types"
 import { DataTableColumnHeader } from "@/app/(admin)/users/_components/data-table-column-header"
 import { format } from "date-fns"
-import { useState, useTransition } from "react"
-import { MoreHorizontalIcon } from "lucide-react"
+import { Fragment, useState, useTransition } from "react"
+import { CheckIcon, ChevronsUpDownIcon, MoreHorizontalIcon } from "lucide-react"
 import AdminTitle from "../AdminTitle"
 import Link from "next/link"
 import { handleDonations } from "../../../actions/donate"
+import { Listbox, Menu, RadioGroup, Transition } from "@headlessui/react"
+import { conditionRates } from "@/lib/utils"
 
 export const columnDonation: ColumnDef<DonationWithDonators>[] = [
     {
@@ -127,6 +130,8 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
             const [isPending, startTransition] = useTransition()
             const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false)
             const [isRejectOpen, setIsRejectOpen] = useState<boolean>(false)
+            const [selectedRate, setSelectedRate] = useState(0)
+            const [selectRateError, setSelectRateError] = useState<boolean>(false)
 
 
             const donatorImage = row.original.donator.image
@@ -135,13 +140,24 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
             const donatorProduct = row.original.product
             const donatoryQty = row.original.quantity
             const donatorPoints = row.original.pointsToGain
+            const donationSubCategory = row.original.subcategory
             const donatorId = row.original.donator.id
+            const donatorProof = row.original.proof
 
             const dateDonated = row.original.createdAt
             const donationStatus = row.original.status
             const donationId = row.original.id
 
             const isImageNull = donatorImage === null;
+            const isDisable = selectedRate === 0 ? true : false
+
+            const handleConfirm = () =>{
+                if(selectedRate === 0 ){
+                    setSelectRateError(true)
+                } else {
+                    setIsConfirmOpen(true)
+                }
+            }
             return (
                 <>
                     <DropdownMenu>
@@ -192,26 +208,61 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                                         Accumulated Points: <span className="text-green-500">{donatorPoints.toFixed(2)} Point(s)</span>
                                                     </p>
                                                     <p>Date: {format(dateDonated, "PPP")}</p>
-                                                    {/* redirect to uploadthing when clicked. */}
-                                                    <Link className="text-blue-500" href="#">
-                                                        Proof: image.jpg
-                                                    </Link>
+                                                    {donatorProof !== null ? (
+                                                        <Link className="text-blue-500" href="#">
+                                                            Proof: See now
+                                                        </Link>
+                                                    ):(
+                                                        <div className="" >
+                                                            Proof: Haven't uploaded yet!
+                                                        </div>
+                                                    )}
+                                                    
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div className="flex gap-3 mt-3">
-                                            <Button
-                                                variant="primary"
-                                                isLoading={isPending}
-                                                onClick={() => setIsConfirmOpen(true)}
-                                            >Confirm</Button>
-                                            <Button
-                                                variant="destructive"
-                                                isLoading={isPending}
-                                                onClick={() => setIsRejectOpen(true)}
-                                            >Decline</Button>
-                                        </div>
+                                        {donationStatus === "PENDING" ? (
+                                            <div className="mt-5 ">
+                                                <div className="mb-10">
+                                                <RadioGroup value={selectedRate} onChange={setSelectedRate}>
+                                                    <div className="flex justify-center items-center gap-x-5">
+                                                    <RadioGroup.Label>Condition : </RadioGroup.Label>
+                                                    {conditionRates.map((rate) => (
+                                                        <RadioGroup.Option
+                                                        key={rate}
+                                                        value={rate}
+                                                        onClick={()=> setSelectRateError(false)}
+                                                        className="flex gap-3 items-center ui-active:whte ui-active:text-gray-700 text-sm w-24 py-1 px-2 outline-1 outline outline-gray-300 shadow-sm drop-shadow-sm  ui-not-active:bg-white ui-not-active:text-black"
+                                                        >
+                                                        <CheckIcon className="hidden ui-checked:block" height={20} width={20} />
+                                                        {rate === 0.5 && "Poor"}
+                                                        {rate === 1 && "Neutral"}
+                                                        {rate === 1.5 && "Good"}
+                                                        </RadioGroup.Option>
+                                                    ))}
+                                                    </div>
+                                                </RadioGroup>
+                                                {selectRateError && (
+                                                    <h1 className="text-red-500 text-xs text-center mt-3">*Select codition rate first!</h1>
+                                                )}
+                                                </div>
+                                                <div className="flex gap-3 mt-3">
+                                                    <Button
+                                                        variant="primary"
+                                                        isLoading={isPending}
+                                                        onClick={handleConfirm}
+                                                    >Confirm</Button>
+                                                    <Button
+                                                        variant="destructive"
+                                                        isLoading={isPending}
+                                                        onClick={() => setIsRejectOpen(true)}
+                                                    >Decline</Button>
+                                                </div>
+                                            </div>
+                                        ):(
+                                            null
+                                        )}
+                                       
                                     </>
                                 </DialogDescription>
                             </DialogHeader>
@@ -224,17 +275,21 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Are you sure you want to confirm the transaction?</AlertDialogTitle>
                                 <AlertDialogDescription>
+                                    
                                     Note: Once confirmed, this action cannot be undone.
+                                   
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
+                            
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
-                                    className='bg-[#00B207] hover:bg-[#00B207]/80'
+                                    className={`${isDisable ? 'bg-green-300' : 'bg-[#00B207] hover:bg-[#00B207]/80'}`}
+                                    disabled={isDisable}
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleDonations("APPROVED", donatorPoints, donationId, donatorId).then((callback) => {
+                                                handleDonations("APPROVED",selectedRate, donationSubCategory, donationId, donatorId).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,
@@ -273,7 +328,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleDonations("CANCELLED", donatorPoints, donationId, donatorId).then((callback) => {
+                                                handleDonations("APPROVED",selectedRate, donationSubCategory, donationId, donatorId).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,
