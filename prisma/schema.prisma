@@ -275,11 +275,12 @@ model Agriquest {
 }
 
 model Request {
-  id        String      @id @default(cuid())
-  aq        String      @unique
-  status    ClaimStatus @default(PENDING)
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  id         String      @id @default(cuid())
+  aq         String      @unique
+  status     ClaimStatus @default(PENDING)
+  pickUpDate DateTime?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
 
   agriquest   Agriquest @relation(fields: [agriquestId], references: [id], onDelete: Cascade)
   agriquestId String

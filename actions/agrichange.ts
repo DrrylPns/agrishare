@@ -7,6 +7,7 @@ import { getUserById } from "../data/user"
 import { revalidatePath } from "next/cache"
 import { ClaimStatus, Status } from "@prisma/client"
 import { generateClaimedHistoryID } from "@/lib/utils"
+import { DateOfPickupInAgrichange, DateOfPickupInAgrichangeType } from "@/lib/validations/agrichange"
 
 export const createAgrichange = async (values: AgrichangeType, image: string) => {
     try {
@@ -145,8 +146,14 @@ export const updateAgrichange = async (values: AgrichangeType, image: string, id
     }
 }
 
-export const claimAgrichange = async (id: string, pickUpDate: Date) => {
+export const claimAgrichange = async (id: string, data: DateOfPickupInAgrichangeType) => {
     try {
+        const validatedFields = DateOfPickupInAgrichange.safeParse(data)
+
+        if (!validatedFields.success) return { error: "Invalid fields!" }
+
+        const { pickupDate } = validatedFields.data
+
         const session = await auth()
 
         if (!session) return { error: "Unauthorized!" }
@@ -177,6 +184,7 @@ export const claimAgrichange = async (id: string, pickUpDate: Date) => {
                 itm,
                 agriChangeId: currentAgriChange.id,
                 userId: user.id,
+                pickUpDate: pickupDate,
             }
         })
 

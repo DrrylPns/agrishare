@@ -60,3 +60,11 @@ export const AgrichangeSchema = z.object({
     type: z.optional(z.enum(["ORGANIC", "NOT_ORGANIC"])),
     pointsNeeded: z.coerce.number(),
 })
+
+export type DateOfPickupInAgriquestType = z.infer<typeof DateOfPickupInAgriquest>
+
+export const DateOfPickupInAgriquest = z.object({
+    pickupDate: z.date({
+        required_error: "Pick up date is required",
+    }),
+})
