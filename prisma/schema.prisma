@@ -230,6 +230,7 @@ model AgriChange {
   image        String        @db.Text
   name         String
   description  String        @db.Text
+  quantityPerTrade  Float?
   quantity     Float         @default(0)
   weight       Float
   color        String
