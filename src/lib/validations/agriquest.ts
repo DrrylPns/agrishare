@@ -20,6 +20,7 @@ export const AgriQuestSchema = z.object({
     quantity: z.coerce.number(),
     shelfLife: z.string().min(2, { message: "Shelf life should be valid." }),
     category: Category,
+    qtyPerTrade: z.coerce.number(),
     // weight: z.coerce.number(),
     // color: z.string().min(2, { message: "Color should be valid." }),
     // subcategory: Subcategory,
@@ -41,6 +42,7 @@ export const AgrichangeSchema = z.object({
     harvestDate: z.coerce.date(),
     type: z.optional(z.enum(["ORGANIC", "NOT_ORGANIC"])),
     pointsNeeded: z.coerce.number(),
+    qtyPerTrade: z.coerce.number(),
 })
 
 export type DateOfPickupInAgriquestType = z.infer<typeof DateOfPickupInAgriquest>

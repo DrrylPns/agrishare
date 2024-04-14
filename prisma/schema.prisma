@@ -226,25 +226,25 @@ enum Subcategory {
 }
 
 model AgriChange {
-  id           String        @id @default(cuid())
-  image        String        @db.Text
-  name         String
-  description  String        @db.Text
-  quantityPerTrade  Float?
-  quantity     Float         @default(0)
-  weight       Float
-  color        String
-  type         Types?
-  isFavorite   Boolean       @default(false)
-  category     Category
-  subcategory  Subcategory?
-  status       Status
-  shelfLife    String
-  pointsNeeded Float
-  transaction  Transaction[]
-  harvestDate  DateTime
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id               String        @id @default(cuid())
+  image            String        @db.Text
+  name             String
+  description      String        @db.Text
+  quantityPerTrade Float
+  quantity         Float         @default(0)
+  weight           Float
+  color            String
+  type             Types?
+  isFavorite       Boolean       @default(false)
+  category         Category
+  subcategory      Subcategory?
+  status           Status
+  shelfLife        String
+  pointsNeeded     Float
+  transaction      Transaction[]
+  harvestDate      DateTime
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
@@ -268,20 +268,21 @@ model Claim {
 }
 
 model Agriquest {
-  id          String    @id @default(cuid())
-  image       String    @db.Text
-  name        String
-  description String
-  quantity    Float     @default(0)
-  shelfLife   String
-  category    Category
-  pickUpDate  DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  createdBy   User      @relation("CreatedBy", fields: [createdById], references: [id], onDelete: Cascade)
-  createdById String
-  claimedBy   User[]    @relation("Claimed")
-  request     Request[]
+  id               String    @id @default(cuid())
+  image            String    @db.Text
+  name             String
+  description      String
+  quantityPerTrade Float
+  quantity         Float     @default(0)
+  shelfLife        String
+  category         Category
+  pickUpDate       DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  createdBy        User      @relation("CreatedBy", fields: [createdById], references: [id], onDelete: Cascade)
+  createdById      String
+  claimedBy        User[]    @relation("Claimed")
+  request          Request[]
 }
 
 model Request {

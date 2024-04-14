@@ -37,7 +37,7 @@ export default function ExchangeDialog({
 
     function onSubmit(data: DateOfPickupInAgrichangeType) {
         startTransition(() => {
-            claimAgrichange(selectedItem.id, data).then((data) => {
+            claimAgrichange(selectedItem.id, data, selectedItem.quantityPerTrade).then((data) => {
                 if (data.error) {
                     toast({
                         description: data.error,
@@ -63,7 +63,8 @@ export default function ExchangeDialog({
                         <div className="flex flex-col text-center justify-center items-center w-full font-poppins font-semibold text-sm md:text-xl space-y-3">
                             <h1 className="my-auto">Are you sure you want this item?</h1>
                             <Image src={selectedItem.image} alt="" width={100} height={100} className="object-contain" />
-                            <h1 className="">{selectedItem.name}</h1>
+                            <h1 className="">{selectedItem.name} {" "} {`x${selectedItem.quantityPerTrade}`}</h1>
+
                             <FormField
                                 control={form.control}
                                 name="pickupDate"

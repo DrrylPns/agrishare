@@ -39,6 +39,7 @@ export const createAgrichange = async (values: AgrichangeType, image: string) =>
             subcategory,
             weight,
             pointsNeeded,
+            qtyPerTrade,
         } = validatedFields.data
 
         let status: Status;
@@ -65,6 +66,7 @@ export const createAgrichange = async (values: AgrichangeType, image: string) =>
                 // @ts-ignore
                 subcategory,
                 weight,
+                quantityPerTrade: qtyPerTrade,
                 quantity,
                 pointsNeeded, // calculate points needed dpende sa value ng category / subcategory
                 userId: user.id,
@@ -108,6 +110,7 @@ export const updateAgrichange = async (values: AgrichangeType, image: string, id
             subcategory,
             weight,
             pointsNeeded,
+            qtyPerTrade,
         } = validatedFields.data
 
         let status: Status;
@@ -136,6 +139,7 @@ export const updateAgrichange = async (values: AgrichangeType, image: string, id
                 weight,
                 quantity,
                 pointsNeeded,
+                quantityPerTrade: qtyPerTrade,
             }
         })
 
@@ -146,7 +150,7 @@ export const updateAgrichange = async (values: AgrichangeType, image: string, id
     }
 }
 
-export const claimAgrichange = async (id: string, data: DateOfPickupInAgrichangeType) => {
+export const claimAgrichange = async (id: string, data: DateOfPickupInAgrichangeType, quantityPerTrade: number) => {
     try {
         const validatedFields = DateOfPickupInAgrichange.safeParse(data)
 
@@ -171,6 +175,17 @@ export const claimAgrichange = async (id: string, data: DateOfPickupInAgrichange
         if (!currentAgriChange) return { error: "No agrichange item found!" }
 
         if (user.points < currentAgriChange.pointsNeeded) return { error: "Insufficient points" }
+
+        if (currentAgriChange.quantity < quantityPerTrade) return { error: "Insufficient Stocks" }
+
+        await prisma.agriChange.update({
+            where: { id: currentAgriChange.id },
+            data: {
+                quantity: {
+                    decrement: quantityPerTrade
+                }
+            }
+        })
 
         await prisma.user.update({
             where: { id: user.id },
@@ -256,7 +271,7 @@ export const fetchAgriChangeTransactions = async () => {
     }
 }
 
-export const handleClaim = async (status: ClaimStatus, claimId: string, userId: string, points: number) => {
+export const handleClaim = async (status: ClaimStatus, claimId: string, userId: string, points: number, agrichangeId: string, quantity: number) => {
     try {
         const session = await auth()
 
@@ -289,6 +304,12 @@ export const handleClaim = async (status: ClaimStatus, claimId: string, userId: 
         if (status === "APPROVED" && currentClaim.status === "DECLINED") {
             return { error: "Invalid action, the claim intent is already declined." }
         }
+
+        const agrichange = await prisma.agriChange.findUnique({
+            where: { id: agrichangeId }
+        })
+
+        if (!agrichange) return { error: "No item found!" }
 
         const processClaim = await prisma.claim.update({
             data: { status },
@@ -333,6 +354,15 @@ export const handleClaim = async (status: ClaimStatus, claimId: string, userId: 
             // magccreate pa rin ng transaction pero cancelled at walang maggain na points?
 
             // ibalik yung onhold points if declined
+            await prisma.agriChange.update({
+                where: { id: agrichange.id },
+                data: {
+                    quantity: {
+                        increment: quantity
+                    }
+                }
+            })
+
             await prisma.user.update({
                 data: {
                     points: claimer.points + points

@@ -47,6 +47,7 @@ export const EditAgriquestForm = ({
             name: agriquest.name,
             quantity: agriquest.quantity,
             shelfLife: agriquest.shelfLife,
+            qtyPerTrade: agriquest.quantityPerTrade,
         }
     })
 
@@ -92,7 +93,7 @@ export const EditAgriquestForm = ({
                         name="quantity"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Quantity</FormLabel>
+                                <FormLabel>Stocks</FormLabel>
                                 <FormControl>
                                     <Input placeholder="0" {...field} type="number" />
                                 </FormControl>
@@ -161,6 +162,20 @@ export const EditAgriquestForm = ({
                                         className="resize-none"
                                         {...field}
                                     />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="qtyPerTrade"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Quantity per quest</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Enter quantity per quest" {...field} type="number" />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

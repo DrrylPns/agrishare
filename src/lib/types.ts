@@ -32,6 +32,8 @@ export interface TradeWithTradeeTraders {
     tradedQuantity: number;
     shelfLife: string;
     weight: number;
+    traderConditionRate: number | null;
+    tradeeConditionRate: number | null;
     proofTradee: string | null;
     proofTrader: string | null;
     value: number;
@@ -177,6 +179,7 @@ export type AgriChangeType = {
     status: Status;
     shelfLife: string;
     pointsNeeded: number;
+    quantityPerTrade: number | undefined;
     harvestDate: Date;
     createdAt: Date;
     updatedAt: Date;
@@ -191,6 +194,7 @@ export type AgriQuestType = {
     quantity: number;
     shelfLife: string;
     category: Category;
+    quantityPerTrade: number | undefined;
     createdAt: Date;
     updatedAt: Date;
     createdById: string;

@@ -34,6 +34,7 @@ export const createAgriquest = async (values: AgriquestType, image: string) => {
             name,
             quantity,
             shelfLife,
+            qtyPerTrade,
             // subcategory,
             // weight,
         } = validatedFields.data
@@ -51,6 +52,7 @@ export const createAgriquest = async (values: AgriquestType, image: string) => {
                 // weight,
                 quantity,
                 createdById: user.id,
+                quantityPerTrade: qtyPerTrade,
             }
         })
 
@@ -85,6 +87,7 @@ export const updateAgriquest = async (values: AgriquestType, image: string, id: 
             name,
             quantity,
             shelfLife,
+            qtyPerTrade,
         } = validatedFields.data
 
 
@@ -97,6 +100,7 @@ export const updateAgriquest = async (values: AgriquestType, image: string, id: 
                 name,
                 shelfLife,
                 quantity,
+                quantityPerTrade: qtyPerTrade,
                 createdById: user.id,
             },
         })
@@ -108,7 +112,7 @@ export const updateAgriquest = async (values: AgriquestType, image: string, id: 
     }
 }
 
-export const claimAgriquest = async (id: string, data: DateOfPickupInAgriquestType) => {
+export const claimAgriquest = async (id: string, data: DateOfPickupInAgriquestType, quantityPerTrade: number) => {
     try {
         const validatedFields = DateOfPickupInAgriquest.safeParse(data)
 
@@ -133,6 +137,17 @@ export const claimAgriquest = async (id: string, data: DateOfPickupInAgriquestTy
         })
 
         if (!currentAgriquest) return { error: "No agriquest item found!" }
+
+        if (currentAgriquest.quantity < quantityPerTrade) return { error: "Insufficient Stocks" }
+
+        await prisma.agriquest.update({
+            where: { id: currentAgriquest.id },
+            data: {
+                quantity: {
+                    decrement: quantityPerTrade
+                }
+            }
+        })
 
         await prisma.request.create({
             data: {
@@ -204,7 +219,7 @@ export const fetchAgriQuestTransactions = async () => {
     }
 }
 
-export const handleRequest = async (status: ClaimStatus, requestId: string, userId: string) => {
+export const handleRequest = async (status: ClaimStatus, requestId: string, userId: string, agriquestId: string, quantity: number) => {
     try {
         const session = await auth()
 
@@ -245,6 +260,12 @@ export const handleRequest = async (status: ClaimStatus, requestId: string, user
 
         if (requester.requestLeft <= 0) return { error: "This user has no requests left!" }
 
+        const agriquest = await prisma.agriquest.findUnique({
+            where: { id: agriquestId }
+        })
+
+        if (!agriquest) return { error: "No item found!" }
+
         if (status === "APPROVED") {
 
             if (processRequest) {
@@ -267,6 +288,15 @@ export const handleRequest = async (status: ClaimStatus, requestId: string, user
             // TODO: CREATE TRANSACTION FOR CANCELLED DONATIONS CAN EVEN IMPLEMENT PENALTY WHEREIN USERS CAN RECEIVE MINUS LOYALTY POINTS
 
             // magccreate pa rin ng transaction pero cancelled at walang maggain na points?
+
+            await prisma.agriquest.update({
+                where: { id: agriquest.id },
+                data: {
+                    quantity: {
+                        increment: quantity
+                    }
+                }
+            })
 
             revalidatePath("/transactions")
             return { success: "Cancelled the request intent" }
