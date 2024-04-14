@@ -32,8 +32,6 @@ export interface TradeWithTradeeTraders {
     tradedQuantity: number;
     shelfLife: string;
     weight: number;
-    tradeeConditionRate: number | null;
-    traderConditionRate: number | null;
     proofTradee: string | null;
     proofTrader: string | null;
     value: number;
@@ -84,6 +82,7 @@ export interface DonationWithDonators {
     status: DonationStatus;
     category: Category;
     subcategory: Subcategory | null;
+    size: string | null;
     proof: string | null;
     createdAt: Date;
     updatedAt: Date;
