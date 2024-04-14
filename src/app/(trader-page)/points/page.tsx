@@ -26,7 +26,7 @@ const page = async () => {
 
       <div className='w-full flex flex-col justify-center items-center mt-5'>
         <p>My points</p>
-        <p className='font-extrabold text-[24px]'>{user.points}</p>
+        <p className='font-extrabold text-[24px]'>{user.points.toFixed(0)}</p>
       </div>
 
       <Dialog>
@@ -59,7 +59,7 @@ const page = async () => {
 
 
             </DialogDescription>
-          </DialogHeader>   
+          </DialogHeader>
         </DialogContent>
       </Dialog>
 

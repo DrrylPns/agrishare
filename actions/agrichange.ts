@@ -145,7 +145,7 @@ export const updateAgrichange = async (values: AgrichangeType, image: string, id
     }
 }
 
-export const claimAgrichange = async (id: string) => {
+export const claimAgrichange = async (id: string, pickUpDate: Date) => {
     try {
         const session = await auth()
 

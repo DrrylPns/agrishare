@@ -5,11 +5,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator erd {
-  provider = "prisma-erd-generator"
-  output   = "../ERD.svg"
-}
-
 // prisma/schema.prisma
 datasource db {
   provider  = "postgresql"
@@ -237,7 +232,6 @@ model AgriChange {
   shelfLife    String
   pointsNeeded Float
   transaction  Transaction[]
-  pickUpDate   DateTime?
   harvestDate  DateTime
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
@@ -249,11 +243,12 @@ model AgriChange {
 }
 
 model Claim {
-  id        String      @id @default(cuid())
-  itm       String      @unique
-  status    ClaimStatus @default(PENDING)
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  id         String      @id @default(cuid())
+  itm        String      @unique
+  status     ClaimStatus @default(PENDING)
+  pickUpDate DateTime?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
 
   agriChange   AgriChange @relation(fields: [agriChangeId], references: [id], onDelete: Cascade)
   agriChangeId String
