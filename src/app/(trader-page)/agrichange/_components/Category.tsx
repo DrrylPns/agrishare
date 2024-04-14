@@ -129,8 +129,14 @@ export default function Category({
           ) : (
           <>
           {currentItems && currentItems.length > 0 ? currentItems.map((item)=>(
-            <PostCard post={item} key={item.id}/>
-          
+            <div key={item.id}>
+              {item.quantity < item.quantityPerTrade ? (
+                <></>
+              ):(
+                <PostCard post={item} key={item.id}/>
+              )}
+           
+            </div>
           )) :(
             <>
               No Items found

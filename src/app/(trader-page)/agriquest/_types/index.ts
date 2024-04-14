@@ -6,7 +6,7 @@ export type Agriquest = {
     name:        string
     description: string
     quantity:    number   
-   
+    quantityPerTrade: number | null,
     shelfLife:   string
     category:    string
     createdAt:   Date 

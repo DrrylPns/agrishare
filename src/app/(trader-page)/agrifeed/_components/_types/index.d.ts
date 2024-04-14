@@ -59,6 +59,7 @@ export type Agrichange = {
   image: string
   name: string
   description: string
+  quantityPerTrade: number
   quantity: number
   weight: number
   color: string

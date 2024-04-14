@@ -272,6 +272,7 @@ model Agriquest {
   image       String    @db.Text
   name        String
   description String
+  quantityPerTrade  Float?
   quantity    Float     @default(0)
   shelfLife   String
   category    Category
