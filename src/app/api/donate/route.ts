@@ -16,7 +16,7 @@ export async function POST(req: Request) {
         const body = await req.json()
 
         // add  subcategory for 
-        const { name, product, image, quantity, subcategory, category, pickUpDate } = DonationSchema.parse(body)
+        const { name, product, image, quantity, subcategory, category, pickUpDate, size } = DonationSchema.parse(body)
 
         const user = await getUserById(session.user.id)
 
@@ -27,7 +27,7 @@ export async function POST(req: Request) {
         const dn = generateDonationHistoryID()
 
         // const donation =
-         await prisma.donation.create({
+        await prisma.donation.create({
             data: {
                 // donatee,
                 dn,
@@ -40,6 +40,7 @@ export async function POST(req: Request) {
                 subcategory,
                 category,
                 pickUpDate,
+                size,
             }
         })
 

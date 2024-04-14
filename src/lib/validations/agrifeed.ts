@@ -1,26 +1,10 @@
 import { z } from "zod";
+import { Subcategory } from "../utils";
 
 export type AgrifeedType = z.infer<typeof AgrifeedSchema>
 
 const Category = z.enum(["FRESH_FRUIT", "VEGETABLES", "TOOLS", "EQUIPMENTS", "SEEDS", "SOILS", "FERTILIZER"])
-const Subcategory = z.enum([
-    "LEAFY_VEGETABLES",
-    "PODDED_VEGETABLES",
-    "FRUIT_VEGETABLES",
-    "ROOT_VEGETABLES",
-    "HERBS_VEGETABLES",
-    "FRUIT1",
-    "FRUIT2",
-    "SMALL",
-    "MEDIUM",
-    "LARGE",
-    "SEEDS1",
-    "SEEDS2",
-    "ORGANIC_SOIL",
-    "NOT_ORGANIC_SOIL",
-    "ORGANIC_FERTILIZER",
-    "NOT_ORGANIC_FERTILIZER",
-])
+
 const ShelfLifeUnit = z.enum([
     "DAY",
     "WEEK",

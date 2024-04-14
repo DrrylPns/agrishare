@@ -214,6 +214,15 @@ enum Subcategory {
   NOT_ORGANIC_SOIL
   ORGANIC_FERTILIZER
   NOT_ORGANIC_FERTILIZER
+  WHEEL_BARROW
+  WATER_HOSE
+  GARDEN_POTS
+  BUCKET
+  GLOVES
+  HAND_PRUNES
+  KALAYKAY
+  HOES
+  SHOVEL
 }
 
 model AgriChange {
@@ -361,6 +370,7 @@ model Donation {
   status       DonationStatus @default(PENDING)
   category     Category?
   subcategory  Subcategory?
+  size         String?
   proof        String?
   pickUpDate   DateTime?
   createdAt    DateTime       @default(now())
@@ -410,23 +420,25 @@ enum TransactionType {
 }
 
 model Trade {
-  id             String       @id @default(cuid())
-  trd            String       @unique
-  item           String
-  image          String       @db.Text
-  quantity       Float
-  shelfLife      String
-  tradedQuantity Float
-  weight         Float
-  value          Float
-  description    String       @db.Text
-  proofTradee    String?
-  proofTrader    String?
-  status         StatusType   @default(PENDING)
-  category       Category?
-  subcategory    Subcategory?
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  id                  String       @id @default(cuid())
+  trd                 String       @unique
+  item                String
+  image               String       @db.Text
+  quantity            Float
+  shelfLife           String
+  tradedQuantity      Float
+  weight              Float
+  value               Float
+  description         String       @db.Text
+  tradeeConditionRate Float?
+  traderConditionRate Float?
+  proofTradee         String?
+  proofTrader         String?
+  status              StatusType   @default(PENDING)
+  category            Category?
+  subcategory         Subcategory?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
 
   // yung nag post, pwede ma-fetch dito yung pinost na product
   tradeeId String

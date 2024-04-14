@@ -10,7 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { toast } from "@/components/ui/use-toast"
 import { UploadButton } from "@/lib/uploadthing"
 import { DonationSchema, DonationType } from "@/lib/validations/donation"
@@ -30,6 +30,8 @@ export default function Page() {
   const [imageUrl, setImageUrl] = useState<string>("")
   const imageIsEmpty = imageUrl.length === 0
   const [chosenCategory, setChosenCategory] = useState("")
+  const [size, setSize] = useState("")
+  const [selectedSubcategory, setSelectedSubcategory] = useState("")
 
   const form = useForm<DonationType>({
     resolver: zodResolver(DonationSchema),
@@ -45,6 +47,7 @@ export default function Page() {
       category,
       subcategory,
       pickUpDate,
+      size,
     }: DonationType) => {
       const payload: DonationType = {
         image,
@@ -55,6 +58,7 @@ export default function Page() {
         category,
         subcategory,
         pickUpDate,
+        size
       }
 
       const { data } = await axios.post("/api/donate", payload)
@@ -90,6 +94,7 @@ export default function Page() {
       category: values.category,
       subcategory: values.subcategory,
       pickUpDate: values.pickUpDate,
+      size,
     }
 
     createPost(payload)
@@ -195,7 +200,10 @@ export default function Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Subcategory</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={(newValue) => {
+                    field.onChange(newValue)
+                    setSelectedSubcategory(newValue)
+                  }} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select a subcategory..." />
@@ -238,9 +246,15 @@ export default function Page() {
                       )} */}
                       {chosenCategory === Category.TOOLS && (
                         <>
-                          <SelectItem value={Subcategory.SMALL}>Small</SelectItem>
-                          <SelectItem value={Subcategory.MEDIUM}>Medium</SelectItem>
-                          <SelectItem value={Subcategory.LARGE}>Large</SelectItem>
+                          <SelectItem value={Subcategory.WHEEL_BARROW}>Wheel Barrow</SelectItem>
+                          <SelectItem value={Subcategory.WATER_HOSE}>Water Hose</SelectItem>
+                          <SelectItem value={Subcategory.GARDEN_POTS}>Garden Pots</SelectItem>
+                          <SelectItem value={Subcategory.BUCKET}>Bucket</SelectItem>
+                          <SelectItem value={Subcategory.GLOVES}>Gloves</SelectItem>
+                          <SelectItem value={Subcategory.HAND_PRUNES}>Hand Prunes</SelectItem>
+                          <SelectItem value={Subcategory.KALAYKAY}>Kalaykay</SelectItem>
+                          <SelectItem value={Subcategory.HOES}>Hoes</SelectItem>
+                          <SelectItem value={Subcategory.SHOVEL}>Shovel</SelectItem>
                         </>
                       )}
                       {chosenCategory === Category.SOILS && (
@@ -255,8 +269,100 @@ export default function Page() {
                 </FormItem>
               )}
             />
-
           </div>
+
+          {/* {(
+            selectedSubcategory === Subcategory.WATER_HOSE ||
+            selectedSubcategory === Subcategory.GARDEN_POTS ||
+            selectedSubcategory === Subcategory.BUCKET ||
+            selectedSubcategory === Subcategory.KALAYKAY ||
+            selectedSubcategory === Subcategory.SHOVEL
+          ) && (
+              <Select>
+                <SelectTrigger className="">
+                  <SelectValue placeholder="Select a size" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Sizes</SelectLabel>
+                    <SelectItem value="apple">Small</SelectItem>
+                    <SelectItem value="banana">Medium</SelectItem>
+                    <SelectItem value="blueberry">Large</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            )} */}
+
+          {selectedSubcategory === Subcategory.WATER_HOSE ? (
+            <Select onValueChange={(newValue) => setSize(newValue)}>
+              <SelectTrigger className="">
+                <SelectValue placeholder="Select a size" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Sizes</SelectLabel>
+                  <SelectItem value="1/4">1/4</SelectItem>
+                  <SelectItem value="1/2">1/2</SelectItem>
+                  <SelectItem value="3/4">3/4</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          ) : selectedSubcategory === Subcategory.GARDEN_POTS ? (
+            <Select onValueChange={(newValue) => setSize(newValue)}>
+              <SelectTrigger className="">
+                <SelectValue placeholder="Select a size" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Sizes</SelectLabel>
+                  <SelectItem value="SmallGarden">Small</SelectItem>
+                  <SelectItem value="MediumGarden">Medium</SelectItem>
+                  <SelectItem value="LargeGarden">Large</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          ) : selectedSubcategory === Subcategory.BUCKET ? (
+            <Select onValueChange={(newValue) => setSize(newValue)}>
+              <SelectTrigger className="">
+                <SelectValue placeholder="Select a size" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Sizes</SelectLabel>
+                  <SelectItem value="SmallBucket">Small</SelectItem>
+                  <SelectItem value="MediumBucket">Medium</SelectItem>
+                  <SelectItem value="LargeBucket">Large</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          ) : selectedSubcategory === Subcategory.KALAYKAY ? (
+            <Select onValueChange={(newValue) => setSize(newValue)}>
+              <SelectTrigger className="">
+                <SelectValue placeholder="Select a size" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Sizes</SelectLabel>
+                  <SelectItem value="SmallKalaykay">Small</SelectItem>
+                  <SelectItem value="LargeKalaykay">Large</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          ) : selectedSubcategory === Subcategory.SHOVEL ? (
+            <Select onValueChange={(newValue) => setSize(newValue)}>
+              <SelectTrigger className="">
+                <SelectValue placeholder="Select a size" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Sizes</SelectLabel>
+                  <SelectItem value="SmallShovel">Small</SelectItem>
+                  <SelectItem value="LargeShovel">Large</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          ) : ""}
+
 
           <FormField
             control={form.control}

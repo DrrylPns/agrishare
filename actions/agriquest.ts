@@ -139,7 +139,7 @@ export const claimAgriquest = async (id: string, data: DateOfPickupInAgriquestTy
                 aq,
                 agriquestId: currentAgriquest.id,
                 userId: user.id,
-                pickUpDate: pickupDate
+                pickUpDate: pickupDate,
             }
         })
 

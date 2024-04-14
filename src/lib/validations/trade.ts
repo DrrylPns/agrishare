@@ -1,28 +1,12 @@
 import { z } from "zod"
+import { Subcategory } from "../utils"
 
 const numberError = { message: "Field must be 0 or more" }
 
 export type TradeType = z.infer<typeof TradeSchema>
 
 const Category = z.enum(["FRESH_FRUIT", "VEGETABLES", "TOOLS", "EQUIPMENTS", "SEEDS", "SOILS", "FERTILIZER"])
-const Subcategory = z.enum([
-    "LEAFY_VEGETABLES",
-    "PODDED_VEGETABLES",
-    "FRUIT_VEGETABLES",
-    "ROOT_VEGETABLES",
-    "HERBS_VEGETABLES",
-    "FRUIT1",
-    "FRUIT2",
-    "SMALL",
-    "MEDIUM",
-    "LARGE",
-    "SEEDS1",
-    "SEEDS2",
-    "ORGANIC_SOIL",
-    "NOT_ORGANIC_SOIL",
-    "ORGANIC_FERTILIZER",
-    "NOT_ORGANIC_FERTILIZER",
-])
+
 
 export const TradeSchema = z.object({
     item: z.string({
