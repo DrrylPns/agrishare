@@ -9,7 +9,7 @@ import { ClaimStatus, Status } from "@prisma/client"
 import { generateClaimedHistoryID } from "@/lib/utils"
 import { DateOfPickupInAgrichange, DateOfPickupInAgrichangeType } from "@/lib/validations/agrichange"
 
-export const createAgrichange = async (values: AgrichangeType, image: string) => {
+export const createAgrichange = async (values: AgrichangeType, image: string, size: string | null) => {
     try {
         const session = await auth()
 
@@ -39,7 +39,7 @@ export const createAgrichange = async (values: AgrichangeType, image: string) =>
             subcategory,
             weight,
             pointsNeeded,
-            qtyPerTrade,
+            // qtyPerTrade,
         } = validatedFields.data
 
         let status: Status;
@@ -52,12 +52,70 @@ export const createAgrichange = async (values: AgrichangeType, image: string) =>
             status = Status.OUTOFSTOCK
         }
 
+        let calculatedPoints
+
+        if (subcategory === "FRUIT_VEGETABLES") {
+            calculatedPoints = 35 / 0.18
+        } else if (subcategory === "LEAFY_VEGETABLES") {
+            calculatedPoints = 35 / 0.15
+        } else if (subcategory === "PODDED_VEGETABLES") {
+            calculatedPoints = 35 / 0.25
+        } else if (subcategory === "ROOT_VEGETABLES") {
+            calculatedPoints = 72.25 / 0.15
+        } else if (subcategory === "ORGANIC_FERTILIZER") {
+            calculatedPoints = 50 / 0.36
+        } else if (subcategory === "NOT_ORGANIC_FERTILIZER") {
+            calculatedPoints = 60 / 0.9
+        } else if (subcategory === "ORGANIC_SOIL") {
+            calculatedPoints = 7.5 / 0.75
+        } else if (subcategory === "NOT_ORGANIC_SOIL") {
+            calculatedPoints = 15 / 0.25
+        } else if (subcategory === "WATER_HOSE" && size === "1/4") {
+            calculatedPoints = 28 / 1.1
+        } else if (subcategory === "WATER_HOSE" && size === "1/2") {
+            calculatedPoints = 35 / 0.9
+        } else if (subcategory === "WATER_HOSE" && size === "3/4") {
+            calculatedPoints = 42 / 0.7
+        } else if (subcategory === "GARDEN_POTS" && size === "Small") {
+            calculatedPoints = 100 / 0.27
+        } else if (subcategory === "GARDEN_POTS" && size === "Medium") {
+            calculatedPoints = 150 / 0.35
+        } else if (subcategory === "GARDEN_POTS" && size === "Large") {
+            calculatedPoints = 300 / 0.7
+        } else if (subcategory === "BUCKET" && size === "Small") {
+            calculatedPoints = 60 / 0.2
+        } else if (subcategory === "BUCKET" && size === "Medium") {
+            calculatedPoints = 100 / 0.27
+        } else if (subcategory === "BUCKET" && size === "Large") {
+            calculatedPoints = 125 / 0.32
+        } else if (subcategory === "KALAYKAY" && size === "Small") {
+            calculatedPoints = 75 / 0.33
+        } else if (subcategory === "KALAYKAY" && size === "Large") {
+            calculatedPoints = 250 / 0.52
+        } else if (subcategory === "SHOVEL" && size === "Small") {
+            calculatedPoints = 75 / 0.33
+        } else if (subcategory === "SHOVEL" && size === "Large") {
+            calculatedPoints = 250 / 0.52
+        } else if (subcategory === "HOES") {
+            calculatedPoints = 250 / 0.52
+        } else if (subcategory === "GLOVES") {
+            calculatedPoints = 55 / 0.24
+        } else if (subcategory === "WHEEL_BARROW") {
+            calculatedPoints = 3500 / 2
+        } else if (subcategory === "HAND_PRUNES") {
+            calculatedPoints = 157.5 / 0.513
+        } else if (category === "SEEDS") {
+            calculatedPoints = 25 / 0.65
+        } else {
+            calculatedPoints = 0.15
+        }
+
         await prisma.agriChange.create({
             data: {
                 category,
                 color,
                 description,
-                harvestDate,
+                harvestDate: harvestDate,
                 image: image,
                 name,
                 shelfLife,
@@ -66,9 +124,9 @@ export const createAgrichange = async (values: AgrichangeType, image: string) =>
                 // @ts-ignore
                 subcategory,
                 weight,
-                quantityPerTrade: qtyPerTrade,
+                // quantityPerTrade: qtyPerTrade,
                 quantity,
-                pointsNeeded, // calculate points needed dpende sa value ng category / subcategory
+                pointsNeeded: calculatedPoints, // calculate points needed dpende sa value ng category / subcategory
                 userId: user.id,
             }
         })
@@ -80,7 +138,7 @@ export const createAgrichange = async (values: AgrichangeType, image: string) =>
     }
 }
 
-export const updateAgrichange = async (values: AgrichangeType, image: string, id: string) => {
+export const updateAgrichange = async (values: AgrichangeType, image: string, id: string, size: string | null) => {
     try {
         const session = await auth()
 
@@ -109,8 +167,8 @@ export const updateAgrichange = async (values: AgrichangeType, image: string, id
             shelfLife,
             subcategory,
             weight,
-            pointsNeeded,
-            qtyPerTrade,
+            // pointsNeeded,
+            // qtyPerTrade,
         } = validatedFields.data
 
         let status: Status;
@@ -121,6 +179,72 @@ export const updateAgrichange = async (values: AgrichangeType, image: string, id
             status = Status.LOWSTOCK
         } else {
             status = Status.OUTOFSTOCK
+        }
+
+        let calculatedPoints
+
+
+        // else if (subcategory === "HERBS_VEGETABLES") {
+        //     calculatedPoints = 0.17 // TODO
+        // }
+        if (subcategory === "FRUIT_VEGETABLES") {
+            calculatedPoints = 35 / 0.18
+        } else if (subcategory === "LEAFY_VEGETABLES") {
+            calculatedPoints = 35 / 0.15
+        } else if (subcategory === "PODDED_VEGETABLES") {
+            calculatedPoints = 35 / 0.25
+        } else if (subcategory === "ROOT_VEGETABLES") {
+            calculatedPoints = 72.25 / 0.15
+        } else if (subcategory === "ORGANIC_FERTILIZER") {
+            calculatedPoints = 50 / 0.36
+        } else if (subcategory === "NOT_ORGANIC_FERTILIZER") {
+            calculatedPoints = 60 / 0.9
+        } else if (subcategory === "ORGANIC_SOIL") {
+            calculatedPoints = 7.5 / 0.75
+        } else if (subcategory === "NOT_ORGANIC_SOIL") {
+            calculatedPoints = 15 / 0.25
+        } else if (subcategory === "WATER_HOSE" && size === "1/4") {
+            calculatedPoints = 28 / 1.1
+        } else if (subcategory === "WATER_HOSE" && size === "1/2") {
+            calculatedPoints = 35 / 0.9
+        } else if (subcategory === "WATER_HOSE" && size === "3/4") {
+            calculatedPoints = 42 / 0.7
+        } else if (subcategory === "GARDEN_POTS" && size === "Small") {
+            calculatedPoints = 100 / 0.27
+        } else if (subcategory === "GARDEN_POTS" && size === "Medium") {
+            calculatedPoints = 150 / 0.35
+        } else if (subcategory === "GARDEN_POTS" && size === "Large") {
+            calculatedPoints = 300 / 0.7
+        } else if (subcategory === "BUCKET" && size === "Small") {
+            calculatedPoints = 60 / 0.2
+        } else if (subcategory === "BUCKET" && size === "Medium") {
+            calculatedPoints = 100 / 0.27
+        } else if (subcategory === "BUCKET" && size === "Large") {
+            calculatedPoints = 125 / 0.32
+        } else if (subcategory === "KALAYKAY" && size === "Small") {
+            calculatedPoints = 75 / 0.33
+        } else if (subcategory === "KALAYKAY" && size === "Large") {
+            calculatedPoints = 250 / 0.52
+        } else if (subcategory === "SHOVEL" && size === "Small") {
+            calculatedPoints = 75 / 0.33
+        } else if (subcategory === "SHOVEL" && size === "Large") {
+            calculatedPoints = 250 / 0.52
+        } else if (subcategory === "HOES") {
+            calculatedPoints = 250 / 0.52
+        } else if (subcategory === "GLOVES") {
+            calculatedPoints = 55 / 0.24
+        } else if (subcategory === "WHEEL_BARROW") {
+            calculatedPoints = 3500 / 2
+        } else if (subcategory === "HAND_PRUNES") {
+            calculatedPoints = 157.5 / 0.513
+        } else if (subcategory === "FRUIT1") {
+            calculatedPoints = 35 / 0.07
+        } else if (subcategory === "FRUIT2") {
+            calculatedPoints = 35 / 0.08
+        } else if (category === "SEEDS") {
+            calculatedPoints = 25 / 0.65
+        } else {
+            calculatedPoints = 0.15
         }
 
         await prisma.agriChange.update({
@@ -138,8 +262,8 @@ export const updateAgrichange = async (values: AgrichangeType, image: string, id
                 subcategory,
                 weight,
                 quantity,
-                pointsNeeded,
-                quantityPerTrade: qtyPerTrade,
+                pointsNeeded: calculatedPoints,
+                // quantityPerTrade: qtyPerTrade,
             }
         })
 
@@ -271,7 +395,7 @@ export const fetchAgriChangeTransactions = async () => {
     }
 }
 
-export const handleClaim = async (status: ClaimStatus, claimId: string, userId: string, points: number, agrichangeId: string, quantity: number) => {
+export const handleClaim = async (status: ClaimStatus, claimId: string, userId: string, points: number, agrichangeId: string) => {
     try {
         const session = await auth()
 
@@ -353,16 +477,17 @@ export const handleClaim = async (status: ClaimStatus, claimId: string, userId: 
 
             // magccreate pa rin ng transaction pero cancelled at walang maggain na points?
 
-            // ibalik yung onhold points if declined
-            await prisma.agriChange.update({
-                where: { id: agrichange.id },
-                data: {
-                    quantity: {
-                        increment: quantity
-                    }
-                }
-            })
 
+            // await prisma.agriChange.update({
+            //     where: { id: agrichange.id },
+            //     data: {
+            //         quantity: {
+            //             increment: quantity
+            //         }
+            //     }
+            // })
+
+            // ibalik yung onhold points if declined
             await prisma.user.update({
                 data: {
                     points: claimer.points + points
