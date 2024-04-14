@@ -144,6 +144,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
             const donationSubCategory = row.original.subcategory
             const donatorId = row.original.donator.id
             const donatorProof = row.original.proof
+            const donationSize = row.original.size
 
             const dateDonated = row.original.createdAt
             const donationStatus = row.original.status
@@ -206,7 +207,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                                     <p>Item: {donatorProduct}</p>
                                                     <p>Quantity: {donatoryQty}</p>
                                                     <p>
-                                                        Accumulated Points: <span className="text-green-500">{donatorPoints} Point(s)</span>
+                                                        Accumulated Points: <span className="text-green-500">{donatorPoints.toFixed(0)} Point(s)</span>
                                                     </p>
                                                     <p>Date: {format(dateDonated, "PPP")}</p>
                                                     {donatorProof !== null ? (
@@ -290,7 +291,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleDonations("APPROVED", selectedRate, donationSubCategory, donationCategory, donationId, donatorId).then((callback) => {
+                                                handleDonations("APPROVED", selectedRate, donationSubCategory, donationCategory, donationId, donatorId, donationSize).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,
@@ -329,7 +330,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleDonations("APPROVED", selectedRate, donationSubCategory, donationCategory, donationId, donatorId).then((callback) => {
+                                                handleDonations("APPROVED", selectedRate, donationSubCategory, donationCategory, donationId, donatorId, donationSize).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,
