@@ -45,9 +45,10 @@ export default function Category({
     const lastItemIndex = currentPage * itemsPerPage;
     const firstItemIndex = lastItemIndex - itemsPerPage;
     const currentItems = post?.slice(firstItemIndex, lastItemIndex)
-
+    
     useEffect(() => {
       getPostsByCategory();
+      setCurrentPage(1)
   }, [selectedCategory, selectedSort]); 
 
    const getPostsByCategory = async () => {
@@ -57,7 +58,8 @@ export default function Category({
             category: selectedCategory,
             sort: selectedSort 
         });
-        setPost(res.data);
+        const filteredPosts = res.data.filter((item : Agrichange)  => item.quantity >= item.quantityPerTrade);
+        setPost(filteredPosts);
     } catch (error) {
         console.log(error);
     } finally {
@@ -130,14 +132,9 @@ export default function Category({
           <>
           {currentItems && currentItems.length > 0 ? currentItems.map((item)=>(
             <div key={item.id}>
-              {item.quantity < item.quantityPerTrade ? (
-                <></>
-              ):(
-                <PostCard post={item} key={item.id}/>
-              )}
-           
+              <PostCard post={item} />
             </div>
-          )) :(
+            )):(
             <>
               No Items found
             </>

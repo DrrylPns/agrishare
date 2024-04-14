@@ -50,8 +50,8 @@ export default function Category({
         category: selectedCategory,
         sort: selectedSort
       });
-
-      setPost(res.data);
+      const filteredPosts = res.data.filter((item : Agriquest)  => item.quantity >= item.quantityPerTrade);
+      setPost(filteredPosts);
     } catch (error) {
       console.log(error);
     } finally {
