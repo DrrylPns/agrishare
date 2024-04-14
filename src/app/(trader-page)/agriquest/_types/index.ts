@@ -1,20 +1,20 @@
 'use server';
 
 export type Agriquest = {
-    id:          string  
-    image:       string  
-    name:        string
+    id: string
+    image: string
+    name: string
     description: string
-    quantity:    number   
-    quantityPerTrade: number,
-    shelfLife:   string
-    category:    string
-    createdAt:   Date 
-    updatedAt:   Date
 
-    createdBy:   User   
+    quantity: number
+    quantityPerTrade: number
+    shelfLife: string
+    category: string
+    createdAt: Date
+    updatedAt: Date
+    createdBy: User
     createdById: String
-    claimedBy:   User[] 
+    claimedBy: User[]
     request: Request[]
 }
 
@@ -33,4 +33,4 @@ export type User = {
     updatedAt: Date;
     points: number;
     companyName: string | null;
-  }
+}

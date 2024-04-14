@@ -120,7 +120,9 @@ export const columnQuest: ColumnDef<RequestWithAgriquestAndUsers>[] = [
             const name = row.original.user.name
             const lastName = row.original.user.lastName
 
+            const quantity = row.original.agriquest.quantityPerTrade
             const product = row.original.agriquest.name
+            const agriquestId = row.original.agriquest.id
 
             const dateRequestIntent = row.original.createdAt
             const status = row.original.status
@@ -172,6 +174,7 @@ export const columnQuest: ColumnDef<RequestWithAgriquestAndUsers>[] = [
                                                     {/* <p className="font-semibold">Trade ID: {id}</p> */}
                                                     <p>Name: {name} {" "} {lastName}</p>
                                                     <p>Item: {product}</p>
+                                                    <p>Quantity: {quantity}</p>
                                                     {/* <p>
                                                         Points deduction: <span className="text-rose-500">{points.toFixed(2)} Point(s)</span>
                                                     </p> */}
@@ -218,7 +221,7 @@ export const columnQuest: ColumnDef<RequestWithAgriquestAndUsers>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleRequest(ClaimStatus.APPROVED, requestId, userId).then((callback) => {
+                                                handleRequest(ClaimStatus.APPROVED, requestId, userId, agriquestId, quantity).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,
@@ -257,7 +260,7 @@ export const columnQuest: ColumnDef<RequestWithAgriquestAndUsers>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleRequest(ClaimStatus.DECLINED, requestId, userId).then((callback) => {
+                                                handleRequest(ClaimStatus.DECLINED, requestId, userId, agriquestId, quantity).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,

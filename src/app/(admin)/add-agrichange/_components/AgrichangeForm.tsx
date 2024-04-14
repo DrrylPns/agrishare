@@ -107,7 +107,7 @@ export const AgrichangeForm = () => {
                             name="quantity"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Quantity</FormLabel>
+                                    <FormLabel>Stocks</FormLabel>
                                     <FormControl>
                                         <Input placeholder="0" {...field} type="number" />
                                     </FormControl>
@@ -343,6 +343,20 @@ export const AgrichangeForm = () => {
                                     <FormLabel>Points</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Enter points needed to claim this item" {...field} type="number" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="qtyPerTrade"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Quantity per claim</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Enter quantity per claim" {...field} type="number" />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

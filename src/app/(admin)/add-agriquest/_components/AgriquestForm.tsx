@@ -1,5 +1,6 @@
 "use client"
 
+import AdminTitle from "@/components/AdminTitle"
 import { Button } from "@/components/ui/button"
 import {
     Form,
@@ -13,22 +14,15 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
+import { toast } from "@/components/ui/use-toast"
+import { UploadDropzone } from "@/lib/uploadthing"
 import { AgriQuestSchema, AgriquestType } from "@/lib/validations/agriquest"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Category } from '@prisma/client'
+import Image from "next/image"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
-import { Category, Subcategory, Types } from '@prisma/client'
-import { createAgrichange } from "../../../../../actions/agrichange"
-import { toast } from "@/components/ui/use-toast"
-import Image from "next/image"
-import { UploadDropzone } from "@/lib/uploadthing"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
-import { format, sub } from "date-fns"
-import { CalendarIcon } from "lucide-react"
-import { Calendar } from "@/components/ui/calendar"
 import { createAgriquest } from "../../../../../actions/agriquest"
-import AdminTitle from "@/components/AdminTitle"
 
 export const AgriquestForm = () => {
     const [isPending, startTransition] = useTransition()
@@ -89,7 +83,7 @@ export const AgriquestForm = () => {
                             name="quantity"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Quantity</FormLabel>
+                                    <FormLabel>Stocks</FormLabel>
                                     <FormControl>
                                         <Input placeholder="0" {...field} type="number" />
                                     </FormControl>
@@ -157,6 +151,20 @@ export const AgriquestForm = () => {
                                             className="resize-none"
                                             {...field}
                                         />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="qtyPerTrade"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Quantity per quest</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Enter quantity per quest" {...field} type="number" />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

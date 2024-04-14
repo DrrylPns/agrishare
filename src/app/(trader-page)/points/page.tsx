@@ -21,12 +21,14 @@ const page = async () => {
 
   if (!user) return <PageNF />
 
+  const pts = user.points?.toFixed(0)
+
   return (
     <Card className='max-w-5xl h-full drop-shadow-md bg-[#BCF6BE] outline-none border-none p-0 space-y-3 relative mt-[60px] lg:mt-5 xl:mt-0'>
 
       <div className='w-full flex flex-col justify-center items-center mt-5'>
         <p>My points</p>
-        <p className='font-extrabold text-[24px]'>{user.points.toFixed(0)}</p>
+        <p className='font-extrabold text-[24px]'>{pts}</p>
       </div>
 
       <Dialog>

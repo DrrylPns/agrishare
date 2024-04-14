@@ -121,6 +121,8 @@ export const columnClaims: ColumnDef<ClaimsWithAgrichangeAndUsers>[] = [
 
             const product = row.original.agriChange.name
             const points = row.original.agriChange.pointsNeeded
+            const quantity = row.original.agriChange.quantityPerTrade
+            const agriquestId = row.original.agriChange.id
 
             const dateClaimIntent = row.original.createdAt
             const status = row.original.status
@@ -218,7 +220,7 @@ export const columnClaims: ColumnDef<ClaimsWithAgrichangeAndUsers>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleClaim(ClaimStatus.APPROVED, claimId, userId, points).then((callback) => {
+                                                handleClaim(ClaimStatus.APPROVED, claimId, userId, points, agriquestId, quantity).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,
@@ -257,7 +259,7 @@ export const columnClaims: ColumnDef<ClaimsWithAgrichangeAndUsers>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleClaim(ClaimStatus.DECLINED, claimId, userId, points).then((callback) => {
+                                                handleClaim(ClaimStatus.DECLINED, claimId, userId, points, agriquestId, quantity).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,
