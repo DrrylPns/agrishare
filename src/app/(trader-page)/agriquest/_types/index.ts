@@ -5,6 +5,7 @@ export type Agriquest = {
     image: string
     name: string
     description: string
+
     quantity: number
     quantityPerTrade: number
     shelfLife: string
