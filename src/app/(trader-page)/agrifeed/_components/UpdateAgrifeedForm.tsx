@@ -110,7 +110,7 @@ function UpdateAgrifeedForm({
         id: product.id,
       }
 
-      const { data } = await axios.post("/api/agrifeedPost", payload)
+      const { data } = await axios.put("/api/agrifeedPost", payload)
       return data
     },
     onError: (err) => {

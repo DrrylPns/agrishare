@@ -79,7 +79,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
             )
         },
         cell: ({ row }) => {
-            const points = row.original.pointsToGain.toFixed(2)
+            const points = row.original.pointsToGain.toFixed(0)
 
             return <div
                 className=""
@@ -140,6 +140,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
             const donatorProduct = row.original.product
             const donatoryQty = row.original.quantity
             const donatorPoints = row.original.pointsToGain
+            const donationCategory = row.original.category
             const donationSubCategory = row.original.subcategory
             const donatorId = row.original.donator.id
             const donatorProof = row.original.proof
@@ -151,8 +152,8 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
             const isImageNull = donatorImage === null;
             const isDisable = selectedRate === 0 ? true : false
 
-            const handleConfirm = () =>{
-                if(selectedRate === 0 ){
+            const handleConfirm = () => {
+                if (selectedRate === 0) {
                     setSelectRateError(true)
                 } else {
                     setIsConfirmOpen(true)
@@ -205,46 +206,46 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                                     <p>Item: {donatorProduct}</p>
                                                     <p>Quantity: {donatoryQty}</p>
                                                     <p>
-                                                        Accumulated Points: <span className="text-green-500">{donatorPoints.toFixed(2)} Point(s)</span>
+                                                        Accumulated Points: <span className="text-green-500">{donatorPoints} Point(s)</span>
                                                     </p>
                                                     <p>Date: {format(dateDonated, "PPP")}</p>
                                                     {donatorProof !== null ? (
                                                         <Link className="text-blue-500" href="#">
                                                             Proof: See now
                                                         </Link>
-                                                    ):(
+                                                    ) : (
                                                         <div className="" >
                                                             Proof: Haven't uploaded yet!
                                                         </div>
                                                     )}
-                                                    
+
                                                 </div>
                                             </div>
                                         </div>
                                         {donationStatus === "PENDING" ? (
                                             <div className="mt-5 ">
                                                 <div className="mb-10">
-                                                <RadioGroup value={selectedRate} onChange={setSelectedRate}>
-                                                    <div className="flex justify-center items-center gap-x-5">
-                                                    <RadioGroup.Label>Condition : </RadioGroup.Label>
-                                                    {conditionRates.map((rate) => (
-                                                        <RadioGroup.Option
-                                                        key={rate}
-                                                        value={rate}
-                                                        onClick={()=> setSelectRateError(false)}
-                                                        className="flex gap-3 items-center ui-active:whte ui-active:text-gray-700 text-sm w-24 py-1 px-2 outline-1 outline outline-gray-300 shadow-sm drop-shadow-sm  ui-not-active:bg-white ui-not-active:text-black"
-                                                        >
-                                                        <CheckIcon className="hidden ui-checked:block" height={20} width={20} />
-                                                        {rate === 0.5 && "Poor"}
-                                                        {rate === 1 && "Neutral"}
-                                                        {rate === 1.5 && "Good"}
-                                                        </RadioGroup.Option>
-                                                    ))}
-                                                    </div>
-                                                </RadioGroup>
-                                                {selectRateError && (
-                                                    <h1 className="text-red-500 text-xs text-center mt-3">*Select codition rate first!</h1>
-                                                )}
+                                                    <RadioGroup value={selectedRate} onChange={setSelectedRate}>
+                                                        <div className="flex justify-center items-center gap-x-5">
+                                                            <RadioGroup.Label>Condition : </RadioGroup.Label>
+                                                            {conditionRates.map((rate) => (
+                                                                <RadioGroup.Option
+                                                                    key={rate}
+                                                                    value={rate}
+                                                                    onClick={() => setSelectRateError(false)}
+                                                                    className="flex gap-3 items-center ui-active:whte ui-active:text-gray-700 text-sm w-24 py-1 px-2 outline-1 outline outline-gray-300 shadow-sm drop-shadow-sm  ui-not-active:bg-white ui-not-active:text-black"
+                                                                >
+                                                                    <CheckIcon className="hidden ui-checked:block" height={20} width={20} />
+                                                                    {rate === 0.5 && "Poor"}
+                                                                    {rate === 1 && "Neutral"}
+                                                                    {rate === 1.5 && "Good"}
+                                                                </RadioGroup.Option>
+                                                            ))}
+                                                        </div>
+                                                    </RadioGroup>
+                                                    {selectRateError && (
+                                                        <h1 className="text-red-500 text-xs text-center mt-3">*Select codition rate first!</h1>
+                                                    )}
                                                 </div>
                                                 <div className="flex gap-3 mt-3">
                                                     <Button
@@ -259,10 +260,10 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                                     >Decline</Button>
                                                 </div>
                                             </div>
-                                        ):(
+                                        ) : (
                                             null
                                         )}
-                                       
+
                                     </>
                                 </DialogDescription>
                             </DialogHeader>
@@ -275,13 +276,13 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Are you sure you want to confirm the transaction?</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    
+
                                     Note: Once confirmed, this action cannot be undone.
-                                   
+
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                            
+
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
                                     className={`${isDisable ? 'bg-green-300' : 'bg-[#00B207] hover:bg-[#00B207]/80'}`}
@@ -289,7 +290,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleDonations("APPROVED",selectedRate, donationSubCategory, donationId, donatorId).then((callback) => {
+                                                handleDonations("APPROVED", selectedRate, donationSubCategory, donationCategory, donationId, donatorId).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,
@@ -328,7 +329,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleDonations("APPROVED",selectedRate, donationSubCategory, donationId, donatorId).then((callback) => {
+                                                handleDonations("APPROVED", selectedRate, donationSubCategory, donationCategory, donationId, donatorId).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,

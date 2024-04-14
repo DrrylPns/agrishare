@@ -5,6 +5,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "../ERD.svg"
+}
+
 // prisma/schema.prisma
 datasource db {
   provider  = "postgresql"
@@ -38,7 +43,6 @@ model User {
   name                  String?
   lastName              String?
   middleInitial         String?
-  // username       String    @unique
   email                 String?                @unique
   emailVerified         DateTime?
   image                 String?                @db.Text
@@ -49,12 +53,12 @@ model User {
   state                 String?
   city                  String?
   zip                   String?
-  userId                String?                @unique // 01-2024 02-2024 etc..
+  userId                String?                @unique
   createdAt             DateTime               @default(now())
   updatedAt             DateTime               @updatedAt
   companyName           String?
   points                Float                  @default(0)
-  requestLeft           Float                  @default(3) // claimed items in agriquest. 3 requests per trader only // if successful claim then - 1 the request of claimer
+  requestLeft           Float                  @default(3)
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
   role                  Role                   @default(DONATOR)
@@ -72,10 +76,14 @@ model User {
   claimedAgrichange     Claim[]
   requests              Request[]
 
-  // user (ADMIN) can create many agriquest items
   createdAgriquests Agriquest[] @relation("CreatedBy")
-  // user (TRADER) can request and claim many agriquest items
   claimedAgriquests Agriquest[] @relation("Claimed")
+
+  chatroomUser1 ChatRoom[] @relation("ChatroomUser1")
+  chatroomUser2 ChatRoom[] @relation("ChatroomUser2")
+
+  sender Message[] @relation("Sender")
+  sendee Message[] @relation("Sendee")
 }
 
 enum Role {
@@ -118,6 +126,35 @@ model TwoFactorConfirmation {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId])
+}
+
+model ChatRoom {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  chatroomUser1Id String
+  chatroomUser1   User   @relation(fields: [chatroomUser1Id], references: [id], onDelete: Cascade, name: "ChatroomUser1")
+
+  chatroomUser2Id String
+  chatroomUser2   User   @relation(fields: [chatroomUser2Id], references: [id], onDelete: Cascade, name: "ChatroomUser2")
+
+  messages Message[]
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  image     String?
+  content   String
+  createdAt DateTime @default(now())
+
+  senderId String
+  sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade, name: "Sender")
+
+  sendeeId String
+  sendee   User   @relation(fields: [sendeeId], references: [id], onDelete: Cascade, name: "Sendee")
+
+  ChatRoom   ChatRoom? @relation(fields: [chatRoomId], references: [id])
+  chatRoomId String?
 }
 
 model Post {
@@ -182,7 +219,6 @@ enum Subcategory {
   NOT_ORGANIC_SOIL
   ORGANIC_FERTILIZER
   NOT_ORGANIC_FERTILIZER
-  // TO BE ADDED
 }
 
 model AgriChange {
@@ -201,6 +237,7 @@ model AgriChange {
   shelfLife    String
   pointsNeeded Float
   transaction  Transaction[]
+  pickUpDate   DateTime?
   harvestDate  DateTime
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
@@ -226,27 +263,20 @@ model Claim {
 }
 
 model Agriquest {
-  id          String   @id @default(cuid())
-  image       String   @db.Text
+  id          String    @id @default(cuid())
+  image       String    @db.Text
   name        String
   description String
-  quantity    Float    @default(0)
-  // weight      Float
-  // color       String
+  quantity    Float     @default(0)
   shelfLife   String
-  // type        Types?
   category    Category
-  // subcategory Subcategory
-  // harvestDate DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  // user relation who created the agriquest (ADMIN)
-  createdBy   User     @relation("CreatedBy", fields: [createdById], references: [id], onDelete: Cascade)
+  pickUpDate  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  createdBy   User      @relation("CreatedBy", fields: [createdById], references: [id], onDelete: Cascade)
   createdById String
-  // relation to users who claimed the agriquest (TRADER)
-  claimedBy   User[]   @relation("Claimed")
-
-  request Request[]
+  claimedBy   User[]    @relation("Claimed")
+  request     Request[]
 }
 
 model Request {
@@ -313,7 +343,7 @@ model Community {
   communityImage String?  @db.Text
   title          String?
   currentDonated Float    @default(0) // current donation sa community na yon
-  neededDonation Float // target donation na ma-reach
+  neededDonation Float
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -323,11 +353,10 @@ model Community {
   donations Donation[]
 }
 
-// to get number of donators by community use this model fetch it by Community ID...
 model Donation {
   id           String         @id @default(cuid())
   dn           String         @unique
-  donatee      String
+  donatee      String?
   name         String
   product      String
   quantity     Float
@@ -337,23 +366,7 @@ model Donation {
   category     Category?
   subcategory  Subcategory?
   proof        String?
-  // name                String
-  // lastName            String
-  // phoneNumber         String
-  // email               String
-  // district            String
-  // zip                 String
-  // category            Category
-  // productName         String
-  // condition           String
-  // quantity            String
-  // preservationReq     String
-  // deliveryTime        DateTime
-  // deliveryAddress     String
-  // specialInstructions String   @db.Text
-  // comment             String   @db.Text
-  // image               String   @db.Text
-  // isAnonymous         Boolean
+  pickUpDate   DateTime?
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 
@@ -372,8 +385,8 @@ enum DonationStatus {
 
 model Transaction {
   id     String          @id @default(cuid())
-  ps     String? // mali ps explain sakanila kung bakit // no need Points ID sa points table
-  itm    String? // eto tama to kaso to do pa dahil wala pang claiming functionality.
+  ps     String?
+  itm    String?
   dn     String?
   trd    String?
   aq     String?
@@ -400,8 +413,6 @@ enum TransactionType {
   CLAIM
 }
 
-// dito iffetch yung product na gustong ipang trade
-// once trade is COMPLETED make a transaction.create based on trade values para mapalabas siya sa transaction history.
 model Trade {
   id             String       @id @default(cuid())
   trd            String       @unique
@@ -413,11 +424,11 @@ model Trade {
   weight         Float
   value          Float
   description    String       @db.Text
-  proofTradee    String? // gamitan ng OR method para maipasa value
-  proofTrader    String? // gamitan ng OR method para maipasa value
+  proofTradee    String?
+  proofTrader    String?
   status         StatusType   @default(PENDING)
   category       Category?
-  subcategory    Subcategory? // trader PE
+  subcategory    Subcategory?
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 
@@ -425,7 +436,6 @@ model Trade {
   tradeeId String
   tradee   User   @relation(fields: [tradeeId], references: [id], onDelete: Cascade, name: "Tradee")
 
-  // yung nag trade intent, pwede ma-fetch dito yung gusto ipang trade
   traderId String
   trader   User   @relation(fields: [traderId], references: [id], onDelete: Cascade, name: "Trader")
 
@@ -436,13 +446,12 @@ model Trade {
 }
 
 enum StatusType {
-  PENDING // TRADE INTENT
-  PROCESSING // INACCEPT NA NG TRADEE YUNG TRADE INTENT
-  COMPLETED // ADMIN HAS CONFIRMED THAT TRADE IS INDEED SUCCESSFUL // IF COMPLETED THEN BAWAS NA QTY KAAGAD
-  CANCELLED // ADMIN FINDS THE TRADE SUSPICIOUS
+  PENDING
+  PROCESSING
+  COMPLETED
+  CANCELLED
 }
 
-// every time na magbabago yung notification like from pending to processing  
 model Notification {
   id        String     @id @default(cuid())
   type      StatusType @default(PENDING)
@@ -450,25 +459,9 @@ model Notification {
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 
-  // user na naka receive ng notification.
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // dito iffetch yung current trade intent na pending shempre.
   tradeId String?
   trade   Trade?  @relation(fields: [tradeId], references: [id], onDelete: Cascade)
 }
-
-//NOT SURE PA DITO -- di na ata kailangan to, i-fetch nalang to sa model Transaction at dagdagan ang transaction type ng CLAIM.
-// if nag claim si user then deduct points
-// model ClaimedProduct {
-//   id        String   @id @default(cuid())
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-
-//   userId String
-//   user   User   @relation(fields: [userId], references: [id])
-
-//   Post   Post?   @relation(fields: [postId], references: [id])
-//   postId String?
-// }

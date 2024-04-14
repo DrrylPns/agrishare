@@ -84,7 +84,7 @@ export const columnPointsByUser: ColumnDef<TransactionWithUserAndPost>[] = [
             )
         },
         cell: ({ row }) => {
-            const points = row.original.points.toFixed(2)
+            const points = row.original.points.toFixed(0)
             const transactionType = row.original.type
 
 

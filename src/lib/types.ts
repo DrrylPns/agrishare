@@ -80,6 +80,7 @@ export interface DonationWithDonators {
     image: string;
     pointsToGain: number;
     status: DonationStatus;
+    category: Category;
     subcategory: Subcategory | null;
     proof: string | null;
     createdAt: Date;

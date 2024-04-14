@@ -252,7 +252,7 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                                     <p>Item: {traderItem}</p>
                                                     <p>Quantity: {traderQty}</p>
                                                     <p>
-                                                        Accumulated Points: <span className="text-green-500">{traderCalculatedPoints.toFixed(2)} Point(s)</span>
+                                                        Accumulated Points: <span className="text-green-500">{traderCalculatedPoints.toFixed(0)} Point(s)</span>
                                                     </p>
                                                     <p>Shelf Life: {traderShelfLife}</p>
                                                     <p>Date: {format(tradeDate, "PPP")}</p>
@@ -279,7 +279,7 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                                     <p>Item: {tradeeItem}</p>
                                                     <p>Quantity: {tradeeQty}</p>
                                                     <p>
-                                                        Accumulated Points: <span className="text-green-500">{tradeeCalculatedPoints.toFixed(2)} Point(s)</span>
+                                                        Accumulated Points: <span className="text-green-500">{tradeeCalculatedPoints.toFixed(0)} Point(s)</span>
                                                     </p>
                                                     <p>Shelf Life: {formattedShelfLifeUnit}</p>
                                                     <p>Date: {format(tradeDate, "PPP")}</p>

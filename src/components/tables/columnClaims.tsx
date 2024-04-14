@@ -173,7 +173,7 @@ export const columnClaims: ColumnDef<ClaimsWithAgrichangeAndUsers>[] = [
                                                     <p>Name: {name} {" "} {lastName}</p>
                                                     <p>Item: {product}</p>
                                                     <p>
-                                                        Points deduction: <span className="text-rose-500">{points.toFixed(2)} Point(s)</span>
+                                                        Points deduction: <span className="text-rose-500">{points.toFixed(0)} Point(s)</span>
                                                     </p>
                                                     <p>Date: {format(dateClaimIntent, "PPP")}</p>
                                                     {/* redirect to uploadthing when clicked. */}

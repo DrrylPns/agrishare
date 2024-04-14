@@ -60,7 +60,7 @@ export const UrbanFarmerSchema = z.object({
             const phMobilePattern = /^(09\d{9})$/;
             return phMobilePattern.test(phone)
         }, { message: "Invalid Mobile Number" }),
-    userId: z.string().min(2, { message: "User ID should be valid." }).max(20, { message: "User ID is too long." }),
+    // userId: z.string().min(2, { message: "User ID should be valid." }).max(20, { message: "User ID is too long." }),
     password: z.string()
         .min(8, { message: "Minimum password length is 8 characters" })
         .max(20, { message: "Maximum password length is 20 characters" })

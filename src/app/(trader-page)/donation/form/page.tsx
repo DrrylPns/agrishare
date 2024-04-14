@@ -1,7 +1,5 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -12,19 +10,21 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { toast } from "@/components/ui/use-toast"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
-import { format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
-import { Calendar } from "@/components/ui/calendar"
+import { UploadButton } from "@/lib/uploadthing"
 import { DonationSchema, DonationType } from "@/lib/validations/donation"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Category, Subcategory } from '@prisma/client'
 import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 import { useState } from "react"
-import { UploadButton } from "@/lib/uploadthing"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Category, Subcategory } from '@prisma/client'
+import { useForm } from "react-hook-form"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { cn } from "@/lib/utils"
+import { add, format, sub } from "date-fns"
+import { CalendarIcon } from "lucide-react"
+import { Calendar } from "@/components/ui/calendar"
 
 export default function Page() {
   const [imageUrl, setImageUrl] = useState<string>("")
@@ -38,21 +38,23 @@ export default function Page() {
   const { mutate: createPost, isLoading } = useMutation({
     mutationFn: async ({
       image,
-      donatee,
+      // donatee,
       name,
       product,
       quantity,
       category,
       subcategory,
+      pickUpDate,
     }: DonationType) => {
       const payload: DonationType = {
         image,
-        donatee,
+        // donatee,
         name,
         product,
         quantity,
         category,
         subcategory,
+        pickUpDate,
       }
 
       const { data } = await axios.post("/api/donate", payload)
@@ -80,13 +82,14 @@ export default function Page() {
 
   function onSubmit(values: DonationType) {
     const payload: DonationType = {
-      donatee: values.donatee,
+      // donatee: values.donatee,
       name: values.name,
       product: values.product,
       quantity: values.quantity,
       image: imageUrl,
       category: values.category,
       subcategory: values.subcategory,
+      pickUpDate: values.pickUpDate,
     }
 
     createPost(payload)
@@ -98,8 +101,8 @@ export default function Page() {
         <h1 className='text-center text-4xl font-semibold mb-5'>Donation Form</h1>
         <form onSubmit={form.handleSubmit(onSubmit)} className="font-poppins bg-green-200 p-10 rounded-2xl space-y-3">
           <h1 className='text-center text-xl font-medium mb-5'>Donation Information</h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <FormField
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-5">
+            {/* <FormField
               control={form.control}
               name="donatee"
               render={({ field }) => (
@@ -110,7 +113,7 @@ export default function Page() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <FormField
               control={form.control}
@@ -208,12 +211,12 @@ export default function Page() {
                           <SelectItem value={Subcategory.HERBS_VEGETABLES}>Herbs Vegetables</SelectItem>
                         </>
                       )}
-                      {chosenCategory === Category.FRESH_FRUIT && (
+                      {/* {chosenCategory === Category.FRESH_FRUIT && (
                         <>
                           <SelectItem value={Subcategory.FRUIT1}>Fruit 1</SelectItem>
                           <SelectItem value={Subcategory.FRUIT2}>Fruit 2</SelectItem>
                         </>
-                      )}
+                      )} */}
                       {chosenCategory === Category.EQUIPMENTS && (
                         <>
                           <SelectItem value={Subcategory.SMALL}>Small</SelectItem>
@@ -227,12 +230,12 @@ export default function Page() {
                           <SelectItem value={Subcategory.NOT_ORGANIC_FERTILIZER}>Not Organic Fertilizer</SelectItem>
                         </>
                       )}
-                      {chosenCategory === Category.SEEDS && (
+                      {/* {chosenCategory === Category.SEEDS && (
                         <>
                           <SelectItem value={Subcategory.SEEDS1}>Seeds 1</SelectItem>
                           <SelectItem value={Subcategory.SEEDS2}>Seeds 2</SelectItem>
                         </>
-                      )}
+                      )} */}
                       {chosenCategory === Category.TOOLS && (
                         <>
                           <SelectItem value={Subcategory.SMALL}>Small</SelectItem>
@@ -252,7 +255,51 @@ export default function Page() {
                 </FormItem>
               )}
             />
+
           </div>
+
+          <FormField
+            control={form.control}
+            name="pickUpDate"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Pick up date</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      disabled={(date) =>
+                        date < new Date() ||
+                        date > add(new Date(), { days: 7 })
+                      }
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <p className="text-xl font-poppins font-medium leading-6 mt-5 px-5 text-justify">We further certify that this is for free and that there is no payment exchange of monetary value for the distribution of said merchandise but you are required to fill out and give back to the CUAI office the evaluation form attached here.</p>
 
@@ -260,7 +307,7 @@ export default function Page() {
           <p className="text-xl font-poppins font-medium leading-6 mb-5 px-5 text-justify">That the Donee hereby accepts the foregoing donation from the Donor and for which he/his expresses his/her sincere appreciation and gratitude for the kindness shown by the Donor.</p>
           {/* Replace it with upload image */}
           <div>
-            {!imageUrl.length && <h1 className="my-5">Upload E-Signature</h1>}
+            {!imageUrl.length && <h1 className="my-5">Upload Photo</h1>}
 
             {imageUrl.length ?
               <>

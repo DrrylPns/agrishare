@@ -31,7 +31,7 @@ export const UrbanRegister = () => {
             name,
             password,
             phoneNumber,
-            userId,
+            // userId,
             email,
         }: UrbanFarmerType) => {
             const payload: UrbanFarmerType = {
@@ -41,7 +41,7 @@ export const UrbanRegister = () => {
                 name,
                 password,
                 phoneNumber,
-                userId,
+                // userId,
                 email,
             }
 
@@ -68,7 +68,7 @@ export const UrbanRegister = () => {
                 description: 'Success!',
                 variant: 'default',
             })
-            
+
             setTimeout(() => {
                 window.location.reload()
             }, 1000)
@@ -83,7 +83,7 @@ export const UrbanRegister = () => {
             name: data.name,
             password: data.password,
             phoneNumber: data.phoneNumber,
-            userId: data.userId,
+            // userId: data.userId,
             email: data.email,
         }
 
@@ -139,7 +139,7 @@ export const UrbanRegister = () => {
                         />
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                         <FormField
                             control={form.control}
                             name="email"
@@ -154,7 +154,7 @@ export const UrbanRegister = () => {
                             )}
                         />
 
-                        <FormField
+                        {/* <FormField
                             control={form.control}
                             name="userId"
                             render={({ field }) => (
@@ -166,7 +166,8 @@ export const UrbanRegister = () => {
                                     <FormMessage />
                                 </FormItem>
                             )}
-                        />
+                        /> */}
+
                         <FormField
                             control={form.control}
                             name="phoneNumber"

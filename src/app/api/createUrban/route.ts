@@ -1,9 +1,9 @@
 import prisma from "@/lib/db";
-import { UrbanFarmerSchema } from "@/lib/validations/user-settings";
-import { NextRequest, NextResponse } from "next/server";
-import bcrypt from "bcryptjs"
-import { auth } from "../../../../auth";
 import { generateUserId } from "@/lib/utils";
+import { UrbanFarmerSchema } from "@/lib/validations/user-settings";
+import bcrypt from "bcryptjs";
+import { NextResponse } from "next/server";
+import { auth } from "../../../../auth";
 
 export async function POST(req: Request) {
     try {
@@ -26,13 +26,12 @@ export async function POST(req: Request) {
         const body = await req.json()
 
         const {
-            confirmPassword,
             lastName,
             middleInitial,
             name,
             password,
             phoneNumber,
-            userId,
+            // userId,
             email,
         } = UrbanFarmerSchema.parse(body)
 
@@ -53,6 +52,8 @@ export async function POST(req: Request) {
         if (phoneNumberExists && phoneNumberExists.id !== session?.user.id) {
             return new NextResponse("Phone number already taken.", { status: 408 })
         }
+
+        const userId = await generateUserId()
 
         const userIdExists = await prisma.user.findFirst({
             where: {

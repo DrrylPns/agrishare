@@ -76,7 +76,7 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
             )
         },
         cell: ({ row }) => {
-            const points = row.original.pointsToGain.toFixed(2)
+            const points = row.original.pointsToGain.toFixed(0)
 
             return <div
                 className=""

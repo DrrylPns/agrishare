@@ -77,6 +77,7 @@ function CreatePost() {
       weight,
       image,
       subcategory,
+
     }: AgrifeedType) => {
       const payload: AgrifeedType = {
         category,
@@ -92,6 +93,7 @@ function CreatePost() {
         weight,
         image,
         subcategory,
+
       }
 
       const { data } = await axios.post("/api/agrifeedPost", payload)

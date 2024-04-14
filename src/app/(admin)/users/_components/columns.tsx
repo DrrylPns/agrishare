@@ -8,6 +8,23 @@ import { categories } from "@/lib/utils"
 
 export const columns: ColumnDef<User>[] = [
     {
+        accessorKey: "userId",
+        header: ({ column }) => {
+            return (
+                <DataTableColumnHeader column={column} title="User ID" />
+            )
+        },
+        cell: ({ row }) => {
+            const id = row.original.userId
+
+            return <div
+                className=""
+            >
+                {id}
+            </div>
+        },
+    },
+    {
         accessorKey: "name",
         header: ({ column }) => {
             return (
