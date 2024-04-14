@@ -145,6 +145,7 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
             const traderShelfLife = row.original.shelfLife
             const traderSubcategory = row.original.subcategory
             const traderProof = row.original.proofTrader
+            const traderConditionRate = row.original.traderConditionRate
 
             const tradeeName = row.original.tradee.name
             const tradeeLastName = row.original.tradee.lastName
@@ -154,6 +155,7 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
             const tradeePts = row.original.tradee.points
             const tradeeSubcategory = row.original.post.subcategory
             const tradeeProof = row.original.proofTradee
+            const tradeeConditionRate = row.original.tradeeConditionRate
 
             const tradeeShelfLifeDuration = row.original.post.shelfLifeDuration
             const tradeeShelfLifeUnit = row.original.post.shelfLifeUnit
@@ -167,8 +169,6 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
 
             const firstLetterOfTradeeName = tradeeName?.charAt(0);
             const firstLetterOfTradeeLastName = tradeeLastName?.charAt(0);
-
-            // kalkulasyon at rebolusyon
 
             let conditionRate = 1.5
             let ptsEquivalentTrader
@@ -202,8 +202,8 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                 ptsEquivalentTradee = 0.15
             }
 
-            const tradeeCalculatedPoints = (6 / ptsEquivalentTradee) * tradeeQty * conditionRate
-            const traderCalculatedPoints = (6 / ptsEquivalentTrader) * tradeeQty * conditionRate
+            const tradeeCalculatedPoints = (6 / ptsEquivalentTradee) * tradeeQty * (traderConditionRate !== null ? traderConditionRate : 0)
+            const traderCalculatedPoints = (6 / ptsEquivalentTrader) * tradeeQty * (tradeeConditionRate !== null ? tradeeConditionRate : 0)
 
             return (
                 <>
@@ -256,7 +256,20 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                                     </p>
                                                     <p>Shelf Life: {traderShelfLife}</p>
                                                     <p>Date: {format(tradeDate, "PPP")}</p>
-                                                    {/* redirect to uploadthing when clicked. */}
+                                                    <p>Item condition: {
+                                                        traderConditionRate !== null ? (
+                                                            <span>
+                                                                {traderConditionRate === 0.5 && "Poor"}
+                                                                {traderConditionRate === 1 && "Fair"}
+                                                                {traderConditionRate === 1.5 && "Good"}
+                                                            </span>
+                                                        ) :(
+                                                            <span className="text-gray-400">
+                                                                Item not yet rated
+                                                            </span>
+                                                        )
+
+                                                    }</p>
                                                     {traderProof !== null ? (
                                                         <a target="_blank" className="text-blue-500" href={traderProof}>
                                                             Proof: See Proof
@@ -283,6 +296,20 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                                     </p>
                                                     <p>Shelf Life: {formattedShelfLifeUnit}</p>
                                                     <p>Date: {format(tradeDate, "PPP")}</p>
+                                                    <p>Item condition: {
+                                                        tradeeConditionRate !== null ? (
+                                                            <span>
+                                                                {tradeeConditionRate === 0.5 && "Poor"}
+                                                                {tradeeConditionRate === 1 && "Fair"}
+                                                                {tradeeConditionRate === 1.5 && "Good"}
+                                                            </span>
+                                                        ) :(
+                                                            <span className="text-gray-400">
+                                                                Item not yet rated
+                                                            </span>
+                                                        )
+
+                                                    }</p>
                                                     {tradeeProof !== null ? (
                                                         <a target="_blank" className="text-blue-500" href={tradeeProof}>
                                                             Proof: See Proof
@@ -293,8 +320,10 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div className="flex gap-3 mt-3">
+                                        {tradeStatus === 'COMPLETED' || tradeStatus === 'CANCELLED' || tradeStatus === "PENDING"? (
+                                            <></>
+                                        ):(
+                                            <div className="flex gap-3 mt-3">
                                             <Button
                                                 variant="primary"
                                                 isLoading={isPending}
@@ -306,6 +335,8 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                                 onClick={() => setIsRejectOpen(true)}
                                             >Decline</Button>
                                         </div>
+                                        )}
+                                        
                                     </>
                                 </DialogDescription>
                             </DialogHeader>
@@ -328,20 +359,27 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleTrade("COMPLETED", tradeId, tradeeId, traderId, tradeeQty, traderQty, postId, traderSubcategory, tradeeSubcategory).then((callback) => {
-                                                    if (callback?.error) {
-                                                        toast({
-                                                            description: callback.error,
-                                                            variant: "destructive"
-                                                        })
-                                                    }
-
-                                                    if (callback?.success) {
-                                                        toast({
-                                                            description: callback.success
-                                                        })
-                                                    }
-                                                })
+                                                if(tradeeConditionRate === null || traderConditionRate === null){
+                                                    toast({
+                                                        title: "Not allowed",
+                                                        description: "Item condition must have provided for both trader and tradee",
+                                                        variant: "destructive"
+                                                    })
+                                                } else {
+                                                    handleTrade(tradeeCalculatedPoints, traderCalculatedPoints ,tradeeConditionRate, traderConditionRate, "COMPLETED", tradeId, tradeeId, traderId, tradeeQty, traderQty, postId, traderSubcategory, tradeeSubcategory).then((callback) => {
+                                                        if (callback?.error) {
+                                                            toast({
+                                                                description: callback.error,
+                                                                variant: "destructive"
+                                                            })
+                                                        }
+                                                        if (callback?.success) {
+                                                            toast({
+                                                                description: callback.success
+                                                            })
+                                                        }
+                                                    })
+                                                }
                                             })
                                         }
                                     }
@@ -366,7 +404,7 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleTrade("CANCELLED", tradeId, tradeeId, traderId, tradeeQty, traderQty, postId, traderSubcategory, tradeeSubcategory).then((callback) => {
+                                                handleTrade(tradeeCalculatedPoints,traderCalculatedPoints, tradeeConditionRate, traderConditionRate,"CANCELLED", tradeId, tradeeId, traderId, tradeeQty, traderQty, postId, traderSubcategory, tradeeSubcategory).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,

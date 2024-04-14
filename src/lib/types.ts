@@ -32,6 +32,8 @@ export interface TradeWithTradeeTraders {
     tradedQuantity: number;
     shelfLife: string;
     weight: number;
+    tradeeConditionRate: number | null;
+    traderConditionRate: number | null;
     proofTradee: string | null;
     proofTrader: string | null;
     value: number;

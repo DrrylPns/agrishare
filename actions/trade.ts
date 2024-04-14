@@ -133,9 +133,9 @@ export const fetchTradesByUser = async () => {
     return trades
 }
 
-export const handleTrade = async (status: StatusType, tradeId: string, tradeeId: string, traderId: string, tradeeQty: number, traderQty: number, postId: string, traderSubcategory: Subcategory | null, tradeeSubcategory: Subcategory | null) => {
-    const session = await auth()
-
+export const handleTrade = async (tradeeCalculatedPoints:number,traderCalculatedPoints: number, tradeeCondtionRate:number | null, traderConditionRate: number | null,  status: StatusType, tradeId: string, tradeeId: string, traderId: string, tradeeQty: number, traderQty: number, postId: string, traderSubcategory: Subcategory | null, tradeeSubcategory: Subcategory | null) => {
+    const session = await auth() 
+    
     if (!session) return { error: "Unauthorized" }
 
     const user = await getUserById(session.user.id)
@@ -195,42 +195,6 @@ export const handleTrade = async (status: StatusType, tradeId: string, tradeeId:
         })
 
         if (!tradee || !trader) return { error: "Tradee or trader not found." }
-
-        let ptsEquivalentTrader
-        let ptsEquivalentTradee
-        let conditionRate = 1.5
-
-        if (traderSubcategory === "FRUIT_VEGETABLES") {
-            ptsEquivalentTrader = 0.18
-        } else if (traderSubcategory === "HERBS_VEGETABLES") {
-            ptsEquivalentTrader = 0.17
-        } else if (traderSubcategory === "LEAFY_VEGETABLES") {
-            ptsEquivalentTrader = 0.15
-        } else if (traderSubcategory === "PODDED_VEGETABLES") {
-            ptsEquivalentTrader = 0.25
-        } else if (traderSubcategory === "ROOT_VEGETABLES") {
-            ptsEquivalentTrader = 0.20
-        } else {
-            ptsEquivalentTrader = 0.15
-        }
-
-        if (tradeeSubcategory === "FRUIT_VEGETABLES") {
-            ptsEquivalentTradee = 0.18
-        } else if (tradeeSubcategory === "HERBS_VEGETABLES") {
-            ptsEquivalentTradee = 0.17
-        } else if (tradeeSubcategory === "LEAFY_VEGETABLES") {
-            ptsEquivalentTradee = 0.15
-        } else if (tradeeSubcategory === "PODDED_VEGETABLES") {
-            ptsEquivalentTradee = 0.25
-        } else if (tradeeSubcategory === "ROOT_VEGETABLES") {
-            ptsEquivalentTradee = 0.20
-        } else {
-            ptsEquivalentTradee = 0.15
-        }
-
-        //fetch PE (subcategory) of tradee and trader
-        const tradeeCalculatedPoints = (6 / ptsEquivalentTradee) * tradeeQty * conditionRate
-        const traderCalculatedPoints = (6 / ptsEquivalentTrader) * tradeeQty * conditionRate
 
         await prisma.user.update({
             data: {
@@ -417,7 +381,7 @@ export const tradeIntent = async (status: StatusType, tradeId: string, email: st
     return { success: "Trade Accepted." }
 }
 
-export const handleTradeProof = async (img: string, tradeId: string) => {
+export const handleTradeProof = async (img: string, tradeId: string, conditionRate: number) => {
     const session = await auth()
 
     if (!session) return { error: "Unauthorized" }
@@ -444,7 +408,8 @@ export const handleTradeProof = async (img: string, tradeId: string) => {
         await prisma.trade.update({
             where: { id: findTrader?.id },
             data: {
-                proofTrader: img
+                proofTrader: img,
+                traderConditionRate: conditionRate
             },
         })
     }
@@ -453,7 +418,8 @@ export const handleTradeProof = async (img: string, tradeId: string) => {
         await prisma.trade.update({
             where: { id: findTradee?.id },
             data: {
-                proofTradee: img
+                proofTradee: img,
+                tradeeConditionRate: conditionRate
             }
         })
     }

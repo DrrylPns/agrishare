@@ -37,9 +37,9 @@ export const fetchDonationsByUser = async () => {
     return donations
 }
 
-export const handleDonations = async (status: DonationStatus, conditionRate: number, subcategory: string | null, category: string, donationId: string, donatorId: string) => {
+export const handleDonations = async (status: DonationStatus, conditionRate: number, subcategory: string|null, category: string, donationId: string, donatorId: string) => {
     const session = await auth()
-
+ 
     if (!session) return { error: "Unauthorized" }
 
     if (!status || !(status in DonationStatus)) return { error: "Invalid status." }
@@ -81,20 +81,6 @@ export const handleDonations = async (status: DonationStatus, conditionRate: num
 
         let ptsEquivalent
 
-        // if (subcategory === "FRUIT_VEGETABLES") {
-        //     ptsEquivalent = 0.18
-        // } else if (subcategory === "HERBS_VEGETABLES") {
-        //     ptsEquivalent = 0.17
-        // } else if (subcategory === "LEAFY_VEGETABLES") {
-        //     ptsEquivalent = 0.15
-        // } else if (subcategory === "PODDED_VEGETABLES") {
-        //     ptsEquivalent = 0.25
-        // } else if (subcategory === "ROOT_VEGETABLES") {
-        //     ptsEquivalent = 0.20
-        // } else {
-        //     ptsEquivalent = 0.15
-        // }
-
         if (subcategory === "FRUIT_VEGETABLES") {
             ptsEquivalent = 0.18
         } else if (subcategory === "HERBS_VEGETABLES") {
@@ -105,20 +91,11 @@ export const handleDonations = async (status: DonationStatus, conditionRate: num
             ptsEquivalent = 0.25
         } else if (subcategory === "ROOT_VEGETABLES") {
             ptsEquivalent = 0.20
-        } else if (subcategory === "ORGANIC_FERTILIZER") {
-            ptsEquivalent = 0.9
-        } else if (subcategory === "NOT_ORGANIC_FERTILIZER") {
-            ptsEquivalent = 0.45
-        } else if (subcategory === "ORGANIC_SOIL") {
-            ptsEquivalent = 0.95
-        } else if (subcategory === "NOT_ORGANIC_SOIL") {
-            ptsEquivalent = 0.50
-        } else if (category === "SEEDS") {
+        } else if (category = "SEEDS"){
             ptsEquivalent = 0.65
         } else {
             ptsEquivalent = 0.15
-        } // todo: tools
-        // Formula: (PFD or PFT / Points equivalent x quantity x condition rate = points Earned)
+        }
 
         const calculatedPointsWithPE = (10 / ptsEquivalent) * processDonate.quantity * conditionRate
 
@@ -147,21 +124,21 @@ export const handleDonations = async (status: DonationStatus, conditionRate: num
                     dn: currentDonation.dn
                 }
             })
-
+    
             revalidatePath("/transactions")
             return { success: "Confirmed the donation." }
         }
-
+    
         if (status === "CANCELLED") {
-
+    
             // TODO: CREATE TRANSACTION FOR CANCELLED DONATIONS CAN EVEN IMPLEMENT PENALTY WHEREIN USERS CAN RECEIVE MINUS LOYALTY POINTS
-
+    
             // magccreate pa rin ng transaction pero cancelled at walang maggain na points?
-
+    
             revalidatePath("/transactions")
             return { success: "Cancelled the donation" }
         }
     }
 
-
+   
 }

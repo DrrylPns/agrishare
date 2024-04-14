@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { FolderSyncIcon, MoreHorizontalIcon } from "lucide-react"
+import { CheckIcon, FolderSyncIcon, MoreHorizontalIcon } from "lucide-react"
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 
@@ -19,7 +19,8 @@ import Link from "next/link"
 import Image from "next/image"
 import { UploadDropzone } from "@/lib/uploadthing"
 import { handleTradeProof } from "../../../../../actions/trade"
-import { formattedSLU } from "@/lib/utils"
+import { conditionRates, formattedSLU } from "@/lib/utils"
+import { RadioGroup } from "@headlessui/react"
 // import { handleTrade } from "../../../actions/trade"
 
 export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
@@ -137,6 +138,8 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
             const [isPending, startTransition] = useTransition()
             const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false)
             const [isRejectOpen, setIsRejectOpen] = useState<boolean>(false)
+            const [selectedRate, setSelectedRate] = useState(0)
+            const [selectRateError, setSelectRateError] = useState<boolean>(false)
 
 
             const tradeId = row.original.id;
@@ -242,6 +245,8 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
 
                 })
             }
+
+          
 
             return (
                 <>
@@ -584,6 +589,35 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                             }}
                                         />
                                         }
+                                        {tradeStatus === "PENDING" ? (
+                                            <div className="mt-5 ">
+                                                <div className="mb-10">
+                                                    <RadioGroup value={selectedRate} onChange={setSelectedRate}>
+                                                        <div className="flex justify-center items-center gap-x-5">
+                                                            <RadioGroup.Label>Condition : </RadioGroup.Label>
+                                                            {conditionRates.map((rate) => (
+                                                                <RadioGroup.Option
+                                                                    key={rate}
+                                                                    value={rate}
+                                                                    onClick={() => setSelectRateError(false)}
+                                                                    className="flex gap-3 items-center ui-active:whte ui-active:text-gray-700 text-sm w-24 py-1 px-2 outline-1 outline outline-gray-300 shadow-sm drop-shadow-sm  ui-not-active:bg-white ui-not-active:text-black"
+                                                                >
+                                                                    <CheckIcon className="hidden ui-checked:block" height={20} width={20} />
+                                                                    {rate === 0.5 && "Poor"}
+                                                                    {rate === 1 && "Neutral"}
+                                                                    {rate === 1.5 && "Good"}
+                                                                </RadioGroup.Option>
+                                                            ))}
+                                                        </div>
+                                                    </RadioGroup>
+                                                    {selectRateError && (
+                                                        <h1 className="text-red-500 text-xs text-center mt-3">*Select codition rate first!</h1>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            null
+                                        )}
 
                                         <div className="flex gap-3 mt-3">
                                             <Button
@@ -592,21 +626,24 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                                 isLoading={isPending}
                                                 onClick={() => {
                                                     startTransition(() => {
-                                                        handleTradeProof(imageUrl, tradeId).then((callback) => {
-                                                            if (callback?.error) {
-                                                                toast({
-                                                                    description: callback.error,
-                                                                    variant: "destructive"
-                                                                })
-                                                            }
-
-                                                            if (callback?.success) {
-                                                                setIsProofOpen(false)
-                                                                toast({
-                                                                    description: callback.success
-                                                                })
-                                                            }
-                                                        })
+                                                        if(selectedRate === 0 ){
+                                                            setSelectRateError(true)
+                                                        } else {
+                                                            handleTradeProof(imageUrl, tradeId, selectedRate).then((callback) => {
+                                                                if (callback?.error) {
+                                                                    toast({
+                                                                        description: callback.error,
+                                                                        variant: "destructive"
+                                                                    })
+                                                                }
+                                                                if (callback?.success) {
+                                                                    setIsProofOpen(false)
+                                                                    toast({
+                                                                        description: callback.success
+                                                                    })
+                                                                }
+                                                            })
+                                                        }
                                                     })
                                                 }}
                                             >Confirm</Button>

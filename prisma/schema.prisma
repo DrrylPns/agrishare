@@ -214,6 +214,15 @@ enum Subcategory {
   NOT_ORGANIC_SOIL
   ORGANIC_FERTILIZER
   NOT_ORGANIC_FERTILIZER
+  WHEEL_BARROW
+  WATER_HOSE
+  GARDEN_POTS
+  BUCKET
+  GLOVES
+  HAND_PRUNES
+  KALAYKAY
+  HOES
+  SHOVEL
 }
 
 model AgriChange {
@@ -360,6 +369,7 @@ model Donation {
   status       DonationStatus @default(PENDING)
   category     Category?
   subcategory  Subcategory?
+  size          String?
   proof        String?
   pickUpDate   DateTime?
   createdAt    DateTime       @default(now())
@@ -419,6 +429,8 @@ model Trade {
   weight         Float
   value          Float
   description    String       @db.Text
+  tradeeConditionRate Float?
+  traderConditionRate Float?
   proofTradee    String?
   proofTrader    String?
   status         StatusType   @default(PENDING)
