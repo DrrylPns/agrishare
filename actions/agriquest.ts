@@ -1,7 +1,7 @@
 "use server"
 
 import prisma from "@/lib/db"
-import { AgriQuestSchema, AgriquestType } from "@/lib/validations/agriquest"
+import { AgriQuestSchema, AgriquestType, DateOfPickupInAgriquest, DateOfPickupInAgriquestType } from "@/lib/validations/agriquest"
 import { auth } from "../auth"
 import { getUserById } from "../data/user"
 import { generateAgriquestHistoryID } from "@/lib/utils"
@@ -108,8 +108,14 @@ export const updateAgriquest = async (values: AgriquestType, image: string, id: 
     }
 }
 
-export const claimAgriquest = async (id: string) => {
+export const claimAgriquest = async (id: string, data: DateOfPickupInAgriquestType) => {
     try {
+        const validatedFields = DateOfPickupInAgriquest.safeParse(data)
+
+        if (!validatedFields.success) return { error: "Invalid fields!" }
+
+        const { pickupDate } = validatedFields.data
+
         const session = await auth()
 
         if (!session) return { error: "Unauthorized!" }
@@ -133,6 +139,7 @@ export const claimAgriquest = async (id: string) => {
                 aq,
                 agriquestId: currentAgriquest.id,
                 userId: user.id,
+                pickUpDate: pickupDate,
             }
         })
 

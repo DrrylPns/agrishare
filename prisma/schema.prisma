@@ -214,7 +214,7 @@ enum Subcategory {
   NOT_ORGANIC_SOIL
   ORGANIC_FERTILIZER
   NOT_ORGANIC_FERTILIZER
-  WHEEL_BARROW
+ WHEEL_BARROW
   WATER_HOSE
   GARDEN_POTS
   BUCKET
@@ -284,11 +284,12 @@ model Agriquest {
 }
 
 model Request {
-  id        String      @id @default(cuid())
-  aq        String      @unique
-  status    ClaimStatus @default(PENDING)
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  id         String      @id @default(cuid())
+  aq         String      @unique
+  status     ClaimStatus @default(PENDING)
+  pickUpDate DateTime?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
 
   agriquest   Agriquest @relation(fields: [agriquestId], references: [id], onDelete: Cascade)
   agriquestId String
@@ -369,7 +370,7 @@ model Donation {
   status       DonationStatus @default(PENDING)
   category     Category?
   subcategory  Subcategory?
-  size          String?
+  size         String?
   proof        String?
   pickUpDate   DateTime?
   createdAt    DateTime       @default(now())
@@ -419,25 +420,25 @@ enum TransactionType {
 }
 
 model Trade {
-  id             String       @id @default(cuid())
-  trd            String       @unique
-  item           String
-  image          String       @db.Text
-  quantity       Float
-  shelfLife      String
-  tradedQuantity Float
-  weight         Float
-  value          Float
-  description    String       @db.Text
+  id                  String       @id @default(cuid())
+  trd                 String       @unique
+  item                String
+  image               String       @db.Text
+  quantity            Float
+  shelfLife           String
+  tradedQuantity      Float
+  weight              Float
+  value               Float
+  description         String       @db.Text
   tradeeConditionRate Float?
   traderConditionRate Float?
-  proofTradee    String?
-  proofTrader    String?
-  status         StatusType   @default(PENDING)
-  category       Category?
-  subcategory    Subcategory?
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  proofTradee         String?
+  proofTrader         String?
+  status              StatusType   @default(PENDING)
+  category            Category?
+  subcategory         Subcategory?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
 
   // yung nag post, pwede ma-fetch dito yung pinost na product
   tradeeId String
