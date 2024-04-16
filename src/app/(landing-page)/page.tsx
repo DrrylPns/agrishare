@@ -11,10 +11,6 @@ import Heart from './_components/images/Heart.png'
 import { FaCheck } from 'react-icons/fa'
 import { BsArrowRight, BsEnvelope, BsTelephone } from 'react-icons/bs'
 import { Button } from '@/components/ui/button'
-import newsArray, { NewsItem } from './_components/dummyData/newsData'
-import NewsCard from './_components/newsCard'
-import { CiLocationOn } from 'react-icons/ci'
-import ContactForm from './_components/ContactForm'
 import Footer from './_components/Footer'
 import { ContactUsForm } from '@/components/contact-us-form'
 
@@ -23,32 +19,32 @@ function page() {
   return (
     <div className='transition-all duration-1000 ease-in-out'>
       <Header />
-      <section className='relative h-dvh font-poppins' id='aboutus'>
-        <div className='relative flex flex-col justify-center items-center w-1/2 h-full mx-auto my-auto'>
-          <h1 className='relative z-20 text-5xl text-center text-white font-bold tracking-tight'>About us</h1>
-          <p className='relative z-20 text-white text-justify'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Pariatur delectus necessitatibus odit accusamus, qui distinctio architecto excepturi quae molestiae rerum eum, omnis saepe explicabo, ex tenetur libero eos. Totam, laudantium.</p>
+      <section className='relative py-40 md:py-40 h-dvh font-poppins' id='aboutus'>
+        <div className='relative my-auto px-10 md:px-40'>
+          <h1 className='relative z-20 text-4xl md:text-7xl mb-10 text-center text-white font-bold tracking-wider'>About us</h1>
+          <p className='relative z-20 text-white text-sm md:text-2xl text-center'>In August 2021, the Quezon City University - Center for Urban Agriculture and Innovation (QCU-CUAI) was established through the Board Resolution No. 14, s. 2021 with the aim of promoting urban agriculture as a measure to alleviate poverty, address stability of food supply, foster social integration among communities, and protect the environment through eco-friendly methods and other alternative and innovative gardening methods.</p>
         </div>
-        <div className='absolute top-0 z-10 w-full h-dvh bg-transparent-whitist'>
+        <div className='absolute top-0 z-10 w-full h-dvh bg-white/20'>
         </div>
-        <div className='absolute top-0 z-0 w-full  mx-auto '>
+        <div className='absolute top-0 z-0 w-full mx-auto '>
           <Image
             src={aboutusBg}
             alt='Header Image'
-            className='max-h-dvh min-h-fit z-0'
+            className='h-dvh z-0'
           />
         </div>
       </section>
 
       <section className='font-poppins flex justify-center items-center gap-10 px-20 text-white font-semibold bg-black h-dvh w-full'>
         <div className='w-full md:w-1/2'>
-          <h1 className='font-semibold text-4xl font-poppins'>MISSION</h1>
-          <p className='mt-5 text-justify'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex rem exercitationem sunt ratione velit veritatis ad architecto. Vero soluta reiciendis eligendi odio mollitia nemo vel possimus, maxime, assumenda molestiae fugiat.</p>
+          <h1 className='font-semibold text-4xl mb-10 font-poppins'>MISSION</h1>
+          <p className='mt-5 text-justify text-xl'>To lead in the production of innovative farming technologies, hosting of urban farming projects, and development of relevant research and community extension programs.</p>
         </div>
-        <div className='hidden lg:flex justify-center items-center'>
+        <div className='hidden w-2/3 lg:flex justify-center items-center'>
           <Image
             src={MissionSvg}
             alt='Mission image'
-            className='w-1/2'
+            className='w-2/3 object-cover h-1/2'
           />
         </div>
       </section>
@@ -63,7 +59,7 @@ function page() {
         </div>
         <div className='w-full md:w-1/2'>
           <h1 className='font-semibold text-4xl font-poppins uppercase text-center'>VISION</h1>
-          <p className='mt-5 text-justify text-muted-foreground'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex rem exercitationem sunt ratione velit veritatis ad architecto. Vero soluta reiciendis eligendi odio mollitia nemo vel possimus, maxime, assumenda molestiae fugiat.</p>
+          <p className='mt-5 text-justify text-muted-foreground'>To be an internationally-recognized center in urban agriculture development, research, community engagement, and capability building toward achieving a livable and green Quezon City.</p>
           <div className='grid md:grid-cols-2 gap-5 mt-10 grid-cols-1'>
             <div className='flex items-center w-full gap-3'>
               <Image
@@ -103,10 +99,10 @@ function page() {
         </div>
       </section>
 
-      <section className='bg-black font-poppins text-white flex justify-center items-center gap-10 px-20 w-full h-dvh'>
+      <section className='bg-black font-poppins text-white flex justify-center items-center gap-10 px-20 md:px-40 w-full h-dvh'>
         <div className='w-full md:w-1/2'>
           <h1 className='font-semibold text-4xl font-poppins uppercase'>How it works?</h1>
-          <p className='mt-5 text-justify'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex rem exercitationem sunt ratione velit veritatis ad architecto. Vero soluta reiciendis eligendi odio mollitia nemo vel possimus, maxime, assumenda molestiae fugiat.</p>
+          <p className='mt-5 text-justify'>Welcome to Agrishare!, Our platform allows you to trade with other users and donate to urban farmer while earning points that can be redeemed for goods and equipment.</p>
           <div className='mt-5'>
             <div className='flex gap-3 mt-3'>
               <span className='text-[#2C742F]'><FaCheck /></span>
@@ -127,30 +123,11 @@ function page() {
           <Image
             src={Heart}
             alt='Mission image'
-            className='w-1/2'
+            className='w w-2/3 h-full'
           />
         </div>
       </section>
-
-      <section id='news' className='font-poppins lg:px-32 lg:py-10 w-full min-h-dvh my-5 p-3'>
-        <h1 className='text-2xl font-semibold text-center mb-2'>Latest news</h1>
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-2 md:gap-5'>
-          {newsArray.length > 0 && newsArray.map((news: NewsItem) => (
-            <div key={news.id}>
-              <NewsCard
-                category={news.category}
-                userRole={news.userRole}
-                description={news.description}
-                image={news.image}
-                date={news.createdAt}
-                comments={news.arrayOfComments}
-              />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section id='contactus' className='bg-black font-poppins text-white flex flex-col md:flex-row justify-center items-center gap-10 p-10 md:p-32 w-full min-h-dvh h-dvh'>
+      <section id='contactus' className='bg-white font-poppins text-white flex justify-center items-center px-5 md:px-40 py-44 w-full min-h-dvh h-dvh'>
         <ContactUsForm />
       </section>
       <Footer />

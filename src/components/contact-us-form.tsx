@@ -4,37 +4,18 @@ import { Button } from "@/components/ui/button"
 
 export function ContactUsForm() {
   return (
-    <div className="min-h-screen flex justify-center items-center md:p-4">
-      <div className="bg-white max-w-4xl mx-auto rounded-lg shadow-lg overflow-hidden lg:flex my-3">
-        <div className="lg:w-1/2 p-6 sm:p-8 lg:p-12 md:my-auto">
-          <div className="md:space-y-11 space-y-3">
-            <div className="flex flex-col items-center space-x-2">
-              <MapPinIcon className="text-green-500 h-11 w-11" />
-              <p className="text-gray-600">123 Lily St. Batasan Hills Q.C</p>
-            </div>
-            <div className="flex flex-col items-center space-x-2">
-              <MailIcon className="text-green-500 h-11 w-11" />
-              <p className="text-gray-600">Proxy@gmail.com</p>
-            </div>
-            <div className="flex flex-col items-center space-x-2">
-              <PhoneIcon className="text-green-500 h-11 w-11" />
-              <p className="text-gray-600">(219) 555-0114</p>
-            </div>
-          </div>
-        </div>
-        <div className="lg:w-1/2 bg-[#F1F5F9] p-6 sm:p-8 lg:p-12">
-          <h2 className="text-2xl font-bold text-gray-800">Just Say Hello!</h2>
-          <p className="mt-2 text-gray-600">
-            Do you fancy saying hi to me or you want to get started with your project and you need my help? Feel free to
-            contact me.
-          </p>
-          <div className="mt-8">
-            <Input className="mb-4" id="email" placeholder="zakirsoft@gmail.com" type="email" />
-            <Input className="mb-4" id="name" placeholder="Hello!" />
-            <Textarea className="mb-4" id="message" placeholder="Subjects" />
-            <Button>Send Message</Button>
-          </div>
-        </div>
+    <div className="md:grid grid-cols-3 justify-between items-center gap-x-5 p-20 w-full h-full rounded-xl bg-black">
+      <div className="flex flex-col items-center mb-5 md:mb-0">
+        <MapPinIcon className="text-green-500 h-11 w-11" />
+        <p className="text-gray-600 text-center">673 Quirino Hwy, Novaliches, Quezon City, Metro Manila</p>
+      </div>
+      <div className="flex flex-col items-center  md:mb-0">
+        <PhoneIcon className="text-green-500 h-11 w-11" />
+        <p className="text-gray-600">090-825-59914</p>
+      </div>
+      <div className="flex flex-col items-center  md:mb-0">
+        <MailIcon className="text-green-500 h-11 w-11" />
+        <p className="text-gray-600">center.urban.agriculture@qcu.edu.ph</p>
       </div>
     </div>
   )
