@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/components/ui/use-toast"
@@ -26,7 +26,7 @@ import { Category, Subcategory, Types } from '@prisma/client'
 import { format, sub } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import Image from "next/image"
-import { useState, useTransition } from "react"
+import { useEffect, useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { updateAgrichange } from "../../../../../actions/agrichange"
 
@@ -40,8 +40,14 @@ export const EditAgrichangeForm = ({
     const [isPending, startTransition] = useTransition()
     const [chosenCategory, setChosenCategory] = useState(agrichange.category)
     const [imageUrl, setImageUrl] = useState<string>(agrichange.image)
+    const [size, setSize] = useState("")
+    const [selectedSubcategory, setSelectedSubcategory] = useState("")
 
     const imageIsEmpty = imageUrl.length === 0
+
+    useEffect(() => {
+        setSelectedSubcategory("")
+    }, [chosenCategory])
 
     const form = useForm<AgrichangeType>({
         resolver: zodResolver(AgrichangeSchema),
@@ -51,20 +57,20 @@ export const EditAgrichangeForm = ({
             harvestDate: agrichange.harvestDate,
             image: agrichange.image,
             name: agrichange.name,
-            pointsNeeded: agrichange.pointsNeeded,
+            // pointsNeeded: agrichange.pointsNeeded,
             quantity: agrichange.quantity,
             shelfLife: agrichange.shelfLife,
             subcategory: agrichange.subcategory as Subcategory,
-            type: agrichange.type,
+            type: agrichange.category === "FRESH_FRUIT" || agrichange.category === "VEGETABLES" ? agrichange.type : undefined,
             weight: agrichange.weight,
-            qtyPerTrade: agrichange.quantityPerTrade,
+            // qtyPerTrade: agrichange.quantityPerTrade,
             category: agrichange.category as Category,
         }
     })
 
     function onSubmit(values: AgrichangeType) {
         startTransition(() => {
-            updateAgrichange(values, imageUrl, agrichange.id).then((callback) => {
+            updateAgrichange(values, imageUrl, agrichange.id, size).then((callback) => {
                 if (callback.error) {
                     toast({
                         description: callback.error,
@@ -214,7 +220,10 @@ export const EditAgrichangeForm = ({
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Subcategory</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <Select onValueChange={(newValue) => {
+                                    field.onChange(newValue)
+                                    setSelectedSubcategory(newValue)
+                                }} defaultValue={field.value}>
                                     <FormControl>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Select a subcategory..." />
@@ -227,7 +236,7 @@ export const EditAgrichangeForm = ({
                                                 <SelectItem value={Subcategory.PODDED_VEGETABLES}>Podded Vegetables</SelectItem>
                                                 <SelectItem value={Subcategory.FRUIT_VEGETABLES}>Fruit Vegetables</SelectItem>
                                                 <SelectItem value={Subcategory.ROOT_VEGETABLES}>Root Vegetables</SelectItem>
-                                                <SelectItem value={Subcategory.HERBS_VEGETABLES}>Herbs Vegetables</SelectItem>
+                                                {/* <SelectItem value={Subcategory.HERBS_VEGETABLES}>Herbs Vegetables</SelectItem> */}
                                             </>
                                         )}
                                         {chosenCategory === Category.FRESH_FRUIT && (
@@ -249,17 +258,23 @@ export const EditAgrichangeForm = ({
                                                 <SelectItem value={Subcategory.NOT_ORGANIC_FERTILIZER}>Not Organic Fertilizer</SelectItem>
                                             </>
                                         )}
-                                        {chosenCategory === Category.SEEDS && (
-                                            <>
-                                                <SelectItem value={Subcategory.SEEDS1}>Seeds 1</SelectItem>
-                                                <SelectItem value={Subcategory.SEEDS2}>Seeds 2</SelectItem>
-                                            </>
-                                        )}
+                                        {/* {chosenCategory === Category.SEEDS && (
+                        <>
+                          <SelectItem value={Subcategory.SEEDS1}>Seeds 1</SelectItem>
+                          <SelectItem value={Subcategory.SEEDS2}>Seeds 2</SelectItem>
+                        </>
+                      )} */}
                                         {chosenCategory === Category.TOOLS && (
                                             <>
-                                                <SelectItem value={Subcategory.SMALL}>Small</SelectItem>
-                                                <SelectItem value={Subcategory.MEDIUM}>Medium</SelectItem>
-                                                <SelectItem value={Subcategory.LARGE}>Large</SelectItem>
+                                                <SelectItem value={Subcategory.WHEEL_BARROW}>Wheel Barrow</SelectItem>
+                                                <SelectItem value={Subcategory.WATER_HOSE}>Water Hose</SelectItem>
+                                                <SelectItem value={Subcategory.GARDEN_POTS}>Garden Pots</SelectItem>
+                                                <SelectItem value={Subcategory.BUCKET}>Bucket</SelectItem>
+                                                <SelectItem value={Subcategory.GLOVES}>Gloves</SelectItem>
+                                                <SelectItem value={Subcategory.HAND_PRUNES}>Hand Prunes</SelectItem>
+                                                <SelectItem value={Subcategory.KALAYKAY}>Kalaykay</SelectItem>
+                                                <SelectItem value={Subcategory.HOES}>Hoes</SelectItem>
+                                                <SelectItem value={Subcategory.SHOVEL}>Shovel</SelectItem>
                                             </>
                                         )}
                                         {chosenCategory === Category.SOILS && (
@@ -305,10 +320,126 @@ export const EditAgrichangeForm = ({
                             )}
                         />
                     )}
+
+                    <div className="mt-8">
+                        {selectedSubcategory === Subcategory.WATER_HOSE ? (
+                            <Select onValueChange={(newValue) => setSize(newValue)}>
+                                <SelectTrigger className="">
+                                    <SelectValue placeholder="Select a size" />
+                                </SelectTrigger>
+                                <SelectContent className="">
+                                    <SelectGroup>
+                                        <SelectLabel>Sizes</SelectLabel>
+                                        <SelectItem value="1/4">1/4</SelectItem>
+                                        <SelectItem value="1/2">1/2</SelectItem>
+                                        <SelectItem value="3/4">3/4</SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        ) : selectedSubcategory === Subcategory.GARDEN_POTS ? (
+                            <Select onValueChange={(newValue) => setSize(newValue)}>
+                                <SelectTrigger className="">
+                                    <SelectValue placeholder="Select a size" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectLabel>Sizes</SelectLabel>
+                                        <SelectItem value="SmallGarden">Small</SelectItem>
+                                        <SelectItem value="MediumGarden">Medium</SelectItem>
+                                        <SelectItem value="LargeGarden">Large</SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        ) : selectedSubcategory === Subcategory.BUCKET ? (
+                            <Select onValueChange={(newValue) => setSize(newValue)}>
+                                <SelectTrigger className="">
+                                    <SelectValue placeholder="Select a size" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectLabel>Sizes</SelectLabel>
+                                        <SelectItem value="SmallBucket">Small</SelectItem>
+                                        <SelectItem value="MediumBucket">Medium</SelectItem>
+                                        <SelectItem value="LargeBucket">Large</SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        ) : selectedSubcategory === Subcategory.KALAYKAY ? (
+                            <Select onValueChange={(newValue) => setSize(newValue)}>
+                                <SelectTrigger className="">
+                                    <SelectValue placeholder="Select a size" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectLabel>Sizes</SelectLabel>
+                                        <SelectItem value="SmallKalaykay">Small</SelectItem>
+                                        <SelectItem value="LargeKalaykay">Large</SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        ) : selectedSubcategory === Subcategory.SHOVEL ? (
+                            <Select onValueChange={(newValue) => setSize(newValue)}>
+                                <SelectTrigger className="">
+                                    <SelectValue placeholder="Select a size" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectLabel>Sizes</SelectLabel>
+                                        <SelectItem value="SmallShovel">Small</SelectItem>
+                                        <SelectItem value="LargeShovel">Large</SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        ) : ""}
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-center">
-                    <FormField
+                    {(chosenCategory === Category.VEGETABLES || chosenCategory === Category.FRESH_FRUIT) && (
+                        <FormField
+                            control={form.control}
+                            name="harvestDate"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-col">
+                                    <FormLabel>Harvest Date</FormLabel>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <FormControl>
+                                                <Button
+                                                    variant={"outline"}
+                                                    className={cn(
+                                                        "pl-3 text-left font-normal",
+                                                        !field.value && "text-muted-foreground"
+                                                    )}
+                                                >
+                                                    {field.value ? (
+                                                        format(field.value, "PPP")
+                                                    ) : (
+                                                        <span>Pick a date</span>
+                                                    )}
+                                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                </Button>
+                                            </FormControl>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto p-0" align="start">
+                                            <Calendar
+                                                mode="single"
+                                                selected={field.value}
+                                                onSelect={field.onChange}
+                                                disabled={(date) =>
+                                                    date > new Date() ||
+                                                    date < sub(new Date(), { days: 3 }) // Limit to the last 3 days
+                                                }
+                                                initialFocus
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    )}
+                    {/* <FormField
                         control={form.control}
                         name="harvestDate"
                         render={({ field }) => (
@@ -349,9 +480,9 @@ export const EditAgrichangeForm = ({
                                 <FormMessage />
                             </FormItem>
                         )}
-                    />
+                    /> */}
 
-                    <FormField
+                    {/* <FormField
                         control={form.control}
                         name="pointsNeeded"
                         render={({ field }) => (
@@ -363,9 +494,9 @@ export const EditAgrichangeForm = ({
                                 <FormMessage />
                             </FormItem>
                         )}
-                    />
+                    /> */}
 
-                    <FormField
+                    {/* <FormField
                         control={form.control}
                         name="qtyPerTrade"
                         render={({ field }) => (
@@ -377,7 +508,7 @@ export const EditAgrichangeForm = ({
                                 <FormMessage />
                             </FormItem>
                         )}
-                    />
+                    /> */}
                 </div>
 
                 <div>

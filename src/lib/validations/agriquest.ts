@@ -39,10 +39,11 @@ export const AgrichangeSchema = z.object({
     shelfLife: z.string().min(2, { message: "Shelf life should be valid." }),
     category: Category,
     subcategory: Subcategory,
-    harvestDate: z.coerce.date(),
-    type: z.optional(z.enum(["ORGANIC", "NOT_ORGANIC"])),
-    pointsNeeded: z.coerce.number(),
-    qtyPerTrade: z.coerce.number(),
+    harvestDate: z.coerce.date().optional(),
+    type: z.enum(["ORGANIC", "NOT_ORGANIC"]).optional(),
+    pointsNeeded: z.coerce.number().optional(),
+    // qtyPerTrade: z.coerce.number(),
+    size: z.optional(z.string()),
 })
 
 export type DateOfPickupInAgriquestType = z.infer<typeof DateOfPickupInAgriquest>

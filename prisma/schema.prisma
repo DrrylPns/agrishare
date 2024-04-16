@@ -168,7 +168,7 @@ model Post {
   shelfLifeDuration Int
   shelfLifeUnit     ShelfLifeUnit
   preferedOffers    String
-  harvestDate       DateTime
+  harvestDate       DateTime?
   proof             String?
   reviews           Reviews[]
   transaction       Transaction[]
@@ -230,7 +230,7 @@ model AgriChange {
   image            String        @db.Text
   name             String
   description      String        @db.Text
-  quantityPerTrade Float
+  quantityPerTrade Float?
   quantity         Float         @default(0)
   weight           Float
   color            String
@@ -242,7 +242,7 @@ model AgriChange {
   shelfLife        String
   pointsNeeded     Float
   transaction      Transaction[]
-  harvestDate      DateTime
+  harvestDate      DateTime?
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
 

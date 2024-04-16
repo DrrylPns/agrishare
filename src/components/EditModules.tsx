@@ -45,7 +45,7 @@ export const EditModules = ({
             </DropdownMenu>
 
             <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
-                <DialogContent className="lg:max-w-screen-lg max-lg:overflow-y-scroll max-h-screen">
+                <DialogContent className="lg:max-w-screen-lg overflow-y-scroll max-h-screen">
                     <DialogHeader>
                         <DialogTitle>
                             <AdminTitle entry="1" title={title} />

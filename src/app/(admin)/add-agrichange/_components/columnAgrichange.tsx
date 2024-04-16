@@ -79,8 +79,7 @@ export const columnAgrichange: ColumnDef<AgriChangeType>[] = [
             )
         },
         cell: ({ row }) => {
-            const pts = row.original.pointsNeeded
-
+            const pts = row.original.pointsNeeded.toFixed(0)
 
             return <div
                 className=""
