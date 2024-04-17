@@ -83,7 +83,11 @@ export async function generateUserId() {
   return userId;
 }
 
-export function formattedSLU(duration: number, unit: ShelfLifeUnit): string {
+export function formattedSLU(duration: number | null, unit: ShelfLifeUnit | null): string {
+  if (!unit) {
+    return ''
+  }
+
   const formattedUnit = unit.toLowerCase().charAt(0) + unit.toLowerCase().slice(1).toLowerCase();
 
   if (duration === 1) {
@@ -98,20 +102,21 @@ export function isExpired(dateString: string, shelfLifeDuration: number, shelfLi
   const expirationDate = new Date(dateString);
 
   switch (shelfLifeUnit) {
-      case 'DAY':
-          expirationDate.setDate(expirationDate.getDate() + shelfLifeDuration);
-          break;
-      case 'WEEK':
-          expirationDate.setDate(expirationDate.getDate() + (shelfLifeDuration * 7));
-          break;
-      case 'MONTH':
-          expirationDate.setMonth(expirationDate.getMonth() + shelfLifeDuration);
-          break;
-      case 'YEAR':
-          expirationDate.setFullYear(expirationDate.getFullYear() + shelfLifeDuration);
-          break;
-      default:
-          throw new Error('Invalid shelfLifeUnit');
+    case 'DAY':
+      expirationDate.setDate(expirationDate.getDate() + shelfLifeDuration);
+      break;
+    case 'WEEK':
+      expirationDate.setDate(expirationDate.getDate() + (shelfLifeDuration * 7));
+      break;
+    case 'MONTH':
+      expirationDate.setMonth(expirationDate.getMonth() + shelfLifeDuration);
+      break;
+    case 'YEAR':
+      expirationDate.setFullYear(expirationDate.getFullYear() + shelfLifeDuration);
+      break;
+    default:
+      // throw new Error('Invalid shelfLifeUnit');
+      ""
   }
 
   return currentDate > expirationDate;

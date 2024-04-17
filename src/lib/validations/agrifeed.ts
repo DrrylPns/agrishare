@@ -10,7 +10,7 @@ const ShelfLifeUnit = z.enum([
     "WEEK",
     "MONTH",
     "YEAR",
-])
+]).optional()
 
 export const AgrifeedSchema = z.object({
     id: z.optional(z.string()),
@@ -20,11 +20,12 @@ export const AgrifeedSchema = z.object({
     quantity: z.coerce.number(),
     weight: z.coerce.number(),
     color: z.string().min(2, { message: "Color should be valid." }),
-    shelfLifeDuration: z.coerce.number().min(1),
+    shelfLifeDuration: z.coerce.number().min(1).optional(),
     shelfLifeUnit: ShelfLifeUnit,
     category: Category,
     subcategory: Subcategory,
     type: z.optional(z.enum(["ORGANIC", "NOT_ORGANIC"])),
-    harvestDate: z.coerce.date(),
+    harvestDate: z.coerce.date().optional(),
     preferedOffers: z.string().min(2, { message: "Preferred Offer should be valid." }),
+    size: z.optional(z.string()),
 })

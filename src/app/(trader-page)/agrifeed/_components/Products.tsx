@@ -77,7 +77,7 @@ function Products() {
       {Posts?.pages.length > 0 ? Posts?.pages.map((page) => (
         <div key={page.nextId} >
           {page.getAllPost !== undefined && page.getAllPost.map((product) => {
-            if (isExpired(product.harvestDate.toString(), product.shelfLifeDuration, product.shelfLifeUnit)) {
+            if (isExpired(product.harvestDate?.toString(), product.shelfLifeDuration, product.shelfLifeUnit)) {
               return null
             } else {
               return (

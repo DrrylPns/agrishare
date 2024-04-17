@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/components/ui/use-toast'
 import { UploadDropzone } from '@/lib/uploadthing'
@@ -50,6 +50,8 @@ function UpdateAgrifeedForm({
   const [imageUrl, setImageUrl] = useState<string>(product.image)
   const [formStep, setFormStep] = useState(0)
   const [chosenCategory, setChosenCategory] = useState(product.category)
+  const [size, setSize] = useState("")
+  const [selectedSubcategory, setSelectedSubcategory] = useState("")
 
   const imageIsEmpty = imageUrl.length === 0
 
@@ -69,6 +71,7 @@ function UpdateAgrifeedForm({
       category: product.category as Category,
       harvestDate: product.harvestDate,
       type: product.type,
+      size: product?.size,
     }
   })
 
@@ -241,45 +244,49 @@ function UpdateAgrifeedForm({
                 </div>
 
                 {/* STEP 3 */}
-                <div className={`${formStep !== 2 && "hidden"} space-y-3 mb-1`}>
+                <div className={`${formStep !== 3 && "hidden"} space-y-3 mb-1`}>
+                  {(chosenCategory === Category.VEGETABLES || chosenCategory === Category.FRESH_FRUIT) && (
+                    <>
+                      <FormField
+                        control={form.control}
+                        name="shelfLifeDuration"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Shelf Life Duration</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter shelf life..." {...field} type='number' min={1} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                  <FormField
-                    control={form.control}
-                    name="shelfLifeDuration"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Shelf Life Duration</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter shelf life..." {...field} type='number' min={1} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                      <FormField
+                        control={form.control}
+                        name="shelfLifeUnit"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Shelf Life Unit</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select a unit" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value={ShelfLifeUnit.DAY}>Day(s)</SelectItem>
+                                <SelectItem value={ShelfLifeUnit.WEEK}>Week(s)</SelectItem>
+                                <SelectItem value={ShelfLifeUnit.MONTH}>Month(s)</SelectItem>
+                                <SelectItem value={ShelfLifeUnit.YEAR}>Year(s)</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </>
+                  )}
 
-                  <FormField
-                    control={form.control}
-                    name="shelfLifeUnit"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Shelf Life Unit</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a unit" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value={ShelfLifeUnit.DAY}>Day(s)</SelectItem>
-                            <SelectItem value={ShelfLifeUnit.WEEK}>Week(s)</SelectItem>
-                            <SelectItem value={ShelfLifeUnit.MONTH}>Month(s)</SelectItem>
-                            <SelectItem value={ShelfLifeUnit.YEAR}>Year(s)</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
 
                   <FormField
                     control={form.control}
@@ -327,7 +334,7 @@ function UpdateAgrifeedForm({
                 </div>
 
                 {/* STEP 4 */}
-                <div className={`${formStep !== 3 && "hidden"} space-y-3 mb-1`}>
+                <div className={`${formStep !== 2 && "hidden"} space-y-3 mb-1`}>
                   <FormField
                     control={form.control}
                     name="category"
@@ -365,7 +372,10 @@ function UpdateAgrifeedForm({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Subcategory</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <Select onValueChange={(newValue) => {
+                          field.onChange(newValue)
+                          setSelectedSubcategory(newValue)
+                        }} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Select a subcategory..." />
@@ -381,12 +391,12 @@ function UpdateAgrifeedForm({
                                 <SelectItem value={Subcategory.HERBS_VEGETABLES}>Herbs Vegetables</SelectItem>
                               </>
                             )}
-                            {chosenCategory === Category.FRESH_FRUIT && (
-                              <>
-                                <SelectItem value={Subcategory.FRUIT1}>Fruit 1</SelectItem>
-                                <SelectItem value={Subcategory.FRUIT2}>Fruit 2</SelectItem>
-                              </>
-                            )}
+                            {/* {chosenCategory === Category.FRESH_FRUIT && (
+                        <>
+                          <SelectItem value={Subcategory.FRUIT1}>Fruit 1</SelectItem>
+                          <SelectItem value={Subcategory.FRUIT2}>Fruit 2</SelectItem>
+                        </>
+                      )} */}
                             {chosenCategory === Category.EQUIPMENTS && (
                               <>
                                 <SelectItem value={Subcategory.SMALL}>Small</SelectItem>
@@ -400,17 +410,23 @@ function UpdateAgrifeedForm({
                                 <SelectItem value={Subcategory.NOT_ORGANIC_FERTILIZER}>Not Organic Fertilizer</SelectItem>
                               </>
                             )}
-                            {chosenCategory === Category.SEEDS && (
-                              <>
-                                <SelectItem value={Subcategory.SEEDS1}>Seeds 1</SelectItem>
-                                <SelectItem value={Subcategory.SEEDS2}>Seeds 2</SelectItem>
-                              </>
-                            )}
+                            {/* {chosenCategory === Category.SEEDS && (
+                        <>
+                          <SelectItem value={Subcategory.SEEDS1}>Seeds 1</SelectItem>
+                          <SelectItem value={Subcategory.SEEDS2}>Seeds 2</SelectItem>
+                        </>
+                      )} */}
                             {chosenCategory === Category.TOOLS && (
                               <>
-                                <SelectItem value={Subcategory.SMALL}>Small</SelectItem>
-                                <SelectItem value={Subcategory.MEDIUM}>Medium</SelectItem>
-                                <SelectItem value={Subcategory.LARGE}>Large</SelectItem>
+                                <SelectItem value={Subcategory.WHEEL_BARROW}>Wheel Barrow</SelectItem>
+                                <SelectItem value={Subcategory.WATER_HOSE}>Water Hose</SelectItem>
+                                <SelectItem value={Subcategory.GARDEN_POTS}>Garden Pots</SelectItem>
+                                <SelectItem value={Subcategory.BUCKET}>Bucket</SelectItem>
+                                <SelectItem value={Subcategory.GLOVES}>Gloves</SelectItem>
+                                <SelectItem value={Subcategory.HAND_PRUNES}>Hand Prunes</SelectItem>
+                                <SelectItem value={Subcategory.KALAYKAY}>Kalaykay</SelectItem>
+                                <SelectItem value={Subcategory.HOES}>Hoes</SelectItem>
+                                <SelectItem value={Subcategory.SHOVEL}>Shovel</SelectItem>
                               </>
                             )}
                             {chosenCategory === Category.SOILS && (
@@ -425,6 +441,76 @@ function UpdateAgrifeedForm({
                       </FormItem>
                     )}
                   />
+
+                  {selectedSubcategory === Subcategory.WATER_HOSE ? (
+                    <Select onValueChange={(newValue) => setSize(newValue)}>
+                      <SelectTrigger className="">
+                        <SelectValue placeholder="Select a size" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Sizes</SelectLabel>
+                          <SelectItem value="1/4">1/4</SelectItem>
+                          <SelectItem value="1/2">1/2</SelectItem>
+                          <SelectItem value="3/4">3/4</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  ) : selectedSubcategory === Subcategory.GARDEN_POTS ? (
+                    <Select onValueChange={(newValue) => setSize(newValue)}>
+                      <SelectTrigger className="">
+                        <SelectValue placeholder="Select a size" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Sizes</SelectLabel>
+                          <SelectItem value="SmallGarden">Small</SelectItem>
+                          <SelectItem value="MediumGarden">Medium</SelectItem>
+                          <SelectItem value="LargeGarden">Large</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  ) : selectedSubcategory === Subcategory.BUCKET ? (
+                    <Select onValueChange={(newValue) => setSize(newValue)}>
+                      <SelectTrigger className="">
+                        <SelectValue placeholder="Select a size" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Sizes</SelectLabel>
+                          <SelectItem value="SmallBucket">Small</SelectItem>
+                          <SelectItem value="MediumBucket">Medium</SelectItem>
+                          <SelectItem value="LargeBucket">Large</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  ) : selectedSubcategory === Subcategory.KALAYKAY ? (
+                    <Select onValueChange={(newValue) => setSize(newValue)}>
+                      <SelectTrigger className="">
+                        <SelectValue placeholder="Select a size" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Sizes</SelectLabel>
+                          <SelectItem value="SmallKalaykay">Small</SelectItem>
+                          <SelectItem value="LargeKalaykay">Large</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  ) : selectedSubcategory === Subcategory.SHOVEL ? (
+                    <Select onValueChange={(newValue) => setSize(newValue)}>
+                      <SelectTrigger className="">
+                        <SelectValue placeholder="Select a size" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Sizes</SelectLabel>
+                          <SelectItem value="SmallShovel">Small</SelectItem>
+                          <SelectItem value="LargeShovel">Large</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  ) : ""}
 
                   {(chosenCategory === Category.VEGETABLES || chosenCategory === Category.FRESH_FRUIT) && (
                     <FormField
@@ -470,50 +556,52 @@ function UpdateAgrifeedForm({
                       </FormItem>
                     )}
                   />
-
-                  <FormField
-                    control={form.control}
-                    name="harvestDate"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col">
-                        <FormLabel>Harvest Date</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant={"outline"}
-                                className={cn(
-                                  "pl-3 text-left font-normal",
-                                  !field.value && "text-muted-foreground"
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value, "PPP")
-                                ) : (
-                                  <span>Pick a date</span>
-                                )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                              disabled={(date) =>
-                                date > new Date() ||
-                                date < sub(new Date(), { days: 3 }) // Limit to the last 3 days
-                              }
-                              initialFocus
-                            />
-                          </PopoverContent>
-                        </Popover>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  {(chosenCategory === Category.VEGETABLES || chosenCategory === Category.FRESH_FRUIT) && (
+                    <FormField
+                      control={form.control}
+                      name="harvestDate"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                          <FormLabel>Harvest Date</FormLabel>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant={"outline"}
+                                  className={cn(
+                                    "pl-3 text-left font-normal",
+                                    !field.value && "text-muted-foreground"
+                                  )}
+                                >
+                                  {field.value ? (
+                                    format(field.value, "PPP")
+                                  ) : (
+                                    <span>Pick a date</span>
+                                  )}
+                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0" align="start">
+                              <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                                disabled={(date) =>
+                                  date > new Date() ||
+                                  date < sub(new Date(), { days: 3 }) // Limit to the last 3 days
+                                }
+                                initialFocus
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
                 </div>
+
 
                 {/* STEP 1 BUTTON: NEXT STEP */}
                 <Button
@@ -584,11 +672,11 @@ function UpdateAgrifeedForm({
                     variant="primary"
                     className={
                       cn(' text-white rounded-full w-full mt-3', {
-                        'hidden': formStep !== 2
+                        'hidden': formStep !== 3
                       })
                     }
                     onClick={() => {
-                      setFormStep(1)
+                      setFormStep(2)
                     }}
                   >
                     <ArrowLeft className='w-4 h-4 mr-2 font-bold' />
@@ -601,17 +689,11 @@ function UpdateAgrifeedForm({
                     variant="primary"
                     className={
                       cn(' text-white rounded-full w-full mt-3', {
-                        'hidden': formStep !== 2
+                        'hidden': formStep !== 3
                       })
                     }
                     onClick={() => {
-                      form.trigger(['quantity', 'weight', 'color', 'shelfLifeDuration', 'shelfLifeUnit'])
-
-                      const quantityState = form.getFieldState("quantity")
-                      const weightState = form.getFieldState("weight")
-                      const colorState = form.getFieldState("color")
-                      const shelfLifeDuration = form.getFieldState("shelfLifeDuration")
-                      const shelfLifeUnit = form.getFieldState("shelfLifeUnit")
+                      form.trigger(["quantity", "weight", "color"])
 
                       const quantityValue = form.getValues("quantity")
                       const weightValue = form.getValues("weight")
@@ -621,16 +703,10 @@ function UpdateAgrifeedForm({
                         variant: "destructive"
                       })
 
-                      if (quantityState.invalid) return;
-                      if (weightState.invalid) return;
-                      if (colorState.invalid) return;
-                      if (shelfLifeDuration.invalid) return;
-                      if (shelfLifeUnit.invalid) return;
-
-                      setFormStep(3)
+                      form.handleSubmit(onSubmit)()
                     }}
                   >
-                    Next Step<ArrowRight className='w-4 h-4 ml-2 font-bold' />
+                    Save Changes
                   </Button>
                 </div>
 
@@ -641,11 +717,11 @@ function UpdateAgrifeedForm({
                     variant="primary"
                     className={
                       cn(' text-white rounded-full w-full mt-3', {
-                        'hidden': formStep !== 3
+                        'hidden': formStep !== 2
                       })
                     }
                     onClick={() => {
-                      setFormStep(2)
+                      setFormStep(1)
                     }}
                   >
                     <ArrowLeft className='w-4 h-4 mr-2 font-bold' />
@@ -660,14 +736,35 @@ function UpdateAgrifeedForm({
                     disabled={isLoading}
                     className={
                       cn(' text-white rounded-full w-full mt-3', {
-                        'hidden': formStep !== 3
+                        'hidden': formStep !== 2
                       })
                     }
                     onClick={() => {
-                      form.handleSubmit(onSubmit)()
+                      form.trigger(['category', 'subcategory', 'preferedOffers',])
+
+                      const categoryState = form.getFieldState("category")
+                      const subState = form.getFieldState("subcategory")
+                      const prefState = form.getFieldState("preferedOffers")
+                      // const shelfLifeDuration = form.getFieldState("shelfLifeDuration")
+                      // const shelfLifeUnit = form.getFieldState("shelfLifeUnit")
+
+                      // const quantityValue = form.getValues("quantity")
+                      // const weightValue = form.getValues("weight")
+
+                      // if (quantityValue <= 0 || weightValue <= 0) return toast({
+                      //   description: "Please put a valid quantity or weight!",
+                      //   variant: "destructive"
+                      // })
+
+                      if (categoryState.invalid) return;
+                      if (subState.invalid) return;
+                      if (prefState.invalid) return;
+
+                      setFormStep(3)
                     }}
                   >
-                    Save Changes
+                    Next Step
+                    <ArrowRight className='w-4 h-4 ml-2 font-bold' />
                   </Button>
                 </div>
 

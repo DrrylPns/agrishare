@@ -153,28 +153,29 @@ model Message {
 }
 
 model Post {
-  id                String        @id @default(cuid())
-  image             String        @db.Text
+  id                String         @id @default(cuid())
+  image             String         @db.Text
   name              String
-  description       String        @db.Text
-  quantity          Float         @default(0)
+  description       String         @db.Text
+  quantity          Float          @default(0)
   weight            Float
   color             String
   type              Types?
-  isFavorite        Boolean       @default(false)
+  size              String?
+  isFavorite        Boolean        @default(false)
   category          Category
   subcategory       Subcategory?
   status            Status
-  shelfLifeDuration Int
-  shelfLifeUnit     ShelfLifeUnit
+  shelfLifeDuration Int?
+  shelfLifeUnit     ShelfLifeUnit?
   preferedOffers    String
   harvestDate       DateTime?
   proof             String?
   reviews           Reviews[]
   transaction       Transaction[]
   trades            Trade[]
-  createdAt         DateTime      @default(now())
-  updatedAt         DateTime      @updatedAt
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
 
   User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
@@ -239,7 +240,7 @@ model AgriChange {
   category         Category
   subcategory      Subcategory?
   status           Status
-  shelfLife        String
+  shelfLife        String?
   pointsNeeded     Float
   transaction      Transaction[]
   harvestDate      DateTime?
@@ -274,7 +275,7 @@ model Agriquest {
   description      String
   quantityPerTrade Float
   quantity         Float     @default(0)
-  shelfLife        String
+  shelfLife        String?
   category         Category
   pickUpDate       DateTime?
   createdAt        DateTime  @default(now())
@@ -427,7 +428,7 @@ model Trade {
   item                String
   image               String       @db.Text
   quantity            Float
-  shelfLife           String
+  shelfLife           String?
   tradedQuantity      Float
   weight              Float
   value               Float

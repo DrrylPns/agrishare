@@ -13,6 +13,8 @@ export async function POST(req: Request) {
         const {
             category,
             color,
+            subcategory,
+            size,
             description,
             harvestDate,
             name,
@@ -26,10 +28,14 @@ export async function POST(req: Request) {
             id,
         } = AgrifeedSchema.parse(body)
 
+        //@ts-ignore
         if (shelfLifeDuration <= 0) {
             return new NextResponse(`The shelf life duration must be a positive number greater than 0. The value "${shelfLifeDuration}" is invalid.`);
         }
 
+        if (!quantity) {
+            return new NextResponse("No quantity selected!")
+        }
         let status: Status;
 
         if (quantity > 5) {
@@ -56,6 +62,8 @@ export async function POST(req: Request) {
                 weight,
                 status,
                 userId: session?.user.id as string,
+                subcategory,
+                size,
             }
         })
         return new NextResponse(`Successfully created the product!`)
@@ -73,6 +81,8 @@ export async function PUT(req: Request) {
         const {
             category,
             color,
+            subcategory,
+            size,
             description,
             harvestDate,
             name,
@@ -86,6 +96,7 @@ export async function PUT(req: Request) {
             id,
         } = AgrifeedSchema.parse(body)
 
+        //@ts-ignore
         if (shelfLifeDuration <= 0) {
             return new NextResponse(`The shelf life duration must be a positive number greater than 0. The value "${shelfLifeDuration}" is invalid.`);
         }
@@ -118,6 +129,8 @@ export async function PUT(req: Request) {
                 type,
                 weight,
                 status,
+                subcategory,
+                size,
                 userId: session?.user.id as string,
             }
         })

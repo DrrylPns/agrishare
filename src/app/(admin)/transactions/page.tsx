@@ -39,6 +39,7 @@ const page = async () => {
           <TabPanels>
             <TabPanel>
               <DataTable
+                //@ts-ignore
                 data={trades}
                 columns={columnTrade}
                 isHistory

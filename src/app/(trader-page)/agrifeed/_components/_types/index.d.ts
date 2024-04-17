@@ -35,6 +35,7 @@ export type Post = {
   shelfLifeDuration: number
   shelfLifeUnit: ShelfLifeUnit
   preferedOffers: string
+  size: string | undefined;
   harvestDate: Date
   reviews: Reviews[]
   createdAt: Date

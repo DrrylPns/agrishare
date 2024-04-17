@@ -48,7 +48,9 @@ function PostTabs({
           </div>
           <div className='flex'>
             <h1 className='w-1/3'>Harvest Date: </h1>
-            <span className='text-gray-400'><RelativeDate dateString={post.harvestDate.toDateString()} /></span>
+            <span className='text-gray-400'>
+              {post.harvestDate && <RelativeDate dateString={post.harvestDate.toDateString()} />}
+            </span>
           </div>
           <div className='flex'>
             <h1 className='w-1/3'>Prefered Offers: </h1>
