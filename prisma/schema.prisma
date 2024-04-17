@@ -74,11 +74,15 @@ model User {
   createdAgriquests Agriquest[] @relation("CreatedBy")
   claimedAgriquests Agriquest[] @relation("Claimed")
 
-  chatroomUser1 ChatRoom[] @relation("ChatroomUser1")
-  chatroomUser2 ChatRoom[] @relation("ChatroomUser2")
+  // chatroomUser1 ChatRoom[] @relation("ChatroomUser1")
+  // chatroomUser2 ChatRoom[] @relation("ChatroomUser2")
 
-  sender Message[] @relation("Sender")
-  sendee Message[] @relation("Sendee")
+  // sender Message[] @relation("Sender")
+  // sendee Message[] @relation("Sendee")
+
+  ChatRoom ChatRoom[]
+
+  Message Message[]
 }
 
 enum Role {
@@ -126,14 +130,10 @@ model TwoFactorConfirmation {
 model ChatRoom {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  chatroomUser1Id String
-  chatroomUser1   User   @relation(fields: [chatroomUser1Id], references: [id], onDelete: Cascade, name: "ChatroomUser1")
-
-  chatroomUser2Id String
-  chatroomUser2   User   @relation(fields: [chatroomUser2Id], references: [id], onDelete: Cascade, name: "ChatroomUser2")
-
-  messages Message[]
+  participants User[]
+  messages     Message[]
 }
 
 model Message {
@@ -141,16 +141,43 @@ model Message {
   image     String?
   content   String
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
+  sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade)
   senderId String
-  sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade, name: "Sender")
 
-  sendeeId String
-  sendee   User   @relation(fields: [sendeeId], references: [id], onDelete: Cascade, name: "Sendee")
-
-  ChatRoom   ChatRoom? @relation(fields: [chatRoomId], references: [id])
-  chatRoomId String?
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  chatRoomId String
 }
+
+// model ChatRoom {
+//   id        String   @id @default(cuid())
+//   createdAt DateTime @default(now())
+
+//   chatroomUser1Id String
+//   chatroomUser1   User   @relation(fields: [chatroomUser1Id], references: [id], onDelete: Cascade, name: "ChatroomUser1")
+
+//   chatroomUser2Id String
+//   chatroomUser2   User   @relation(fields: [chatroomUser2Id], references: [id], onDelete: Cascade, name: "ChatroomUser2")
+
+//   messages Message[]
+// }
+
+// model Message {
+//   id        String   @id @default(cuid())
+//   image     String?
+//   content   String
+//   createdAt DateTime @default(now())
+
+//   senderId String
+//   sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade, name: "Sender")
+
+//   sendeeId String
+//   sendee   User   @relation(fields: [sendeeId], references: [id], onDelete: Cascade, name: "Sendee")
+
+//   ChatRoom   ChatRoom? @relation(fields: [chatRoomId], references: [id])
+//   chatRoomId String?
+// }
 
 model Post {
   id                String         @id @default(cuid())

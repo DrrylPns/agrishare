@@ -1,4 +1,4 @@
-import { AgriChange, Agriquest, Category, ClaimStatus, DonationStatus, Post, Role, Status, StatusType, Subcategory, TransactionType, Types, User } from "@prisma/client";
+import { AgriChange, Agriquest, Category, ClaimStatus, DonationStatus, Post, Prisma, Role, Status, StatusType, Subcategory, TransactionType, Types, User } from "@prisma/client";
 
 export interface Posts {
     id: string;
@@ -201,3 +201,16 @@ export type AgriQuestType = {
     updatedAt: Date;
     createdById: string;
 }
+
+export type UserWithMessages = Prisma.UserGetPayload<{
+    include: {
+        Message: true,
+    }
+}>
+
+export type ChatRoomWithMessages = Prisma.ChatRoomGetPayload<{
+    include: {
+        messages: true,
+        participants: true,
+    }
+}>
