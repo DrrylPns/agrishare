@@ -131,7 +131,7 @@ export const handleDonations = async (status: DonationStatus, conditionRate: num
             ptsEquivalent = 0.12
         } else if (subcategory === "WHEEL_BARROW") {
             ptsEquivalent = 0.0125
-        } else if (category = "SEEDS") {
+        } else if (category === "SEEDS") {
             ptsEquivalent = 0.65
         } else {
             ptsEquivalent = 0.15

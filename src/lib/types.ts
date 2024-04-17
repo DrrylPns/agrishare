@@ -38,7 +38,9 @@ export interface TradeWithTradeeTraders {
     proofTrader: string | null;
     value: number;
     description: string;
+    category: Category;
     subcategory: Subcategory | null;
+    size: string | null;
     status: StatusType;
     createdAt: Date;
     updatedAt: Date;

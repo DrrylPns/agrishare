@@ -1,36 +1,33 @@
 'use client'
-import React, { useEffect, useState, useTransition } from 'react'
-import { z } from "zod"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { FormError } from '@/components/form-error'
+import { FormSuccess } from '@/components/form-success'
+import { PageNF } from '@/components/not-found'
+import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
-    FormMessage,
+    FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { UploadDropzone } from '@/lib/uploadthing'
-import Image from 'next/image'
-import { toast } from '@/components/ui/use-toast'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+import { toast } from '@/components/ui/use-toast'
+import { UploadDropzone } from '@/lib/uploadthing'
+import { formattedCategory } from '@/lib/utils'
 import { TradeSchema, TradeType } from '@/lib/validations/trade'
-import { Post } from '../../agrifeed/_components/_types'
-import { fetchPost } from '../../../../../actions/fetchPost'
-import { BeatLoader } from 'react-spinners'
-import { PageNF } from '@/components/not-found'
-import Link from 'next/link'
-import { cn, formattedCategory } from '@/lib/utils'
-import { LiaExchangeAltSolid } from 'react-icons/lia'
-import { trade } from '../../../../../actions/trade'
-import { FormError } from '@/components/form-error'
-import { FormSuccess } from '@/components/form-success'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Category, Subcategory } from '@prisma/client'
+import Image from 'next/image'
+import { useEffect, useState, useTransition } from 'react'
+import { useForm } from 'react-hook-form'
+import { BeatLoader } from 'react-spinners'
+import { z } from "zod"
+import { fetchPost } from '../../../../../actions/fetchPost'
+import { trade } from '../../../../../actions/trade'
+import { Post } from '../../agrifeed/_components/_types'
 
 function Page({
     params
@@ -48,6 +45,8 @@ function Page({
     const [number, setNumber] = useState<number>(0)
     const [tradeeId, setTradeeId] = useState<string>()
     const [postId, setPostId] = useState<string>()
+    const [size, setSize] = useState("")
+    const [selectedSubcategory, setSelectedSubcategory] = useState("")
 
     const imageIsEmpty = imageUrl.length === 0
 
@@ -84,7 +83,6 @@ function Page({
             value: 0,
             weight: 0,
             description: '',
-            shelfLife: '',
         },
     })
 
@@ -205,36 +203,6 @@ function Page({
                                 </FormItem>
                             )}
                         />
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-10'>
-
-                            <FormField
-                                control={form.control}
-                                name="shelfLife"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Shelf Life</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="Shelf life..." {...field} disabled={isPending} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
-                                name="value"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Value</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="P" {...field} disabled={isPending} type="number" />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
 
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-10'>
                             <FormField
@@ -274,7 +242,10 @@ function Page({
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Subcategory</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <Select onValueChange={(newValue) => {
+                                            field.onChange(newValue)
+                                            setSelectedSubcategory(newValue)
+                                        }} defaultValue={field.value}>
                                             <FormControl>
                                                 <SelectTrigger>
                                                     <SelectValue placeholder="Select a subcategory..." />
@@ -290,12 +261,12 @@ function Page({
                                                         <SelectItem value={Subcategory.HERBS_VEGETABLES}>Herbs Vegetables</SelectItem>
                                                     </>
                                                 )}
-                                                {chosenCategory === Category.FRESH_FRUIT && (
-                                                    <>
-                                                        <SelectItem value={Subcategory.FRUIT1}>Fruit 1</SelectItem>
-                                                        <SelectItem value={Subcategory.FRUIT2}>Fruit 2</SelectItem>
-                                                    </>
-                                                )}
+                                                {/* {chosenCategory === Category.FRESH_FRUIT && (
+                        <>
+                          <SelectItem value={Subcategory.FRUIT1}>Fruit 1</SelectItem>
+                          <SelectItem value={Subcategory.FRUIT2}>Fruit 2</SelectItem>
+                        </>
+                      )} */}
                                                 {chosenCategory === Category.EQUIPMENTS && (
                                                     <>
                                                         <SelectItem value={Subcategory.SMALL}>Small</SelectItem>
@@ -309,17 +280,23 @@ function Page({
                                                         <SelectItem value={Subcategory.NOT_ORGANIC_FERTILIZER}>Not Organic Fertilizer</SelectItem>
                                                     </>
                                                 )}
-                                                {chosenCategory === Category.SEEDS && (
-                                                    <>
-                                                        <SelectItem value={Subcategory.SEEDS1}>Seeds 1</SelectItem>
-                                                        <SelectItem value={Subcategory.SEEDS2}>Seeds 2</SelectItem>
-                                                    </>
-                                                )}
+                                                {/* {chosenCategory === Category.SEEDS && (
+                        <>
+                          <SelectItem value={Subcategory.SEEDS1}>Seeds 1</SelectItem>
+                          <SelectItem value={Subcategory.SEEDS2}>Seeds 2</SelectItem>
+                        </>
+                      )} */}
                                                 {chosenCategory === Category.TOOLS && (
                                                     <>
-                                                        <SelectItem value={Subcategory.SMALL}>Small</SelectItem>
-                                                        <SelectItem value={Subcategory.MEDIUM}>Medium</SelectItem>
-                                                        <SelectItem value={Subcategory.LARGE}>Large</SelectItem>
+                                                        <SelectItem value={Subcategory.WHEEL_BARROW}>Wheel Barrow</SelectItem>
+                                                        <SelectItem value={Subcategory.WATER_HOSE}>Water Hose</SelectItem>
+                                                        <SelectItem value={Subcategory.GARDEN_POTS}>Garden Pots</SelectItem>
+                                                        <SelectItem value={Subcategory.BUCKET}>Bucket</SelectItem>
+                                                        <SelectItem value={Subcategory.GLOVES}>Gloves</SelectItem>
+                                                        <SelectItem value={Subcategory.HAND_PRUNES}>Hand Prunes</SelectItem>
+                                                        <SelectItem value={Subcategory.KALAYKAY}>Kalaykay</SelectItem>
+                                                        <SelectItem value={Subcategory.HOES}>Hoes</SelectItem>
+                                                        <SelectItem value={Subcategory.SHOVEL}>Shovel</SelectItem>
                                                     </>
                                                 )}
                                                 {chosenCategory === Category.SOILS && (
@@ -330,6 +307,109 @@ function Page({
                                                 )}
                                             </SelectContent>
                                         </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            {selectedSubcategory === Subcategory.WATER_HOSE ? (
+                                <Select onValueChange={(newValue) => setSize(newValue)}>
+                                    <SelectTrigger className="">
+                                        <SelectValue placeholder="Select a size" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectLabel>Sizes</SelectLabel>
+                                            <SelectItem value="1/4">1/4</SelectItem>
+                                            <SelectItem value="1/2">1/2</SelectItem>
+                                            <SelectItem value="3/4">3/4</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            ) : selectedSubcategory === Subcategory.GARDEN_POTS ? (
+                                <Select onValueChange={(newValue) => setSize(newValue)}>
+                                    <SelectTrigger className="">
+                                        <SelectValue placeholder="Select a size" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectLabel>Sizes</SelectLabel>
+                                            <SelectItem value="SmallGarden">Small</SelectItem>
+                                            <SelectItem value="MediumGarden">Medium</SelectItem>
+                                            <SelectItem value="LargeGarden">Large</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            ) : selectedSubcategory === Subcategory.BUCKET ? (
+                                <Select onValueChange={(newValue) => setSize(newValue)}>
+                                    <SelectTrigger className="">
+                                        <SelectValue placeholder="Select a size" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectLabel>Sizes</SelectLabel>
+                                            <SelectItem value="SmallBucket">Small</SelectItem>
+                                            <SelectItem value="MediumBucket">Medium</SelectItem>
+                                            <SelectItem value="LargeBucket">Large</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            ) : selectedSubcategory === Subcategory.KALAYKAY ? (
+                                <Select onValueChange={(newValue) => setSize(newValue)}>
+                                    <SelectTrigger className="">
+                                        <SelectValue placeholder="Select a size" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectLabel>Sizes</SelectLabel>
+                                            <SelectItem value="SmallKalaykay">Small</SelectItem>
+                                            <SelectItem value="LargeKalaykay">Large</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            ) : selectedSubcategory === Subcategory.SHOVEL ? (
+                                <Select onValueChange={(newValue) => setSize(newValue)}>
+                                    <SelectTrigger className="">
+                                        <SelectValue placeholder="Select a size" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectLabel>Sizes</SelectLabel>
+                                            <SelectItem value="SmallShovel">Small</SelectItem>
+                                            <SelectItem value="LargeShovel">Large</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            ) : ""}
+                        </div>
+
+
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-10'>
+                            {(chosenCategory === Category.VEGETABLES || chosenCategory === Category.FRESH_FRUIT) && (
+                                <FormField
+                                    control={form.control}
+                                    name="shelfLife"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Shelf Life</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Shelf life..." {...field} disabled={isPending} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            )}
+
+                            <FormField
+                                control={form.control}
+                                name="value"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Value</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="0" {...field} disabled={isPending} type="number" />
+                                        </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}

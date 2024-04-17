@@ -15,7 +15,7 @@ export const TradeSchema = z.object({
     quantity: z.coerce.number().min(0, numberError),
     value: z.coerce.number().min(0, numberError),
     weight: z.coerce.number().min(0, numberError),
-    shelfLife: z.string().min(5).max(35),
+    shelfLife: z.string().min(5).max(35).optional(),
     description: z.string({
         required_error: "Add some description!"
     }).min(5, {
@@ -23,4 +23,5 @@ export const TradeSchema = z.object({
     }),
     subcategory: Subcategory,
     category: Category,
+    size: z.optional(z.string()),
 })

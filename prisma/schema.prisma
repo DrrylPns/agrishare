@@ -440,6 +440,7 @@ model Trade {
   status              StatusType   @default(PENDING)
   category            Category?
   subcategory         Subcategory?
+  size                String?
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
 
