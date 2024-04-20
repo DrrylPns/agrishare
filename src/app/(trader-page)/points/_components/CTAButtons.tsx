@@ -40,7 +40,7 @@ export const CTAButtons = () => {
         </DialogTrigger>
         <DialogContent className='lg:max-w-3xl'>
           <DialogHeader>
-            <DialogTitle className='md:text-[48px] font-semibold mb-6 w-full justify-center items-center text-center'>Ways to Earn Points</DialogTitle>
+            <DialogTitle className='md:text-[48px] font-semibold mb-6 w-full justify-center items-center text-center'></DialogTitle>
             <DialogDescription className='grid grid-flow-col grid-rows-3 md:gap-5 gap-1'>
               <div className='text-muted-foreground flex md:flex-row flex-col md:gap-5 lg:gap-7 items-center justify-center gap-0'>
                 <Image src="/images/WaysToEarn1.png" alt='ways2earn1' width={100} height={100} className='w-[40px] h-[40px] md:w-[100px] md:h-[100px]' />

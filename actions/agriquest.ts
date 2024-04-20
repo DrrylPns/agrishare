@@ -56,6 +56,15 @@ export const createAgriquest = async (values: AgriquestType, image: string) => {
             }
         })
 
+        await prisma.user.update({
+            where:{
+                id: user.id
+            },
+            data:{
+                requestLeft: user.requestLeft - 1
+            }
+        })
+
         revalidatePath("/add-agriquest")
         return { success: "Agriquest created" }
     } catch (error) {

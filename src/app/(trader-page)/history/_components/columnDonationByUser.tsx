@@ -186,16 +186,16 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
 
                             <DropdownMenuItem 
                                 className="cursor-pointer"
-                                onClick={downloadPDF}
+                                onClick={() => setIsReviewOpen(true)}
                             >
                                 Download
                             </DropdownMenuItem>
 
-                            <DropdownMenuItem
+                            {/* <DropdownMenuItem
                                 onClick={() => setIsReviewOpen(true)}
                             >
                                 Review
-                            </DropdownMenuItem>
+                            </DropdownMenuItem> */}
 
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -207,8 +207,8 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                                     {/* <AdminTitle entry="4" title="Donations Review" /> */}
                                     <p className="text-center">Status: {donationStatus}</p>
                                 </DialogTitle>
-                                <DialogDescription >
-                                    <>
+                                <DialogDescription>
+                                    <div ref={pdfRef}>
                                         <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-between max-w-fit mx-auto">
                                             <div className="flex flex-col items-center md:items-start">
                                                 <Avatar>
@@ -235,9 +235,10 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                                                 </div>
                                             </div>
                                         </div>
-                                    </>
+                                    </div>
                                 </DialogDescription>
                             </DialogHeader>
+                            <Button variant={'primary'} onClick={downloadPDF}>Download</Button>
                         </DialogContent>
                     </Dialog>
 
