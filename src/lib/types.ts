@@ -146,6 +146,7 @@ export interface ClaimsWithAgrichangeAndUsers {
     id: string;
     itm: string;
     status: ClaimStatus;
+    quantity: number;
     createdAt: Date;
     updatedAt: Date;
     agriChange: AgriChange;

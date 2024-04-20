@@ -322,7 +322,7 @@ export const claimAgrichange = async (id: string, data: DateOfPickupInAgrichange
         await prisma.user.update({
             where: { id: user.id },
             data: {
-                points: user.points - currentAgriChange.pointsNeeded
+                points: user.points - currentAgriChange.pointsNeeded * quantityPerTrade
             }
         })
 
@@ -330,6 +330,7 @@ export const claimAgrichange = async (id: string, data: DateOfPickupInAgrichange
             data: {
                 itm,
                 agriChangeId: currentAgriChange.id,
+                quantity: quantityPerTrade,
                 userId: user.id,
                 pickUpDate: pickupDate,
             }
@@ -459,10 +460,12 @@ export const handleClaim = async (status: ClaimStatus, claimId: string, userId: 
             //     })
             // }
 
+            const totalPoints = points * currentClaim.quantity
+
             await prisma.transaction.create({
                 data: {
                     type: "CLAIM",
-                    points: points,
+                    points: totalPoints,
                     userId: claimer.id,
                     itm: currentClaim.itm,
                 }
@@ -498,9 +501,19 @@ export const handleClaim = async (status: ClaimStatus, claimId: string, userId: 
             // ibalik yung onhold points if declined
             await prisma.user.update({
                 data: {
-                    points: claimer.points + points
+                    points: claimer.points + points * currentClaim?.quantity
                 },
                 where: { id: claimer.id }
+            })
+
+            //ibalik yung stocks nung product na inorder dahil cancelled naman
+            await prisma.agriChange.update({
+                where: { id: agrichange.id },
+                data: {
+                    quantity: {
+                        increment: currentClaim?.quantity
+                    }
+                }
             })
 
             await prisma.notification.create({

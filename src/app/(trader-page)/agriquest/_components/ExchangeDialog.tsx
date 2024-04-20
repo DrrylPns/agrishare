@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils"
 import { add, format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import Image from "next/image"
-import { useTransition } from "react"
+import { useState, useTransition } from "react"
 import { LiaExchangeAltSolid } from "react-icons/lia"
 import { Agriquest } from "../_types"
 import HearthwihGirl from './images/image1.png'
@@ -30,10 +30,23 @@ export default function ExchangeDialog({
     selectedItem: Agriquest
 }) {
     const [isPending, startTransition] = useTransition()
+    // const [number, setNumber] = useState<number>(1)
 
     const form = useForm<DateOfPickupInAgriquestType>({
         resolver: zodResolver(DateOfPickupInAgriquest),
     })
+
+    // const handleSubtract = () => {
+    //     if (number > 0) {
+    //         setNumber(prev => prev - 1)
+    //     }
+    // }
+
+    // const handleAdd = () => {
+    //     if (selectedItem && number < selectedItem.quantity) {
+    //         setNumber(prev => prev + 1)
+    //     }
+    // }
 
     function onSubmit(data: DateOfPickupInAgriquestType) {
         startTransition(() => {

@@ -80,16 +80,17 @@ export const columnPoints: ColumnDef<TransactionWithUserAndPost>[] = [
         accessorKey: "points",
         header: ({ column }) => {
             return (
-                <DataTableColumnHeader column={column} title="GAINED POINTS" />
+                <DataTableColumnHeader column={column} title="POINTS" />
             )
         },
         cell: ({ row }) => {
             const points = row.original.points.toFixed(0)
+            const type = row.original.type
 
             return <div
                 className=""
             >
-                {points} Points
+                {type === "CLAIM" ? "-" : "+"} {points} Points
             </div>
         },
     },

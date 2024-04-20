@@ -60,12 +60,15 @@ export const columnClaims: ColumnDef<ClaimsWithAgrichangeAndUsers>[] = [
             )
         },
         cell: ({ row }) => {
-            const points = row.original.agriChange.pointsNeeded.toFixed(0)
+            const points = row.original.agriChange.pointsNeeded
+            const quantity = row.original.quantity
+
+            const overallPts = points * quantity
 
             return <div
                 className=""
             >
-                {points} Points
+                - {overallPts.toFixed(0)} Points
             </div>
         },
     },
@@ -119,8 +122,13 @@ export const columnClaims: ColumnDef<ClaimsWithAgrichangeAndUsers>[] = [
             const name = row.original.user.name
             const lastName = row.original.user.lastName
 
-            const product = row.original.agriChange.name
             const points = row.original.agriChange.pointsNeeded
+            const qty = row.original.quantity
+
+            const overallPts = points * qty
+
+            const product = row.original.agriChange.name
+
             // const quantity = row.original.agriChange.quantityPerTrade
             const agriquestId = row.original.agriChange.id
 
@@ -175,28 +183,28 @@ export const columnClaims: ColumnDef<ClaimsWithAgrichangeAndUsers>[] = [
                                                     <p>Name: {name} {" "} {lastName}</p>
                                                     <p>Item: {product}</p>
                                                     <p>
-                                                        Points deduction: <span className="text-rose-500">{points.toFixed(0)} Point(s)</span>
+                                                        Points deduction: <span className="text-rose-500">- {overallPts.toFixed(0)} Point(s)</span>
                                                     </p>
                                                     <p>Date: {format(dateClaimIntent, "PPP")}</p>
-                                                   
+
                                                 </div>
                                             </div>
                                         </div>
                                         {status === 'PENDING' && (
                                             <div className="flex gap-3 mt-3">
-                                               <Button
-                                                   variant="primary"
-                                                   isLoading={isPending}
-                                                   onClick={() => setIsConfirmOpen(true)}
-                                               >Confirm</Button>
-                                               <Button
-                                                   variant="destructive"
-                                                   isLoading={isPending}
-                                                   onClick={() => setIsRejectOpen(true)}
-                                               >Decline</Button>
-                                           </div>
+                                                <Button
+                                                    variant="primary"
+                                                    isLoading={isPending}
+                                                    onClick={() => setIsConfirmOpen(true)}
+                                                >Confirm</Button>
+                                                <Button
+                                                    variant="destructive"
+                                                    isLoading={isPending}
+                                                    onClick={() => setIsRejectOpen(true)}
+                                                >Decline</Button>
+                                            </div>
                                         )}
-                                     
+
                                     </>
                                 </DialogDescription>
                             </DialogHeader>

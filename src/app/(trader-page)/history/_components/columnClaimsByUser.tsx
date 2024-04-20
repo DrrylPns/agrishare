@@ -51,11 +51,14 @@ export const columnClaimsByUser: ColumnDef<ClaimsWithAgrichangeAndUsers>[] = [
         },
         cell: ({ row }) => {
             const points = row.original.agriChange.pointsNeeded
+            const quantity = row.original.quantity
+
+            const overallPts = points * quantity
 
             return <div
                 className=""
             >
-                {points} Points
+                - {overallPts.toFixed(0)} Points
             </div>
         },
     },

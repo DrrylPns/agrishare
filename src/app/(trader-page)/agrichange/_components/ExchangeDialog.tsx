@@ -1,28 +1,28 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
 import {
     Dialog,
     DialogClose,
     DialogContent,
     DialogTrigger
 } from "@/components/ui/dialog"
-import Image from "next/image"
-import { LiaExchangeAltSolid } from "react-icons/lia"
-import { Agrichange } from "../../agrifeed/_components/_types"
-import HearthwihGirl from './images/image1.png'
-import { useTransition } from "react"
-import { claimAgrichange } from "../../../../../actions/agrichange"
-import { toast } from "@/components/ui/use-toast"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { toast } from "@/components/ui/use-toast"
 import { cn } from "@/lib/utils"
+import { DateOfPickupInAgrichange, DateOfPickupInAgrichangeType } from "@/lib/validations/agrichange"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { add, format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
-import { Calendar } from "@/components/ui/calendar"
+import Image from "next/image"
+import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { DateOfPickupInAgrichange, DateOfPickupInAgrichangeType } from "@/lib/validations/agrichange"
+import { LiaExchangeAltSolid } from "react-icons/lia"
+import { claimAgrichange } from "../../../../../actions/agrichange"
+import { Agrichange } from "../../agrifeed/_components/_types"
+import HearthwihGirl from './images/image1.png'
 
 export default function ExchangeDialog({
     selectedItem
@@ -30,6 +30,19 @@ export default function ExchangeDialog({
     selectedItem: Agrichange
 }) {
     const [isPending, startTransition] = useTransition()
+    const [number, setNumber] = useState<number>(1)
+
+    const handleSubtract = () => {
+        if (number > 0) {
+            setNumber(prev => prev - 1)
+        }
+    }
+
+    const handleAdd = () => {
+        if (selectedItem && number < selectedItem.quantity) {
+            setNumber(prev => prev + 1)
+        }
+    }
 
     const form = useForm<DateOfPickupInAgrichangeType>({
         resolver: zodResolver(DateOfPickupInAgrichange),
@@ -37,7 +50,7 @@ export default function ExchangeDialog({
 
     function onSubmit(data: DateOfPickupInAgrichangeType) {
         startTransition(() => {
-            claimAgrichange(selectedItem.id, data, selectedItem.quantityPerTrade).then((data) => {
+            claimAgrichange(selectedItem.id, data, number).then((data) => {
                 if (data.error) {
                     toast({
                         description: data.error,
@@ -63,7 +76,23 @@ export default function ExchangeDialog({
                         <div className="flex flex-col text-center justify-center items-center w-full font-poppins font-semibold text-sm md:text-xl space-y-3">
                             <h1 className="my-auto">Are you sure you want this item?</h1>
                             <Image src={selectedItem.image} alt="" width={100} height={100} className="object-contain" />
-                            <h1 className="">{selectedItem.name} {" "} {`x${selectedItem.quantityPerTrade}`}</h1>
+                            <h1 className="">{selectedItem.name}</h1>
+
+                            <h1>Choose how many {selectedItem.name} {" "} do you want to trade:</h1>
+                            <div className='flex flex-row items-center justify-center lg:justify-start'>
+
+                                <div className={buttonVariants({ variant: "secondary", className: "cursor-pointer" })}
+                                    onClick={handleSubtract}
+                                >
+                                    -
+                                </div>
+                                <h1 className='px-3'>{number}</h1>
+                                <div className={buttonVariants({ variant: "secondary", className: "cursor-pointer" })}
+                                    onClick={handleAdd}
+                                >
+                                    +
+                                </div>
+                            </div>
 
                             <FormField
                                 control={form.control}

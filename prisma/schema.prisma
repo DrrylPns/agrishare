@@ -287,6 +287,7 @@ model Claim {
   id         String      @id @default(cuid())
   itm        String      @unique
   status     ClaimStatus @default(PENDING)
+  quantity   Float
   pickUpDate DateTime?
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
