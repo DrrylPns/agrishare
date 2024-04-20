@@ -377,14 +377,6 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-
-                            {checkStatus && (
-                                <DropdownMenuItem className="cursor-pointer"
-                                    onClick={() => setIsDownloadOpen(true)}
-                                >
-                                    Download
-                                </DropdownMenuItem>
-                            )}
                             {isCompleted && (
                                 <DropdownMenuItem className="cursor-pointer"
                                     onClick={() => setIsDownloadOpen(true)}
@@ -393,7 +385,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                 </DropdownMenuItem>
                             )}
 
-                            {tradeStatus === "PENDING" && (
+                            {tradeStatus === "PROCESSING" && (
                                 <DropdownMenuItem
                                     onClick={() => setIsProofOpen(true)}
                                 >
@@ -706,7 +698,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                             }}
                                         />
                                         }
-                                        {tradeStatus === "PENDING" ? (
+                                        {tradeStatus === "PROCESSING" ? (
                                             <div className="mt-5 ">
                                                 <div className="mb-10">
                                                     <RadioGroup value={selectedRate} onChange={setSelectedRate}>
