@@ -159,7 +159,7 @@ export const columnQuest: ColumnDef<RequestWithAgriquestAndUsers>[] = [
                         <DialogContent className="lg:max-w-2xl">
                             <DialogHeader>
                                 <DialogTitle>
-                                    <AdminTitle entry="4" title="Donations Review" />
+                                    <AdminTitle entry="4" title="Claim Review" />
                                     <p className="text-center">Status: {status}</p>
                                 </DialogTitle>
                                 <DialogDescription>
@@ -179,26 +179,24 @@ export const columnQuest: ColumnDef<RequestWithAgriquestAndUsers>[] = [
                                                         Points deduction: <span className="text-rose-500">{points.toFixed(2)} Point(s)</span>
                                                     </p> */}
                                                     <p>Date: {format(dateRequestIntent, "PPP")}</p>
-                                                    {/* redirect to uploadthing when clicked. */}
-                                                    <Link className="text-blue-500" href="#">
-                                                        Proof: image.jpg
-                                                    </Link>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div className="flex gap-3 mt-3">
-                                            <Button
-                                                variant="primary"
-                                                isLoading={isPending}
-                                                onClick={() => setIsConfirmOpen(true)}
-                                            >Confirm</Button>
-                                            <Button
-                                                variant="destructive"
-                                                isLoading={isPending}
-                                                onClick={() => setIsRejectOpen(true)}
-                                            >Decline</Button>
-                                        </div>
+                                        {status === 'PENDING' && (
+                                            <div className="flex gap-3 mt-3">
+                                                <Button
+                                                    variant="primary"
+                                                    isLoading={isPending}
+                                                    onClick={() => setIsConfirmOpen(true)}
+                                                >Confirm</Button>
+                                                <Button
+                                                    variant="destructive"
+                                                    isLoading={isPending}
+                                                    onClick={() => setIsRejectOpen(true)}
+                                                >Decline</Button>
+                                            </div>
+                                        )}
+                                        
                                     </>
                                 </DialogDescription>
                             </DialogHeader>
