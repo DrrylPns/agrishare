@@ -70,6 +70,12 @@ export const createAgrichange = async (values: AgrichangeType, image: string, si
             calculatedPoints = 7.5 / 0.75
         } else if (subcategory === "NOT_ORGANIC_SOIL") {
             calculatedPoints = 15 / 0.25
+        } else if (subcategory === "CITRUS_FRUITS") {
+            calculatedPoints = 13 / 0.26
+        } else if (subcategory === "COCONUT") {
+            calculatedPoints = 54 / 0.108
+        } else if (subcategory === "TROPICAL_FRUIT") {
+            calculatedPoints = 28 / 0.082
         } else if (subcategory === "WATER_HOSE" && size === "1/4") {
             calculatedPoints = 28 / 1.1
         } else if (subcategory === "WATER_HOSE" && size === "1/2") {
@@ -203,6 +209,12 @@ export const updateAgrichange = async (values: AgrichangeType, image: string, id
             calculatedPoints = 7.5 / 0.75
         } else if (subcategory === "NOT_ORGANIC_SOIL") {
             calculatedPoints = 15 / 0.25
+        } else if (subcategory === "CITRUS_FRUITS") {
+            calculatedPoints = 13 / 0.26
+        } else if (subcategory === "COCONUT") {
+            calculatedPoints = 54 / 0.108
+        } else if (subcategory === "TROPICAL_FRUIT") {
+            calculatedPoints = 28 / 0.082
         } else if (subcategory === "WATER_HOSE" && size === "1/4") {
             calculatedPoints = 28 / 1.1
         } else if (subcategory === "WATER_HOSE" && size === "1/2") {
@@ -237,10 +249,6 @@ export const updateAgrichange = async (values: AgrichangeType, image: string, id
             calculatedPoints = 3500 / 2
         } else if (subcategory === "HAND_PRUNES") {
             calculatedPoints = 157.5 / 0.513
-        } else if (subcategory === "FRUIT1") {
-            calculatedPoints = 35 / 0.07
-        } else if (subcategory === "FRUIT2") {
-            calculatedPoints = 35 / 0.08
         } else if (category === "SEEDS") {
             calculatedPoints = 25 / 0.65
         } else {

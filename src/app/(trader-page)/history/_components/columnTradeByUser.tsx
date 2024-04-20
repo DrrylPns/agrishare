@@ -227,6 +227,12 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                 ptsEquivalentTrader = 0.95
             } else if (traderSubcategory === "NOT_ORGANIC_SOIL") {
                 ptsEquivalentTrader = 0.50
+            } else if (traderSubcategory === "CITRUS_FRUITS") {
+                ptsEquivalentTrader = 0.13
+            } else if (traderSubcategory === "COCONUT") {
+                ptsEquivalentTrader = 0.054
+            } else if (traderSubcategory === "TROPICAL_FRUIT") {
+                ptsEquivalentTrader = 0.041
             } else if (traderSubcategory === "WATER_HOSE" && traderSize === "1/4") {
                 ptsEquivalentTrader = 0.55
             } else if (traderSubcategory === "WATER_HOSE" && traderSize === "1/2") {
@@ -283,6 +289,12 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                 ptsEquivalentTradee = 0.95
             } else if (tradeeSubcategory === "NOT_ORGANIC_SOIL") {
                 ptsEquivalentTradee = 0.50
+            } else if (tradeeSubcategory === "CITRUS_FRUITS") {
+                ptsEquivalentTradee = 0.13
+            } else if (tradeeSubcategory === "COCONUT") {
+                ptsEquivalentTradee = 0.054
+            } else if (tradeeSubcategory === "TROPICAL_FRUIT") {
+                ptsEquivalentTradee = 0.041
             } else if (tradeeSubcategory === "WATER_HOSE" && tradeeSize === "1/4") {
                 ptsEquivalentTradee = 0.55
             } else if (tradeeSubcategory === "WATER_HOSE" && tradeeSize === "1/2") {
@@ -381,7 +393,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                 >
                                     Download
                                 </DropdownMenuItem>
- 
+
                             )}
 
                             {tradeStatus === "PROCESSING" && (
@@ -392,7 +404,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                 </DropdownMenuItem>
 
                             )}
-                            
+
                             <DropdownMenuItem
                                 onClick={() => setIsReviewOpen(true)}
                             >
@@ -422,7 +434,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                                     <p>Name: {traderName} {" "} {traderLastName}</p>
                                                     <p>Item: {traderItem}</p>
                                                     <p>Quantity: {traderQty}</p>
-                                                    
+
                                                     <p>
                                                         Accumulated Points: <span className="text-green-500">{traderCalculatedPoints.toFixed(0)} Point(s)</span>
                                                     </p>

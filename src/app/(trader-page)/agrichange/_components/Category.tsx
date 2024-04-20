@@ -66,6 +66,7 @@ export default function Category({
         setIsLoading(false);
     }
 }
+
   return (
     <>
     <div className='flex justify-between'>

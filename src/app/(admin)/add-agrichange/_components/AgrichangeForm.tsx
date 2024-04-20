@@ -292,8 +292,9 @@ export const AgrichangeForm = () => {
                                             )}
                                             {chosenCategory === Category.FRESH_FRUIT && (
                                                 <>
-                                                    <SelectItem value={Subcategory.FRUIT1}>Fruit 1</SelectItem>
-                                                    <SelectItem value={Subcategory.FRUIT2}>Fruit 2</SelectItem>
+                                                    <SelectItem value={Subcategory.CITRUS_FRUITS}>Citrus Fruits</SelectItem>
+                                                    <SelectItem value={Subcategory.COCONUT}>Coconut</SelectItem>
+                                                    <SelectItem value={Subcategory.TROPICAL_FRUIT}>Tropical Fruit</SelectItem>
                                                 </>
                                             )}
                                             {chosenCategory === Category.EQUIPMENTS && (

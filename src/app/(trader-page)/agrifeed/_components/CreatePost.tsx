@@ -389,12 +389,13 @@ function CreatePost() {
                                     <SelectItem value={Subcategory.HERBS_VEGETABLES}>Herbs Vegetables</SelectItem>
                                   </>
                                 )}
-                                {/* {chosenCategory === Category.FRESH_FRUIT && (
-                        <>
-                          <SelectItem value={Subcategory.FRUIT1}>Fruit 1</SelectItem>
-                          <SelectItem value={Subcategory.FRUIT2}>Fruit 2</SelectItem>
-                        </>
-                      )} */}
+                                {chosenCategory === Category.FRESH_FRUIT && (
+                                  <>
+                                    <SelectItem value={Subcategory.CITRUS_FRUITS}>Citrus Fruits</SelectItem>
+                                    <SelectItem value={Subcategory.TROPICAL_FRUIT}>Tropical Fruit</SelectItem>
+                                    <SelectItem value={Subcategory.COCONUT}>Coconut</SelectItem>
+                                  </>
+                                )}
                                 {chosenCategory === Category.EQUIPMENTS && (
                                   <>
                                     <SelectItem value={Subcategory.SMALL}>Small</SelectItem>
@@ -685,6 +686,7 @@ function CreatePost() {
                       <Button
                         type='button'
                         variant="primary"
+                        disabled={isLoading}
                         className={
                           cn(' text-white rounded-full w-full mt-3', {
                             'hidden': formStep !== 3
