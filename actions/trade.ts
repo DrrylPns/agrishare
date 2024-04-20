@@ -36,6 +36,8 @@ export const trade = async (
 
     const { description, item, value, weight, quantity, shelfLife, category, subcategory } = validatedFields.data
 
+    if (tradedQuantity <= 0) return { error: "Quantity can't be less than 0" }
+
     if (quantity <= 0) return { error: "Quantity can't be less than 0" }
 
     if (value <= 0) return { error: "Value can't be less than 0" }
@@ -133,9 +135,9 @@ export const fetchTradesByUser = async () => {
     return trades
 }
 
-export const handleTrade = async (tradeeCalculatedPoints:number,traderCalculatedPoints: number, tradeeCondtionRate:number | null, traderConditionRate: number | null,  status: StatusType, tradeId: string, tradeeId: string, traderId: string, tradeeQty: number, traderQty: number, postId: string, traderSubcategory: Subcategory | null, tradeeSubcategory: Subcategory | null) => {
-    const session = await auth() 
-    
+export const handleTrade = async (tradeeCalculatedPoints: number, traderCalculatedPoints: number, tradeeCondtionRate: number | null, traderConditionRate: number | null, status: StatusType, tradeId: string, tradeeId: string, traderId: string, tradeeQty: number, traderQty: number, postId: string, traderSubcategory: Subcategory | null, tradeeSubcategory: Subcategory | null) => {
+    const session = await auth()
+
     if (!session) return { error: "Unauthorized" }
 
     const user = await getUserById(session.user.id)

@@ -10,6 +10,9 @@ import { columnDonationByUser } from './_components/columnDonationByUser'
 import { columnPointsByUser } from './_components/columnPointsByUser'
 import { columnQuestByUser } from './_components/columnQuestByUser'
 import { columnTradeByUser } from './_components/columnTradeByUser'
+import { auth } from '../../../../auth'
+import prisma from '@/lib/db'
+import { getUserById } from '../../../../data/user'
 
 export const dynamic = 'force-dynamic';
 
@@ -20,66 +23,107 @@ const page = async () => {
   const transactions = await fetchTransactionByUser()
   const claims = await fecthAgriChangeTransactionsByUser()
   const quests = await fecthAgriQuestTransactionsByUser()
+  const session = await auth()
 
-  return (    
-    <div className='w-full md:w-[80%] p-6 mb-11 mt-4 md:mt-0'>    
+  const user = await getUserById(session?.user.id as string)
+
+  return (
+    <div className='w-full md:w-[80%] p-6 mb-11 mt-4 md:mt-0'>
       <div className='my-5 flex flex-row items-center gap-3'>
         <h1 className='text-[#1C2A53] text-xl font-semibold'>History</h1>
       </div>
+      {user?.role !== "DONATOR" ? (
+        <Card className="mx-auto max-w-full h-full drop-shadow-lg">
+          <TabGroup>
+            <TabList className="mt-4">
+              <Tab>Trade</Tab>
+              <Tab>Donation</Tab>
+              <Tab>Points</Tab>
+              <Tab>Claims</Tab>
+              <Tab>Agriquest</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <DataTable
+                  //@ts-ignore
+                  data={trades}
+                  columns={columnTradeByUser}
+                  isHistory
+                />
+              </TabPanel>
+              <TabPanel>
+                <DataTable
+                  //@ts-ignore
+                  data={donations}
+                  columns={columnDonationByUser}
+                  isHistory
+                />
+              </TabPanel>
+              <TabPanel>
+                <DataTable
+                  //@ts-ignore
+                  data={transactions}
+                  columns={columnPointsByUser}
+                  isHistory
+                />
+              </TabPanel>
+              <TabPanel>
+                <DataTable
+                  //@ts-ignore
+                  data={claims}
+                  columns={columnClaimsByUser}
+                  isHistory
+                />
+              </TabPanel>
+              <TabPanel>
+                <DataTable
+                  //@ts-ignore
+                  data={quests}
+                  columns={columnQuestByUser}
+                  isHistory
+                />
+              </TabPanel>
+            </TabPanels>
+          </TabGroup>
+        </Card>
+      ) :
+        <Card className="mx-auto max-w-full h-full drop-shadow-lg">
+          <TabGroup>
+            <TabList className="mt-4">
+              <Tab>Donation</Tab>
+              <Tab>Points</Tab>
+              <Tab>Claims</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <DataTable
+                  //@ts-ignore
+                  data={donations}
+                  columns={columnDonationByUser}
+                  isHistory
+                />
+              </TabPanel>
+              <TabPanel>
+                <DataTable
+                  //@ts-ignore
+                  data={transactions}
+                  columns={columnPointsByUser}
+                  isHistory
+                />
+              </TabPanel>
+              <TabPanel>
+                <DataTable
+                  //@ts-ignore
+                  data={claims}
+                  columns={columnClaimsByUser}
+                  isHistory
+                />
+              </TabPanel>
+            </TabPanels>
+          </TabGroup>
+        </Card>
+      }
 
-      <Card className="mx-auto max-w-full h-full drop-shadow-lg">
-        <TabGroup>
-          <TabList className="mt-4">
-            <Tab>Trade</Tab>
-            <Tab>Donation</Tab>
-            <Tab>Points</Tab>
-            <Tab>Claims</Tab>
-            <Tab>Agriquest</Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel>
-              <DataTable
-                //@ts-ignore
-                data={trades}
-                columns={columnTradeByUser}
-                isHistory
-              />
-            </TabPanel>
-            <TabPanel>
-              <DataTable
-                //@ts-ignore
-                data={donations}
-                columns={columnDonationByUser}
-                isHistory
-              />
-            </TabPanel>
-            <TabPanel>
-              <DataTable
-                //@ts-ignore
-                data={transactions}
-                columns={columnPointsByUser}
-                isHistory
-              />
-            </TabPanel>
-            <TabPanel>
-              <DataTable
-                //@ts-ignore
-                data={claims}
-                columns={columnClaimsByUser} 
-                isHistory
-                />
-            </TabPanel>
-            <TabPanel>
-              <DataTable
-                //@ts-ignore
-                data={quests}
-                columns={columnQuestByUser} 
-                isHistory
-                />
-            </TabPanel>
-          </TabPanels>
-        </TabGroup>
-      </Card>
     </div>
   )
 }

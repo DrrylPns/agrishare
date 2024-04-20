@@ -60,7 +60,7 @@ export const columnClaims: ColumnDef<ClaimsWithAgrichangeAndUsers>[] = [
             )
         },
         cell: ({ row }) => {
-            const points = row.original.agriChange.pointsNeeded
+            const points = row.original.agriChange.pointsNeeded.toFixed(0)
 
             return <div
                 className=""

@@ -42,7 +42,7 @@ function Page({
     const [isPending, startTransition] = useTransition()
     const [chosenCategory, setChosenCategory] = useState("")
     const [imageUrl, setImageUrl] = useState<string>('')
-    const [number, setNumber] = useState<number>(0)
+    const [number, setNumber] = useState<number>(1)
     const [tradeeId, setTradeeId] = useState<string>()
     const [postId, setPostId] = useState<string>()
     const [size, setSize] = useState("")
@@ -91,19 +91,27 @@ function Page({
         setSuccess("");
 
         startTransition(() => {
-            trade(values as TradeType, number, tradeeId as string, imageUrl, postId as string).then((data) => {
-                if (data?.error) {
-                    form.reset()
-                    setError(data.error)
-                }
 
-                if (data?.success) {
-                    form.reset()
-                    setImageUrl("")
-                    setNumber(0)
-                    setSuccess(data.success);
-                }
-            }).catch(() => setError("Something went wrong"))
+            if (number <= 0) {
+                toast({
+                    description: "Quantity can't be less than 0",
+                    variant: "destructive",
+                })
+            } else {
+                trade(values as TradeType, number, tradeeId as string, imageUrl, postId as string).then((data) => {
+                    if (data?.error) {
+                        form.reset()
+                        setError(data.error)
+                    }
+
+                    if (data?.success) {
+                        form.reset()
+                        setImageUrl("")
+                        setNumber(0)
+                        setSuccess(data.success);
+                    }
+                }).catch(() => setError("Something went wrong"))
+            }
         })
     }
 

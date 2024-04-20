@@ -21,7 +21,9 @@ const SettingsPage = async () => {
             <AccountSettings user={user as User} />
 
             {/* Trader Address */}
-            <TraderAddress user={user as User} />
+            {user?.role === "TRADER" && (
+                <TraderAddress user={user as User} />
+            )}
 
             {/* Change Password */}
             <PasswordSettings user={user as User} />

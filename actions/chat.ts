@@ -18,7 +18,7 @@ export const fetchUsers = async () => {
                 }
             },
             include: {
-                Message: true
+                Message: true,
             },
             orderBy: {
                 updatedAt: "desc"
@@ -150,9 +150,39 @@ export const sendMessage = async (
             },
         });
 
-        // if (newMessage) {
+        if (newMessage) {
+            const currentChatRoom = await prisma.chatRoom.findUnique({
+                where: { id: chatRoomId },
+                include: {
+                    participants: true,
+                }
+            })
+
+            await prisma.chatRoom.update({
+                where: {
+                    id: currentChatRoom?.id
+                },
+                data: {
+                    updatedAt: new Date()
+                }
+            })
+        }
+        //     const otherParticipant = currentChatRoom?.participants.find(participant => participant.id !== senderId);
+
+        //     if (!otherParticipant) {
+        //         return { error: "Other participant not found!" };
+        //     }
+
+        //     const otherUser = await prisma.user.findUnique({
+        //         where: {
+        //             id: otherParticipant.id
+        //         }
+        //     })
+
+        //     if (!otherUser) return { error: "No participant found!" }
+
         //     await prisma.user.update({
-        //         where: { id: user.id },
+        //         where: { id: otherUser.id },
         //         data: {
         //             updatedAt: new Date(),
         //         }

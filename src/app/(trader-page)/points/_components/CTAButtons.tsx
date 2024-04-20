@@ -41,7 +41,7 @@ export const CTAButtons = () => {
         <DialogContent className='lg:max-w-3xl'>
           <DialogHeader>
             <DialogTitle className='md:text-[48px] font-semibold mb-6 w-full justify-center items-center text-center'>Ways to Earn Points</DialogTitle>
-            <DialogDescription className='grid grid-flow-col grid-rows-4 md:gap-5 gap-1'>
+            <DialogDescription className='grid grid-flow-col grid-rows-3 md:gap-5 gap-1'>
               <div className='text-muted-foreground flex md:flex-row flex-col md:gap-5 lg:gap-7 items-center justify-center gap-0'>
                 <Image src="/images/WaysToEarn1.png" alt='ways2earn1' width={100} height={100} className='w-[40px] h-[40px] md:w-[100px] md:h-[100px]' />
                 By making a donation, you can gather points through participation in this activity. The number of points you acquire depends on the quantity donated and moderator approval, ensuring successful transfer to the intended beneficiary.
@@ -52,10 +52,10 @@ export const CTAButtons = () => {
                 Engaging in trading activities can also earn you points, and the basis for your accumulated points will depend on the quantity or kilograms of the items you trade with other agrizens.
               </div>
 
-              <div className='text-muted-foreground flex md:flex-row flex-col md:gap-5 lg:gap-7 items-center justify-center gap-0'>
+              {/* <div className='text-muted-foreground flex md:flex-row flex-col md:gap-5 lg:gap-7 items-center justify-center gap-0'>
                 <Image src="/images/WaysToEarn3.png" alt='ways2earn3' width={100} height={100} className='w-[40px] h-[40px] md:w-[100px] md:h-[100px]' />
                 You can accumulate points not just through trading and donations; your best chance to earn points is by browsing today's news!
-              </div>
+              </div> */}
 
               <div className='text-muted-foreground flex md:flex-row flex-col md:gap-5 lg:gap-7 items-center justify-center gap-0'>
                 <Image src="/images/WaysToEarn4.png" alt='ways2earn4' width={100} height={100} className='w-[40px] h-[40px] md:w-[100px] md:h-[100px]' />

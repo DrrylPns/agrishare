@@ -34,7 +34,7 @@ import { Card, CardContent } from "@/components/ui/card";
 //   ChatRoomWithMessagesAndCommunity,
 //   UsersWithCommunityMessages,
 // } from "@/lib/types";
-import { UploadDropzone } from "@/lib/uploadthing";
+import { UploadButton } from "@/lib/uploadthing";
 import {
   useInfiniteQuery,
   useQuery,
@@ -146,9 +146,9 @@ export const ChatRoom = ({ chatroom, userId }: Props) => {
   // const avatarFallback = chatroom.community.name.charAt(0);
 
   return (
-    <div className="flex h-screen bg-white dark:bg-zinc-800 border border-lime-500 rounded-lg ">
+    <div className="flex h-screen bg-white dark:bg-zinc-800 border border-lime-500 rounded-lg">
       <aside className="w-80 border-r dark:border-zinc-700">
-        <div className="p-4 space-y-4 overflow-auto h-screen">
+        <div className="p-4 space-y-4 h-screen overflow-y-auto">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-bold">Messages</h2>
           </div>
@@ -426,7 +426,7 @@ export const ChatRoom = ({ chatroom, userId }: Props) => {
           <div className="flex items-center gap-2">
             <Dialog>
               <DialogTrigger>
-                <ImagePlus />
+                <UploadPictureIcon />
               </DialogTrigger>
               <DialogContent>
                 {imageUrl.length ? (
@@ -443,31 +443,33 @@ export const ChatRoom = ({ chatroom, userId }: Props) => {
                     </Button>
                   </div>
                 ) : (
-                  <UploadDropzone
-                    className="text-green"
-                    appearance={{
-                      button: "bg-[#00B207] p-2 mb-3",
-                      label: "text-green",
-                      allowedContent:
-                        "flex h-8 flex-col items-center justify-center px-2 text-green",
-                    }}
-                    endpoint="imageUploader"
-                    onClientUploadComplete={(res) => {
-                      console.log("Files: ", res);
-                      if (res && res.length > 0 && res[0].url) {
-                        setImageUrl(res[0].url);
-                      } else {
-                        console.error("Please input a valid image.", res);
-                      }
-                    }}
-                    onUploadError={(error: Error) => {
-                      toast({
-                        title: "Error!",
-                        description: error.message,
-                        variant: "destructive",
-                      });
-                    }}
-                  />
+                  <>
+                    <h1>Upload a picture!</h1>
+                    <UploadButton
+                      className="text-green"
+                      appearance={{
+                        button: "bg-[#00B207] p-2 mb-3",
+                        allowedContent:
+                          "flex h-8 flex-col items-center justify-center px-2 text-green",
+                      }}
+                      endpoint="imageUploader"
+                      onClientUploadComplete={(res) => {
+                        console.log("Files: ", res);
+                        if (res && res.length > 0 && res[0].url) {
+                          setImageUrl(res[0].url);
+                        } else {
+                          console.error("Please input a valid image.", res);
+                        }
+                      }}
+                      onUploadError={(error: Error) => {
+                        toast({
+                          title: "Error!",
+                          description: error.message,
+                          variant: "destructive",
+                        });
+                      }}
+                    />
+                  </>
                 )}
               </DialogContent>
             </Dialog>
@@ -481,6 +483,7 @@ export const ChatRoom = ({ chatroom, userId }: Props) => {
             <Button
               disabled={content.length < 1}
               variant="default"
+              className="bg-lime-500"
               onClick={() => {
                 sendMessage(
                   chatroom.id,
@@ -513,3 +516,14 @@ export const ChatRoom = ({ chatroom, userId }: Props) => {
     </div>
   );
 };
+
+
+const UploadPictureIcon = () => {
+  return (
+    <div>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+      </svg>
+    </div>
+  )
+}

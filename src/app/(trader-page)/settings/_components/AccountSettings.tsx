@@ -38,7 +38,7 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
     const router = useRouter()
     const { update } = useSession()
 
-    // const imageIsEmpty = imageUrl.length === 0
+    const imageIsEmpty = imageUrl.length === 0
 
     const form = useForm<AccountType>({
         resolver: zodResolver(AccountSchema),
@@ -212,7 +212,6 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
                                     <DrawerFooter>
                                         <DrawerClose>
                                             <div className="flex flex-col gap-3 w-full items-center justify-center">
-                                                <Button variant="primary" className="w-[320px]">Done</Button>
                                                 <Button
                                                     variant="outline"
                                                     className="w-[320px]"

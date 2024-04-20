@@ -99,6 +99,12 @@ export const handleDonations = async (status: DonationStatus, conditionRate: num
             ptsEquivalent = 0.95
         } else if (subcategory === "NOT_ORGANIC_SOIL") {
             ptsEquivalent = 0.50
+        } else if (subcategory === "CITRUS_FRUITS") {
+            ptsEquivalent = 0.13
+        } else if (subcategory === "TROPICAL_FRUIT") {
+            ptsEquivalent = 0.041
+        } else if (subcategory === "COCONUT") {
+            ptsEquivalent = 0.054
         } else if (subcategory === "WATER_HOSE" && size === "1/4") {
             ptsEquivalent = 0.55
         } else if (subcategory === "WATER_HOSE" && size === "1/2") {

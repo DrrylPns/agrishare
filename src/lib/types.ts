@@ -214,3 +214,10 @@ export type ChatRoomWithMessages = Prisma.ChatRoomGetPayload<{
         participants: true,
     }
 }>
+
+export type TradeWithTradeeTradersV2 = Prisma.TradeGetPayload<{
+    include: {
+        trader: true,
+        tradee: true,
+    }
+}>

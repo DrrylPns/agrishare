@@ -21,7 +21,7 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
         accessorKey: "dn",
         header: ({ column }) => {
             return (
-                <DataTableColumnHeader column={column} title="TRADE ID" />
+                <DataTableColumnHeader column={column} title="ID" />
             )
         },
         cell: ({ row }) => {

@@ -1,7 +1,7 @@
 "use client"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { TradeWithTradeeTraders } from '@/lib/types'
+import { TradeWithTradeeTraders, TradeWithTradeeTradersV2 } from '@/lib/types'
 import Image from 'next/image'
 import React, { useState, useTransition } from 'react'
 import { tradeIntent } from '../../../../../actions/trade'
@@ -10,7 +10,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 
 
 interface SingleTradeProps {
-    trade: TradeWithTradeeTraders
+    trade: TradeWithTradeeTradersV2
 }
 
 export const SingleTrade: React.FC<SingleTradeProps> = ({ trade }) => {
@@ -63,7 +63,7 @@ export const SingleTrade: React.FC<SingleTradeProps> = ({ trade }) => {
                 <p className="text-center text-muted-foreground mt-4">
                     {trade.description}
                 </p>
-                <span className="text-2xl font-semibold mt-4">x{trade.quantity}</span>
+                <span className="text-2xl font-semibold mt-4">x{trade.tradedQuantity}</span>
             </div>
             <hr className="my-6 border-gray-300" />
             <div className="flex justify-center gap-4">
@@ -72,7 +72,7 @@ export const SingleTrade: React.FC<SingleTradeProps> = ({ trade }) => {
                     :
                     <>
                         <Button
-                            className=" px-6 py-2 rounded-full"
+                            className="px-6 py-2 rounded-full"
                             variant="primary"
                             isLoading={isPending}
                             onClick={() => {

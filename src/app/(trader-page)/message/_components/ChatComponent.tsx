@@ -28,14 +28,12 @@ export default function ChatComponent({ user }: Props) {
     return (
         <div key="1" className="flex bg-white dark:bg-zinc-800 h-[820px] border border-lime-500 rounded-lg ">
             <aside className="w-80 border-r dark:border-zinc-700">
-                <div className="p-4 space-y-4 overflow-auto h-[820px]">
+                <div className="p-4 space-y-4 overflow-auto h-[820px] pb-2">
                     <div className="flex justify-between items-center">
                         <h2 className="text-xl font-bold">Messages</h2>
-                        <PencilIcon className="w-6 h-6" />
                     </div>
 
                     {users?.map((user) => {
-
                         return (
                             <div className="space-y-2" key={user.id}>
                                 <Card className="p-2 cursor-pointer border-lime-500" onClick={() => {
@@ -73,25 +71,5 @@ export default function ChatComponent({ user }: Props) {
                 </main>
             </section>
         </div>
-    )
-}
-
-function PencilIcon(props?: any) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-            <path d="m15 5 4 4" />
-        </svg>
     )
 }

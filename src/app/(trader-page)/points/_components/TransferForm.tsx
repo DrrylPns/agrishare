@@ -84,7 +84,7 @@ export const TransferForm = () => {
                                     <Input
                                         {...field}
                                         disabled={isPending}
-                                        placeholder="John"
+                                        placeholder="01-2024"
                                     />
                                 </FormControl>
                                 <FormMessage />
