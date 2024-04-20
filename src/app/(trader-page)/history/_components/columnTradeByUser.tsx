@@ -393,11 +393,11 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
 
                             )}
                             
-                            <DropdownMenuItem
+                            {/* <DropdownMenuItem
                                 onClick={() => setIsReviewOpen(true)}
                             >
                                 Review
-                            </DropdownMenuItem>
+                            </DropdownMenuItem> */}
 
                         </DropdownMenuContent>
                     </DropdownMenu>
