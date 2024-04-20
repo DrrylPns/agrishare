@@ -159,6 +159,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
             const proofTraderimage = row.original.proofTrader
             const traderCategory = row.original.category
             const traderSize = row.original.size
+            const traderConditionRate = row.original.traderConditionRate
 
             const tradeeName = row.original.tradee.name
             const tradeeLastName = row.original.tradee.lastName
@@ -169,11 +170,11 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
             const tradeeSubcategory = row.original.post.subcategory
             const tradeeCategory = row.original.post.category
             const tradeeSize = row.original.post.size
+            const tradeeConditionRate = row.original.tradeeConditionRate
 
             const tradeeShelfLifeDuration = row.original.post.shelfLifeDuration
             const tradeeShelfLifeUnit = row.original.post.shelfLifeUnit
             const formattedShelfLifeUnit = formattedSLU(tradeeShelfLifeDuration, tradeeShelfLifeUnit)
-
 
             const tradeStatus = row.original.status
             const tradeDate = row.original.createdAt
@@ -191,7 +192,6 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
             // const imageIsEmpty = imageUrl.length === 0
             // kalkulasyon at rebolusyon
 
-            let conditionRate = 1.5
             let ptsEquivalentTrader
             let ptsEquivalentTradee
 
@@ -336,12 +336,12 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
             //     ptsEquivalentTradee = 0.15
             // }
 
-            const tradeeCalculatedPoints = (6 / ptsEquivalentTradee) * tradeeQty * conditionRate
-            const traderCalculatedPoints = (6 / ptsEquivalentTrader) * tradeeQty * conditionRate
+            const tradeeCalculatedPoints = traderConditionRate === null ? 0 : (6 / ptsEquivalentTradee) * tradeeQty * traderConditionRate
+            const traderCalculatedPoints = tradeeConditionRate === null ? 0 : (6 / ptsEquivalentTrader) * tradeeQty * tradeeConditionRate
 
             const pdfRef = useRef<HTMLDivElement>(null);
 
-            const dowloadPDF = () => {
+            const downloadPDF = () => {
                 const input = pdfRef.current;
                 if (!input) {
                     console.error("PDF reference is not available");
@@ -363,8 +363,6 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                 })
             }
 
-
-
             return (
                 <>
                     <DropdownMenu>
@@ -377,23 +375,16 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-
-                            {checkStatus && (
-                                <DropdownMenuItem className="cursor-pointer"
-                                    onClick={() => setIsDownloadOpen(true)}
-                                >
-                                    Download
-                                </DropdownMenuItem>
-                            )}
                             {isCompleted && (
                                 <DropdownMenuItem className="cursor-pointer"
                                     onClick={() => setIsDownloadOpen(true)}
                                 >
                                     Download
                                 </DropdownMenuItem>
+ 
                             )}
 
-                            {tradeStatus === "PENDING" && (
+                            {tradeStatus === "PROCESSING" && (
                                 <DropdownMenuItem
                                     onClick={() => setIsProofOpen(true)}
                                 >
@@ -401,6 +392,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                 </DropdownMenuItem>
 
                             )}
+                            
                             <DropdownMenuItem
                                 onClick={() => setIsReviewOpen(true)}
                             >
@@ -430,6 +422,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                                     <p>Name: {traderName} {" "} {traderLastName}</p>
                                                     <p>Item: {traderItem}</p>
                                                     <p>Quantity: {traderQty}</p>
+                                                    
                                                     <p>
                                                         Accumulated Points: <span className="text-green-500">{traderCalculatedPoints.toFixed(0)} Point(s)</span>
                                                     </p>
@@ -580,9 +573,8 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                     </DialogDescription>
                                 </DialogHeader>
                             </div>
-                            <Button variant={'primary'} onClick={dowloadPDF}>Download</Button>
+                            <Button variant={'primary'} onClick={downloadPDF}>Download</Button>
                         </DialogContent>
-
                     </Dialog>
 
                     <AlertDialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
@@ -706,7 +698,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                             }}
                                         />
                                         }
-                                        {tradeStatus === "PENDING" ? (
+                                        {tradeStatus === "PROCESSING" ? (
                                             <div className="mt-5 ">
                                                 <div className="mb-10">
                                                     <RadioGroup value={selectedRate} onChange={setSelectedRate}>
