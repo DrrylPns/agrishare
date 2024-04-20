@@ -10,10 +10,12 @@ import { ColumnDef } from "@tanstack/react-table"
 import { DonationWithDonators } from "@/lib/types"
 import { DataTableColumnHeader } from "@/app/(admin)/users/_components/data-table-column-header"
 import { format } from "date-fns"
-import { useState, useTransition } from "react"
+import { useRef, useState, useTransition } from "react"
 import { MoreHorizontalIcon } from "lucide-react"
 // import AdminTitle from "../AdminTitle"
 import Link from "next/link"
+import html2canvas from "html2canvas"
+import jsPDF from "jspdf"
 // import { handleDonations } from "../../../actions/donate"
 
 export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
@@ -126,6 +128,7 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
             const [isReviewOpen, setIsReviewOpen] = useState<boolean>()
             const [isPending, startTransition] = useTransition()
             const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false)
+            const [isDownloadOpen, setIsDownloadOpen] = useState<boolean>()
             const [isRejectOpen, setIsRejectOpen] = useState<boolean>(false)
 
 
@@ -135,6 +138,7 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
             const donatorProduct = row.original.product
             const donatoryQty = row.original.quantity
             const donatorPoints = row.original.pointsToGain
+            const proof = row.original.proof
             const donatorId = row.original.donator.id
 
             const dateDonated = row.original.createdAt
@@ -142,6 +146,31 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
             const donationId = row.original.id
 
             const isImageNull = donatorImage === null;
+
+            const pdfRef = useRef<HTMLDivElement>(null);
+
+            const downloadPDF = () => {
+                const input = pdfRef.current;
+                if (!input) {
+                    console.error("PDF reference is not available");
+                    return;
+                }
+                html2canvas(input).then((canvas) => {
+                    const imgData = canvas.toDataURL('image/png')
+                    const pdf = new jsPDF('p', 'mm', 'a4', true);
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = pdf.internal.pageSize.getHeight();
+                    const imgWidth = canvas.width;
+                    const imgHeight = canvas.height;
+                    const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight)
+                    const imgX = (pdfWidth - imgWidth * ratio) / 2;
+                    const imgY = 30;
+                    pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+                    pdf.save('Reciept.pdf')
+
+                })
+            }
+
             return (
                 <>
                     <DropdownMenu>
@@ -155,7 +184,10 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
 
-                            <DropdownMenuItem className="cursor-pointer">
+                            <DropdownMenuItem 
+                                className="cursor-pointer"
+                                onClick={downloadPDF}
+                            >
                                 Download
                             </DropdownMenuItem>
 
@@ -169,13 +201,13 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                     </DropdownMenu>
 
                     <Dialog open={isReviewOpen} onOpenChange={setIsReviewOpen}>
-                        <DialogContent className="lg:max-w-2xl">
+                        <DialogContent className="lg:max-w-2xl" ref={pdfRef}>
                             <DialogHeader>
                                 <DialogTitle>
                                     {/* <AdminTitle entry="4" title="Donations Review" /> */}
                                     <p className="text-center">Status: {donationStatus}</p>
                                 </DialogTitle>
-                                <DialogDescription>
+                                <DialogDescription >
                                     <>
                                         <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-between max-w-fit mx-auto">
                                             <div className="flex flex-col items-center md:items-start">
@@ -192,25 +224,16 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                                                         Accumulated Points: <span className="text-green-500">{donatorPoints.toFixed(2)} Point(s)</span>
                                                     </p>
                                                     <p>Date: {format(dateDonated, "PPP")}</p>
-                                                    {/* redirect to uploadthing when clicked. */}
-                                                    <Link className="text-blue-500" href="#">
-                                                        Proof: image.jpg
-                                                    </Link>
+                                                    {proof !== null ? (
+                                                        <a target="_blank" className="text-blue-500" href={proof}>
+                                                            Proof: See Proof
+                                                        </a>
+                                                    ) : (
+                                                        <></>
+                                                    )}
+                                                    
                                                 </div>
                                             </div>
-                                        </div>
-
-                                        <div className="flex gap-3 mt-3">
-                                            <Button
-                                                variant="primary"
-                                                isLoading={isPending}
-                                                onClick={() => setIsConfirmOpen(true)}
-                                            >Confirm</Button>
-                                            <Button
-                                                variant="destructive"
-                                                isLoading={isPending}
-                                                onClick={() => setIsRejectOpen(true)}
-                                            >Decline</Button>
                                         </div>
                                     </>
                                 </DialogDescription>
