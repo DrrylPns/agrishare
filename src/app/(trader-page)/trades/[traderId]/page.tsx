@@ -1,4 +1,4 @@
-import { TradeWithTradeeTraders } from '@/lib/types'
+import { TradeWithTradeeTraders, TradeWithTradeeTradersV2 } from '@/lib/types'
 import React from 'react'
 import { SingleTrade } from '../_components/SingleTrade'
 import { singleTrade } from '../../../../../actions/trade'
@@ -21,7 +21,7 @@ const page = async ({ params }: TradeParamsProps) => {
 
     return (
         <div className='mt-[64px] sm:mt-[28px] md:mt-[13px] lg:mt-[0px]'>
-            <SingleTrade trade={trade as TradeWithTradeeTraders} />
+            <SingleTrade trade={trade as TradeWithTradeeTradersV2} />
         </div>
     )
 }
