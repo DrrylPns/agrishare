@@ -145,6 +145,8 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
             const traderShelfLife = row.original.shelfLife
             const traderSubcategory = row.original.subcategory
             const traderProof = row.original.proofTrader
+            const traderSize = row.original.size
+            const traderCategory = row.original.category
             const traderConditionRate = row.original.traderConditionRate
 
             const tradeeName = row.original.tradee.name
@@ -155,6 +157,8 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
             const tradeePts = row.original.tradee.points
             const tradeeSubcategory = row.original.post.subcategory
             const tradeeProof = row.original.proofTradee
+            const tradeeSize = row.original.post.size
+            const tradeeCategory = row.original.post.category
             const tradeeConditionRate = row.original.tradeeConditionRate
 
             const tradeeShelfLifeDuration = row.original.post.shelfLifeDuration
@@ -184,6 +188,54 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                 ptsEquivalentTrader = 0.25
             } else if (traderSubcategory === "ROOT_VEGETABLES") {
                 ptsEquivalentTrader = 0.20
+            } else if (traderSubcategory === "ORGANIC_FERTILIZER") {
+                ptsEquivalentTrader = 0.9
+            } else if (traderSubcategory === "NOT_ORGANIC_FERTILIZER") {
+                ptsEquivalentTrader = 0.45
+            } else if (traderSubcategory === "ORGANIC_SOIL") {
+                ptsEquivalentTrader = 0.95
+            } else if (traderSubcategory === "NOT_ORGANIC_SOIL") {
+                ptsEquivalentTrader = 0.50
+            } else if (traderSubcategory === "CITRUS_FRUITS") {
+                ptsEquivalentTrader = 0.13
+            } else if (traderSubcategory === "COCONUT") {
+                ptsEquivalentTrader = 0.054
+            } else if (traderSubcategory === "TROPICAL_FRUIT") {
+                ptsEquivalentTrader = 0.041
+            } else if (traderSubcategory === "WATER_HOSE" && traderSize === "1/4") {
+                ptsEquivalentTrader = 0.55
+            } else if (traderSubcategory === "WATER_HOSE" && traderSize === "1/2") {
+                ptsEquivalentTrader = 0.45
+            } else if (traderSubcategory === "WATER_HOSE" && traderSize === "3/4") {
+                ptsEquivalentTrader = 0.35
+            } else if (traderSubcategory === "GARDEN_POTS" && traderSize === "Small") {
+                ptsEquivalentTrader = 0.09
+            } else if (traderSubcategory === "GARDEN_POTS" && traderSize === "Medium") {
+                ptsEquivalentTrader = 0.08
+            } else if (traderSubcategory === "GARDEN_POTS" && traderSize === "Large") {
+                ptsEquivalentTrader = 0.078
+            } else if (traderSubcategory === "BUCKET" && traderSize === "Small") {
+                ptsEquivalentTrader = 0.10
+            } else if (traderSubcategory === "BUCKET" && traderSize === "Medium") {
+                ptsEquivalentTrader = 0.9
+            } else if (traderSubcategory === "BUCKET" && traderSize === "Large") {
+                ptsEquivalentTrader = 0.085
+            } else if (traderSubcategory === "KALAYKAY" && traderSize === "Small") {
+                ptsEquivalentTrader = 0.11
+            } else if (traderSubcategory === "KALAYKAY" && traderSize === "Large") {
+                ptsEquivalentTrader = 0.067
+            } else if (traderSubcategory === "SHOVEL" && traderSize === "Small") {
+                ptsEquivalentTrader = 0.11
+            } else if (traderSubcategory === "SHOVEL" && traderSize === "Large") {
+                ptsEquivalentTrader = 0.067
+            } else if (traderSubcategory === "HOES" || traderSubcategory === "HAND_PRUNES") {
+                ptsEquivalentTrader = 0.067
+            } else if (traderSubcategory === "GLOVES") {
+                ptsEquivalentTrader = 0.12
+            } else if (traderSubcategory === "WHEEL_BARROW") {
+                ptsEquivalentTrader = 0.0125
+            } else if (traderCategory === "SEEDS") {
+                ptsEquivalentTrader = 0.65
             } else {
                 ptsEquivalentTrader = 0.15
             }
@@ -198,12 +250,91 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                 ptsEquivalentTradee = 0.25
             } else if (tradeeSubcategory === "ROOT_VEGETABLES") {
                 ptsEquivalentTradee = 0.20
+            } else if (tradeeSubcategory === "ORGANIC_FERTILIZER") {
+                ptsEquivalentTradee = 0.9
+            } else if (tradeeSubcategory === "NOT_ORGANIC_FERTILIZER") {
+                ptsEquivalentTradee = 0.45
+            } else if (tradeeSubcategory === "ORGANIC_SOIL") {
+                ptsEquivalentTradee = 0.95
+            } else if (tradeeSubcategory === "NOT_ORGANIC_SOIL") {
+                ptsEquivalentTradee = 0.50
+            } else if (tradeeSubcategory === "CITRUS_FRUITS") {
+                ptsEquivalentTradee = 0.13
+            } else if (tradeeSubcategory === "COCONUT") {
+                ptsEquivalentTradee = 0.054
+            } else if (tradeeSubcategory === "TROPICAL_FRUIT") {
+                ptsEquivalentTradee = 0.041
+            } else if (tradeeSubcategory === "WATER_HOSE" && tradeeSize === "1/4") {
+                ptsEquivalentTradee = 0.55
+            } else if (tradeeSubcategory === "WATER_HOSE" && tradeeSize === "1/2") {
+                ptsEquivalentTradee = 0.45
+            } else if (tradeeSubcategory === "WATER_HOSE" && tradeeSize === "3/4") {
+                ptsEquivalentTradee = 0.35
+            } else if (tradeeSubcategory === "GARDEN_POTS" && tradeeSize === "Small") {
+                ptsEquivalentTradee = 0.09
+            } else if (tradeeSubcategory === "GARDEN_POTS" && tradeeSize === "Medium") {
+                ptsEquivalentTradee = 0.08
+            } else if (tradeeSubcategory === "GARDEN_POTS" && tradeeSize === "Large") {
+                ptsEquivalentTradee = 0.078
+            } else if (tradeeSubcategory === "BUCKET" && tradeeSize === "Small") {
+                ptsEquivalentTradee = 0.10
+            } else if (tradeeSubcategory === "BUCKET" && tradeeSize === "Medium") {
+                ptsEquivalentTradee = 0.9
+            } else if (tradeeSubcategory === "BUCKET" && tradeeSize === "Large") {
+                ptsEquivalentTradee = 0.085
+            } else if (tradeeSubcategory === "KALAYKAY" && tradeeSize === "Small") {
+                ptsEquivalentTradee = 0.11
+            } else if (tradeeSubcategory === "KALAYKAY" && tradeeSize === "Large") {
+                ptsEquivalentTradee = 0.067
+            } else if (tradeeSubcategory === "SHOVEL" && tradeeSize === "Small") {
+                ptsEquivalentTradee = 0.11
+            } else if (tradeeSubcategory === "SHOVEL" && tradeeSize === "Large") {
+                ptsEquivalentTradee = 0.067
+            } else if (tradeeSubcategory === "HOES" || tradeeSubcategory === "HAND_PRUNES") {
+                ptsEquivalentTradee = 0.067
+            } else if (tradeeSubcategory === "GLOVES") {
+                ptsEquivalentTradee = 0.12
+            } else if (tradeeSubcategory === "WHEEL_BARROW") {
+                ptsEquivalentTradee = 0.0125
+            } else if (tradeeCategory === "SEEDS") {
+                ptsEquivalentTradee = 0.65
             } else {
                 ptsEquivalentTradee = 0.15
             }
 
-            const tradeeCalculatedPoints = (6 / ptsEquivalentTradee) * tradeeQty * (traderConditionRate !== null ? traderConditionRate : 0)
-            const traderCalculatedPoints = (6 / ptsEquivalentTrader) * tradeeQty * (tradeeConditionRate !== null ? tradeeConditionRate : 0)
+            const tradeeCalculatedPoints = traderConditionRate === null ? 0 : (6 / ptsEquivalentTradee) * tradeeQty * traderConditionRate
+            const traderCalculatedPoints = tradeeConditionRate === null ? 0 : (6 / ptsEquivalentTrader) * tradeeQty * tradeeConditionRate
+
+            // if (traderSubcategory === "FRUIT_VEGETABLES") {
+            //     ptsEquivalentTrader = 0.18
+            // } else if (traderSubcategory === "HERBS_VEGETABLES") {
+            //     ptsEquivalentTrader = 0.17
+            // } else if (traderSubcategory === "LEAFY_VEGETABLES") {
+            //     ptsEquivalentTrader = 0.15
+            // } else if (traderSubcategory === "PODDED_VEGETABLES") {
+            //     ptsEquivalentTrader = 0.25
+            // } else if (traderSubcategory === "ROOT_VEGETABLES") {
+            //     ptsEquivalentTrader = 0.20
+            // } else {
+            //     ptsEquivalentTrader = 0.15
+            // }
+
+            // if (tradeeSubcategory === "FRUIT_VEGETABLES") {
+            //     ptsEquivalentTradee = 0.18
+            // } else if (tradeeSubcategory === "HERBS_VEGETABLES") {
+            //     ptsEquivalentTradee = 0.17
+            // } else if (tradeeSubcategory === "LEAFY_VEGETABLES") {
+            //     ptsEquivalentTradee = 0.15
+            // } else if (tradeeSubcategory === "PODDED_VEGETABLES") {
+            //     ptsEquivalentTradee = 0.25
+            // } else if (tradeeSubcategory === "ROOT_VEGETABLES") {
+            //     ptsEquivalentTradee = 0.20
+            // } else {
+            //     ptsEquivalentTradee = 0.15
+            // }
+
+            // const tradeeCalculatedPoints = (6 / ptsEquivalentTradee) * tradeeQty * (traderConditionRate !== null ? traderConditionRate : 0)
+            // const traderCalculatedPoints = (6 / ptsEquivalentTrader) * tradeeQty * (tradeeConditionRate !== null ? tradeeConditionRate : 0)
 
             return (
                 <>
