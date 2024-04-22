@@ -121,7 +121,7 @@ function Page({
 
 
     return (
-        <div className='flex flex-col w-full h-full items-center space-y-3'>
+        <div className='w-full overflow-hidden'>
             <div className='w-full sm:w-3/5 mt-5 sm:mt-0 p-10 border border-gray-300 rounded-xl'>
                 <h1 className='text-3xl font-semibold text-center mb-3'>You are currently trading:</h1>
 

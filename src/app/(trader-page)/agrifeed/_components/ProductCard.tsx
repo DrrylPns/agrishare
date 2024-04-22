@@ -22,7 +22,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { toast } from '@/components/ui/use-toast';
-import { formattedCategory } from '@/lib/utils';
+import { formattedCategory, formattedSLU } from '@/lib/utils';
 import { MoreHorizontalIcon } from "lucide-react";
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -33,6 +33,7 @@ import { deleteAgrifeed } from '../../../../../actions/agrifeed';
 import { ReviewsType } from './Products';
 import { Post, User } from './_types';
 import UpdateAgrifeedForm from "./UpdateAgrifeedForm";
+import RelativeDate from "@/components/RelativeDate";
 
 
 function ProductCard({
@@ -65,6 +66,8 @@ function ProductCard({
     const [isUpdateOpen, setIsUpdateOpen] = useState<boolean>(false)
     const [isPending, startTransition] = useTransition()
 
+    const formattedShelfLifeUnit = formattedSLU(product.shelfLifeDuration, product.shelfLifeUnit)
+
     return (
         <Card className='transition-all duration-700 ease-in-out border-gray-400 border p-5 sm:p-10 rounded-2xl drop-shadow-md hover:drop-shadow-md hover:shadow-xl font-poppins'>
 
@@ -94,7 +97,6 @@ function ProductCard({
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
-
                         <UpdateAgrifeedForm
                             product={product}
                             isUpdateOpen={isUpdateOpen}
@@ -156,7 +158,44 @@ function ProductCard({
                         <h1 className='text-xl sm:text-3xl font-medium'>{productName}</h1>
                     </Link>
                     <Link href={`/agrifeed/${id}`}>
-                        <CardDescription className='text-[0.6rem] min-h-10 sm:min-h-24 line-clamp-4 sm:line-clamp-5'>{description}</CardDescription>
+                        <CardDescription className='text-[0.6rem] min-h-10 sm:min-h-24 '>
+                    
+                            <div className='flex'>
+                                <h1 className='w-1/3'>Weight:</h1>
+                                <span className='text-gray-400'>{product.weight}</span>
+                            </div>
+                            <div className='flex'>
+                                <h1 className='w-1/3'>Color: </h1>
+                                <span className='text-gray-400'>{product.color}</span>
+                            </div>
+                            <div className='flex'>
+                                <h1 className='w-1/3'>Type: </h1>
+                                <span className='text-gray-400'>{product.type}</span>
+                            </div>
+                            <div className='flex'>
+                                <h1 className='w-1/3'>Category: </h1>
+                                <span className='text-gray-400'>{formattedCategory(product.category)}</span>
+                            </div>
+                            <div className='flex'>
+                                <h1 className='w-1/3'>Quantity: </h1>
+                                <span className='text-gray-400'>{product.quantity}</span>
+                            </div>
+                            <div className='flex'>
+                                <h1 className='w-1/3'>Shelf Life: </h1>
+                                <span className='text-gray-400'>{formattedShelfLifeUnit}</span>
+                            </div>
+                            <div className='flex'>
+                                <h1 className='w-1/3'>Harvest Date: </h1>
+                                <span className='text-gray-400'>
+                                {product.harvestDate && <RelativeDate dateString={product.harvestDate.toString()} />}
+                                </span>
+                            </div>
+                            <div className='flex'>
+                                <h1 className='w-1/3'>Prefered Offers: </h1>
+                                <span className='text-gray-400'>{product.preferedOffers}</span>
+                            </div>
+                      
+                        </CardDescription>
                     </Link>
                     <Link href={{ pathname: `/agrifeed/${id}` }} className='flex gap-3 justify-between items-center border-y-2 border-gray-300 py-2 sm:py-5'>
                         <Button variant={'default'} className='rounded-full w-1/2 py-2 px-3 text-[0.6rem] sm:w-2/5 '>

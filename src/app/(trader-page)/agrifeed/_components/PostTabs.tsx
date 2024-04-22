@@ -13,7 +13,7 @@ function PostTabs({
 }) {
   const formattedShelfLifeUnit = formattedSLU(post.shelfLifeDuration, post.shelfLifeUnit)
   return (
-    <Tabs defaultValue="account" className="w-full mt-5 px-5 sm:mt-10" >
+    <Tabs defaultValue="adddtional information" className="w-full mt-5 px-5 sm:mt-10" >
       <TabsList className='bg-transparent w-full mx-auto'>
         <TabsTrigger value="description">Description</TabsTrigger>
         <TabsTrigger value="adddtional information">Additional Information</TabsTrigger>
