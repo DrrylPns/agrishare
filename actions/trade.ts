@@ -34,13 +34,15 @@ export const trade = async (
         return { error: "You cannot issue a trade for your own post." };
     }
 
-    const { description, item, value, weight, quantity, shelfLife, category, subcategory } = validatedFields.data
+    const { description, item, 
+        // value,
+        weight, quantity, shelfLife, category, subcategory } = validatedFields.data
 
     if (tradedQuantity <= 0) return { error: "Quantity can't be less than 0" }
 
     if (quantity <= 0) return { error: "Quantity can't be less than 0" }
 
-    if (value <= 0) return { error: "Value can't be less than 0" }
+    // if (value <= 0) return { error: "Value can't be less than 0" }
 
     if (weight <= 0) return { error: "Weight can't be less than 0" }
 
@@ -52,7 +54,7 @@ export const trade = async (
             tradedQuantity,
             description,
             quantity,
-            value,
+            // value,
             weight,
             item,
             tradeeId,

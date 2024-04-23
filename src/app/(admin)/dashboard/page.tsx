@@ -11,12 +11,12 @@ const DashboardPage = () => {
 
   const { data: urbanFarmers } = useQuery({
     queryKey: ["urban-farmers"],
-    queryFn: async () => fetchUrbanFarmers()
+    queryFn: async () => await fetchUrbanFarmers()
   })
 
   const { data: donators } = useQuery({
-    queryKey: ["urban-farmers"],
-    queryFn: async () => fetchUrbanDonator()
+    queryKey: ["urban-donators"],
+    queryFn: async () => await fetchUrbanDonator()
   })
 
   return (

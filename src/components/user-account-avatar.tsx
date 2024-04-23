@@ -59,11 +59,11 @@ export const UserAccountAvatar = () => {
                     </DropdownMenuItem>
 
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="cursor-pointer">
-                        <LogoutButton>
+                    <LogoutButton>
+                        <DropdownMenuItem className="cursor-pointer">
                             Logout
-                        </LogoutButton>
-                    </DropdownMenuItem>
+                        </DropdownMenuItem>
+                    </LogoutButton>
                 </DropdownMenuContent>
             </DropdownMenu>
             {/* <div className="md:block hidden">

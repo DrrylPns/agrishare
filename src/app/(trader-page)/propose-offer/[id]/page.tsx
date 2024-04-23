@@ -80,7 +80,7 @@ function Page({
         defaultValues: {
             item: "",
             quantity: 0,
-            value: 0,
+            // value: 0,
             weight: 0,
             description: '',
         },
@@ -410,7 +410,7 @@ function Page({
                                 />
                             )}
 
-                            <FormField
+                            {/* <FormField
                                 control={form.control}
                                 name="value"
                                 render={({ field }) => (
@@ -422,7 +422,7 @@ function Page({
                                         <FormMessage />
                                     </FormItem>
                                 )}
-                            />
+                            /> */}
                         </div>
 
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-10'>

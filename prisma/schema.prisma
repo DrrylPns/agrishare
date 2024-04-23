@@ -462,7 +462,7 @@ model Trade {
   shelfLife           String?
   tradedQuantity      Float
   weight              Float
-  value               Float
+  value               Float?
   description         String       @db.Text
   tradeeConditionRate Float?
   traderConditionRate Float?
