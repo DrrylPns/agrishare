@@ -145,10 +145,11 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
             const donatorId = row.original.donator.id
             const donatorProof = row.original.proof
             const donationSize = row.original.size
-
+     
             const dateDonated = row.original.createdAt
             const donationStatus = row.original.status
             const donationId = row.original.id
+
 
             const isImageNull = donatorImage === null;
             const isDisable = selectedRate === 0 ? true : false
@@ -211,9 +212,9 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                                     </p>
                                                     <p>Date: {format(dateDonated, "PPP")}</p>
                                                     {donatorProof !== null ? (
-                                                        <Link className="text-blue-500" href="#">
-                                                            Proof: See now
-                                                        </Link>
+                                                         <a target="_blank" className="text-blue-500" href={donatorProof}>
+                                                            Proof: See Proof
+                                                        </a>
                                                     ) : (
                                                         <div className="" >
                                                             Proof: Haven't uploaded yet!

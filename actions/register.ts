@@ -29,6 +29,8 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
 
   const userId = await generateUserId()
 
+  console.log(`Churros: ${userId}`)
+
   await prisma.user.create({
     data: {
       name,

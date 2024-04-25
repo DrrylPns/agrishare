@@ -15,7 +15,11 @@ import { MoreHorizontalIcon } from "lucide-react"
 // import AdminTitle from "../AdminTitle"
 import Link from "next/link"
 import html2canvas from "html2canvas"
+import { UploadDropzone } from "@/lib/uploadthing"
 import jsPDF from "jspdf"
+import { handleTradeProof } from "../../../../../actions/trade"
+import Image from "next/image"
+import { handleDonationProof } from "../../../../../actions/donate"
 // import { handleDonations } from "../../../actions/donate"
 
 export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
@@ -128,8 +132,10 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
             const [isReviewOpen, setIsReviewOpen] = useState<boolean>()
             const [isPending, startTransition] = useTransition()
             const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false)
+            const [isProofOpen, setIsProofOpen] = useState<boolean>()
             const [isDownloadOpen, setIsDownloadOpen] = useState<boolean>()
             const [isRejectOpen, setIsRejectOpen] = useState<boolean>(false)
+            const [imageUrl, setImageUrl] = useState<string>("")
 
 
             const donatorImage = row.original.donator.image
@@ -146,6 +152,7 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
             const donationId = row.original.id
 
             const isImageNull = donatorImage === null;
+            const imageIsEmpty = imageUrl.length === 0
 
             const pdfRef = useRef<HTMLDivElement>(null);
 
@@ -170,7 +177,6 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
 
                 })
             }
-
             return (
                 <>
                     <DropdownMenu>
@@ -183,23 +189,23 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-
-                            <DropdownMenuItem 
+                            <DropdownMenuItem
                                 className="cursor-pointer"
                                 onClick={() => setIsReviewOpen(true)}
                             >
                                 Download
                             </DropdownMenuItem>
-
-                            {/* <DropdownMenuItem
-                                onClick={() => setIsReviewOpen(true)}
-                            >
-                                Review
-                            </DropdownMenuItem> */}
-
+                            {proof !== null ? (
+                                null
+                            ) : (
+                                <DropdownMenuItem
+                                    onClick={() => setIsProofOpen(true)}
+                                >
+                                    Upload Proof
+                                </DropdownMenuItem>
+                            )}
                         </DropdownMenuContent>
                     </DropdownMenu>
-
                     <Dialog open={isReviewOpen} onOpenChange={setIsReviewOpen}>
                         <DialogContent className="lg:max-w-2xl" ref={pdfRef}>
                             <DialogHeader>
@@ -231,7 +237,7 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                                                     ) : (
                                                         <></>
                                                     )}
-                                                    
+
                                                 </div>
                                             </div>
                                         </div>
@@ -258,7 +264,7 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                // handleDonations("APPROVED", donatorPoints, donationId, donatorId).then((callback) => {
+                                                // handleDonations("APPROVED", selectedRate, donationSubCategory, donationCategory, donationId, donatorId, donationSize).then((callback) => {
                                                 //     if (callback?.error) {
                                                 //         toast({
                                                 //             description: callback.error,
@@ -280,6 +286,83 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>
+
+                    <Dialog open={isProofOpen} onOpenChange={setIsProofOpen}>
+                        <DialogContent className="lg:max-w-2xl">
+                            <DialogHeader>
+                                <DialogTitle>
+                                    {/* <AdminTitle entry="4" title="Trade Review" /> */}
+                                    <p className="">Status: {donationStatus}</p>
+                                    <p className="text-sm text-muted-foreground">Kindly upload your proof so we can review it.</p>
+                                </DialogTitle>
+                                <DialogDescription>
+                                    <>
+                                        {imageUrl.length ? <div className="w-full flex flex-col items-center justify-center mt-5">
+                                            <Image
+                                                alt='Done Upload'
+                                                src={"/done.svg"}
+                                                width={250}
+                                                height={250}
+                                                className='mb-3'
+                                            />
+                                            <h1 className='text-xl text-muted-foreground'>Image Uploaded!</h1>
+                                        </div> : <UploadDropzone
+                                            className="text-green"
+                                            appearance={{
+                                                button: "bg-[#00B207] p-2 mb-3",
+                                                label: "text-green",
+                                                allowedContent: "flex h-8 flex-col items-center justify-center px-2 text-green",
+                                            }}
+                                            endpoint="imageUploader"
+                                            onClientUploadComplete={(res) => {
+                                                console.log('Files: ', res);
+                                                if (res && res.length > 0 && res[0].url) {
+                                                    setImageUrl(res[0].url);
+                                                } else {
+                                                    console.error('Please input a valid image:', res);
+                                                }
+                                            }}
+                                            onUploadError={(error: Error) => {
+                                                toast({
+                                                    title: 'Error!',
+                                                    description: error.message,
+                                                    variant: 'destructive',
+                                                })
+                                            }}
+                                        />
+                                        }
+
+                                        <div className="flex gap-3 mt-3">
+                                            <Button
+                                                variant="primary"
+                                                disabled={imageIsEmpty}
+                                                isLoading={isPending}
+                                                onClick={() => {
+                                                    startTransition(() => {
+                                                        handleDonationProof(imageUrl, donationId,).then((callback) => {
+                                                            if (callback?.error) {
+                                                                toast({
+                                                                    description: callback.error,
+                                                                    variant: "destructive"
+                                                                })
+                                                            }
+                                                            if (callback?.success) {
+                                                                setIsProofOpen(false)
+                                                                toast({
+                                                                    description: callback.success
+                                                                })
+                                                            }
+                                                        })
+                                                    }
+                                                    )
+                                                }}
+                                            >Confirm</Button>
+                                        </div>
+                                    </>
+                                </DialogDescription>
+                            </DialogHeader>
+                        </DialogContent>
+                    </Dialog>
 
                     <AlertDialog open={isRejectOpen} onOpenChange={setIsRejectOpen}>
                         {/* <AlertDialogTrigger>Reject Report</AlertDialogTrigger> */}

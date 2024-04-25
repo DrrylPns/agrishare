@@ -397,7 +397,7 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                                         ) :(
                                                             <span className="text-gray-400">
                                                                 Item not yet rated
-                                                            </span>
+                                                            </span> 
                                                         )
 
                                                     }</p>

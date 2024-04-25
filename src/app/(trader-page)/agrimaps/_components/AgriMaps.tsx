@@ -57,6 +57,7 @@ export const AgriMaps = () => {
 
     const handleSearch = () => {
         const location = coordinates.find(coord => coord.name.toLowerCase() === searchQuery.toLowerCase());
+
         if (location) {
             setSelectedMarker(location as any);
             setError('');

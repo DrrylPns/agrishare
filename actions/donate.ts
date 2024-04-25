@@ -191,6 +191,31 @@ export const handleDonations = async (status: DonationStatus, conditionRate: num
             return { success: "Cancelled the donation" }
         }
     }
+}
 
+export const handleDonationProof = async (img: string, donationId: string) => {
+    const session = await auth()
 
+    if (!session) return { error: "Unauthorized" }
+
+    const user = await getUserById(session.user.id)
+
+    if (!user) return { error: "No user found." }
+
+    const findDonator = await prisma.donation.findFirst({
+        where: {
+            id: donationId,
+        }
+    })
+
+    if (findDonator) {
+        await prisma.donation.update({
+            where: { id: findDonator?.id },
+            data: {
+                proof: img,
+            },
+        })
+    }
+
+    return { success: "Proof uploaded." }
 }
