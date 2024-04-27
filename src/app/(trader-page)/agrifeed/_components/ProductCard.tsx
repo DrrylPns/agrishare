@@ -160,39 +160,39 @@ function ProductCard({
                         <h1 className='text-xl sm:text-3xl font-medium'>{productName}</h1>
                     </Link>
                     <Link href={`/agrifeed/${id}`}>
-                        <CardDescription className='text-[0.6rem] min-h-10 sm:min-h-24 '>
+                        <CardDescription className='text-[0.6rem] min-h-10 sm:min-h-24 font-bold'>
 
-                            <div className='flex'>
+                            <div className='flex gap-2'>
                                 <h1 className='w-1/3'>Weight:</h1>
                                 <span className='text-gray-400'>{product.weight}</span>
                             </div>
-                            <div className='flex'>
+                            <div className='flex gap-2'>
                                 <h1 className='w-1/3'>Color: </h1>
                                 <span className='text-gray-400'>{product.color}</span>
                             </div>
-                            <div className='flex'>
+                            <div className='flex gap-2'>
                                 <h1 className='w-1/3'>Type: </h1>
                                 <span className='text-gray-400'>{product.type}</span>
                             </div>
-                            <div className='flex'>
+                            <div className='flex gap-2'>
                                 <h1 className='w-1/3'>Category: </h1>
                                 <span className='text-gray-400'>{formattedCategory(product.category)}</span>
                             </div>
-                            <div className='flex'>
+                            <div className='flex gap-2'>
                                 <h1 className='w-1/3'>Quantity: </h1>
                                 <span className='text-gray-400'>{product.quantity}</span>
                             </div>
-                            <div className='flex'>
+                            <div className='flex gap-2'>
                                 <h1 className='w-1/3'>Shelf Life: </h1>
                                 <span className='text-gray-400'>{formattedShelfLifeUnit}</span>
                             </div>
-                            <div className='flex'>
+                            <div className='flex gap-2'>
                                 <h1 className='w-1/3'>Harvest Date: </h1>
                                 <span className='text-gray-400'>
                                     {product.harvestDate && <RelativeDate dateString={product.harvestDate.toString()} />}
                                 </span>
                             </div>
-                            <div className='flex'>
+                            <div className='flex gap-2'>
                                 <h1 className='w-1/3'>Prefered Offers: </h1>
                                 <span className='text-gray-400'>{product.preferedOffers}</span>
                             </div>
@@ -200,7 +200,7 @@ function ProductCard({
                         </CardDescription>
                     </Link>
 
-                    <div className="flex flex-row gap-3 my-2">
+                    <div className="flex flex-col md:flex-row gap-3 my-2">
                         <Link href={{ pathname: `/agrifeed/${id}` }} className=''>
                             <Button variant={'default'} className='rounded-full py-2 px-3'>
                                 Trade
