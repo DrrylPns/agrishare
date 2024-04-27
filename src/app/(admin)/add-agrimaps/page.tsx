@@ -1,8 +1,10 @@
 import AdminTitle from '@/components/AdminTitle'
 import { Card } from '@/components/ui/card'
 import AgrimapsForm from './_components/AgrimapsForm'
+import prisma from '@/lib/db';
 
 const AddAgrimapsPage = () => {
+
     return (
         <div className='h-full'>
             <AdminTitle entry='7' title='Agrimaps' />

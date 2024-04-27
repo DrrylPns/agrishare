@@ -511,7 +511,7 @@ model Notification {
 
 model Coordinates {
   id   String @id @default(cuid())
-  name String
-  lat  String
-  lang String
+  name String @unique
+  lat  Float
+  lang Float
 }

@@ -1,4 +1,5 @@
 'use client';
+import { Loading } from '@/components/Loading';
 import { LogoutButton } from '@/components/LogoutButton';
 import { Button } from '@/components/ui/button';
 import { useSession } from 'next-auth/react';
@@ -16,6 +17,9 @@ import { TbClover2 } from "react-icons/tb";
 function SideNav() {
     const pathname = usePathname();
     const { data: session, status } = useSession()
+
+    if (status === "loading") return <Loading />
+
     return (
         <div className={`w-[25%] hidden ${pathname === "/history" ? "hidden" : "md:block"}`}>
             <div className={` ${pathname === '/agrifeed/'} border border-gray-300 shadow-sm drop-shadow-sm bg-white`}>
@@ -23,7 +27,7 @@ function SideNav() {
                 <div className='text-gray-500 transition-all duration-700 ease-in-out mt-3'>
                     {session?.user.role === 'DONATOR' ? (
                         <></>
-                       ):( 
+                    ) : (
                         <>
                             <Link
                                 href={'/agrifeed'}
@@ -75,7 +79,7 @@ function SideNav() {
                     </Link>
                     {session?.user.role === 'DONATOR' ? (
                         <></>
-                        ):(
+                    ) : (
                         <Link
                             href={'/agriquest'}
                             className={`link ${pathname === '/agriquest' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
@@ -98,9 +102,9 @@ function SideNav() {
                         <span><CiSettings /></span>
                         <h1>Settings</h1>
                     </Link>
-                    {status === 'loading' && (
+                    {/* {status === 'loading' && (
                         <></>
-                    )}
+                    )} */}
                     {status === 'authenticated' && (
                         <LogoutButton>
                             <Button
