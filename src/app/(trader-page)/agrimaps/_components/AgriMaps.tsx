@@ -4,6 +4,16 @@ import { GoogleMap, InfoWindow, Marker, useJsApiLoader } from '@react-google-map
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+import { MapPin } from 'lucide-react';
+
 
 const containerStyle = {
     width: '100%',
@@ -26,7 +36,6 @@ const coordinates = [
     { lat: 14.658201721231105, lng: 121.0552264935998, name: "Green Thumb Arbo Urban Farm (GrowQC)" },
     { lat: 14.648421426484312, lng: 121.05098021719552, name: "Joy of Urban Farming" },
     { lat: 14.652738473934496, lng: 121.05672069016371, name: "San Vicente Urban Farming" },
-
 ];
 
 export const AgriMaps = () => {
@@ -69,7 +78,7 @@ export const AgriMaps = () => {
 
     return isLoaded ? (
         <div className='space-y-3 mt-11 md:mt-0'>
-            <div className='flex gap-3'>
+            {/* <div className='flex gap-3'>
                 <Input
                     type="text"
                     placeholder="Search location..."
@@ -78,7 +87,7 @@ export const AgriMaps = () => {
                     className={`${error.length > 1 ? "border-rose-500 placeholder:text-rose-500" : ""}`}
                 />
                 <Button onClick={handleSearch} variant="primary">Search</Button>
-            </div>
+            </div> */}
             {error && <p className="text-rose-500">{error}</p>}
             <GoogleMap
                 mapContainerStyle={containerStyle}
@@ -108,6 +117,22 @@ export const AgriMaps = () => {
                     </Marker>
                 ))}
             </GoogleMap>
+
+            <div className='grid grid-cols-1 lg:grid-cols-2 items-center justify-center gap-3 w-full'>
+                {coordinates.map((coordinate, index) => (
+                    <Card className='w-full'>
+                        <CardHeader>
+                            <CardTitle
+                                onClick={() => setSelectedMarker(coordinate as any)}
+                                className='cursor-pointer flex flex-row gap-3 truncate text-lg'
+                            >
+                                <MapPin />
+                                {coordinate.name}
+                            </CardTitle>
+                        </CardHeader>
+                    </Card>
+                ))}
+            </div>
         </div>
     ) : <></>
 }

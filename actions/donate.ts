@@ -82,21 +82,21 @@ export const handleDonations = async (status: DonationStatus, conditionRate: num
         let ptsEquivalent
 
         if (subcategory === "FRUIT_VEGETABLES") {
-            ptsEquivalent = 0.18
+            ptsEquivalent = 0.09
         } else if (subcategory === "HERBS_VEGETABLES") {
             ptsEquivalent = 0.17
         } else if (subcategory === "LEAFY_VEGETABLES") {
-            ptsEquivalent = 0.15
+            ptsEquivalent = 0.07
         } else if (subcategory === "PODDED_VEGETABLES") {
-            ptsEquivalent = 0.25
+            ptsEquivalent = 0.125
         } else if (subcategory === "ROOT_VEGETABLES") {
-            ptsEquivalent = 0.20
+            ptsEquivalent = 0.07
         } else if (subcategory === "ORGANIC_FERTILIZER") {
-            ptsEquivalent = 0.9
+            ptsEquivalent = 0.18
         } else if (subcategory === "NOT_ORGANIC_FERTILIZER") {
             ptsEquivalent = 0.45
         } else if (subcategory === "ORGANIC_SOIL") {
-            ptsEquivalent = 0.95
+            ptsEquivalent = 1.5
         } else if (subcategory === "NOT_ORGANIC_SOIL") {
             ptsEquivalent = 0.50
         } else if (subcategory === "CITRUS_FRUITS") {
@@ -188,7 +188,7 @@ export const handleDonations = async (status: DonationStatus, conditionRate: num
             // magccreate pa rin ng transaction pero cancelled at walang maggain na points?
 
             revalidatePath("/transactions")
-            return { success: "Cancelled the donation" }
+            return { success: "Donation cancelled" }
         }
     }
 }

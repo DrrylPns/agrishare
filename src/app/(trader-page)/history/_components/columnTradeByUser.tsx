@@ -210,21 +210,21 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
             // }
 
             if (traderSubcategory === "FRUIT_VEGETABLES") {
-                ptsEquivalentTrader = 0.18
+                ptsEquivalentTrader = 0.09
             } else if (traderSubcategory === "HERBS_VEGETABLES") {
                 ptsEquivalentTrader = 0.17
             } else if (traderSubcategory === "LEAFY_VEGETABLES") {
-                ptsEquivalentTrader = 0.15
+                ptsEquivalentTrader = 0.07
             } else if (traderSubcategory === "PODDED_VEGETABLES") {
-                ptsEquivalentTrader = 0.25
+                ptsEquivalentTrader = 0.125
             } else if (traderSubcategory === "ROOT_VEGETABLES") {
-                ptsEquivalentTrader = 0.20
+                ptsEquivalentTrader = 0.07
             } else if (traderSubcategory === "ORGANIC_FERTILIZER") {
-                ptsEquivalentTrader = 0.9
+                ptsEquivalentTrader = 0.18
             } else if (traderSubcategory === "NOT_ORGANIC_FERTILIZER") {
                 ptsEquivalentTrader = 0.45
             } else if (traderSubcategory === "ORGANIC_SOIL") {
-                ptsEquivalentTrader = 0.95
+                ptsEquivalentTrader = 1.5
             } else if (traderSubcategory === "NOT_ORGANIC_SOIL") {
                 ptsEquivalentTrader = 0.50
             } else if (traderSubcategory === "CITRUS_FRUITS") {
@@ -272,21 +272,21 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
             }
 
             if (tradeeSubcategory === "FRUIT_VEGETABLES") {
-                ptsEquivalentTradee = 0.18
+                ptsEquivalentTradee = 0.09
             } else if (tradeeSubcategory === "HERBS_VEGETABLES") {
                 ptsEquivalentTradee = 0.17
             } else if (tradeeSubcategory === "LEAFY_VEGETABLES") {
-                ptsEquivalentTradee = 0.15
+                ptsEquivalentTradee = 0.07
             } else if (tradeeSubcategory === "PODDED_VEGETABLES") {
-                ptsEquivalentTradee = 0.25
+                ptsEquivalentTradee = 0.125
             } else if (tradeeSubcategory === "ROOT_VEGETABLES") {
-                ptsEquivalentTradee = 0.20
+                ptsEquivalentTradee = 0.07
             } else if (tradeeSubcategory === "ORGANIC_FERTILIZER") {
-                ptsEquivalentTradee = 0.9
+                ptsEquivalentTradee = 0.18
             } else if (tradeeSubcategory === "NOT_ORGANIC_FERTILIZER") {
                 ptsEquivalentTradee = 0.45
             } else if (tradeeSubcategory === "ORGANIC_SOIL") {
-                ptsEquivalentTradee = 0.95
+                ptsEquivalentTradee = 1.5
             } else if (tradeeSubcategory === "NOT_ORGANIC_SOIL") {
                 ptsEquivalentTradee = 0.50
             } else if (tradeeSubcategory === "CITRUS_FRUITS") {

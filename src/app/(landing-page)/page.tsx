@@ -19,19 +19,12 @@ function page() {
   return (
     <div className='transition-all duration-1000 ease-in-out'>
       <Header />
-      <section className='relative py-40 md:py-40 h-dvh font-poppins' id='aboutus'>
+      <section className='relative py-40 md:py-40 h-dvh font-poppins flex items-center justify-center' id='aboutus'>
         <div className='relative my-auto px-10 md:px-40'>
-          <h1 className='relative z-20 text-4xl md:text-7xl mb-10 text-center text-white font-bold tracking-wider'>About us</h1>
-          <p className='relative z-20 text-white text-sm md:text-2xl text-center'>In August 2021, the Quezon City University - Center for Urban Agriculture and Innovation (QCU-CUAI) was established through the Board Resolution No. 14, s. 2021 with the aim of promoting urban agriculture as a measure to alleviate poverty, address stability of food supply, foster social integration among communities, and protect the environment through eco-friendly methods and other alternative and innovative gardening methods.</p>
+          <h1 className='relative z-20 text-4xl md:text-7xl mb-10 text-center text-black font-bold tracking-wider'>About us</h1>
+          <p className='relative z-20 text-black text-sm md:text-2xl text-center'>In August 2021, the Quezon City University - Center for Urban Agriculture and Innovation (QCU-CUAI) was established through the Board Resolution No. 14, s. 2021 with the aim of promoting urban agriculture as a measure to alleviate poverty, address stability of food supply, foster social integration among communities, and protect the environment through eco-friendly methods and other alternative and innovative gardening methods.</p>
         </div>
         <div className='absolute top-0 z-10 w-full h-dvh bg-white/20'>
-        </div>
-        <div className='absolute top-0 z-0 w-full mx-auto '>
-          <Image
-            src={aboutusBg}
-            alt='Header Image'
-            className='h-dvh z-0'
-          />
         </div>
       </section>
 

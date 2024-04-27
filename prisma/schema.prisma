@@ -508,3 +508,10 @@ model Notification {
   tradeId String?
   trade   Trade?  @relation(fields: [tradeId], references: [id], onDelete: Cascade)
 }
+
+model Coordinates {
+  id   String @id @default(cuid())
+  name String
+  lat  String
+  lang String
+}

@@ -241,21 +241,21 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
             }
 
             if (tradeeSubcategory === "FRUIT_VEGETABLES") {
-                ptsEquivalentTradee = 0.18
+                ptsEquivalentTradee = 0.09
             } else if (tradeeSubcategory === "HERBS_VEGETABLES") {
                 ptsEquivalentTradee = 0.17
             } else if (tradeeSubcategory === "LEAFY_VEGETABLES") {
-                ptsEquivalentTradee = 0.15
+                ptsEquivalentTradee = 0.07
             } else if (tradeeSubcategory === "PODDED_VEGETABLES") {
-                ptsEquivalentTradee = 0.25
+                ptsEquivalentTradee = 0.125
             } else if (tradeeSubcategory === "ROOT_VEGETABLES") {
-                ptsEquivalentTradee = 0.20
+                ptsEquivalentTradee = 0.07
             } else if (tradeeSubcategory === "ORGANIC_FERTILIZER") {
-                ptsEquivalentTradee = 0.9
+                ptsEquivalentTradee = 0.18
             } else if (tradeeSubcategory === "NOT_ORGANIC_FERTILIZER") {
                 ptsEquivalentTradee = 0.45
             } else if (tradeeSubcategory === "ORGANIC_SOIL") {
-                ptsEquivalentTradee = 0.95
+                ptsEquivalentTradee = 1.5
             } else if (tradeeSubcategory === "NOT_ORGANIC_SOIL") {
                 ptsEquivalentTradee = 0.50
             } else if (tradeeSubcategory === "CITRUS_FRUITS") {
@@ -394,10 +394,10 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                                                 {traderConditionRate === 1 && "Fair"}
                                                                 {traderConditionRate === 1.5 && "Good"}
                                                             </span>
-                                                        ) :(
+                                                        ) : (
                                                             <span className="text-gray-400">
                                                                 Item not yet rated
-                                                            </span> 
+                                                            </span>
                                                         )
 
                                                     }</p>
@@ -434,7 +434,7 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                                                 {tradeeConditionRate === 1 && "Fair"}
                                                                 {tradeeConditionRate === 1.5 && "Good"}
                                                             </span>
-                                                        ) :(
+                                                        ) : (
                                                             <span className="text-gray-400">
                                                                 Item not yet rated
                                                             </span>
@@ -451,23 +451,23 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                                 </div>
                                             </div>
                                         </div>
-                                        {tradeStatus === 'COMPLETED' || tradeStatus === 'CANCELLED' || tradeStatus === "PENDING"? (
+                                        {tradeStatus === 'COMPLETED' || tradeStatus === 'CANCELLED' || tradeStatus === "PENDING" ? (
                                             <></>
-                                        ):(
+                                        ) : (
                                             <div className="flex gap-3 mt-3">
-                                            <Button
-                                                variant="primary"
-                                                isLoading={isPending}
-                                                onClick={() => setIsConfirmOpen(true)}
-                                            >Confirm</Button>
-                                            <Button
-                                                variant="destructive"
-                                                isLoading={isPending}
-                                                onClick={() => setIsRejectOpen(true)}
-                                            >Decline</Button>
-                                        </div>
+                                                <Button
+                                                    variant="primary"
+                                                    isLoading={isPending}
+                                                    onClick={() => setIsConfirmOpen(true)}
+                                                >Confirm</Button>
+                                                <Button
+                                                    variant="destructive"
+                                                    isLoading={isPending}
+                                                    onClick={() => setIsRejectOpen(true)}
+                                                >Decline</Button>
+                                            </div>
                                         )}
-                                        
+
                                     </>
                                 </DialogDescription>
                             </DialogHeader>
@@ -490,14 +490,14 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                if(tradeeConditionRate === null || traderConditionRate === null){
+                                                if (tradeeConditionRate === null || traderConditionRate === null) {
                                                     toast({
                                                         title: "Not allowed",
                                                         description: "Item condition must have provided for both trader and tradee",
                                                         variant: "destructive"
                                                     })
                                                 } else {
-                                                    handleTrade(tradeeCalculatedPoints, traderCalculatedPoints ,tradeeConditionRate, traderConditionRate, "COMPLETED", tradeId, tradeeId, traderId, tradeeQty, traderQty, postId, traderSubcategory, tradeeSubcategory).then((callback) => {
+                                                    handleTrade(tradeeCalculatedPoints, traderCalculatedPoints, tradeeConditionRate, traderConditionRate, "COMPLETED", tradeId, tradeeId, traderId, tradeeQty, traderQty, postId, traderSubcategory, tradeeSubcategory).then((callback) => {
                                                         if (callback?.error) {
                                                             toast({
                                                                 description: callback.error,
@@ -535,7 +535,7 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleTrade(tradeeCalculatedPoints,traderCalculatedPoints, tradeeConditionRate, traderConditionRate,"CANCELLED", tradeId, tradeeId, traderId, tradeeQty, traderQty, postId, traderSubcategory, tradeeSubcategory).then((callback) => {
+                                                handleTrade(tradeeCalculatedPoints, traderCalculatedPoints, tradeeConditionRate, traderConditionRate, "CANCELLED", tradeId, tradeeId, traderId, tradeeQty, traderQty, postId, traderSubcategory, tradeeSubcategory).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,

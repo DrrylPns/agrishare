@@ -34,6 +34,8 @@ import { ReviewsType } from './Products';
 import { Post, User } from './_types';
 import UpdateAgrifeedForm from "./UpdateAgrifeedForm";
 import RelativeDate from "@/components/RelativeDate";
+import { TiMessages } from "react-icons/ti";
+import { inspectChatRoom } from "../../../../../actions/chat";
 
 
 function ProductCard({
@@ -159,7 +161,7 @@ function ProductCard({
                     </Link>
                     <Link href={`/agrifeed/${id}`}>
                         <CardDescription className='text-[0.6rem] min-h-10 sm:min-h-24 '>
-                    
+
                             <div className='flex'>
                                 <h1 className='w-1/3'>Weight:</h1>
                                 <span className='text-gray-400'>{product.weight}</span>
@@ -187,22 +189,31 @@ function ProductCard({
                             <div className='flex'>
                                 <h1 className='w-1/3'>Harvest Date: </h1>
                                 <span className='text-gray-400'>
-                                {product.harvestDate && <RelativeDate dateString={product.harvestDate.toString()} />}
+                                    {product.harvestDate && <RelativeDate dateString={product.harvestDate.toString()} />}
                                 </span>
                             </div>
                             <div className='flex'>
                                 <h1 className='w-1/3'>Prefered Offers: </h1>
                                 <span className='text-gray-400'>{product.preferedOffers}</span>
                             </div>
-                      
+
                         </CardDescription>
                     </Link>
-                    <Link href={{ pathname: `/agrifeed/${id}` }} className='flex gap-3 justify-between items-center border-y-2 border-gray-300 py-2 sm:py-5'>
-                        <Button variant={'default'} className='rounded-full w-1/2 py-2 px-3 text-[0.6rem] sm:w-2/5 '>
-                            Trade
-                            <span className='ml-3 text-[0.6rem]'><LiaExchangeAltSolid /></span>
+
+                    <div className="flex flex-row gap-3 my-2">
+                        <Link href={{ pathname: `/agrifeed/${id}` }} className=''>
+                            <Button variant={'default'} className='rounded-full py-2 px-3'>
+                                Trade
+                                <span className='ml-3'><LiaExchangeAltSolid /></span>
+                            </Button>
+                        </Link>
+
+                        <Button variant='default' className='rounded-full py-2 px-3' onClick={() => inspectChatRoom(user.id)}>
+                            Message
+                            <span className='ml-3'><TiMessages /></span>
                         </Button>
-                    </Link>
+                    </div>
+
                     <h1 className='text-[0.6rem] sm:text-sm text-gray-700 my-1 sm:my-3'>Category: <span className='text-gray-500'>{formattedCategory(category)}</span></h1>
                 </div>
             </div>
