@@ -24,27 +24,30 @@ function Header() {
     <div className='relative' id='home'>
       <header className={`relative font-poppins w-full text-center tracking-widest`}>
         <div className=' z-30 min-h-dvh'>
-          <Image
-            src={Logo}
-            alt='Logo Image'
-            className='relative z-30 h-[70vh] md:h-[80vh] '
-          />
-          <div className='relative mt-[-4rem] md:mt-[-8rem]'>
-            <h1 className='relative z-30 text-white text-2xl font-poppins font-medium '>Share to care, Trade to aid.</h1>
-            <Button onClick={handleStartNowBtn} variant={"default"} className='relative mt-10 z-30 rounded-2xl px-5 text-[0.7rem]'>
-              Start Now!<span className='ml-2 text-lg'><BsArrowRight /></span>
-            </Button>
+          <div className='min-h-dvh flex flex-col items-center justify-center'>
+            <Image
+              src={Logo}
+              alt='Logo Image'
+              className='relative z-30 h-[40vh] sm:h-[60vh] md:h-[70vh] object-cover'
+            />
+            <div className='relative mt-[-4rem] md:mt-[-8rem]'>
+              <h1 className='relative z-30 text-white text-2xl font-poppins font-medium '>Share to care, Trade to aid.</h1>
+              <Button onClick={handleStartNowBtn} variant={"default"} className='relative mt-10 z-30 rounded-2xl px-5 text-[0.7rem]'>
+                Start Now!<span className='ml-2 text-lg'><BsArrowRight /></span>
+              </Button>
+            </div>
           </div>
+
         </div>
       </header>
       <div className='absolute z-10 top-0 w-full h-dvh bg-gradient-to-r from-transparent to-transparent-black'>
 
       </div>
-      <div className='absolute top-0 z-0 w-full mx-auto '>
+      <div className='absolute top-0 z-0 w-full mx-auto opacity-90'>
         <Image
           src={HeaderBg}
           alt='Header Image'
-          className='h-dvh z-0'
+          className='h-dvh z-0 object-cover'
         />
       </div>
     </div>

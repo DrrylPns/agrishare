@@ -62,7 +62,7 @@ const AgrimapsForm = () => {
                         name="lat"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Latitute</FormLabel>
+                                <FormLabel>Latitude</FormLabel>
                                 <FormControl>
                                     <Input placeholder="01234567890" {...field} type='number' />
                                 </FormControl>

@@ -375,7 +375,7 @@ export const AgrichangeForm = () => {
 
                         <div className="mt-8">
                             {selectedSubcategory === Subcategory.WATER_HOSE ? (
-                                <Select onValueChange={(newValue) => setSize(newValue)}>
+                                <Select value={size} onValueChange={setSize}>
                                     <SelectTrigger className="">
                                         <SelectValue placeholder="Select a size" />
                                     </SelectTrigger>
@@ -389,56 +389,56 @@ export const AgrichangeForm = () => {
                                     </SelectContent>
                                 </Select>
                             ) : selectedSubcategory === Subcategory.GARDEN_POTS ? (
-                                <Select onValueChange={(newValue) => setSize(newValue)}>
+                                <Select value={size} onValueChange={setSize}>
                                     <SelectTrigger className="">
                                         <SelectValue placeholder="Select a size" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
                                             <SelectLabel>Sizes</SelectLabel>
-                                            <SelectItem value="SmallGarden">Small</SelectItem>
-                                            <SelectItem value="MediumGarden">Medium</SelectItem>
-                                            <SelectItem value="LargeGarden">Large</SelectItem>
+                                            <SelectItem value="Small">Small</SelectItem>
+                                            <SelectItem value="Medium">Medium</SelectItem>
+                                            <SelectItem value="Large">Large</SelectItem>
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
                             ) : selectedSubcategory === Subcategory.BUCKET ? (
-                                <Select onValueChange={(newValue) => setSize(newValue)}>
+                                <Select value={size} onValueChange={setSize}>
                                     <SelectTrigger className="">
                                         <SelectValue placeholder="Select a size" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
                                             <SelectLabel>Sizes</SelectLabel>
-                                            <SelectItem value="SmallBucket">Small</SelectItem>
-                                            <SelectItem value="MediumBucket">Medium</SelectItem>
-                                            <SelectItem value="LargeBucket">Large</SelectItem>
+                                            <SelectItem value="Small">Small</SelectItem>
+                                            <SelectItem value="Medium">Medium</SelectItem>
+                                            <SelectItem value="Large">Large</SelectItem>
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
                             ) : selectedSubcategory === Subcategory.KALAYKAY ? (
-                                <Select onValueChange={(newValue) => setSize(newValue)}>
+                                <Select value={size} onValueChange={setSize}>
                                     <SelectTrigger className="">
                                         <SelectValue placeholder="Select a size" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
                                             <SelectLabel>Sizes</SelectLabel>
-                                            <SelectItem value="SmallKalaykay">Small</SelectItem>
-                                            <SelectItem value="LargeKalaykay">Large</SelectItem>
+                                            <SelectItem value="Small">Small</SelectItem>
+                                            <SelectItem value="Large">Large</SelectItem>
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
                             ) : selectedSubcategory === Subcategory.SHOVEL ? (
-                                <Select onValueChange={(newValue) => setSize(newValue)}>
+                                <Select value={size} onValueChange={setSize}>
                                     <SelectTrigger className="">
                                         <SelectValue placeholder="Select a size" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
                                             <SelectLabel>Sizes</SelectLabel>
-                                            <SelectItem value="SmallShovel">Small</SelectItem>
-                                            <SelectItem value="LargeShovel">Large</SelectItem>
+                                            <SelectItem value="Small">Small</SelectItem>
+                                            <SelectItem value="Large">Large</SelectItem>
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>

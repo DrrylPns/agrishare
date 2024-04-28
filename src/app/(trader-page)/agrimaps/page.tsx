@@ -2,6 +2,8 @@ import React from 'react'
 import { AgriMaps } from './_components/AgriMaps'
 import prisma from '@/lib/db';
 
+export const dynamic = 'force-dynamic';
+
 async function page() {
   const agrimaps = await prisma.coordinates.findMany();
   return (

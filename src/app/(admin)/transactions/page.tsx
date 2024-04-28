@@ -12,6 +12,7 @@ import { fetchAgriChangeTransactions } from '../../../../actions/agrichange'
 import { columnClaims } from '@/components/tables/columnClaims'
 import { fetchAgriQuestTransactions } from '../../../../actions/agriquest'
 import { columnQuest } from '@/components/tables/columnQuest'
+import { BadgeCent, HeartHandshakeIcon, LeafyGreen, ShieldAlert, ShoppingBasketIcon } from 'lucide-react'
 
 export const dynamic = 'force-dynamic';
 
@@ -29,15 +30,31 @@ const page = async () => {
 
       <Card className="mx-auto max-w-full h-full drop-shadow-lg">
         <TabGroup>
-          <TabList className="mt-4">
-            <Tab>Trade</Tab>
-            <Tab>Donation</Tab>
-            <Tab>Points</Tab>
-            <Tab>Claims</Tab>
-            <Tab>Agriquest</Tab>
+          <TabList className="mt-4 p-0">
+            <Tab>
+              <LeafyGreen className='w-4 h-4 block sm:hidden' />
+              <p className='hidden sm:block'>Trade</p>
+            </Tab>
+            <Tab>
+              <HeartHandshakeIcon className='w-4 h-4 block sm:hidden' />
+              <p className='hidden sm:block'>Donation</p>
+            </Tab>
+            <Tab>
+              <BadgeCent className='w-4 h-4 block sm:hidden' />
+              <p className='hidden sm:block'>Points</p>
+            </Tab>
+            <Tab>
+              <ShoppingBasketIcon className='w-4 h-4 block sm:hidden' />
+              <p className='hidden sm:block'>Claims</p>
+            </Tab>
+            <Tab>
+              <ShieldAlert className='w-4 h-4 block sm:hidden' />
+              <p className='hidden sm:block'>Agriquest</p>
+            </Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
+              <AdminTitle entry='1' title='Trades' />
               <DataTable
                 //@ts-ignore
                 data={trades}
@@ -46,6 +63,7 @@ const page = async () => {
               />
             </TabPanel>
             <TabPanel>
+              <AdminTitle entry='2' title='Donations' />
               <DataTable
                 //@ts-ignore
                 data={donations}
@@ -54,6 +72,7 @@ const page = async () => {
               />
             </TabPanel>
             <TabPanel>
+              <AdminTitle entry='3' title='Points' />
               <DataTable
                 data={transactions}
                 columns={columnPoints}
@@ -61,6 +80,7 @@ const page = async () => {
               />
             </TabPanel>
             <TabPanel>
+              <AdminTitle entry='4' title='Claims' />
               <DataTable
                 //@ts-ignore
                 data={claims}
@@ -69,6 +89,7 @@ const page = async () => {
               />
             </TabPanel>
             <TabPanel>
+              <AdminTitle entry='5' title='Agriquests' />
               <DataTable
                 //@ts-ignore
                 data={requests}

@@ -118,7 +118,6 @@ export const columnAgrichange: ColumnDef<AgriChangeType>[] = [
 
             const agrichange = row.original
 
-
             return (
                 <EditModules
                     key={id}

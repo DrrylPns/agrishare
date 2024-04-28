@@ -104,6 +104,12 @@ export const createAgrichange = async (values: AgrichangeType, image: string, si
             calculatedPoints = 250 / 0.52
         } else if (subcategory === "HOES") {
             calculatedPoints = 250 / 0.52
+        } else if (category === "EQUIPMENTS" && subcategory === "SMALL") {
+            calculatedPoints = 150 / 0.52
+        } else if (category === "EQUIPMENTS" && subcategory === "MEDIUM") {
+            calculatedPoints = 200 / 0.52
+        } else if (category === "EQUIPMENTS" && subcategory === "LARGE") {
+            calculatedPoints = 250 / 0.52
         } else if (subcategory === "GLOVES") {
             calculatedPoints = 55 / 0.24
         } else if (subcategory === "WHEEL_BARROW") {
@@ -242,6 +248,12 @@ export const updateAgrichange = async (values: AgrichangeType, image: string, id
         } else if (subcategory === "SHOVEL" && size === "Large") {
             calculatedPoints = 250 / 0.52
         } else if (subcategory === "HOES") {
+            calculatedPoints = 250 / 0.52
+        } else if (category === "EQUIPMENTS" && subcategory === "SMALL") {
+            calculatedPoints = 150 / 0.52
+        } else if (category === "EQUIPMENTS" && subcategory === "MEDIUM") {
+            calculatedPoints = 200 / 0.52
+        } else if (category === "EQUIPMENTS" && subcategory === "LARGE") {
             calculatedPoints = 250 / 0.52
         } else if (subcategory === "GLOVES") {
             calculatedPoints = 55 / 0.24

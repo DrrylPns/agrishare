@@ -74,13 +74,13 @@ const Navbar = () => {
                 >
                     About Us
                 </Button>
-                <Button
+                {/* <Button
                     onClick={() => scrollToSection("news")}
                     className="text-[16px] font-normal"
                     variant="ghost"
                 >
                     News
-                </Button>
+                </Button> */}
                 <Button
                     onClick={() => scrollToSection("contactus")}
                     className="text-[16px] font-normal"
@@ -135,12 +135,12 @@ const Navbar = () => {
                                 setIsOpenChange(false)
                             }}
                         >About Us</div>
-                        <div className={cn(buttonVariants({ variant: "ghost" }), "w-full")}
+                        {/* <div className={cn(buttonVariants({ variant: "ghost" }), "w-full")}
                             onClick={() => {
                                 scrollToSection("news")
                                 setIsOpenChange(false)
                             }}
-                        >News</div>
+                        >News</div> */}
                         <div className={cn(buttonVariants({ variant: "ghost" }), "w-full")}
                             onClick={() => {
                                 scrollToSection("contactus")
