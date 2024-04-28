@@ -18,7 +18,7 @@ export const Sidebar = () => {
         <div>
             {/* MOBILE NAV */}
             <div className='w-full border-b shadow-md'>
-                <div className='grid grid-cols-5 p-3 items-center justify-center text-center md:hidden'>
+                <div className='grid grid-cols-8 p-3 gap-2 items-center justify-center text-center md:hidden'>
                     <Link href="dashboard" className={`mx-auto text-neutral-500 p-1 rounded-lg ${url === "dashboard" ? "bg-[#00B207] hover:bg-[#00B207]/80 text-white" : "hover:bg-gray-200 text-gray-500"}`}>
                         <LayoutDashboard />
                     </Link>
@@ -42,12 +42,12 @@ export const Sidebar = () => {
                         <MapPinned />
                     </Link>
                     <Popover>
-                        <PopoverTrigger asChild className={`mx-auto text-neutral-500 rounded-lg ${url === "adminSettings" ? "bg-[#00B207] hover:bg-[#00B207]/80 text-white p-1 w-[29px] h-[29px]" : "hover:bg-gray-200 text-gray-500"}`}>
+                        <PopoverTrigger asChild className={`mx-auto text-neutral-500 rounded-lg ${url === "adm-settings" ? "bg-[#00B207] hover:bg-[#00B207]/80 text-white p-1 w-[29px] h-[29px]" : "hover:bg-gray-200 text-gray-500"}`}>
                             <Settings />
                         </PopoverTrigger>
                         <PopoverContent>
                             <div className='space-y-2'>
-                                <Link href="settings" className={`w-full flex items-center space-x-2 py-2 px-2 rounded-lg ${url === "adminSettings" ? "bg-[#00B207] hover:bg-[#00B207]/80 text-white" : "hover:bg-gray-200 text-gray-500"}`}>
+                                <Link href="adm-settings" className={`w-full flex items-center space-x-2 py-2 px-2 rounded-lg ${url === "adm-settings" ? "bg-[#00B207] hover:bg-[#00B207]/80 text-white" : "hover:bg-gray-200 text-gray-500"}`}>
                                     <Cog className='w-4 h-4' />
                                     <span className='text-sm font-medium'>Settings</span>
                                 </Link>
@@ -107,7 +107,7 @@ export const Sidebar = () => {
 
                     </nav>
                     <div className='space-y-2 absolute bottom-10 w-[85%]'>
-                        <Link href="settings" className={`w-full flex items-center space-x-2 py-2 px-2 rounded-lg ${url === "adminSettings" ? "bg-[#00B207] hover:bg-[#00B207]/80 text-white" : "hover:bg-gray-200 text-gray-500"}`}>
+                        <Link href="adm-settings" className={`w-full flex items-center space-x-2 py-2 px-2 rounded-lg ${url === "adm-settings" ? "bg-[#00B207] hover:bg-[#00B207]/80 text-white" : "hover:bg-gray-200 text-gray-500"}`}>
                             <Cog className='w-4 h-4' />
                             <span className='text-sm font-medium'>Settings</span>
                         </Link>

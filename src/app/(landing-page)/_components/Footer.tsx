@@ -13,7 +13,7 @@ function Footer() {
                         alt='AgriShare'
                         className='md:mt-[-3rem]'
                     />
-                    <p className='text-[#808080] md:mt-[-4rem] mb-4'>Morbi cursus porttitor enim lobortis molestie. Duis gravida turpis dui, eget bibendum magna congue nec.</p>
+                    {/* <p className='text-[#808080] md:mt-[-4rem] mb-4'>Morbi cursus porttitor enim lobortis molestie. Duis gravida turpis dui, eget bibendum magna congue nec.</p> */}
                     <span>(219) 555-0114</span><span> or </span><span>Proxy@gmail.com</span>
                 </div>
                 <div className='w-[70%] grid grid-cols-2 md:grid-cols-4 mt-10 text-white mb-10 gap-6'>
