@@ -74,7 +74,10 @@ function ProductCard({
         <Card className='transition-all duration-700 ease-in-out border-gray-400 border p-5 sm:p-10 rounded-2xl drop-shadow-md hover:drop-shadow-md hover:shadow-xl font-poppins'>
 
             <div className='flex justify-between'>
-                <CardTitle className='text-xl sm:text-4xl font-semibold'>{name} {" "} {lastName}</CardTitle>
+                <div className="flex justify-between w-full">
+                    <CardTitle className='text-xl sm:text-4xl font-semibold'>{name} {" "} {lastName}</CardTitle>
+                    <h1 className='text-[0.6rem] sm:text-sm text-gray-700 my-1 sm:my-3'><span className='text-gray-500'><RelativeDate dateString={product.createdAt.toString()}/></span></h1>
+                </div>
 
                 {session?.user.id === user.id && (
                     <>
@@ -179,7 +182,7 @@ function ProductCard({
                                 <span className='text-gray-400'>{formattedCategory(product.category)}</span>
                             </div>
                             <div className='flex gap-2'>
-                                <h1 className='w-1/3'>Quantity: </h1>
+                                <h1 className='w-1/3'>Kg: </h1>
                                 <span className='text-gray-400'>{product.quantity}</span>
                             </div>
                             <div className='flex gap-2'>
@@ -215,6 +218,7 @@ function ProductCard({
                     </div>
 
                     <h1 className='text-[0.6rem] sm:text-sm text-gray-700 my-1 sm:my-3'>Category: <span className='text-gray-500'>{formattedCategory(category)}</span></h1>
+                    
                 </div>
             </div>
         </Card>
