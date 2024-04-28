@@ -39,7 +39,7 @@ function PostTabs({
             <span className='text-gray-400'>{formattedCategory(post.category)}</span>
           </div>
           <div className='flex'>
-            <h1 className='w-1/3'>Quantity: </h1>
+            <h1 className='w-1/3'>Kg: </h1>
             <span className='text-gray-400'>{post.quantity}</span>
           </div>
           <div className='flex'>
