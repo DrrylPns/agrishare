@@ -4,17 +4,15 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { Cog, LayoutDashboard, LogOutIcon, Settings, TicketIcon, UserPlus, UsersIcon, TreePine, MapPinned } from 'lucide-react'
+import { Cog, LayoutDashboard, LogOutIcon, MapPinned, Settings, TicketIcon, TreePine, UserPlus, UsersIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FiRefreshCw } from 'react-icons/fi'
 import { LogoutButton } from "./LogoutButton"
 
-
 export const Sidebar = () => {
     const pathname = usePathname()
     const url = pathname.replace("/", "")
-
 
     return (
         <div>

@@ -46,6 +46,7 @@ type CityType = {
 
 export const TraderAddress: React.FC<TraderAddressProps> = ({ user }) => {
     let countryData = Country.getAllCountries();
+    // let currentStateData = State.getStateByCode("NCR")
     const [stateData, setStateData] = useState();
     const [cityData, setCityData] = useState();
     const [country, setCountry] = useState(countryData[173]);
@@ -53,6 +54,8 @@ export const TraderAddress: React.FC<TraderAddressProps> = ({ user }) => {
     const [city, setCity] = useState<CityType>();
     const [isEdit, setIsEdit] = useState<boolean>(false)
 
+    // console.log(State.getStateByCode('NCR'))
+    console.log(cityData)
 
     const router = useRouter();
 
@@ -67,11 +70,11 @@ export const TraderAddress: React.FC<TraderAddressProps> = ({ user }) => {
     }, [state]);
 
     useEffect(() => {
-        stateData && setState(stateData[0]);
+        stateData && setState(stateData[59]);
     }, [stateData]);
 
     useEffect(() => {
-        cityData && setCity(cityData[0]);
+        cityData && setCity(cityData[23]);
     }, [cityData]);
 
     const form = useForm<TraderType>({
@@ -178,7 +181,37 @@ export const TraderAddress: React.FC<TraderAddressProps> = ({ user }) => {
                         />
                     </div>
 
-                    <div className="mt-6">
+
+
+                    <div className="grid grid-cols-1 gap-6 md:grid-cols-3 mt-6">
+                        <div className="">
+                            <p className="font-semibold text-[14px]">Country:</p>
+                            <AddressSelector data={countryData} selected={country} setSelected={setCountry} disabled={true} />
+                        </div>
+
+                        {state && (
+                            <div>
+                                <p className="font-semibold text-[14px]">State :</p>
+                                <AddressSelector
+                                    data={stateData}
+                                    selected={state}
+                                    setSelected={setState}
+                                    disabled={true}
+                                />
+                            </div>
+                        )}
+
+                        {city && (
+                            <div>
+                                <p className=" font-semibold text-[14px]">City :</p>
+                                <AddressSelector data={cityData} selected={city} setSelected={setCity} disabled={true} />
+                            </div>
+                        )}
+
+
+                    </div>
+
+                    <div className="mt-6 mb-2">
                         <FormField
                             control={form.control}
                             name="address"
@@ -194,31 +227,20 @@ export const TraderAddress: React.FC<TraderAddressProps> = ({ user }) => {
                         />
                     </div>
 
-                    <div className="grid grid-cols-1 gap-6 md:grid-cols-3 mt-6">
-                        <div className="">
-                            <p className="font-semibold text-[14px]">Country:</p>
-                            <AddressSelector data={countryData} selected={country} setSelected={setCountry} disabled={!isEdit} />
-                        </div>
-
-                        {state && (
-                            <div>
-                                <p className="font-semibold text-[14px]">State :</p>
-                                <AddressSelector
-                                    data={stateData}
-                                    selected={state}
-                                    setSelected={setState}
-                                    disabled={!isEdit}
-                                />
-                            </div>
-                        )}
-
-                        {city && (
-                            <div>
-                                <p className=" font-semibold text-[14px]">City :</p>
-                                <AddressSelector data={cityData} selected={city} setSelected={setCity} disabled={!isEdit} />
-                            </div>
-                        )}
-
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+                        <FormField
+                            control={form.control}
+                            name="brgy"
+                            render={({ field }) => (
+                                <FormItem className="">
+                                    <FormLabel>Brgy</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Enter brgy..." {...field} type="text" disabled={!isEdit} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
 
                         <FormField
                             control={form.control}

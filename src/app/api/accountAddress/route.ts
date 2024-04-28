@@ -9,7 +9,7 @@ export async function PUT(req: Request) {
     try {
         const body = await req.json()
 
-        const { address, city, companyName, country, state, zip } = TraderSchema.parse(body)
+        const { address, city, companyName, country, state, zip, brgy } = TraderSchema.parse(body)
 
         await prisma.user.update({
             where: {
@@ -22,6 +22,7 @@ export async function PUT(req: Request) {
                 country,
                 state,
                 zip,
+                brgy,
             }
         })
 

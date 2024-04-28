@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss"
-import HeaderBg from './public/images/Header.jpg'
+
 const config = {
   darkMode: ["class"],
   content: [

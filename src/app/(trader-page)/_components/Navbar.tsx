@@ -85,6 +85,116 @@ function Navbar() {
             ) : (<></>)}
 
             {/* Mobile dropdown menu */}
+
+            <Sheet>
+                <SheetTrigger className={`${pathname === "/history" ? "md:block hidden" : "hidden"} flex w-full items-start`}>
+                    <BiMenu className='text-[32px]' />
+                </SheetTrigger>
+                <SheetContent className=''>
+                    <SheetHeader>
+                        <SheetTitle className='w-full flex justify-center items-center'>
+                            <Logo />
+                        </SheetTitle>
+                        <SheetDescription>
+                            <div className='text-gray-500 transition-all duration-700 ease-in-out mt-3'>
+                                {session?.user.role === 'DONATOR' ? (
+                                    <></>
+                                ) : (<>
+                                    <Link
+                                        href={'/agrifeed'}
+                                        className={`link ${pathname === '/agrifeed' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
+                                    >
+                                        <span><MdDashboard /></span>
+                                        <h1>Agrifeed</h1>
+
+                                    </Link>
+                                    <Link
+                                        href={'/categories'}
+                                        className={`link ${pathname === '/categories' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
+                                    >
+                                        <span><GiHamburgerMenu /></span>
+                                        <h1>Categories</h1>
+                                    </Link>
+                                </>
+                                )}
+                                <Link
+                                    href={'/donation'}
+                                    className={`link ${pathname === '/donation' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
+                                >
+                                    <span><BiSolidDonateHeart /></span>
+                                    <h1>Donation</h1>
+
+                                </Link>
+                                <Link
+                                    href={'/points'}
+                                    className={`link ${pathname === '/points' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
+                                >
+                                    <span><TbClover2 /></span>
+                                    <h1>Points</h1>
+
+                                </Link>
+
+                                <Link
+                                    href={'/agrimaps'}
+                                    className={`link ${pathname === '/agrimaps' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
+                                >
+                                    <span><FaRegFileAlt /></span>
+                                    <h1>Agrimaps</h1>
+                                </Link>
+                                <Link
+                                    href={'/agrichange'}
+                                    className={`link ${pathname === '/agrichange' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
+                                >
+                                    <span><FiRefreshCw /></span>
+                                    <h1>Agrichange</h1>
+                                </Link>
+                                {session?.user.role === 'DONATOR' ? (
+                                    <></>
+                                ) : (
+                                    <Link
+                                        href={'/agriquest'}
+                                        className={`link ${pathname === '/agriquest' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
+                                    >
+                                        <span><FiRefreshCw /></span>
+                                        <h1>Agriquest</h1>
+                                    </Link>
+                                )}
+                                <Link
+                                    href={'/history'}
+                                    className={`link ${pathname === '/history' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
+                                >
+                                    <span><MdHistory /></span>
+                                    <h1>History</h1>
+                                </Link>
+                                <Link
+                                    href={'/settings'}
+                                    className={`link ${pathname === '/settings' ? "border-l-2 border-primary-green bg-[#e6e6e671]" : ""} flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3`}
+                                >
+                                    <span><CiSettings /></span>
+                                    <h1>Settings</h1>
+                                </Link>
+                                {status === 'loading' && (
+                                    <></>
+                                )}
+                                {status === 'authenticated' && (
+                                    <LogoutButton>
+                                        <Button
+                                            variant={'outline'}
+                                            className='flex gap-3 w-full items-center justify-center hover:bg-[#e6e6e671] py-3'
+                                        >
+                                            <span><CiLogout /></span>
+                                            <h1>Logout</h1>
+                                        </Button>
+                                    </LogoutButton>
+
+                                )}
+
+                            </div>
+                        </SheetDescription>
+                    </SheetHeader>
+                </SheetContent>
+            </Sheet>
+
             <div className='flex flex-row justify-around items-center w-full md:hidden'>
                 <div>
                     <Sheet>

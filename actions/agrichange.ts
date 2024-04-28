@@ -306,7 +306,9 @@ export const claimAgrichange = async (id: string, data: DateOfPickupInAgrichange
 
         if (!currentAgriChange) return { error: "No agrichange item found!" }
 
-        if (user.points < currentAgriChange.pointsNeeded) return { error: "Insufficient points" }
+        const currentPoints = currentAgriChange.pointsNeeded * quantityPerTrade
+
+        if (user.points < currentPoints) return { error: "Insufficient points" }
 
         if (currentAgriChange.quantity < quantityPerTrade) return { error: "Insufficient Stocks" }
 
