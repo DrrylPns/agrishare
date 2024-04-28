@@ -129,6 +129,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
             const [isReviewOpen, setIsReviewOpen] = useState<boolean>()
             const [isPending, startTransition] = useTransition()
             const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false)
+            const [donationProofError, setDonationProofError] = useState<boolean>(false)
             const [isRejectOpen, setIsRejectOpen] = useState<boolean>(false)
             const [selectedRate, setSelectedRate] = useState(0)
             const [selectRateError, setSelectRateError] = useState<boolean>(false)
@@ -150,14 +151,21 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
             const donationStatus = row.original.status
             const donationId = row.original.id
 
-
+            const isDonationProofNull = donatorProof === null;
             const isImageNull = donatorImage === null;
             const isDisable = selectedRate === 0 ? true : false
 
             const handleConfirm = () => {
+                if (isDonationProofNull ){
+                    toast({
+                        description: "Not Allowed! The donator must upload his/her proof first.",
+                        variant: "destructive"
+                    })
+                }
                 if (selectedRate === 0) {
                     setSelectRateError(true)
-                } else {
+                }
+                if(selectedRate !== 0 && !isDonationProofNull){
                     setIsConfirmOpen(true)
                 }
             }
