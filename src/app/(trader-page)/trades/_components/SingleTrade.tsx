@@ -152,7 +152,8 @@ export const SingleTrade: React.FC<SingleTradeProps> = ({ trade }) => {
 
                                                         if (callback.success) {
                                                             toast({
-                                                                description: callback.success,
+                                                                description: "Trade cancelled!",
+                                                                variant: "destructive",
                                                             })
                                                         }
                                                     })

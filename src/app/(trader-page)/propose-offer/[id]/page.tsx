@@ -121,7 +121,7 @@ function Page({
 
 
     return (
-        <div className='w-full overflow-hidden'>
+        <div className='w-full overflow-hidden flex flex-col items-center justify-center gap-3 pb-20 max-lg:pt-20'>
             <div className='w-full sm:w-3/5 mt-5 sm:mt-0 p-10 border border-gray-300 rounded-xl'>
                 <h1 className='text-3xl font-semibold text-center mb-3'>You are currently trading:</h1>
 
