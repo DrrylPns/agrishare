@@ -11,13 +11,16 @@ import { ColumnDef } from "@tanstack/react-table"
 import { DonationWithDonators } from "@/lib/types"
 import { DataTableColumnHeader } from "@/app/(admin)/users/_components/data-table-column-header"
 import { format } from "date-fns"
-import { Fragment, useState, useTransition } from "react"
+import { Fragment, useRef, useState, useTransition } from "react"
 import { CheckIcon, ChevronsUpDownIcon, MoreHorizontalIcon } from "lucide-react"
 import AdminTitle from "../AdminTitle"
 import Link from "next/link"
 import { handleDonations } from "../../../actions/donate"
 import { Listbox, Menu, RadioGroup, Transition } from "@headlessui/react"
 import { conditionRates } from "@/lib/utils"
+import html2canvas from "html2canvas"
+import jsPDF from 'jspdf'
+import Image from "next/image"
 
 export const columnDonation: ColumnDef<DonationWithDonators>[] = [
     {
@@ -129,6 +132,8 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
             const [isReviewOpen, setIsReviewOpen] = useState<boolean>()
             const [isPending, startTransition] = useTransition()
             const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false)
+            const [isDownloadOpen, setIsDownloadOpen] = useState<boolean>()
+            const [donationProofError, setDonationProofError] = useState<boolean>(false)
             const [isRejectOpen, setIsRejectOpen] = useState<boolean>(false)
             const [selectedRate, setSelectedRate] = useState(0)
             const [selectRateError, setSelectRateError] = useState<boolean>(false)
@@ -150,16 +155,46 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
             const donationStatus = row.original.status
             const donationId = row.original.id
 
-
+            const isDonationProofNull = donatorProof === null;
             const isImageNull = donatorImage === null;
             const isDisable = selectedRate === 0 ? true : false
 
             const handleConfirm = () => {
+                if (isDonationProofNull ){
+                    toast({
+                        description: "Not Allowed! The donator must upload his/her proof first.",
+                        variant: "destructive"
+                    })
+                }
                 if (selectedRate === 0) {
                     setSelectRateError(true)
-                } else {
+                }
+                if(selectedRate !== 0 && !isDonationProofNull){
                     setIsConfirmOpen(true)
                 }
+            }
+
+            const pdfRef = useRef<HTMLDivElement>(null);
+            const downloadPDF = () => {
+                const input = pdfRef.current;
+                if (!input) {
+                    console.error("PDF reference is not available");
+                    return;
+                }
+                html2canvas(input).then((canvas) => {
+                    const imgData = canvas.toDataURL('image/png')
+                    const pdf = new jsPDF('p', 'mm', 'a4', true);
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = pdf.internal.pageSize.getHeight();
+                    const imgWidth = canvas.width;
+                    const imgHeight = canvas.height;
+                    const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight)
+                    const imgX = (pdfWidth - imgWidth * ratio) / 2;
+                    const imgY = 30;
+                    pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+                    pdf.save('Reciept.pdf')
+
+                })
             }
             return (
                 <>
@@ -173,11 +208,12 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-
-                            <DropdownMenuItem className="cursor-pointer">
-                                Download
-                            </DropdownMenuItem>
-
+                            {donationStatus !== 'PENDING'}
+                            <DropdownMenuItem className="cursor-pointer"
+                                    onClick={() => setIsDownloadOpen(true)}
+                                >
+                                    Download
+                                </DropdownMenuItem>
                             <DropdownMenuItem
                                 onClick={() => setIsReviewOpen(true)}
                             >
@@ -196,7 +232,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                 </DialogTitle>
                                 <DialogDescription>
                                     <>
-                                        <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-between max-w-fit mx-auto">
+                                        <div ref={pdfRef} className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-between max-w-fit mx-auto">
                                             <div className="flex flex-col items-center md:items-start">
                                                 <Avatar>
                                                     <AvatarImage src={`${isImageNull ? "/avatar-placeholder.jpg" : donatorImage}`} alt="profile" />
@@ -212,8 +248,11 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                                     </p>
                                                     <p>Date: {format(dateDonated, "PPP")}</p>
                                                     {donatorProof !== null ? (
-                                                         <a target="_blank" className="text-blue-500" href={donatorProof}>
-                                                            Proof: See Proof
+                                                         <a target="_blank" className="text-blue-500 flex" href={donatorProof}>
+                                                            Proof: 
+                                                            <div className="ml-5 w-20 h-20">
+                                                                <Image src={donatorProof} alt="donator proof" width={100} height={100} className="object-contain w-full h-full"/>
+                                                            </div>
                                                         </a>
                                                     ) : (
                                                         <div className="" >
@@ -267,6 +306,9 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                         )}
 
                                     </>
+                                    {donationStatus === 'APPROVED' && (
+                                        <Button variant={'primary'} onClick={downloadPDF}>Download</Button>
+                                    )}
                                 </DialogDescription>
                             </DialogHeader>
                         </DialogContent>
@@ -353,6 +395,57 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>
+
+                    <Dialog open={isDownloadOpen} onOpenChange={setIsDownloadOpen}>
+                        <DialogContent className="lg:max-w-2xl">
+                            <DialogHeader>
+                                <DialogTitle>
+                                    <AdminTitle entry="4" title="Donations Review" />
+                                    <p className="text-center">Status: {donationStatus}</p>
+                                </DialogTitle>
+                                <DialogDescription  ref={pdfRef}>
+                                    <>
+                                        <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-between max-w-fit mx-auto">
+                                            <div className="flex flex-col items-center md:items-start">
+                                                <Avatar>
+                                                    <AvatarImage src={`${isImageNull ? "/avatar-placeholder.jpg" : donatorImage}`} alt="profile" />
+                                                    <AvatarFallback>CN</AvatarFallback>
+                                                </Avatar>
+                                                <div className="mt-4 text-sm text-center md:text-start">
+                                                    {/* <p className="font-semibold">Trade ID: {id}</p> */}
+                                                    <p>Name: {donatorName} {" "} {donatorLastName}</p>
+                                                    <p>Item: {donatorProduct}</p>
+                                                    <p>Quantity: {donatoryQty}</p>
+                                                    <p>
+                                                        Accumulated Points: <span className="text-green-500">{donatorPoints.toFixed(0)} Point(s)</span>
+                                                    </p>
+                                                    <p>Date: {format(dateDonated, "PPP")}</p>
+                                                    {donatorProof !== null ? (
+                                                         <a target="_blank" className="text-blue-500 flex" href={donatorProof}>
+                                                            Proof: 
+                                                            <div className="ml-5 w-20 h-20">
+                                                                <Image src={donatorProof} alt="donator proof" width={100} height={100} className="object-contain w-full h-full"/>
+                                                            </div>
+                                                        </a>
+                                                    ) : (
+                                                        <div className="" >
+                                                            Proof: Haven't uploaded yet!
+                                                        </div>
+                                                    )}
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                    
+                                </DialogDescription>
+                                
+                            </DialogHeader>
+                            {donationStatus === 'APPROVED' && (
+                                        <Button variant={'primary'} onClick={downloadPDF}>Download</Button>
+                                    )}
+                        </DialogContent>
+                    </Dialog>
                 </>
             )
         },
