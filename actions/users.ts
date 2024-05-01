@@ -34,3 +34,16 @@ export const fetchDonatorAndTrader = async () => {
 
     return users
 }
+
+export const fetchOneUser = async () =>{
+    const session = await auth()
+        if (!session) return { error: "No user found!" }
+        const user = await prisma.user.findUnique({
+            where: {
+                id: session?.user.id,
+            },
+        })
+        if (!user) return { error: "No user found!" }
+
+    return user
+}

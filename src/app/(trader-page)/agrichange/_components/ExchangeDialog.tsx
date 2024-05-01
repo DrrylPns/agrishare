@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils"
 import { DateOfPickupInAgrichange, DateOfPickupInAgrichangeType } from "@/lib/validations/agrichange"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { add, format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
+import { CalendarIcon, User } from "lucide-react"
 import Image from "next/image"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
@@ -23,6 +23,9 @@ import { LiaExchangeAltSolid } from "react-icons/lia"
 import { claimAgrichange } from "../../../../../actions/agrichange"
 import { Agrichange } from "../../agrifeed/_components/_types"
 import HearthwihGirl from './images/image1.png'
+import { fetchOneUser } from "../../../../../actions/users"
+import { useQuery } from "@tanstack/react-query"
+import { ExchangeUser } from "@/lib/types"
 
 export default function ExchangeDialog({
     selectedItem
@@ -30,7 +33,20 @@ export default function ExchangeDialog({
     selectedItem: Agrichange
 }) {
     const [isPending, startTransition] = useTransition()
-    const [number, setNumber] = useState<number>(1)
+    const [number, setNumber] = useState<number>(0)
+    const [error, setError] = useState<boolean>(false)
+
+    let pointsNeeded
+    
+    pointsNeeded = selectedItem.pointsNeeded
+   
+    const { data: user, isError, isLoading } = useQuery({
+        queryKey: ["user"],
+        queryFn: async () => await fetchOneUser() as ExchangeUser
+    })
+    const userPoints = user?.points
+
+    const isSufficient = userPoints && userPoints > (pointsNeeded * number)
 
     const handleSubtract = () => {
         if (number > 0) {
@@ -39,7 +55,8 @@ export default function ExchangeDialog({
     }
 
     const handleAdd = () => {
-        if (selectedItem && number < selectedItem.quantity) {
+        
+        if (selectedItem && number < selectedItem.quantity && isSufficient) {
             setNumber(prev => prev + 1)
         }
     }
@@ -93,6 +110,9 @@ export default function ExchangeDialog({
                                     +
                                 </div>
                             </div>
+                            {!isSufficient && (
+                                <h1 className="text-red-600 text-center text-xs tracking-wider">Insufficient points!</h1>
+                            )}
 
                             <FormField
                                 control={form.control}
@@ -141,8 +161,9 @@ export default function ExchangeDialog({
                         <div className="relative w-full flex justify-center gap-10">
                             <Button
                                 variant='default'
-                                className="rounded-full px-10"
+                                className={`rounded-full px-10`}
                                 isLoading={isPending}
+                                disabled={!isSufficient}
                             // onClick={onSubmit}
                             >
                                 Yes
