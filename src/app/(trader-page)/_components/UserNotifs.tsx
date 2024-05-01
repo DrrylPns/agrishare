@@ -1,23 +1,20 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
-import { CiBellOn } from 'react-icons/ci'
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { fetchNotifications, notificationRead } from '../../../../actions/notification'
 import { NotificationWithUser } from '@/lib/types'
-import Link from 'next/link'
-import { MailIcon } from 'lucide-react'
 import { formatCreatedAt } from '@/lib/utils'
-import { useQuery } from '@tanstack/react-query'
-import { BeatLoader } from 'react-spinners'
-import { Separator } from '@/components/ui/separator'
-import { GoDotFill } from "react-icons/go";
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { CiBellOn } from 'react-icons/ci'
+import { GoDotFill } from "react-icons/go"
+import { BeatLoader } from 'react-spinners'
+import { fetchNotifications, notificationRead } from '../../../../actions/notification'
 
 export const UserNotifs = () => {
     const [loading, setLoading] = useState<boolean>(true);
@@ -81,9 +78,32 @@ export const UserNotifs = () => {
                                             }}
                                         >
                                             <div className='flex items-center'>
-                                                {/* <MailIcon className="mr-2 h-7 w-7" /> */}
                                                 {notification.type === "PENDING" && (
-                                                    <div> <span className='font-bold'>{notification.trade.trader.name}</span> has requested a trade to your <span className='font-bold'>{notification.trade.post.name}</span>.</div>
+                                                    <div> <span className='font-bold'>{notification.trade?.trader.name}</span> has requested a trade to your <span className='font-bold'>{notification.trade?.post.name}</span>.</div>
+                                                )}
+                                                {notification.type === "TRADEEACCEPTED" && (
+                                                    <div> You have accepted the <span className='font-bold'>{notification.trade?.item}</span> trade request of <span className='font-bold'>{notification.trade?.trader.name}</span></div>
+                                                )}
+                                                {notification.type === "TRADERACCEPTED" && (
+                                                    <div> <span className='font-bold'>{notification.trade?.tradee.name}</span> has accepted your trade request to the <span className='font-bold'>{notification.trade?.post.name}</span></div>
+                                                )}
+                                                {notification.type === "TRADEEDECLINE" && (
+                                                    <div> You declined the <span className='font-bold'>{notification.trade?.item}</span> trade request of <span className='font-bold'>{notification.trade?.trader.name}</span></div>
+                                                )}
+                                                {notification.type === "TRADERDECLINE" && (
+                                                    <div>
+                                                        <span className='font-bold'>{notification.trade?.tradee.name} {" "}</span>
+                                                        has declined your trade request to the <span className='font-bold'>{notification.trade?.post.name}</span></div>
+                                                )}
+                                                {notification.type === "TRADEECOMPLETE" && (
+                                                    <div>
+                                                        The trade for <span className='font-bold'>{notification.trade?.item}</span> with <span className='font-bold'>{notification.trade?.trader.name}</span> has been completed successfully!
+                                                    </div>
+                                                )}
+                                                {notification.type === "TRADERCOMPLETE" && (
+                                                    <div>
+                                                        The trade for <span className='font-bold'>{notification.trade?.post.name}</span> with <span className='font-bold'>{notification.trade?.tradee.name}</span> has been completed successfully!
+                                                    </div>
                                                 )}
                                                 {notification.type === "PROCESSING" && (
                                                     <div><span className='font-bold'>Claiming processed!</span> Your current points is on hold!</div>

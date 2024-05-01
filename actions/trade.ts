@@ -34,7 +34,7 @@ export const trade = async (
         return { error: "You cannot issue a trade for your own post." };
     }
 
-    const { description, item, 
+    const { description, item,
         // value,
         weight, quantity, shelfLife, category, subcategory } = validatedFields.data
 
@@ -250,6 +250,22 @@ export const handleTrade = async (tradeeCalculatedPoints: number, traderCalculat
             }
         })
 
+        await prisma.notification.create({
+            data: {
+                userId: tradeeId as string,
+                tradeId: currentTrade.id,
+                type: "TRADEECOMPLETE"
+            },
+        })
+
+        await prisma.notification.create({
+            data: {
+                userId: traderId as string,
+                tradeId: currentTrade.id,
+                type: "TRADERCOMPLETE",
+            },
+        })
+
         revalidatePath("/transactions")
         return { success: "Confirmed the trade." }
     }
@@ -360,6 +376,7 @@ export const tradeIntent = async (status: StatusType, tradeId: string, email: st
         where: { id: tradeId },
         include: {
             tradee: true,
+            trader: true,
             post: true
         }
     })
@@ -377,8 +394,41 @@ export const tradeIntent = async (status: StatusType, tradeId: string, email: st
 
     if (status === "PROCESSING") {
         await sendAcceptedTradeNotification(email, trade.tradee.name as string, trade.post.name)
+
+        await prisma.notification.create({
+            data: {
+                userId: trade.tradeeId as string,
+                tradeId: trade.id,
+                type: "TRADEEACCEPTED"
+            },
+        })
+
+        await prisma.notification.create({
+            data: {
+                userId: trade.traderId as string,
+                tradeId: trade.id,
+                type: "TRADERACCEPTED",
+            },
+        })
+
     } else if (status === "CANCELLED") {
         await sendDeclinedNotification(email, trade.tradee.name as string, trade.post.name)
+
+        await prisma.notification.create({
+            data: {
+                userId: trade.tradeeId as string,
+                tradeId: trade.id,
+                type: "TRADEEDECLINE"
+            },
+        })
+
+        await prisma.notification.create({
+            data: {
+                userId: trade.traderId as string,
+                tradeId: trade.id,
+                type: "TRADERDECLINE",
+            },
+        })
     }
 
     revalidatePath("/trades/[traderId]")

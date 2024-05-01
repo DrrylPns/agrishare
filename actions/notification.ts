@@ -21,7 +21,8 @@ export const fetchNotifications = async () => {
             trade: {
                 include: {
                     post: true,
-                    trader: true
+                    trader: true,
+                    tradee: true,
                 }
             }
         },
@@ -30,7 +31,7 @@ export const fetchNotifications = async () => {
         },
     })
 
-    return notifications || []
+    return notifications
 }
 
 export const notificationRead = async (notificationId: string, path: string) => {
