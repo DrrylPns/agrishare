@@ -105,6 +105,36 @@ export const UserNotifs = () => {
                                                         The trade for <span className='font-bold'>{notification.trade?.post.name}</span> with <span className='font-bold'>{notification.trade?.tradee.name}</span> has been completed successfully!
                                                     </div>
                                                 )}
+                                                {notification.type === "DONATIONPENDING" && (
+                                                    <div>
+                                                        Your donation has been sent and is pending for approval. <span className="font-bold">Click here for more information</span>
+                                                    </div>
+                                                )}
+                                                {notification.type === "DONATIONCANCELLED" && (
+                                                    <div>
+                                                        Your donation has been cancelled. <span className="font-bold">Click here for more information</span>
+                                                    </div>
+                                                )}
+                                                {notification.type === "DONATIONAPPROVED" && (
+                                                    <div>
+                                                        Your donation has been approved! <span className="font-bold">Click here for more information</span>
+                                                    </div>
+                                                )}
+                                                {notification.type === "AGRIQUESTPENDING" && (
+                                                    <div>
+                                                        Your agriquest request has been sent and is pending for approval. <span className="font-bold">Click here for more information</span>
+                                                    </div>
+                                                )}
+                                                {notification.type === "AGRIQUESTCANCELLED" && (
+                                                    <div>
+                                                        Your agriquest request has been cancelled. <span className="font-bold">Click here for more information</span>
+                                                    </div>
+                                                )}
+                                                {notification.type === "AGRIQUESTAPPROVED" && (
+                                                    <div>
+                                                        Your agriquest request has been approved! <span className="font-bold">Click here for more information</span>
+                                                    </div>
+                                                )}
                                                 {notification.type === "PROCESSING" && (
                                                     <div><span className='font-bold'>Claiming processed!</span> Your current points is on hold!</div>
                                                 )}
