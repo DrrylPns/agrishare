@@ -486,6 +486,7 @@ enum CancelType {
 enum DonationStatus {
   PENDING
   CANCELLED
+  DECLINED
   APPROVED
 }
 

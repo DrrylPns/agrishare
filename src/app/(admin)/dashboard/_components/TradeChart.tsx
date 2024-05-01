@@ -2,7 +2,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { BarChart, Card } from '@tremor/react'
 import React from 'react'
-import { fetchTradesByDate } from '../../../../../actions/dashboard';
+import { fetchTradeCountsForDateRange } from '../../../../../actions/dashboard';
+import { format, isSameDay } from 'date-fns';
 
 // const trades = [
 //     {
@@ -56,12 +57,31 @@ import { fetchTradesByDate } from '../../../../../actions/dashboard';
 // ];
 
 export const TradeChart = () => {
+    const startDate = new Date('2024-04-01');
+    const endDate = new Date();
 
-    const { data: tradesData } = useQuery({
-        queryKey: ['trades-by-date'],
-        queryFn: async () => fetchTradesByDate(),
+    const { data: completedCounts } = useQuery({
+        queryKey: ['completed-trade-counts'],
+        queryFn: async () => fetchTradeCountsForDateRange("COMPLETED", startDate, endDate),
+    });
+    const { data: cancelledCounts } = useQuery({
+        queryKey: ['cancelled-trade-counts'],
+        queryFn: async () => fetchTradeCountsForDateRange("CANCELLED", startDate, endDate),
     });
 
+    const tradesData = completedCounts?.flatMap(({ date, count }) => {
+        const cancelledCount = cancelledCounts?.find((c) => isSameDay(c.date, date))?.count ?? 0;
+
+
+        if (count > 0 || cancelledCount > 0) {
+            return {
+                date: format(date, 'MMMM dd'),
+                Approved: count,
+                Cancelled: cancelledCount,
+            };
+        }
+        return [];
+    });
     return (
         <Card className='mx-auto max-w-6xl h-full drop-shadow-lg my-11'>
             <h3 className="text-lg font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
@@ -71,9 +91,11 @@ export const TradeChart = () => {
                 className="mt-6"
                 data={tradesData as any}
                 index="date"
-                categories={['Trades']}
-                colors={['green']}
+                categories={['Approved', 'Cancelled']}
+                colors={['green', 'red']}
                 yAxisWidth={48}
+                showAnimation
+                allowDecimals={false}
             />
         </Card>
     )

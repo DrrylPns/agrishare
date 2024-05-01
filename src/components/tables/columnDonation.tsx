@@ -399,7 +399,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleDonations("CANCELLED", quantity, selectedRate, donationSubCategory, donationCategory, donationId, donatorId, donationSize).then((callback) => {
+                                                handleDonations("DECLINED", quantity, selectedRate, donationSubCategory, donationCategory, donationId, donatorId, donationSize).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,

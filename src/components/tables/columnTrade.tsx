@@ -36,10 +36,27 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
         },
     },
     {
+        accessorKey: "trader",
+        header: ({ column }) => {
+            return (
+                <DataTableColumnHeader column={column} title="TRADER" />
+            )
+        },
+        cell: ({ row }) => {
+            const user = row.original.trader.name
+
+            return <div
+                className=""
+            >
+                {user}
+            </div>
+        },
+    },
+    {
         accessorKey: "item",
         header: ({ column }) => {
             return (
-                <DataTableColumnHeader column={column} title="ITEM" />
+                <DataTableColumnHeader column={column} title="ITEM 1" />
             )
         },
         cell: ({ row }) => {
@@ -53,19 +70,36 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
         },
     },
     {
-        accessorKey: "trader",
+        accessorKey: "tradee",
         header: ({ column }) => {
             return (
-                <DataTableColumnHeader column={column} title="USER" />
+                <DataTableColumnHeader column={column} title="TRADEE" />
             )
         },
         cell: ({ row }) => {
-            const user = row.original.trader.name
+            const user = row.original.tradee.name
 
             return <div
                 className=""
             >
                 {user}
+            </div>
+        },
+    },
+    {
+        accessorKey: "post",
+        header: ({ column }) => {
+            return (
+                <DataTableColumnHeader column={column} title="ITEM 2" />
+            )
+        },
+        cell: ({ row }) => {
+            const item = row.original.post.name
+
+            return <div
+                className=""
+            >
+                {item}
             </div>
         },
     },

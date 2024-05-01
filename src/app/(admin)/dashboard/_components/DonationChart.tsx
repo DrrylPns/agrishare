@@ -1,7 +1,8 @@
 "use client"
 import { useQuery } from '@tanstack/react-query';
 import { BarChart, Card } from '@tremor/react';
-import { fetchDonationCount } from '../../../../../actions/dashboard';
+import { fetchDonationCount, fetchDonationCountsForDateRange } from '../../../../../actions/dashboard';
+import { format, isSameDay } from 'date-fns';
 
 // const donation = [
 //     {
@@ -55,9 +56,40 @@ import { fetchDonationCount } from '../../../../../actions/dashboard';
 // ];
 
 export const DonationChart = () => {
-    const { data: donationsData } = useQuery({
-        queryKey: ['donations-by-date'],
-        queryFn: async () => fetchDonationCount(),
+    const startDate = new Date('2024-04-01');
+    const endDate = new Date();
+
+
+    const { data: approvedCounts } = useQuery({
+        queryKey: ['approved-donations-counts'],
+        queryFn: async () => fetchDonationCountsForDateRange("APPROVED", startDate, endDate),
+    });
+
+    const { data: declinedCounts } = useQuery({
+        queryKey: ['declined-donations-counts'],
+        queryFn: async () => fetchDonationCountsForDateRange("DECLINED", startDate, endDate),
+    });
+
+    const { data: cancelledCounts } = useQuery({
+        queryKey: ['cancelled-donations-counts'],
+        queryFn: async () => fetchDonationCountsForDateRange("CANCELLED", startDate, endDate),
+    });
+
+
+    const donationsData = approvedCounts?.flatMap(({ date, count }) => {
+        const cancelledCount = cancelledCounts?.find((c) => isSameDay(c.date, date))?.count ?? 0;
+        const declinedCount = declinedCounts?.find((c) => isSameDay(c.date, date))?.count ?? 0;
+
+
+        if (count > 0 || cancelledCount > 0 || declinedCount > 0) {
+            return {
+                date: format(date, 'MMMM dd'),
+                Approved: count,
+                Cancelled: cancelledCount,
+                Declined: declinedCount,
+            };
+        }
+        return [];
     });
 
     return (
@@ -69,9 +101,11 @@ export const DonationChart = () => {
                 className="mt-6"
                 data={donationsData as any} // Pass donations directly
                 index="date"
-                categories={['Donations']}
-                colors={['orange']}
+                categories={['Approved', 'Declined', 'Cancelled']}
+                colors={['green', 'red', 'orange']}
                 yAxisWidth={48}
+                showAnimation
+                allowDecimals={false}
             />
         </Card>
     );

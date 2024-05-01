@@ -42,23 +42,6 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
         },
     },
     {
-        accessorKey: "item",
-        header: ({ column }) => {
-            return (
-                <DataTableColumnHeader column={column} title="ITEM" />
-            )
-        },
-        cell: ({ row }) => {
-            const item = row.original.item
-
-            return <div
-                className=""
-            >
-                {item}
-            </div>
-        },
-    },
-    {
         accessorKey: "trader",
         header: ({ column }) => {
             return (
@@ -72,6 +55,57 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                 className=""
             >
                 {user}
+            </div>
+        },
+    },
+    {
+        accessorKey: "item",
+        header: ({ column }) => {
+            return (
+                <DataTableColumnHeader column={column} title="ITEM 1" />
+            )
+        },
+        cell: ({ row }) => {
+            const item = row.original.item
+
+            return <div
+                className=""
+            >
+                {item}
+            </div>
+        },
+    },
+    {
+        accessorKey: "tradee",
+        header: ({ column }) => {
+            return (
+                <DataTableColumnHeader column={column} title="TRADEE" />
+            )
+        },
+        cell: ({ row }) => {
+            const user = row.original.tradee.name
+
+            return <div
+                className=""
+            >
+                {user}
+            </div>
+        },
+    },
+    {
+        accessorKey: "post",
+        header: ({ column }) => {
+            return (
+                <DataTableColumnHeader column={column} title="ITEM 2" />
+            )
+        },
+        cell: ({ row }) => {
+            const item = row.original.post.name
+
+            return <div
+                className=""
+            >
+                {item}
             </div>
         },
     },
@@ -404,7 +438,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                 </DropdownMenuItem>
 
                             )}
-                            
+
                             {/* <DropdownMenuItem
                                 onClick={() => setIsReviewOpen(true)}
                             >

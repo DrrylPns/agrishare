@@ -92,16 +92,20 @@ export const handleDonations = async (status: DonationStatus, quantity: number, 
         return { error: "Donation is already completed." };
     }
 
-    if (status === "CANCELLED" && currentDonation.status === "CANCELLED") {
+    if (status === "DECLINED" && currentDonation.status === "DECLINED") {
         return { error: "Donation is already cancelled." };
     }
 
-    if (status === "CANCELLED" && currentDonation.status === "APPROVED") {
+    if (status === "DECLINED" && currentDonation.status === "APPROVED") {
         return { error: "Invalid action, the trade is already cancelled." }
     }
 
-    if (status === "APPROVED" && currentDonation.status === "CANCELLED") {
+    if (status === "APPROVED" && currentDonation.status === "DECLINED") {
         return { error: "Invalid action, the trade is already confirmed." }
+    }
+
+    if (currentDonation.status === "CANCELLED") {
+        return { error: "Invalid action, the donator has cancelled its donation." }
     }
 
     const processDonate = await prisma.donation.update({

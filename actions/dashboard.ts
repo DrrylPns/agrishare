@@ -2,6 +2,8 @@
 
 import prisma from "@/lib/db"
 import { auth } from "../auth"
+import { endOfDay, startOfDay } from "date-fns"
+import { eachDayOfInterval } from "date-fns"
 
 export const fetchUrbanFarmers = async () => {
     try {
@@ -77,36 +79,80 @@ export const fetchUrbanDonator = async () => {
 //     return donationsByDate;
 // };
 
-export const fetchDonationCount = async () => {
-    const donations = await prisma.donation.count({
+export const fetchDonationCount = async (status: "APPROVED" | "CANCELLED" | "DECLINED", date: Date) => {
+    const count = await prisma.donation.count({
         where: {
-            status: "APPROVED",
-        }
-    })
-
-    return donations
-}
-
-// Fetch trades from the database and count them by date
-export const fetchTradesByDate = async () => {
-    const tradesByDate = await prisma.trade.groupBy({
-        by: ['createdAt'],
-        where: {
-            status: 'COMPLETED',
-        },
-        _count: {
-            createdAt: true,
-        },
-        orderBy: {
-            createdAt: 'asc',
+            status,
+            createdAt: {
+                gte: startOfDay(date),
+                lt: endOfDay(date),
+            },
         },
     });
 
-    // Transform the data into the required format for the chart
-    const tradesData = tradesByDate.map(trade => ({
-        date: trade.createdAt.toISOString().split('T')[0], // Format the date as needed
-        Trades: trade._count.createdAt, // Get the count of trades for that date
-    }));
+    return count;
+};
 
-    return tradesData;
+export const fetchDonationCountsForDateRange = async (status: "APPROVED" | "CANCELLED" | "DECLINED", startDate: Date, endDate: Date) => {
+    const dates = eachDayOfInterval({ start: startDate, end: endDate });
+
+    const counts = await Promise.all(
+        dates.map(async (date) => {
+            const count = await fetchDonationCount(status, date);
+            return { date, count };
+        })
+    );
+
+    return counts;
+};
+
+// // Fetch trades from the database and count them by date
+// export const fetchTradesByDate = async () => {
+//     const tradesByDate = await prisma.trade.groupBy({
+//         by: ['createdAt'],
+//         where: {
+//             status: 'COMPLETED',
+//         },
+//         _count: {
+//             createdAt: true,
+//         },
+//         orderBy: {
+//             createdAt: 'asc',
+//         },
+//     });
+
+//     // Transform the data into the required format for the chart
+//     const tradesData = tradesByDate.map(trade => ({
+//         date: trade.createdAt.toISOString().split('T')[0], // Format the date as needed
+//         Trades: trade._count.createdAt, // Get the count of trades for that date
+//     }));
+
+//     return tradesData;
+// };
+
+export const fetchTradeCount = async (status: "COMPLETED" | "CANCELLED", date: Date) => {
+    const count = await prisma.trade.count({
+        where: {
+            status,
+            createdAt: {
+                gte: startOfDay(date),
+                lt: endOfDay(date),
+            },
+        },
+    });
+
+    return count;
+};
+
+export const fetchTradeCountsForDateRange = async (status: "COMPLETED" | "CANCELLED", startDate: Date, endDate: Date) => {
+    const dates = eachDayOfInterval({ start: startDate, end: endDate });
+
+    const counts = await Promise.all(
+        dates.map(async (date) => {
+            const count = await fetchTradeCount(status, date);
+            return { date, count };
+        })
+    );
+
+    return counts;
 };
