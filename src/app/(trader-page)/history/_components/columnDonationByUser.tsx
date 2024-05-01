@@ -19,7 +19,7 @@ import { UploadDropzone } from "@/lib/uploadthing"
 import jsPDF from "jspdf"
 import { handleTradeProof } from "../../../../../actions/trade"
 import Image from "next/image"
-import { handleDonationProof } from "../../../../../actions/donate"
+import { handleCancelDonation, handleDonationProof } from "../../../../../actions/donate"
 // import { handleDonations } from "../../../actions/donate"
 
 export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
@@ -195,15 +195,25 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                             >
                                 Download
                             </DropdownMenuItem>
-                            {proof !== null ? (
+                            {proof !== null  || donationStatus === "CANCELLED" ? (
                                 null
                             ) : (
                                 <DropdownMenuItem
+                                    className="cursor-pointer"
                                     onClick={() => setIsProofOpen(true)}
                                 >
                                     Upload Proof
                                 </DropdownMenuItem>
                             )}
+                            {donationStatus === 'PENDING' && (
+                                <DropdownMenuItem
+                                    className="cursor-pointer"
+                                    onClick={() => setIsRejectOpen(true)}
+                                >
+                                    Cancel
+                                </DropdownMenuItem>
+                            )}
+                            
                         </DropdownMenuContent>
                     </DropdownMenu>
                     <Dialog open={isReviewOpen} onOpenChange={setIsReviewOpen}>
@@ -237,7 +247,6 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                                                     ) : (
                                                         <></>
                                                     )}
-
                                                 </div>
                                             </div>
                                         </div>
@@ -380,21 +389,21 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                // handleDonations("CANCELLED", donatorPoints, donationId, donatorId).then((callback) => {
-                                                //     if (callback?.error) {
-                                                //         toast({
-                                                //             description: callback.error,
-                                                //             variant: "destructive"
-                                                //         })
-                                                //     }
+                                                handleCancelDonation("CANCELLED", donationId, donatorId).then((callback) => {
+                                                    if (callback?.error) {
+                                                        toast({
+                                                            description: callback.error,
+                                                            variant: "destructive"
+                                                        })
+                                                    }
 
-                                                //     if (callback?.success) {
-                                                //         toast({
-                                                //             description: callback.success,
-                                                //             variant: "default",
-                                                //         })
-                                                //     }
-                                                // })
+                                                    if (callback?.success) {
+                                                        toast({
+                                                            description: callback.success,
+                                                            variant: "default",
+                                                        })
+                                                    }
+                                                })
                                             })
                                         }
                                     }

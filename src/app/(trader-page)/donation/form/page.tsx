@@ -25,6 +25,8 @@ import { cn } from "@/lib/utils"
 import { add, format, sub } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import { Calendar } from "@/components/ui/calendar"
+import { auth } from "../../../../../auth"
+import { useSession } from "next-auth/react"
 
 export default function Page() {
   const [imageUrl, setImageUrl] = useState<string>("")
@@ -32,6 +34,12 @@ export default function Page() {
   const [chosenCategory, setChosenCategory] = useState("")
   const [size, setSize] = useState("")
   const [selectedSubcategory, setSelectedSubcategory] = useState("")
+
+  const { data:session} = useSession()
+
+  const firstName = session?.user.name
+  const lastName = session?.user.lastName
+  const fullName = firstName + " " + lastName
 
   const form = useForm<DonationType>({
     resolver: zodResolver(DonationSchema),
@@ -96,7 +104,6 @@ export default function Page() {
       pickUpDate: values.pickUpDate,
       size,
     }
-
     createPost(payload)
   }
 
@@ -126,7 +133,7 @@ export default function Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="Name of Donator" {...field} disabled={isLoading} />
+                    <Input placeholder="Name of Donator" {...field} value={fullName} disabled={true} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

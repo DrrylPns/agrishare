@@ -11,7 +11,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { DonationWithDonators } from "@/lib/types"
 import { DataTableColumnHeader } from "@/app/(admin)/users/_components/data-table-column-header"
 import { format } from "date-fns"
-import { Fragment, useRef, useState, useTransition } from "react"
+import { ChangeEvent, Fragment, useRef, useState, useTransition } from "react"
 import { CheckIcon, ChevronsUpDownIcon, MoreHorizontalIcon } from "lucide-react"
 import AdminTitle from "../AdminTitle"
 import Link from "next/link"
@@ -21,6 +21,8 @@ import { conditionRates } from "@/lib/utils"
 import html2canvas from "html2canvas"
 import jsPDF from 'jspdf'
 import Image from "next/image"
+import { Input } from "../ui/input"
+import { Label } from "../ui/label"
 
 export const columnDonation: ColumnDef<DonationWithDonators>[] = [
     {
@@ -135,6 +137,8 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
             const [isDownloadOpen, setIsDownloadOpen] = useState<boolean>()
             const [donationProofError, setDonationProofError] = useState<boolean>(false)
             const [isRejectOpen, setIsRejectOpen] = useState<boolean>(false)
+            const [quantityError, setQuantityError] = useState<boolean>(false)
+            const [quantity, setQuantity] = useState<number>(0)
             const [selectedRate, setSelectedRate] = useState(0)
             const [selectRateError, setSelectRateError] = useState<boolean>(false)
 
@@ -166,14 +170,19 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                         variant: "destructive"
                     })
                 }
+                if (quantity <= 0 || isNaN(quantity)) {
+                    setQuantityError(true)
+                }
                 if (selectedRate === 0) {
                     setSelectRateError(true)
                 }
-                if(selectedRate !== 0 && !isDonationProofNull){
+
+                if(selectedRate !== 0 && !isDonationProofNull && !quantityError){
                     setIsConfirmOpen(true)
                 }
             }
 
+            console.log(quantity)
             const pdfRef = useRef<HTMLDivElement>(null);
             const downloadPDF = () => {
                 const input = pdfRef.current;
@@ -196,6 +205,15 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
 
                 })
             }
+
+            const handleQuantityChange = (event: ChangeEvent<HTMLInputElement>) => {
+                const newValue = parseInt(event.target.value, 10);
+                setQuantity(newValue);
+                if(newValue >= 1){
+                    setQuantityError(false)
+                }
+            };
+
             return (
                 <>
                     <DropdownMenu>
@@ -287,6 +305,13 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                                     {selectRateError && (
                                                         <h1 className="text-red-500 text-xs text-center mt-3">*Select codition rate first!</h1>
                                                     )}
+                                                    <div className="mx-auto flex gap-y-10 gap-x-2 items-center justify-center">
+                                                        <Label className="" htmlFor="quantity">Recieved quantity : </Label>
+                                                        <Input type='number' className="w-1/4" value={quantity} onChange={handleQuantityChange} name="quantity" placeholder="Quantity" />
+                                                    </div>
+                                                    {quantityError && (
+                                                        <h1 className="text-red-500 text-xs text-center mt-3">*Invalid quantity!</h1>
+                                                    )}
                                                 </div>
                                                 <div className="flex gap-3 mt-3">
                                                     <Button
@@ -304,6 +329,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                         ) : (
                                             null
                                         )}
+
 
                                     </>
                                     {donationStatus === 'APPROVED' && (
@@ -334,7 +360,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleDonations("APPROVED", selectedRate, donationSubCategory, donationCategory, donationId, donatorId, donationSize).then((callback) => {
+                                                handleDonations("APPROVED", quantity, selectedRate, donationSubCategory, donationCategory, donationId, donatorId, donationSize).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,
@@ -373,14 +399,13 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleDonations("CANCELLED", selectedRate, donationSubCategory, donationCategory, donationId, donatorId, donationSize).then((callback) => {
+                                                handleDonations("CANCELLED", quantity, selectedRate, donationSubCategory, donationCategory, donationId, donatorId, donationSize).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,
                                                             variant: "destructive"
                                                         })
                                                     }
-
                                                     if (callback?.success) {
                                                         toast({
                                                             description: callback.success,
