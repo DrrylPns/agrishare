@@ -196,8 +196,7 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                         donationId,
                         type,
                     }
-        
-                    const { data } = await axios.put("/api/markethub/transaction/cancelled", payload)
+                    const { data } = await axios.put("/api/donate/cancel", payload)
                     return data
                 },
                 onError: (err) => {

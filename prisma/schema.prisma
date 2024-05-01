@@ -255,6 +255,62 @@ enum Subcategory {
   KALAYKAY
   HOES
   SHOVEL
+  Calamansi
+  MandarinOrange
+  Banana
+  Mango
+  Avocado
+  CottonFruit
+  Pineapple
+  Soursop
+  CustardApple
+  Papaya
+  Lanzones
+  AmpalayaLeaves
+  WaterSpinach
+  SweetPotatoLeaves
+  MalabarSpinach
+  JewsMallow
+  ChiliLeaves
+  Moringaoleifera
+  TaroLeaves
+  OnionLeaves
+  PetchayNative
+  PetchayBaguio
+  CabbageRareBall
+  CabbageScorpio
+  Basil
+  Sitao
+  BaguioBeans
+  GiantPatani
+  Eggplant
+  Ampalaya
+  Tomato
+  Chili
+  BellPepperGreen
+  BellPepperRed
+  Squash
+  BlueTarnette
+  Patola
+  Okra
+  Carrots
+  WhitePotato
+  Chayote
+  RedOnion
+  WhiteOnion
+  WhiteOnionImported
+  GarlicImported
+  GarlicNative
+  Ginger
+  GiantPataniSeed
+  BlueTarnetteSeed
+  AmpalayaSeed
+  PatolaSeed
+  OkraSeed
+  BasilSeed
+  Talong
+  Sitaw
+  BaguioBeansSeed
 }
 
 model AgriChange {
@@ -408,7 +464,7 @@ model Donation {
   size         String?
   proof        String?
   pickUpDate   DateTime?
-  cancelType   CancelType[]
+  cancelType   CancelType?
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 
@@ -497,6 +553,8 @@ model Trade {
 
   notifications Notification[]
 }
+
+
 
 enum StatusType {
   PENDING

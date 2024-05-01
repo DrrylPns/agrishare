@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { Subcategory } from "../utils";
-import { CancelType } from "@prisma/client"
 
 export type DonationType = z.infer<typeof DonationSchema>
 
@@ -22,7 +21,9 @@ export type FormType = z.infer<typeof CancelDonationSchema>
 
 export const CancelDonationSchema = z.object({
     donationId: z.string().optional(),
-    type: z.nativeEnum(CancelType, {
+    type: z.enum([
+        "NotAvailable", "ChangeOfMind", "ChangeOfDonation", "FailedToAppear", "Others"
+    ], {
         required_error: "You need to select a reason for cancelling.",
     }),
 })
