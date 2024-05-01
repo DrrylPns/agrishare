@@ -37,7 +37,39 @@ export const fetchDonationsByUser = async () => {
     return donations
 }
 
-export const handleDonations = async (status: DonationStatus, conditionRate: number, subcategory: Subcategory | null, category: Category, donationId: string, donatorId: string, size: string | null) => {
+export const handleCancelDonation = async (status: DonationStatus, donationId:string, donatorId: string) =>{
+    const session = await auth()
+
+    if (!session) return { error: "Unauthorized" }
+
+    if (!status || !(status in DonationStatus)) return {error: "Invalid status."}
+
+    const currentDonation = await prisma.donation.findUnique({
+        where: { id: donationId }
+    })
+
+    if (!currentDonation) return { error: "Donation not found." };
+
+    const donator = await prisma.user.findUnique({
+        where: { id: donatorId }
+    })
+
+    if (!donator) return { error: "No donator found!" }
+
+    if (status === "CANCELLED" && currentDonation.status === "CANCELLED") {
+        return { error: "Donation is already cancelled." };
+    }
+    const processDonate = await prisma.donation.update({
+        data: { status },
+        where: { id: currentDonation.id }
+    })
+
+    revalidatePath("/transactions")
+    return { success: "Confirmed the donation." }
+
+}
+
+export const handleDonations = async (status: DonationStatus, quantity:number, conditionRate: number, subcategory: Subcategory | null, category: Category, donationId: string, donatorId: string, size: string | null) => {
     const session = await auth()
 
     if (!session) return { error: "Unauthorized" }
@@ -143,7 +175,7 @@ export const handleDonations = async (status: DonationStatus, conditionRate: num
             ptsEquivalent = 0.15
         }
 
-        const calculatedPointsWithPE = (10 / ptsEquivalent) * processDonate.quantity * conditionRate
+        const calculatedPointsWithPE = (10 / ptsEquivalent) * quantity * conditionRate
 
         // const result = 10 / ptsEquivalent
 
