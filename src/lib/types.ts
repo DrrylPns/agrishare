@@ -23,6 +23,10 @@ export interface Posts {
     User: User;
 }
 
+export interface ExchangeUser {
+    points: number
+}
+
 export interface TradeWithTradeeTraders {
     id: string;
     item: string;

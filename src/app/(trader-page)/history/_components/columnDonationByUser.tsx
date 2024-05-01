@@ -20,6 +20,14 @@ import jsPDF from "jspdf"
 import { handleTradeProof } from "../../../../../actions/trade"
 import Image from "next/image"
 import { handleCancelDonation, handleDonationProof } from "../../../../../actions/donate"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { z } from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { CancelDonationSchema, FormType } from "@/lib/validations/donation"
+import { useMutation } from "@tanstack/react-query"
+import axios, { AxiosError } from "axios"
 // import { handleDonations } from "../../../actions/donate"
 
 export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
@@ -177,6 +185,57 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
 
                 })
             }
+
+            const form = useForm<z.infer<typeof CancelDonationSchema>>({
+                resolver: zodResolver(CancelDonationSchema),
+            })
+
+            const { mutate: handleCancel, isLoading } = useMutation({
+                mutationFn: async ({ donationId, type }: FormType) => {
+                    const payload: FormType = {
+                        donationId,
+                        type,
+                    }
+                    const { data } = await axios.put("/api/donate/cancel", payload)
+                    return data
+                },
+                onError: (err) => {
+                    if (err instanceof AxiosError) {
+                        if (err.response?.status === 404) {
+                            toast({
+                                description: "No transaction found!",
+                                variant: 'destructive',
+                            })
+                        }
+                    } else {
+                        return toast({
+                            title: 'Something went wrong.',
+                            description: "Error",
+                            variant: 'destructive',
+                        })
+                    }
+                },
+                onSuccess: (data) => {
+                    toast({
+                        description: `Successfully cancelled the transaction.`,
+                        variant: 'default',
+                    })
+        
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 1000)
+                }
+            })
+            
+            function onSubmit(values: FormType, donationId: string) {
+                const payload: FormType = {
+                    donationId,
+                    type: values.type,
+                }
+
+                handleCancel(payload)
+            }
+
             return (
                 <>
                     <DropdownMenu>
@@ -373,8 +432,87 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                         </DialogContent>
                     </Dialog>
 
-                    <AlertDialog open={isRejectOpen} onOpenChange={setIsRejectOpen}>
-                        {/* <AlertDialogTrigger>Reject Report</AlertDialogTrigger> */}
+                    <Dialog open={isRejectOpen} onOpenChange={setIsRejectOpen}>
+                        <DialogContent>
+                            <DialogHeader className='flex flex-col items-start gap-1'>
+                                <DialogTitle>Why are you cancelling this donation?</DialogTitle>
+                                <DialogDescription className="w-full">
+                                    Please provide a reason for the cancellation. This will help us improve our service.
+                                </DialogDescription>
+                            </DialogHeader>
+
+                            <Form {...form}>
+                                <form onSubmit={form.handleSubmit((values) => onSubmit(values, donationId))} className="w-2/3 space-y-6">
+                                    <FormField
+                                        control={form.control}
+                                        name="type"
+                                        render={({ field }) => (
+                                            <FormItem className="space-y-3">
+                                                <FormLabel className='font-bold'>Reason</FormLabel>
+                                                <FormControl>
+                                                    <RadioGroup
+                                                        onValueChange={field.onChange}
+                                                        defaultValue={field.value}
+                                                        className="flex flex-col space-y-1"
+                                                    >
+                                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                                            <FormControl>
+                                                                <RadioGroupItem value="NotAvailable" />
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal">
+                                                                Not availble on the given time.
+                                                            </FormLabel>
+                                                        </FormItem>
+
+                                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                                            <FormControl>
+                                                                <RadioGroupItem value="ChangeOfMind" />
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal">
+                                                               Change of mind
+                                                            </FormLabel>
+                                                        </FormItem>
+
+                                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                                            <FormControl>
+                                                                <RadioGroupItem value="ChangeOfDonation" />
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal">
+                                                                Change of donation details
+                                                            </FormLabel>
+                                                        </FormItem>
+
+                                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                                            <FormControl>
+                                                                <RadioGroupItem value="FailedToAppear" />
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal">
+                                                                Failed to appear without prior notice
+                                                            </FormLabel>
+                                                        </FormItem>
+
+                                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                                            <FormControl>
+                                                                <RadioGroupItem value="Others" />
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal">
+                                                                Others
+                                                            </FormLabel>
+                                                        </FormItem>
+                                                    </RadioGroup>
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <Button type="submit" className=' bg-primary-green hover:bg-primary-green/80' isLoading={isLoading}>Submit</Button>
+                                </form>
+                            </Form>
+                        </DialogContent>
+                    </Dialog>
+
+                    {/* <AlertDialog open={isRejectOpen} onOpenChange={setIsRejectOpen}>
+                      
                         <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Are you sure you want to cancel the transaction?</AlertDialogTitle>
@@ -410,7 +548,7 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                                 >Continue</AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
-                    </AlertDialog>
+                    </AlertDialog> */}
                 </>
             )
         },

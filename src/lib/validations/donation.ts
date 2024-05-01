@@ -16,3 +16,14 @@ export const DonationSchema = z.object({
     pickUpDate: z.coerce.date(),
     size: z.optional(z.string()),
 })
+
+export type FormType = z.infer<typeof CancelDonationSchema>
+
+export const CancelDonationSchema = z.object({
+    donationId: z.string().optional(),
+    type: z.enum([
+        "NotAvailable", "ChangeOfMind", "ChangeOfDonation", "FailedToAppear", "Others"
+    ], {
+        required_error: "You need to select a reason for cancelling.",
+    }),
+})
