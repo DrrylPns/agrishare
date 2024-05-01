@@ -1,4 +1,4 @@
-import { AgriChange, Agriquest, Category, ClaimStatus, DonationStatus, Post, Prisma, Role, Status, StatusType, Subcategory, TransactionType, Types, User } from "@prisma/client";
+import { AgriChange, Agriquest, Category, ClaimStatus, DonationStatus, NotificationType, Post, Prisma, Role, Status, StatusType, Subcategory, TransactionType, Types, User } from "@prisma/client";
 
 export interface Posts {
     id: string;
@@ -113,7 +113,7 @@ export interface TransactionWithUserAndPost {
 
 export interface NotificationWithUser {
     id: string;
-    type: StatusType;
+    type: NotificationType;
     isRead: boolean;
     createdAt: Date;
     updatedAt: Date;
@@ -139,6 +139,7 @@ interface TradeWithTradersAndPost {
     createdAt: Date;
     updatedAt: Date;
     trader: User;
+    tradee: User;
     post: Post;
 }
 
@@ -220,5 +221,6 @@ export type TradeWithTradeeTradersV2 = Prisma.TradeGetPayload<{
     include: {
         trader: true,
         tradee: true,
+        post: true,
     }
 }>

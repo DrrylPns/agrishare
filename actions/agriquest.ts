@@ -7,6 +7,7 @@ import { getUserById } from "../data/user"
 import { generateAgriquestHistoryID } from "@/lib/utils"
 import { revalidatePath } from "next/cache"
 import { ClaimStatus } from "@prisma/client"
+import { SquareUser } from "lucide-react"
 
 export const createAgriquest = async (values: AgriquestType, image: string) => {
     try {
@@ -57,10 +58,10 @@ export const createAgriquest = async (values: AgriquestType, image: string) => {
         })
 
         await prisma.user.update({
-            where:{
+            where: {
                 id: user.id
             },
-            data:{
+            data: {
                 requestLeft: user.requestLeft - 1
             }
         })
@@ -158,7 +159,7 @@ export const claimAgriquest = async (id: string, data: DateOfPickupInAgriquestTy
             }
         })
 
-        await prisma.request.create({
+        const agriquestDone = await prisma.request.create({
             data: {
                 aq,
                 agriquestId: currentAgriquest.id,
@@ -166,6 +167,15 @@ export const claimAgriquest = async (id: string, data: DateOfPickupInAgriquestTy
                 pickUpDate: pickupDate,
             }
         })
+
+        if (agriquestDone) {
+            await prisma.notification.create({
+                data: {
+                    userId: user.id,
+                    type: "AGRIQUESTPENDING",
+                }
+            })
+        }
 
         revalidatePath("/agriquest")
         return { success: "Agriquest claiming intent is now being reviewed!" }
@@ -286,6 +296,14 @@ export const handleRequest = async (status: ClaimStatus, requestId: string, user
                     },
                     where: { id: requester.id }
                 })
+
+                await prisma.notification.create({
+                    data: {
+                        userId: requester.id,
+                        type: "AGRIQUESTAPPROVED",
+                    }
+                })
+
             }
 
             revalidatePath("/transactions")
@@ -304,6 +322,13 @@ export const handleRequest = async (status: ClaimStatus, requestId: string, user
                     quantity: {
                         increment: quantity
                     }
+                }
+            })
+
+            await prisma.notification.create({
+                data: {
+                    userId: requester.id,
+                    type: "AGRIQUESTCANCELLED",
                 }
             })
 

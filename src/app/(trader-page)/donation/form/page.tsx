@@ -35,7 +35,7 @@ export default function Page() {
   const [size, setSize] = useState("")
   const [selectedSubcategory, setSelectedSubcategory] = useState("")
 
-  const { data:session} = useSession()
+  const { data: session } = useSession()
 
   const firstName = session?.user.name
   const lastName = session?.user.lastName
@@ -43,6 +43,9 @@ export default function Page() {
 
   const form = useForm<DonationType>({
     resolver: zodResolver(DonationSchema),
+    defaultValues: {
+      name: fullName,
+    }
   })
 
   const { mutate: createPost, isLoading } = useMutation({
@@ -133,7 +136,7 @@ export default function Page() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="Name of Donator" {...field} value={fullName} disabled={true} />
+                    <Input placeholder="Name of Donator" {...field} disabled={true} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

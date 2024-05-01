@@ -27,7 +27,7 @@ export async function POST(req: Request) {
         const dn = generateDonationHistoryID()
 
         // const donation =
-        await prisma.donation.create({
+        const successfulDonation = await prisma.donation.create({
             data: {
                 // donatee,
                 dn,
@@ -43,6 +43,15 @@ export async function POST(req: Request) {
                 size,
             }
         })
+
+        if(successfulDonation) {
+            await prisma.notification.create({
+                data: {
+                    type: "DONATIONPENDING",
+                    userId: user.id,
+                }
+            })
+        }
 
         // if (donation) {
 
