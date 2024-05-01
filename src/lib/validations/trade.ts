@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { Subcategory } from "../utils"
+import { Subcat } from "../utils"
 
 const numberError = { message: "Field must be 0 or more" }
 
@@ -21,7 +21,7 @@ export const TradeSchema = z.object({
     }).min(5, {
         message: "Make atleast 5 character long"
     }),
-    subcategory: Subcategory,
+    subcategory: Subcat,
     category: Category,
     size: z.optional(z.string()),
 })

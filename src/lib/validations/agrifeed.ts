@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Subcategory } from "../utils";
+import { Subcat } from "../utils";
 
 export type AgrifeedType = z.infer<typeof AgrifeedSchema>
 
@@ -23,7 +23,7 @@ export const AgrifeedSchema = z.object({
     shelfLifeDuration: z.coerce.number().min(1).optional(),
     shelfLifeUnit: ShelfLifeUnit,
     category: Category,
-    subcategory: Subcategory,
+    subcategory: Subcat,
     type: z.optional(z.enum(["ORGANIC", "NOT_ORGANIC"])),
     harvestDate: z.coerce.date().optional(),
     preferedOffers: z.string().min(2, { message: "Preferred Offer should be valid." }),

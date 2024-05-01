@@ -16,13 +16,15 @@ export async function POST(req: Request) {
         const body = await req.json()
 
         // add  subcategory for 
-        const { name, product, image, quantity, subcategory, category, pickUpDate, size } = DonationSchema.parse(body)
+        const { name, image, quantity, subcategory, category, pickUpDate, size } = DonationSchema.parse(body)
 
         const user = await getUserById(session.user.id)
 
         if (!user) {
             return new NextResponse("Error: No user found!", { status: 402 })
         }
+
+        const product = subcategory?.toString()
 
         const dn = generateDonationHistoryID()
 
@@ -44,7 +46,7 @@ export async function POST(req: Request) {
             }
         })
 
-        if(successfulDonation) {
+        if (successfulDonation) {
             await prisma.notification.create({
                 data: {
                     type: "DONATIONPENDING",

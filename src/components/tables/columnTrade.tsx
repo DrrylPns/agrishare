@@ -178,30 +178,92 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
             let ptsEquivalentTrader
             let ptsEquivalentTradee
 
-            if (traderSubcategory === "FRUIT_VEGETABLES") {
-                ptsEquivalentTrader = 0.18
-            } else if (traderSubcategory === "HERBS_VEGETABLES") {
-                ptsEquivalentTrader = 0.17
-            } else if (traderSubcategory === "LEAFY_VEGETABLES") {
-                ptsEquivalentTrader = 0.15
-            } else if (traderSubcategory === "PODDED_VEGETABLES") {
-                ptsEquivalentTrader = 0.25
-            } else if (traderSubcategory === "ROOT_VEGETABLES") {
-                ptsEquivalentTrader = 0.20
-            } else if (traderSubcategory === "ORGANIC_FERTILIZER") {
+            // if (traderSubcategory === "FRUIT_VEGETABLES") {
+            //     ptsEquivalentTrader = 0.18
+            // } else if (traderSubcategory === "HERBS_VEGETABLES") {
+            //     ptsEquivalentTrader = 0.17
+            // } else if (traderSubcategory === "LEAFY_VEGETABLES") {
+            //     ptsEquivalentTrader = 0.15
+            // } else if (traderSubcategory === "PODDED_VEGETABLES") {
+            //     ptsEquivalentTrader = 0.25
+            // } else if (traderSubcategory === "ROOT_VEGETABLES") {
+            //     ptsEquivalentTrader = 0.20
+            // } else if (traderSubcategory === "ORGANIC_FERTILIZER") {
+            //     ptsEquivalentTrader = 0.9
+            // } else if (traderSubcategory === "NOT_ORGANIC_FERTILIZER") {
+            //     ptsEquivalentTrader = 0.45
+            // } else if (traderSubcategory === "ORGANIC_SOIL") {
+            //     ptsEquivalentTrader = 0.95
+            // } else if (traderSubcategory === "NOT_ORGANIC_SOIL") {
+            //     ptsEquivalentTrader = 0.50
+            // } else if (traderSubcategory === "CITRUS_FRUITS") {
+            //     ptsEquivalentTrader = 0.13
+            // } else if (traderSubcategory === "COCONUT") {
+            //     ptsEquivalentTrader = 0.054
+            // } else if (traderSubcategory === "TROPICAL_FRUIT") {
+            //     ptsEquivalentTrader = 0.041
+            // } else if (traderSubcategory === "WATER_HOSE" && traderSize === "1/4") {
+            //     ptsEquivalentTrader = 0.55
+            // } else if (traderSubcategory === "WATER_HOSE" && traderSize === "1/2") {
+            //     ptsEquivalentTrader = 0.45
+            // } else if (traderSubcategory === "WATER_HOSE" && traderSize === "3/4") {
+            //     ptsEquivalentTrader = 0.35
+            // } else if (traderSubcategory === "GARDEN_POTS" && traderSize === "Small") {
+            //     ptsEquivalentTrader = 0.09
+            // } else if (traderSubcategory === "GARDEN_POTS" && traderSize === "Medium") {
+            //     ptsEquivalentTrader = 0.08
+            // } else if (traderSubcategory === "GARDEN_POTS" && traderSize === "Large") {
+            //     ptsEquivalentTrader = 0.078
+            // } else if (traderSubcategory === "BUCKET" && traderSize === "Small") {
+            //     ptsEquivalentTrader = 0.10
+            // } else if (traderSubcategory === "BUCKET" && traderSize === "Medium") {
+            //     ptsEquivalentTrader = 0.9
+            // } else if (traderSubcategory === "BUCKET" && traderSize === "Large") {
+            //     ptsEquivalentTrader = 0.085
+            // } else if (traderSubcategory === "KALAYKAY" && traderSize === "Small") {
+            //     ptsEquivalentTrader = 0.11
+            // } else if (traderSubcategory === "KALAYKAY" && traderSize === "Large") {
+            //     ptsEquivalentTrader = 0.067
+            // } else if (traderSubcategory === "SHOVEL" && traderSize === "Small") {
+            //     ptsEquivalentTrader = 0.11
+            // } else if (traderSubcategory === "SHOVEL" && traderSize === "Large") {
+            //     ptsEquivalentTrader = 0.067
+            // } else if (traderSubcategory === "HOES" || traderSubcategory === "HAND_PRUNES") {
+            //     ptsEquivalentTrader = 0.067
+            // } else if (traderSubcategory === "GLOVES") {
+            //     ptsEquivalentTrader = 0.12
+            // } else if (traderSubcategory === "WHEEL_BARROW") {
+            //     ptsEquivalentTrader = 0.0125
+            // } else if (traderCategory === "SEEDS") {
+            //     ptsEquivalentTrader = 0.65
+            // } else {
+            //     ptsEquivalentTrader = 0.15
+            // }
+
+            if (traderSubcategory === "Eggplant" || traderSubcategory === "Ampalaya" || traderSubcategory === "Tomato" || traderSubcategory === "Chili" || traderSubcategory === "BellPepperGreen" || traderSubcategory === "BellPepperRed" || traderSubcategory === "Squash" || traderSubcategory === "BlueTarnette" || traderSubcategory === "Patola" || traderSubcategory === "Okra") {
                 ptsEquivalentTrader = 0.9
+            } else if (traderSubcategory === "AmpalayaLeaves" || traderSubcategory === "WaterSpinach" || traderSubcategory === "SweetPotatoLeaves" || traderSubcategory === "MalabarSpinach" || traderSubcategory === "JewsMallow" || traderSubcategory === "ChiliLeaves" || traderSubcategory === "Moringaoleifera" || traderSubcategory === "TaroLeaves" || traderSubcategory === "OnionLeaves" || traderSubcategory === "PetchayNative" || traderSubcategory === "PetchayBaguio" || traderSubcategory === "CabbageRareBall" || traderSubcategory === "CabbageScorpio" || traderSubcategory === "Basil") {
+                ptsEquivalentTrader = 1.5
+            } else if (traderSubcategory === "Sitao" || traderSubcategory === "BaguioBeans" || traderSubcategory === "GiantPatani") {
+                ptsEquivalentTrader = 2.5
+            } else if (traderSubcategory === "Carrots" || traderSubcategory === "WhitePotato" || traderSubcategory === "Chayote" || traderSubcategory === "RedOnion" || traderSubcategory === "WhiteOnion" || traderSubcategory === "WhiteOnionImported" || traderSubcategory === "GarlicImported" || traderSubcategory === "GarlicNative" || traderSubcategory === "Ginger") {
+                ptsEquivalentTrader = 1.5
+            } else if (traderSubcategory === "ORGANIC_FERTILIZER") {
+                ptsEquivalentTrader = 1.8
             } else if (traderSubcategory === "NOT_ORGANIC_FERTILIZER") {
-                ptsEquivalentTrader = 0.45
+                ptsEquivalentTrader = 2.5
             } else if (traderSubcategory === "ORGANIC_SOIL") {
-                ptsEquivalentTrader = 0.95
+                ptsEquivalentTrader = 1.5
             } else if (traderSubcategory === "NOT_ORGANIC_SOIL") {
-                ptsEquivalentTrader = 0.50
-            } else if (traderSubcategory === "CITRUS_FRUITS") {
-                ptsEquivalentTrader = 0.13
+                ptsEquivalentTrader = 5
+            } else if (traderSubcategory === "Calamansi" || traderSubcategory === "MandarinOrange") {
+                ptsEquivalentTrader = 1.3
+            } else if (traderSubcategory === "Banana" || traderSubcategory === "Mango" || traderSubcategory === "Avocado" || traderSubcategory === "CottonFruit" || traderSubcategory === "Pineapple" || traderSubcategory === "Soursop" || traderSubcategory === "CustardApple" || traderSubcategory === "Papaya" || traderSubcategory === "Lanzones") {
+                ptsEquivalentTrader = 1.4
             } else if (traderSubcategory === "COCONUT") {
-                ptsEquivalentTrader = 0.054
-            } else if (traderSubcategory === "TROPICAL_FRUIT") {
-                ptsEquivalentTrader = 0.041
+                ptsEquivalentTrader = 0.54
+            } else if (traderSubcategory === "GiantPataniSeed" || traderSubcategory === "BlueTarnetteSeed" || traderSubcategory === "AmpalayaSeed" || traderSubcategory === "PatolaSeed" || traderSubcategory === "OkraSeed" || traderSubcategory === "BasilSeed" || traderSubcategory === "Talong" || traderSubcategory === "Sitaw" || traderSubcategory === "BaguioBeansSeed") {
+                ptsEquivalentTrader = 3.25
             } else if (traderSubcategory === "WATER_HOSE" && traderSize === "1/4") {
                 ptsEquivalentTrader = 0.55
             } else if (traderSubcategory === "WATER_HOSE" && traderSize === "1/2") {
@@ -209,61 +271,123 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
             } else if (traderSubcategory === "WATER_HOSE" && traderSize === "3/4") {
                 ptsEquivalentTrader = 0.35
             } else if (traderSubcategory === "GARDEN_POTS" && traderSize === "Small") {
-                ptsEquivalentTrader = 0.09
+                ptsEquivalentTrader = 0.9
             } else if (traderSubcategory === "GARDEN_POTS" && traderSize === "Medium") {
-                ptsEquivalentTrader = 0.08
+                ptsEquivalentTrader = 0.8
             } else if (traderSubcategory === "GARDEN_POTS" && traderSize === "Large") {
-                ptsEquivalentTrader = 0.078
+                ptsEquivalentTrader = 0.7
             } else if (traderSubcategory === "BUCKET" && traderSize === "Small") {
-                ptsEquivalentTrader = 0.10
+                ptsEquivalentTrader = 1
             } else if (traderSubcategory === "BUCKET" && traderSize === "Medium") {
                 ptsEquivalentTrader = 0.9
             } else if (traderSubcategory === "BUCKET" && traderSize === "Large") {
-                ptsEquivalentTrader = 0.085
+                ptsEquivalentTrader = 0.8
             } else if (traderSubcategory === "KALAYKAY" && traderSize === "Small") {
-                ptsEquivalentTrader = 0.11
+                ptsEquivalentTrader = 1.1
             } else if (traderSubcategory === "KALAYKAY" && traderSize === "Large") {
-                ptsEquivalentTrader = 0.067
+                ptsEquivalentTrader = 0.67
             } else if (traderSubcategory === "SHOVEL" && traderSize === "Small") {
-                ptsEquivalentTrader = 0.11
+                ptsEquivalentTrader = 1.1
             } else if (traderSubcategory === "SHOVEL" && traderSize === "Large") {
-                ptsEquivalentTrader = 0.067
+                ptsEquivalentTrader = 0.67
             } else if (traderSubcategory === "HOES" || traderSubcategory === "HAND_PRUNES") {
-                ptsEquivalentTrader = 0.067
+                ptsEquivalentTrader = 0.67
             } else if (traderSubcategory === "GLOVES") {
-                ptsEquivalentTrader = 0.12
+                ptsEquivalentTrader = 1.2
             } else if (traderSubcategory === "WHEEL_BARROW") {
-                ptsEquivalentTrader = 0.0125
+                ptsEquivalentTrader = 0.0350
             } else if (traderCategory === "SEEDS") {
-                ptsEquivalentTrader = 0.65
+                ptsEquivalentTrader = 3.25
             } else {
                 ptsEquivalentTrader = 0.15
             }
 
-            if (tradeeSubcategory === "FRUIT_VEGETABLES") {
-                ptsEquivalentTradee = 0.09
-            } else if (tradeeSubcategory === "HERBS_VEGETABLES") {
-                ptsEquivalentTradee = 0.17
-            } else if (tradeeSubcategory === "LEAFY_VEGETABLES") {
-                ptsEquivalentTradee = 0.07
-            } else if (tradeeSubcategory === "PODDED_VEGETABLES") {
-                ptsEquivalentTradee = 0.125
-            } else if (tradeeSubcategory === "ROOT_VEGETABLES") {
-                ptsEquivalentTradee = 0.07
+            // if (tradeeSubcategory === "FRUIT_VEGETABLES") {
+            //     ptsEquivalentTradee = 0.09
+            // } else if (tradeeSubcategory === "HERBS_VEGETABLES") {
+            //     ptsEquivalentTradee = 0.17
+            // } else if (tradeeSubcategory === "LEAFY_VEGETABLES") {
+            //     ptsEquivalentTradee = 0.07
+            // } else if (tradeeSubcategory === "PODDED_VEGETABLES") {
+            //     ptsEquivalentTradee = 0.125
+            // } else if (tradeeSubcategory === "ROOT_VEGETABLES") {
+            //     ptsEquivalentTradee = 0.07
+            // } else if (tradeeSubcategory === "ORGANIC_FERTILIZER") {
+            //     ptsEquivalentTradee = 0.18
+            // } else if (tradeeSubcategory === "NOT_ORGANIC_FERTILIZER") {
+            //     ptsEquivalentTradee = 0.45
+            // } else if (tradeeSubcategory === "ORGANIC_SOIL") {
+            //     ptsEquivalentTradee = 1.5
+            // } else if (tradeeSubcategory === "NOT_ORGANIC_SOIL") {
+            //     ptsEquivalentTradee = 0.50
+            // } else if (tradeeSubcategory === "CITRUS_FRUITS") {
+            //     ptsEquivalentTradee = 0.13
+            // } else if (tradeeSubcategory === "COCONUT") {
+            //     ptsEquivalentTradee = 0.054
+            // } else if (tradeeSubcategory === "TROPICAL_FRUIT") {
+            //     ptsEquivalentTradee = 0.041
+            // } else if (tradeeSubcategory === "WATER_HOSE" && tradeeSize === "1/4") {
+            //     ptsEquivalentTradee = 0.55
+            // } else if (tradeeSubcategory === "WATER_HOSE" && tradeeSize === "1/2") {
+            //     ptsEquivalentTradee = 0.45
+            // } else if (tradeeSubcategory === "WATER_HOSE" && tradeeSize === "3/4") {
+            //     ptsEquivalentTradee = 0.35
+            // } else if (tradeeSubcategory === "GARDEN_POTS" && tradeeSize === "Small") {
+            //     ptsEquivalentTradee = 0.09
+            // } else if (tradeeSubcategory === "GARDEN_POTS" && tradeeSize === "Medium") {
+            //     ptsEquivalentTradee = 0.08
+            // } else if (tradeeSubcategory === "GARDEN_POTS" && tradeeSize === "Large") {
+            //     ptsEquivalentTradee = 0.078
+            // } else if (tradeeSubcategory === "BUCKET" && tradeeSize === "Small") {
+            //     ptsEquivalentTradee = 0.10
+            // } else if (tradeeSubcategory === "BUCKET" && tradeeSize === "Medium") {
+            //     ptsEquivalentTradee = 0.9
+            // } else if (tradeeSubcategory === "BUCKET" && tradeeSize === "Large") {
+            //     ptsEquivalentTradee = 0.085
+            // } else if (tradeeSubcategory === "KALAYKAY" && tradeeSize === "Small") {
+            //     ptsEquivalentTradee = 0.11
+            // } else if (tradeeSubcategory === "KALAYKAY" && tradeeSize === "Large") {
+            //     ptsEquivalentTradee = 0.067
+            // } else if (tradeeSubcategory === "SHOVEL" && tradeeSize === "Small") {
+            //     ptsEquivalentTradee = 0.11
+            // } else if (tradeeSubcategory === "SHOVEL" && tradeeSize === "Large") {
+            //     ptsEquivalentTradee = 0.067
+            // } else if (tradeeSubcategory === "HOES" || tradeeSubcategory === "HAND_PRUNES") {
+            //     ptsEquivalentTradee = 0.067
+            // } else if (tradeeSubcategory === "GLOVES") {
+            //     ptsEquivalentTradee = 0.12
+            // } else if (tradeeSubcategory === "WHEEL_BARROW") {
+            //     ptsEquivalentTradee = 0.0125
+            // } else if (tradeeCategory === "SEEDS") {
+            //     ptsEquivalentTradee = 0.65
+            // } else {
+            //     ptsEquivalentTradee = 0.15
+            // }
+
+            if (tradeeSubcategory === "Eggplant" || tradeeSubcategory === "Ampalaya" || tradeeSubcategory === "Tomato" || tradeeSubcategory === "Chili" || tradeeSubcategory === "BellPepperGreen" || tradeeSubcategory === "BellPepperRed" || tradeeSubcategory === "Squash" || tradeeSubcategory === "BlueTarnette" || tradeeSubcategory === "Patola" || tradeeSubcategory === "Okra") {
+                ptsEquivalentTradee = 0.9
+            } else if (tradeeSubcategory === "AmpalayaLeaves" || tradeeSubcategory === "WaterSpinach" || tradeeSubcategory === "SweetPotatoLeaves" || tradeeSubcategory === "MalabarSpinach" || tradeeSubcategory === "JewsMallow" || tradeeSubcategory === "ChiliLeaves" || tradeeSubcategory === "Moringaoleifera" || tradeeSubcategory === "TaroLeaves" || tradeeSubcategory === "OnionLeaves" || tradeeSubcategory === "PetchayNative" || tradeeSubcategory === "PetchayBaguio" || tradeeSubcategory === "CabbageRareBall" || tradeeSubcategory === "CabbageScorpio" || tradeeSubcategory === "Basil") {
+                ptsEquivalentTradee = 1.5
+            } else if (tradeeSubcategory === "Sitao" || tradeeSubcategory === "BaguioBeans" || tradeeSubcategory === "GiantPatani") {
+                ptsEquivalentTradee = 2.5
+            } else if (tradeeSubcategory === "Carrots" || tradeeSubcategory === "WhitePotato" || tradeeSubcategory === "Chayote" || tradeeSubcategory === "RedOnion" || tradeeSubcategory === "WhiteOnion" || tradeeSubcategory === "WhiteOnionImported" || tradeeSubcategory === "GarlicImported" || tradeeSubcategory === "GarlicNative" || tradeeSubcategory === "Ginger") {
+                ptsEquivalentTradee = 1.5
             } else if (tradeeSubcategory === "ORGANIC_FERTILIZER") {
-                ptsEquivalentTradee = 0.18
+                ptsEquivalentTradee = 1.8
             } else if (tradeeSubcategory === "NOT_ORGANIC_FERTILIZER") {
-                ptsEquivalentTradee = 0.45
+                ptsEquivalentTradee = 2.5
             } else if (tradeeSubcategory === "ORGANIC_SOIL") {
                 ptsEquivalentTradee = 1.5
             } else if (tradeeSubcategory === "NOT_ORGANIC_SOIL") {
-                ptsEquivalentTradee = 0.50
-            } else if (tradeeSubcategory === "CITRUS_FRUITS") {
-                ptsEquivalentTradee = 0.13
+                ptsEquivalentTradee = 5
+            } else if (tradeeSubcategory === "Calamansi" || tradeeSubcategory === "MandarinOrange") {
+                ptsEquivalentTradee = 1.3
+            } else if (tradeeSubcategory === "Banana" || tradeeSubcategory === "Mango" || tradeeSubcategory === "Avocado" || tradeeSubcategory === "CottonFruit" || tradeeSubcategory === "Pineapple" || tradeeSubcategory === "Soursop" || tradeeSubcategory === "CustardApple" || tradeeSubcategory === "Papaya" || tradeeSubcategory === "Lanzones") {
+                ptsEquivalentTradee = 1.4
             } else if (tradeeSubcategory === "COCONUT") {
-                ptsEquivalentTradee = 0.054
-            } else if (tradeeSubcategory === "TROPICAL_FRUIT") {
-                ptsEquivalentTradee = 0.041
+                ptsEquivalentTradee = 0.54
+            } else if (tradeeSubcategory === "GiantPataniSeed" || tradeeSubcategory === "BlueTarnetteSeed" || tradeeSubcategory === "AmpalayaSeed" || tradeeSubcategory === "PatolaSeed" || tradeeSubcategory === "OkraSeed" || tradeeSubcategory === "BasilSeed" || tradeeSubcategory === "Talong" || tradeeSubcategory === "Sitaw" || tradeeSubcategory === "BaguioBeansSeed") {
+                ptsEquivalentTradee = 3.25
             } else if (tradeeSubcategory === "WATER_HOSE" && tradeeSize === "1/4") {
                 ptsEquivalentTradee = 0.55
             } else if (tradeeSubcategory === "WATER_HOSE" && tradeeSize === "1/2") {
@@ -271,33 +395,33 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
             } else if (tradeeSubcategory === "WATER_HOSE" && tradeeSize === "3/4") {
                 ptsEquivalentTradee = 0.35
             } else if (tradeeSubcategory === "GARDEN_POTS" && tradeeSize === "Small") {
-                ptsEquivalentTradee = 0.09
+                ptsEquivalentTradee = 0.9
             } else if (tradeeSubcategory === "GARDEN_POTS" && tradeeSize === "Medium") {
-                ptsEquivalentTradee = 0.08
+                ptsEquivalentTradee = 0.8
             } else if (tradeeSubcategory === "GARDEN_POTS" && tradeeSize === "Large") {
-                ptsEquivalentTradee = 0.078
+                ptsEquivalentTradee = 0.7
             } else if (tradeeSubcategory === "BUCKET" && tradeeSize === "Small") {
-                ptsEquivalentTradee = 0.10
+                ptsEquivalentTradee = 1
             } else if (tradeeSubcategory === "BUCKET" && tradeeSize === "Medium") {
                 ptsEquivalentTradee = 0.9
             } else if (tradeeSubcategory === "BUCKET" && tradeeSize === "Large") {
-                ptsEquivalentTradee = 0.085
+                ptsEquivalentTradee = 0.8
             } else if (tradeeSubcategory === "KALAYKAY" && tradeeSize === "Small") {
-                ptsEquivalentTradee = 0.11
+                ptsEquivalentTradee = 1.1
             } else if (tradeeSubcategory === "KALAYKAY" && tradeeSize === "Large") {
-                ptsEquivalentTradee = 0.067
+                ptsEquivalentTradee = 0.67
             } else if (tradeeSubcategory === "SHOVEL" && tradeeSize === "Small") {
-                ptsEquivalentTradee = 0.11
+                ptsEquivalentTradee = 1.1
             } else if (tradeeSubcategory === "SHOVEL" && tradeeSize === "Large") {
-                ptsEquivalentTradee = 0.067
+                ptsEquivalentTradee = 0.67
             } else if (tradeeSubcategory === "HOES" || tradeeSubcategory === "HAND_PRUNES") {
-                ptsEquivalentTradee = 0.067
+                ptsEquivalentTradee = 0.67
             } else if (tradeeSubcategory === "GLOVES") {
-                ptsEquivalentTradee = 0.12
+                ptsEquivalentTradee = 1.2
             } else if (tradeeSubcategory === "WHEEL_BARROW") {
-                ptsEquivalentTradee = 0.0125
+                ptsEquivalentTradee = 0.0350
             } else if (tradeeCategory === "SEEDS") {
-                ptsEquivalentTradee = 0.65
+                ptsEquivalentTradee = 3.25
             } else {
                 ptsEquivalentTradee = 0.15
             }

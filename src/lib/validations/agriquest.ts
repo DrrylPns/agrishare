@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Subcategory } from "../utils";
+import { Subcat } from "../utils";
 
 export type AgriquestType = z.infer<typeof AgriQuestSchema>
 
@@ -38,7 +38,7 @@ export const AgrichangeSchema = z.object({
     color: z.string().min(2, { message: "Color should be valid." }),
     shelfLife: z.string().min(2, { message: "Shelf life should be valid." }),
     category: Category,
-    subcategory: Subcategory,
+    subcategory: Subcat,
     harvestDate: z.coerce.date().optional(),
     type: z.enum(["ORGANIC", "NOT_ORGANIC"]).optional(),
     pointsNeeded: z.coerce.number().optional(),

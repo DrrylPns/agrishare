@@ -1,7 +1,7 @@
 "use client"
 import { useQuery } from '@tanstack/react-query';
 import { BarChart, Card } from '@tremor/react';
-import { fetchDonationsByDate } from '../../../../../actions/dashboard';
+import { fetchDonationCount } from '../../../../../actions/dashboard';
 
 // const donation = [
 //     {
@@ -57,7 +57,7 @@ import { fetchDonationsByDate } from '../../../../../actions/dashboard';
 export const DonationChart = () => {
     const { data: donationsData } = useQuery({
         queryKey: ['donations-by-date'],
-        queryFn: async () => fetchDonationsByDate(),
+        queryFn: async () => fetchDonationCount(),
     });
 
     return (

@@ -382,18 +382,57 @@ function CreatePost() {
                               <SelectContent>
                                 {chosenCategory === Category.VEGETABLES && (
                                   <>
-                                    <SelectItem value={Subcategory.LEAFY_VEGETABLES}>Leafy Vegetables</SelectItem>
-                                    <SelectItem value={Subcategory.PODDED_VEGETABLES}>Podded Vegetables</SelectItem>
-                                    <SelectItem value={Subcategory.FRUIT_VEGETABLES}>Fruit Vegetables</SelectItem>
-                                    <SelectItem value={Subcategory.ROOT_VEGETABLES}>Root Vegetables</SelectItem>
-                                    <SelectItem value={Subcategory.HERBS_VEGETABLES}>Herbs Vegetables</SelectItem>
+                                    <SelectItem value={Subcategory.AmpalayaLeaves}>Ampalaya Leaves (Dahon ng Ampalaya)</SelectItem>
+                                    <SelectItem value={Subcategory.WaterSpinach}>Water Spinach (Kangkong)</SelectItem>
+                                    <SelectItem value={Subcategory.SweetPotatoLeaves}>Sweet Potato Leaves (Talbos ng Kamote)</SelectItem>
+                                    <SelectItem value={Subcategory.MalabarSpinach}>Malabar Spinach (Alugbati)</SelectItem>
+                                    <SelectItem value={Subcategory.JewsMallow}>Jews Mallow (Saluyot)</SelectItem>
+                                    <SelectItem value={Subcategory.ChiliLeaves}>Chili Leaves (Dahon ng Sili)</SelectItem>
+                                    <SelectItem value={Subcategory.Moringaoleifera}>Moringa oleifera (Malunggay)</SelectItem>
+                                    <SelectItem value={Subcategory.TaroLeaves}>Taro Leaves (Dahon ng Gabi)</SelectItem>
+                                    <SelectItem value={Subcategory.OnionLeaves}>Onion Leaves</SelectItem>
+                                    <SelectItem value={Subcategory.PetchayNative}>Petchay (Native)</SelectItem>
+                                    <SelectItem value={Subcategory.PetchayBaguio}>Petchay (Baguio)</SelectItem>
+                                    <SelectItem value={Subcategory.CabbageRareBall}>Cabbage (Rare Ball)</SelectItem>
+                                    <SelectItem value={Subcategory.CabbageScorpio}>Cabbage (Scorpio)</SelectItem>
+                                    <SelectItem value={Subcategory.Basil}>Basil</SelectItem>
+                                    <SelectItem value={Subcategory.Sitao}>Sitao</SelectItem>
+                                    <SelectItem value={Subcategory.BaguioBeans}>Baguio Beans</SelectItem>
+                                    <SelectItem value={Subcategory.GiantPatani}>Giant Patani</SelectItem>
+                                    <SelectItem value={Subcategory.Eggplant}>Eggplant</SelectItem>
+                                    <SelectItem value={Subcategory.Ampalaya}>Ampalaya</SelectItem>
+                                    <SelectItem value={Subcategory.Tomato}>Tomato</SelectItem>
+                                    <SelectItem value={Subcategory.Chili}>Chili</SelectItem>
+                                    <SelectItem value={Subcategory.BellPepperGreen}>Bell Pepper(Green)</SelectItem>
+                                    <SelectItem value={Subcategory.BellPepperRed}>Bell pepper(Red)</SelectItem>
+                                    <SelectItem value={Subcategory.Squash}>Squash</SelectItem>
+                                    <SelectItem value={Subcategory.BlueTarnette}>Blue Tarnette</SelectItem>
+                                    <SelectItem value={Subcategory.Patola}>Patola</SelectItem>
+                                    <SelectItem value={Subcategory.Okra}>Okra</SelectItem>
+                                    <SelectItem value={Subcategory.Carrots}>Carrots</SelectItem>
+                                    <SelectItem value={Subcategory.WhitePotato}>White Potato</SelectItem>
+                                    <SelectItem value={Subcategory.Chayote}>Chayote</SelectItem>
+                                    <SelectItem value={Subcategory.RedOnion}>Red Onion</SelectItem>
+                                    <SelectItem value={Subcategory.WhiteOnion}>White Onion</SelectItem>
+                                    <SelectItem value={Subcategory.WhiteOnionImported}>White Onion(Imported)</SelectItem>
+                                    <SelectItem value={Subcategory.GarlicImported}>Garlic(Imported)</SelectItem>
+                                    <SelectItem value={Subcategory.GarlicNative}>Garlic(Native)</SelectItem>
+                                    <SelectItem value={Subcategory.Ginger}>Ginger</SelectItem>
                                   </>
                                 )}
                                 {chosenCategory === Category.FRESH_FRUIT && (
                                   <>
-                                    <SelectItem value={Subcategory.CITRUS_FRUITS}>Citrus Fruits</SelectItem>
-                                    <SelectItem value={Subcategory.TROPICAL_FRUIT}>Tropical Fruit</SelectItem>
-                                    <SelectItem value={Subcategory.COCONUT}>Coconut</SelectItem>
+                                    <SelectItem value={Subcategory.Calamansi}>Calamansi</SelectItem>
+                                    <SelectItem value={Subcategory.MandarinOrange}>Mandarin Orange (Dalandan)</SelectItem>
+                                    <SelectItem value={Subcategory.Banana}>Banana (Saging)</SelectItem>
+                                    <SelectItem value={Subcategory.Mango}>Mango (Mangga)</SelectItem>
+                                    <SelectItem value={Subcategory.Avocado}>Avocado</SelectItem>
+                                    <SelectItem value={Subcategory.CottonFruit}>Cotton Fruit (Santol)</SelectItem>
+                                    <SelectItem value={Subcategory.Pineapple}>Pineapple (Pinya)</SelectItem>
+                                    <SelectItem value={Subcategory.Soursop}>Soursop (Guyabano)</SelectItem>
+                                    <SelectItem value={Subcategory.CustardApple}>Custard Apple (Atis)</SelectItem>
+                                    <SelectItem value={Subcategory.Papaya}>Papaya</SelectItem>
+                                    <SelectItem value={Subcategory.Lanzones}>Lanzones</SelectItem>
                                   </>
                                 )}
                                 {chosenCategory === Category.EQUIPMENTS && (
@@ -409,12 +448,19 @@ function CreatePost() {
                                     <SelectItem value={Subcategory.NOT_ORGANIC_FERTILIZER}>Not Organic Fertilizer</SelectItem>
                                   </>
                                 )}
-                                {/* {chosenCategory === Category.SEEDS && (
-                        <>
-                          <SelectItem value={Subcategory.SEEDS1}>Seeds 1</SelectItem>
-                          <SelectItem value={Subcategory.SEEDS2}>Seeds 2</SelectItem>
-                        </>
-                      )} */}
+                                {chosenCategory === Category.SEEDS && (
+                                  <>
+                                    <SelectItem value={Subcategory.GiantPatani}>Giant Patani</SelectItem>
+                                    <SelectItem value={Subcategory.BlueTarnette}>Blue Tarnette</SelectItem>
+                                    <SelectItem value={Subcategory.AmpalayaSeed}>Ampalaya</SelectItem>
+                                    <SelectItem value={Subcategory.PatolaSeed}>Patola</SelectItem>
+                                    <SelectItem value={Subcategory.OkraSeed}>Okra</SelectItem>
+                                    <SelectItem value={Subcategory.BasilSeed}>Basil</SelectItem>
+                                    <SelectItem value={Subcategory.Talong}>Talong</SelectItem>
+                                    <SelectItem value={Subcategory.Sitaw}>Sitaw</SelectItem>
+                                    <SelectItem value={Subcategory.BaguioBeansSeed}>Baguio Beans</SelectItem>
+                                  </>
+                                )}
                                 {chosenCategory === Category.TOOLS && (
                                   <>
                                     <SelectItem value={Subcategory.WHEEL_BARROW}>Wheel Barrow</SelectItem>

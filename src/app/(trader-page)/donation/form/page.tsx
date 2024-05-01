@@ -18,7 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Category, Subcategory } from '@prisma/client'
 import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
@@ -32,6 +32,7 @@ export default function Page() {
   const [imageUrl, setImageUrl] = useState<string>("")
   const imageIsEmpty = imageUrl.length === 0
   const [chosenCategory, setChosenCategory] = useState("")
+  const [unit, setUnit] = useState("")
   const [size, setSize] = useState("")
   const [selectedSubcategory, setSelectedSubcategory] = useState("")
 
@@ -53,7 +54,7 @@ export default function Page() {
       image,
       // donatee,
       name,
-      product,
+      // product,
       quantity,
       category,
       subcategory,
@@ -64,7 +65,7 @@ export default function Page() {
         image,
         // donatee,
         name,
-        product,
+        // product,
         quantity,
         category,
         subcategory,
@@ -99,7 +100,7 @@ export default function Page() {
     const payload: DonationType = {
       // donatee: values.donatee,
       name: values.name,
-      product: values.product,
+      // product: values.product,
       quantity: values.quantity,
       image: imageUrl,
       category: values.category,
@@ -144,7 +145,7 @@ export default function Page() {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <FormField
               control={form.control}
               name="product"
@@ -170,9 +171,9 @@ export default function Page() {
                 </FormItem>
               )}
             />
-          </div>
+          </div> */}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             <FormField
               control={form.control}
               name="category"
@@ -222,18 +223,64 @@ export default function Page() {
                     <SelectContent>
                       {chosenCategory === Category.VEGETABLES && (
                         <>
-                          <SelectItem value={Subcategory.LEAFY_VEGETABLES}>Leafy Vegetables</SelectItem>
-                          <SelectItem value={Subcategory.PODDED_VEGETABLES}>Podded Vegetables</SelectItem>
-                          <SelectItem value={Subcategory.FRUIT_VEGETABLES}>Fruit Vegetables</SelectItem>
-                          <SelectItem value={Subcategory.ROOT_VEGETABLES}>Root Vegetables</SelectItem>
-                          <SelectItem value={Subcategory.HERBS_VEGETABLES}>Herbs Vegetables</SelectItem>
+                          <SelectItem value={Subcategory.AmpalayaLeaves}>Ampalaya Leaves (Dahon ng Ampalaya)</SelectItem>
+                          <SelectItem value={Subcategory.WaterSpinach}>Water Spinach (Kangkong)</SelectItem>
+                          <SelectItem value={Subcategory.SweetPotatoLeaves}>Sweet Potato Leaves (Talbos ng Kamote)</SelectItem>
+                          <SelectItem value={Subcategory.MalabarSpinach}>Malabar Spinach (Alugbati)</SelectItem>
+                          <SelectItem value={Subcategory.JewsMallow}>Jews Mallow (Saluyot)</SelectItem>
+                          <SelectItem value={Subcategory.ChiliLeaves}>Chili Leaves (Dahon ng Sili)</SelectItem>
+                          <SelectItem value={Subcategory.Moringaoleifera}>Moringa oleifera (Malunggay)</SelectItem>
+                          <SelectItem value={Subcategory.TaroLeaves}>Taro Leaves (Dahon ng Gabi)</SelectItem>
+                          <SelectItem value={Subcategory.OnionLeaves}>Onion Leaves</SelectItem>
+                          <SelectItem value={Subcategory.PetchayNative}>Petchay (Native)</SelectItem>
+                          <SelectItem value={Subcategory.PetchayBaguio}>Petchay (Baguio)</SelectItem>
+                          <SelectItem value={Subcategory.CabbageRareBall}>Cabbage (Rare Ball)</SelectItem>
+                          <SelectItem value={Subcategory.CabbageScorpio}>Cabbage (Scorpio)</SelectItem>
+                          <SelectItem value={Subcategory.Basil}>Basil</SelectItem>
+                          <SelectItem value={Subcategory.Sitao}>Sitao</SelectItem>
+                          <SelectItem value={Subcategory.BaguioBeans}>Baguio Beans</SelectItem>
+                          <SelectItem value={Subcategory.GiantPatani}>Giant Patani</SelectItem>
+                          <SelectItem value={Subcategory.Eggplant}>Eggplant</SelectItem>
+                          <SelectItem value={Subcategory.Ampalaya}>Ampalaya</SelectItem>
+                          <SelectItem value={Subcategory.Tomato}>Tomato</SelectItem>
+                          <SelectItem value={Subcategory.Chili}>Chili</SelectItem>
+                          <SelectItem value={Subcategory.BellPepperGreen}>Bell Pepper(Green)</SelectItem>
+                          <SelectItem value={Subcategory.BellPepperRed}>Bell pepper(Red)</SelectItem>
+                          <SelectItem value={Subcategory.Squash}>Squash</SelectItem>
+                          <SelectItem value={Subcategory.BlueTarnette}>Blue Tarnette</SelectItem>
+                          <SelectItem value={Subcategory.Patola}>Patola</SelectItem>
+                          <SelectItem value={Subcategory.Okra}>Okra</SelectItem>
+                          <SelectItem value={Subcategory.Carrots}>Carrots</SelectItem>
+                          <SelectItem value={Subcategory.WhitePotato}>White Potato</SelectItem>
+                          <SelectItem value={Subcategory.Chayote}>Chayote</SelectItem>
+                          <SelectItem value={Subcategory.RedOnion}>Red Onion</SelectItem>
+                          <SelectItem value={Subcategory.WhiteOnion}>White Onion</SelectItem>
+                          <SelectItem value={Subcategory.WhiteOnionImported}>White Onion(Imported)</SelectItem>
+                          <SelectItem value={Subcategory.GarlicImported}>Garlic(Imported)</SelectItem>
+                          <SelectItem value={Subcategory.GarlicNative}>Garlic(Native)</SelectItem>
+                          <SelectItem value={Subcategory.Ginger}>Ginger</SelectItem>
                         </>
                       )}
-                      {chosenCategory === Category.FRESH_FRUIT && (
+                      {/* {chosenCategory === Category.FRESH_FRUIT && (
                         <>
                           <SelectItem value={Subcategory.CITRUS_FRUITS}>Citrus Fruits</SelectItem>
                           <SelectItem value={Subcategory.TROPICAL_FRUIT}>Tropical Fruit</SelectItem>
                           <SelectItem value={Subcategory.COCONUT}>Coconut</SelectItem>
+                        </>
+                      )} */}
+                      {chosenCategory === Category.FRESH_FRUIT && (
+                        <>
+                          <SelectItem value={Subcategory.Calamansi}>Calamansi</SelectItem>
+                          <SelectItem value={Subcategory.MandarinOrange}>Mandarin Orange (Dalandan)</SelectItem>
+                          <SelectItem value={Subcategory.Banana}>Banana (Saging)</SelectItem>
+                          <SelectItem value={Subcategory.Mango}>Mango (Mangga)</SelectItem>
+                          <SelectItem value={Subcategory.Avocado}>Avocado</SelectItem>
+                          <SelectItem value={Subcategory.CottonFruit}>Cotton Fruit (Santol)</SelectItem>
+                          <SelectItem value={Subcategory.Pineapple}>Pineapple (Pinya)</SelectItem>
+                          <SelectItem value={Subcategory.Soursop}>Soursop (Guyabano)</SelectItem>
+                          <SelectItem value={Subcategory.CustardApple}>Custard Apple (Atis)</SelectItem>
+                          <SelectItem value={Subcategory.Papaya}>Papaya</SelectItem>
+                          <SelectItem value={Subcategory.Lanzones}>Lanzones</SelectItem>
                         </>
                       )}
                       {chosenCategory === Category.EQUIPMENTS && (
@@ -249,12 +296,19 @@ export default function Page() {
                           <SelectItem value={Subcategory.NOT_ORGANIC_FERTILIZER}>Not Organic Fertilizer</SelectItem>
                         </>
                       )}
-                      {/* {chosenCategory === Category.SEEDS && (
+                      {chosenCategory === Category.SEEDS && (
                         <>
-                          <SelectItem value={Subcategory.SEEDS1}>Seeds 1</SelectItem>
-                          <SelectItem value={Subcategory.SEEDS2}>Seeds 2</SelectItem>
+                          <SelectItem value={Subcategory.GiantPatani}>Giant Patani</SelectItem>
+                          <SelectItem value={Subcategory.BlueTarnette}>Blue Tarnette</SelectItem>
+                          <SelectItem value={Subcategory.AmpalayaSeed}>Ampalaya</SelectItem>
+                          <SelectItem value={Subcategory.PatolaSeed}>Patola</SelectItem>
+                          <SelectItem value={Subcategory.OkraSeed}>Okra</SelectItem>
+                          <SelectItem value={Subcategory.BasilSeed}>Basil</SelectItem>
+                          <SelectItem value={Subcategory.Talong}>Talong</SelectItem>
+                          <SelectItem value={Subcategory.Sitaw}>Sitaw</SelectItem>
+                          <SelectItem value={Subcategory.BaguioBeansSeed}>Baguio Beans</SelectItem>
                         </>
-                      )} */}
+                      )}
                       {chosenCategory === Category.TOOLS && (
                         <>
                           <SelectItem value={Subcategory.WHEEL_BARROW}>Wheel Barrow</SelectItem>
@@ -276,6 +330,24 @@ export default function Page() {
                       )}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="quantity"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    {chosenCategory === Category.FRESH_FRUIT || chosenCategory === Category.VEGETABLES ? "Kilo/s" :
+                      chosenCategory === Category.EQUIPMENTS || chosenCategory === Category.TOOLS ? "Piece/s" :
+                        chosenCategory === Category.FERTILIZER || chosenCategory === Category.SEEDS || chosenCategory === Category.SOILS ? "Pack/s" : "Unit"}
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Quantity" {...field} disabled={isLoading} type="number" />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -380,7 +452,7 @@ export default function Page() {
             name="pickUpDate"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Pick up date</FormLabel>
+                <FormLabel>Drop off date</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>

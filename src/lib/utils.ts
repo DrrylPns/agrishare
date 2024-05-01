@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge"
 import { formatDistanceToNow } from 'date-fns';
 import { randomBytes } from 'crypto';
 import prisma from "./db";
-import { ShelfLifeUnit } from "@prisma/client";
+import { ShelfLifeUnit, Subcategory } from "@prisma/client";
 import { z } from "zod";
 
 export function cn(...inputs: ClassValue[]) {
@@ -124,33 +124,35 @@ export function isExpired(dateString: string, shelfLifeDuration: number, shelfLi
 
 export const conditionRates = [0.5, 1, 1.5]
 
-export const Subcategory = z.enum([
-  "LEAFY_VEGETABLES",
-  "PODDED_VEGETABLES",
-  "FRUIT_VEGETABLES",
-  "ROOT_VEGETABLES",
-  "HERBS_VEGETABLES",
-  "FRUIT1",
-  "FRUIT2",
-  "CITRUS_FRUITS",
-  "COCONUT",
-  "TROPICAL_FRUIT",
-  "SMALL",
-  "MEDIUM",
-  "LARGE",
-  "SEEDS1",
-  "SEEDS2",
-  "ORGANIC_SOIL",
-  "NOT_ORGANIC_SOIL",
-  "ORGANIC_FERTILIZER",
-  "NOT_ORGANIC_FERTILIZER",
-  "WHEEL_BARROW",
-  "WATER_HOSE",
-  "GARDEN_POTS",
-  "BUCKET",
-  "GLOVES",
-  "HAND_PRUNES",
-  "KALAYKAY",
-  "HOES",
-  "SHOVEL",
-])
+// export const Subcategory = z.enum([
+//   "LEAFY_VEGETABLES",
+//   "PODDED_VEGETABLES",
+//   "FRUIT_VEGETABLES",
+//   "ROOT_VEGETABLES",
+//   "HERBS_VEGETABLES",
+//   "FRUIT1",
+//   "FRUIT2",
+//   "CITRUS_FRUITS",
+//   "COCONUT",
+//   "TROPICAL_FRUIT",
+//   "SMALL",
+//   "MEDIUM",
+//   "LARGE",
+//   "SEEDS1",
+//   "SEEDS2",
+//   "ORGANIC_SOIL",
+//   "NOT_ORGANIC_SOIL",
+//   "ORGANIC_FERTILIZER",
+//   "NOT_ORGANIC_FERTILIZER",
+//   "WHEEL_BARROW",
+//   "WATER_HOSE",
+//   "GARDEN_POTS",
+//   "BUCKET",
+//   "GLOVES",
+//   "HAND_PRUNES",
+//   "KALAYKAY",
+//   "HOES",
+//   "SHOVEL",
+// ])
+
+export const Subcat = z.nativeEnum(Subcategory)

@@ -185,7 +185,7 @@ model Post {
   image             String         @db.Text
   name              String
   description       String         @db.Text
-  quantity          Float          @default(0)
+  quantity          Float          @default(0) // eto yung magsisilbing KILO / PIECE/S / PACK
   weight            Float
   color             String
   type              Types?
@@ -255,6 +255,62 @@ enum Subcategory {
   KALAYKAY
   HOES
   SHOVEL
+  Calamansi
+  MandarinOrange
+  Banana
+  Mango
+  Avocado
+  CottonFruit
+  Pineapple
+  Soursop
+  CustardApple
+  Papaya
+  Lanzones
+  AmpalayaLeaves
+  WaterSpinach
+  SweetPotatoLeaves
+  MalabarSpinach
+  JewsMallow
+  ChiliLeaves
+  Moringaoleifera
+  TaroLeaves
+  OnionLeaves
+  PetchayNative
+  PetchayBaguio
+  CabbageRareBall
+  CabbageScorpio
+  Basil
+  Sitao
+  BaguioBeans
+  GiantPatani
+  Eggplant
+  Ampalaya
+  Tomato
+  Chili
+  BellPepperGreen
+  BellPepperRed
+  Squash
+  BlueTarnette
+  Patola
+  Okra
+  Carrots
+  WhitePotato
+  Chayote
+  RedOnion
+  WhiteOnion
+  WhiteOnionImported
+  GarlicImported
+  GarlicNative
+  Ginger
+  GiantPataniSeed
+  BlueTarnetteSeed
+  AmpalayaSeed
+  PatolaSeed
+  OkraSeed
+  BasilSeed
+  Talong
+  Sitaw
+  BaguioBeansSeed
 }
 
 model AgriChange {
@@ -398,7 +454,7 @@ model Donation {
   dn           String         @unique
   donatee      String?
   name         String
-  product      String
+  product      String?
   quantity     Float
   image        String
   pointsToGain Float

@@ -52,75 +52,139 @@ export const createAgrichange = async (values: AgrichangeType, image: string, si
             status = Status.OUTOFSTOCK
         }
 
-        let calculatedPoints
+        let ptsEquivalent
 
-        if (subcategory === "FRUIT_VEGETABLES") {
-            calculatedPoints = 35 / 0.18
-        } else if (subcategory === "LEAFY_VEGETABLES") {
-            calculatedPoints = 35 / 0.15
-        } else if (subcategory === "PODDED_VEGETABLES") {
-            calculatedPoints = 35 / 0.25
-        } else if (subcategory === "ROOT_VEGETABLES") {
-            calculatedPoints = 72.25 / 0.15
+        if (subcategory === "Eggplant" || subcategory === "Ampalaya" || subcategory === "Tomato" || subcategory === "Chili" || subcategory === "BellPepperGreen" || subcategory === "BellPepperRed" || subcategory === "Squash" || subcategory === "BlueTarnette" || subcategory === "Patola" || subcategory === "Okra") {
+            ptsEquivalent = 32.75 / 0.18
+        } else if (subcategory === "AmpalayaLeaves" || subcategory === "WaterSpinach" || subcategory === "SweetPotatoLeaves" || subcategory === "MalabarSpinach" || subcategory === "JewsMallow" || subcategory === "ChiliLeaves" || subcategory === "Moringaoleifera" || subcategory === "TaroLeaves" || subcategory === "OnionLeaves" || subcategory === "PetchayNative" || subcategory === "PetchayBaguio" || subcategory === "CabbageRareBall" || subcategory === "CabbageScorpio" || subcategory === "Basil") {
+            ptsEquivalent = 35 / 0.3
+        } else if (subcategory === "Sitao" || subcategory === "BaguioBeans" || subcategory === "GiantPatani") {
+            ptsEquivalent = 35 / 0.25
+        } else if (subcategory === "Carrots" || subcategory === "WhitePotato" || subcategory === "Chayote" || subcategory === "RedOnion" || subcategory === "WhiteOnion" || subcategory === "WhiteOnionImported" || subcategory === "GarlicImported" || subcategory === "GarlicNative" || subcategory === "Ginger") {
+            ptsEquivalent = 72 / 0.3
         } else if (subcategory === "ORGANIC_FERTILIZER") {
-            calculatedPoints = 50 / 0.36
+            ptsEquivalent = 50 / 0.36
         } else if (subcategory === "NOT_ORGANIC_FERTILIZER") {
-            calculatedPoints = 60 / 0.9
+            ptsEquivalent = 60 / 0.9
         } else if (subcategory === "ORGANIC_SOIL") {
-            calculatedPoints = 7.5 / 0.75
+            ptsEquivalent = 7.5 / 0.75
         } else if (subcategory === "NOT_ORGANIC_SOIL") {
-            calculatedPoints = 15 / 0.25
-        } else if (subcategory === "CITRUS_FRUITS") {
-            calculatedPoints = 13 / 0.26
+            ptsEquivalent = 15 / 0.25
+        } else if (subcategory === "Calamansi" || subcategory === "MandarinOrange") {
+            ptsEquivalent = 26 / 0.13
+        } else if (subcategory === "Banana" || subcategory === "Mango" || subcategory === "Avocado" || subcategory === "CottonFruit" || subcategory === "Pineapple" || subcategory === "Soursop" || subcategory === "CustardApple" || subcategory === "Papaya" || subcategory === "Lanzones") {
+            ptsEquivalent = 56 / 0.82
         } else if (subcategory === "COCONUT") {
-            calculatedPoints = 54 / 0.108
-        } else if (subcategory === "TROPICAL_FRUIT") {
-            calculatedPoints = 28 / 0.082
+            ptsEquivalent = 55 / 0.18
+        } else if (subcategory === "GiantPataniSeed" || subcategory === "BlueTarnetteSeed" || subcategory === "AmpalayaSeed" || subcategory === "PatolaSeed" || subcategory === "OkraSeed" || subcategory === "BasilSeed" || subcategory === "Talong" || subcategory === "Sitaw" || subcategory === "BaguioBeansSeed") {
+            ptsEquivalent = 54 / 0.18
         } else if (subcategory === "WATER_HOSE" && size === "1/4") {
-            calculatedPoints = 28 / 1.1
+            ptsEquivalent = 28 / 1.1
         } else if (subcategory === "WATER_HOSE" && size === "1/2") {
-            calculatedPoints = 35 / 0.9
+            ptsEquivalent = 35 / 0.9
         } else if (subcategory === "WATER_HOSE" && size === "3/4") {
-            calculatedPoints = 42 / 0.7
+            ptsEquivalent = 42 / 0.7
         } else if (subcategory === "GARDEN_POTS" && size === "Small") {
-            calculatedPoints = 100 / 0.27
+            ptsEquivalent = 100 / 0.54
         } else if (subcategory === "GARDEN_POTS" && size === "Medium") {
-            calculatedPoints = 150 / 0.35
+            ptsEquivalent = 150 / 0.7
         } else if (subcategory === "GARDEN_POTS" && size === "Large") {
-            calculatedPoints = 300 / 0.7
+            ptsEquivalent = 300 / 1.4
         } else if (subcategory === "BUCKET" && size === "Small") {
-            calculatedPoints = 60 / 0.2
+            ptsEquivalent = 60 / 0.4
         } else if (subcategory === "BUCKET" && size === "Medium") {
-            calculatedPoints = 100 / 0.27
+            ptsEquivalent = 100 / 0.54
         } else if (subcategory === "BUCKET" && size === "Large") {
-            calculatedPoints = 125 / 0.32
+            ptsEquivalent = 125 / 0.64
         } else if (subcategory === "KALAYKAY" && size === "Small") {
-            calculatedPoints = 75 / 0.33
+            ptsEquivalent = 75 / 0.33
         } else if (subcategory === "KALAYKAY" && size === "Large") {
-            calculatedPoints = 250 / 0.52
+            ptsEquivalent = 250 / 0.52
         } else if (subcategory === "SHOVEL" && size === "Small") {
-            calculatedPoints = 75 / 0.33
+            ptsEquivalent = 75 / 0.33
         } else if (subcategory === "SHOVEL" && size === "Large") {
-            calculatedPoints = 250 / 0.52
-        } else if (subcategory === "HOES") {
-            calculatedPoints = 250 / 0.52
-        } else if (category === "EQUIPMENTS" && subcategory === "SMALL") {
-            calculatedPoints = 150 / 0.52
-        } else if (category === "EQUIPMENTS" && subcategory === "MEDIUM") {
-            calculatedPoints = 200 / 0.52
-        } else if (category === "EQUIPMENTS" && subcategory === "LARGE") {
-            calculatedPoints = 250 / 0.52
+            ptsEquivalent = 250 / 0.52
+        } else if (subcategory === "HOES" || subcategory === "HAND_PRUNES") {
+            ptsEquivalent = 250 / 0.52
         } else if (subcategory === "GLOVES") {
-            calculatedPoints = 55 / 0.24
+            ptsEquivalent = 55 / 0.48
         } else if (subcategory === "WHEEL_BARROW") {
-            calculatedPoints = 3500 / 2
-        } else if (subcategory === "HAND_PRUNES") {
-            calculatedPoints = 157.5 / 0.513
+            ptsEquivalent = 3500 / 2
         } else if (category === "SEEDS") {
-            calculatedPoints = 25 / 0.65
+            ptsEquivalent = 25 / 0.325
         } else {
-            calculatedPoints = 0.15
+            ptsEquivalent = 0.15
         }
+
+        // let calculatedPoints
+
+        // if (subcategory === "FRUIT_VEGETABLES") {
+        //     calculatedPoints = 35 / 0.18
+        // } else if (subcategory === "LEAFY_VEGETABLES") {
+        //     calculatedPoints = 35 / 0.15
+        // } else if (subcategory === "PODDED_VEGETABLES") {
+        //     calculatedPoints = 35 / 0.25
+        // } else if (subcategory === "ROOT_VEGETABLES") {
+        //     calculatedPoints = 72.25 / 0.15
+        // } else if (subcategory === "ORGANIC_FERTILIZER") {
+        //     calculatedPoints = 50 / 0.36
+        // } else if (subcategory === "NOT_ORGANIC_FERTILIZER") {
+        //     calculatedPoints = 60 / 0.9
+        // } else if (subcategory === "ORGANIC_SOIL") {
+        //     calculatedPoints = 7.5 / 0.75
+        // } else if (subcategory === "NOT_ORGANIC_SOIL") {
+        //     calculatedPoints = 15 / 0.25
+        // } else if (subcategory === "CITRUS_FRUITS") {
+        //     calculatedPoints = 13 / 0.26
+        // } else if (subcategory === "COCONUT") {
+        //     calculatedPoints = 54 / 0.108
+        // } else if (subcategory === "TROPICAL_FRUIT") {
+        //     calculatedPoints = 28 / 0.082
+        // } else if (subcategory === "WATER_HOSE" && size === "1/4") {
+        //     calculatedPoints = 28 / 1.1
+        // } else if (subcategory === "WATER_HOSE" && size === "1/2") {
+        //     calculatedPoints = 35 / 0.9
+        // } else if (subcategory === "WATER_HOSE" && size === "3/4") {
+        //     calculatedPoints = 42 / 0.7
+        // } else if (subcategory === "GARDEN_POTS" && size === "Small") {
+        //     calculatedPoints = 100 / 0.27
+        // } else if (subcategory === "GARDEN_POTS" && size === "Medium") {
+        //     calculatedPoints = 150 / 0.35
+        // } else if (subcategory === "GARDEN_POTS" && size === "Large") {
+        //     calculatedPoints = 300 / 0.7
+        // } else if (subcategory === "BUCKET" && size === "Small") {
+        //     calculatedPoints = 60 / 0.2
+        // } else if (subcategory === "BUCKET" && size === "Medium") {
+        //     calculatedPoints = 100 / 0.27
+        // } else if (subcategory === "BUCKET" && size === "Large") {
+        //     calculatedPoints = 125 / 0.32
+        // } else if (subcategory === "KALAYKAY" && size === "Small") {
+        //     calculatedPoints = 75 / 0.33
+        // } else if (subcategory === "KALAYKAY" && size === "Large") {
+        //     calculatedPoints = 250 / 0.52
+        // } else if (subcategory === "SHOVEL" && size === "Small") {
+        //     calculatedPoints = 75 / 0.33
+        // } else if (subcategory === "SHOVEL" && size === "Large") {
+        //     calculatedPoints = 250 / 0.52
+        // } else if (subcategory === "HOES") {
+        //     calculatedPoints = 250 / 0.52
+        // } else if (category === "EQUIPMENTS" && subcategory === "SMALL") {
+        //     calculatedPoints = 150 / 0.52
+        // } else if (category === "EQUIPMENTS" && subcategory === "MEDIUM") {
+        //     calculatedPoints = 200 / 0.52
+        // } else if (category === "EQUIPMENTS" && subcategory === "LARGE") {
+        //     calculatedPoints = 250 / 0.52
+        // } else if (subcategory === "GLOVES") {
+        //     calculatedPoints = 55 / 0.24
+        // } else if (subcategory === "WHEEL_BARROW") {
+        //     calculatedPoints = 3500 / 2
+        // } else if (subcategory === "HAND_PRUNES") {
+        //     calculatedPoints = 157.5 / 0.513
+        // } else if (category === "SEEDS") {
+        //     calculatedPoints = 25 / 0.65
+        // } else {
+        //     calculatedPoints = 0.15
+        // }
 
         await prisma.agriChange.create({
             data: {
@@ -138,7 +202,7 @@ export const createAgrichange = async (values: AgrichangeType, image: string, si
                 weight,
                 // quantityPerTrade: qtyPerTrade,
                 quantity,
-                pointsNeeded: calculatedPoints, // calculate points needed dpende sa value ng category / subcategory
+                pointsNeeded: ptsEquivalent, // calculate points needed dpende sa value ng category / subcategory
                 userId: user.id,
             }
         })
@@ -193,78 +257,68 @@ export const updateAgrichange = async (values: AgrichangeType, image: string, id
             status = Status.OUTOFSTOCK
         }
 
-        let calculatedPoints
+        let ptsEquivalent
 
-
-        // else if (subcategory === "HERBS_VEGETABLES") {
-        //     calculatedPoints = 0.17 // TODO
-        // }
-        if (subcategory === "FRUIT_VEGETABLES") {
-            calculatedPoints = 35 / 0.18
-        } else if (subcategory === "LEAFY_VEGETABLES") {
-            calculatedPoints = 35 / 0.15
-        } else if (subcategory === "PODDED_VEGETABLES") {
-            calculatedPoints = 35 / 0.25
-        } else if (subcategory === "ROOT_VEGETABLES") {
-            calculatedPoints = 72.25 / 0.15
+        if (subcategory === "Eggplant" || subcategory === "Ampalaya" || subcategory === "Tomato" || subcategory === "Chili" || subcategory === "BellPepperGreen" || subcategory === "BellPepperRed" || subcategory === "Squash" || subcategory === "BlueTarnette" || subcategory === "Patola" || subcategory === "Okra") {
+            ptsEquivalent = 32.75 / 0.18
+        } else if (subcategory === "AmpalayaLeaves" || subcategory === "WaterSpinach" || subcategory === "SweetPotatoLeaves" || subcategory === "MalabarSpinach" || subcategory === "JewsMallow" || subcategory === "ChiliLeaves" || subcategory === "Moringaoleifera" || subcategory === "TaroLeaves" || subcategory === "OnionLeaves" || subcategory === "PetchayNative" || subcategory === "PetchayBaguio" || subcategory === "CabbageRareBall" || subcategory === "CabbageScorpio" || subcategory === "Basil") {
+            ptsEquivalent = 35 / 0.3
+        } else if (subcategory === "Sitao" || subcategory === "BaguioBeans" || subcategory === "GiantPatani") {
+            ptsEquivalent = 35 / 0.25
+        } else if (subcategory === "Carrots" || subcategory === "WhitePotato" || subcategory === "Chayote" || subcategory === "RedOnion" || subcategory === "WhiteOnion" || subcategory === "WhiteOnionImported" || subcategory === "GarlicImported" || subcategory === "GarlicNative" || subcategory === "Ginger") {
+            ptsEquivalent = 72 / 0.3
         } else if (subcategory === "ORGANIC_FERTILIZER") {
-            calculatedPoints = 50 / 0.36
+            ptsEquivalent = 50 / 0.36
         } else if (subcategory === "NOT_ORGANIC_FERTILIZER") {
-            calculatedPoints = 60 / 0.9
+            ptsEquivalent = 60 / 0.9
         } else if (subcategory === "ORGANIC_SOIL") {
-            calculatedPoints = 7.5 / 0.75
+            ptsEquivalent = 7.5 / 0.75
         } else if (subcategory === "NOT_ORGANIC_SOIL") {
-            calculatedPoints = 15 / 0.25
-        } else if (subcategory === "CITRUS_FRUITS") {
-            calculatedPoints = 13 / 0.26
+            ptsEquivalent = 15 / 0.25
+        } else if (subcategory === "Calamansi" || subcategory === "MandarinOrange") {
+            ptsEquivalent = 26 / 0.13
+        } else if (subcategory === "Banana" || subcategory === "Mango" || subcategory === "Avocado" || subcategory === "CottonFruit" || subcategory === "Pineapple" || subcategory === "Soursop" || subcategory === "CustardApple" || subcategory === "Papaya" || subcategory === "Lanzones") {
+            ptsEquivalent = 56 / 0.82
         } else if (subcategory === "COCONUT") {
-            calculatedPoints = 54 / 0.108
-        } else if (subcategory === "TROPICAL_FRUIT") {
-            calculatedPoints = 28 / 0.082
+            ptsEquivalent = 55 / 0.18
+        } else if (subcategory === "GiantPataniSeed" || subcategory === "BlueTarnetteSeed" || subcategory === "AmpalayaSeed" || subcategory === "PatolaSeed" || subcategory === "OkraSeed" || subcategory === "BasilSeed" || subcategory === "Talong" || subcategory === "Sitaw" || subcategory === "BaguioBeansSeed") {
+            ptsEquivalent = 54 / 0.18
         } else if (subcategory === "WATER_HOSE" && size === "1/4") {
-            calculatedPoints = 28 / 1.1
+            ptsEquivalent = 28 / 1.1
         } else if (subcategory === "WATER_HOSE" && size === "1/2") {
-            calculatedPoints = 35 / 0.9
+            ptsEquivalent = 35 / 0.9
         } else if (subcategory === "WATER_HOSE" && size === "3/4") {
-            calculatedPoints = 42 / 0.7
+            ptsEquivalent = 42 / 0.7
         } else if (subcategory === "GARDEN_POTS" && size === "Small") {
-            calculatedPoints = 100 / 0.27
+            ptsEquivalent = 100 / 0.54
         } else if (subcategory === "GARDEN_POTS" && size === "Medium") {
-            calculatedPoints = 150 / 0.35
+            ptsEquivalent = 150 / 0.7
         } else if (subcategory === "GARDEN_POTS" && size === "Large") {
-            calculatedPoints = 300 / 0.7
+            ptsEquivalent = 300 / 1.4
         } else if (subcategory === "BUCKET" && size === "Small") {
-            calculatedPoints = 60 / 0.2
+            ptsEquivalent = 60 / 0.4
         } else if (subcategory === "BUCKET" && size === "Medium") {
-            calculatedPoints = 100 / 0.27
+            ptsEquivalent = 100 / 0.54
         } else if (subcategory === "BUCKET" && size === "Large") {
-            calculatedPoints = 125 / 0.32
+            ptsEquivalent = 125 / 0.64
         } else if (subcategory === "KALAYKAY" && size === "Small") {
-            calculatedPoints = 75 / 0.33
+            ptsEquivalent = 75 / 0.33
         } else if (subcategory === "KALAYKAY" && size === "Large") {
-            calculatedPoints = 250 / 0.52
+            ptsEquivalent = 250 / 0.52
         } else if (subcategory === "SHOVEL" && size === "Small") {
-            calculatedPoints = 75 / 0.33
+            ptsEquivalent = 75 / 0.33
         } else if (subcategory === "SHOVEL" && size === "Large") {
-            calculatedPoints = 250 / 0.52
-        } else if (subcategory === "HOES") {
-            calculatedPoints = 250 / 0.52
-        } else if (category === "EQUIPMENTS" && subcategory === "SMALL") {
-            calculatedPoints = 150 / 0.52
-        } else if (category === "EQUIPMENTS" && subcategory === "MEDIUM") {
-            calculatedPoints = 200 / 0.52
-        } else if (category === "EQUIPMENTS" && subcategory === "LARGE") {
-            calculatedPoints = 250 / 0.52
+            ptsEquivalent = 250 / 0.52
+        } else if (subcategory === "HOES" || subcategory === "HAND_PRUNES") {
+            ptsEquivalent = 250 / 0.52
         } else if (subcategory === "GLOVES") {
-            calculatedPoints = 55 / 0.24
+            ptsEquivalent = 55 / 0.48
         } else if (subcategory === "WHEEL_BARROW") {
-            calculatedPoints = 3500 / 2
-        } else if (subcategory === "HAND_PRUNES") {
-            calculatedPoints = 157.5 / 0.513
+            ptsEquivalent = 3500 / 2
         } else if (category === "SEEDS") {
-            calculatedPoints = 25 / 0.65
+            ptsEquivalent = 25 / 0.325
         } else {
-            calculatedPoints = 0.15
+            ptsEquivalent = 0.15
         }
 
         await prisma.agriChange.update({
@@ -282,7 +336,7 @@ export const updateAgrichange = async (values: AgrichangeType, image: string, id
                 subcategory,
                 weight,
                 quantity,
-                pointsNeeded: calculatedPoints,
+                pointsNeeded: ptsEquivalent,
                 // quantityPerTrade: qtyPerTrade,
             }
         })

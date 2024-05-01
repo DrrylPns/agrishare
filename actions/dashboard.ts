@@ -57,25 +57,35 @@ export const fetchUrbanDonator = async () => {
     }
 }
 
-export const fetchDonationsByDate = async () => {
-    const donations = await prisma.donation.findMany({
+// export const fetchDonationsByDate = async () => {
+//     const donations = await prisma.donation.findMany({
+//         where: {
+//             status: 'APPROVED',
+//         },
+//         select: {
+//             createdAt: true,
+//             quantity: true, 
+//         },
+//     });
+
+
+//     const donationsByDate = donations.map(donation => ({
+//         date: donation.createdAt.toISOString().split('T')[0],
+//         'Donations': donation.quantity,
+//     }));
+
+//     return donationsByDate;
+// };
+
+export const fetchDonationCount = async () => {
+    const donations = await prisma.donation.count({
         where: {
-            status: 'APPROVED',
-        },
-        select: {
-            createdAt: true,
-            quantity: true, 
-        },
-    });
+            status: "APPROVED",
+        }
+    })
 
-    
-    const donationsByDate = donations.map(donation => ({
-        date: donation.createdAt.toISOString().split('T')[0],
-        'Donations': donation.quantity,
-    }));
-
-    return donationsByDate;
-};
+    return donations
+}
 
 // Fetch trades from the database and count them by date
 export const fetchTradesByDate = async () => {
