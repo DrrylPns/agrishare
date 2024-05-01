@@ -163,7 +163,7 @@ export default function ExchangeDialog({
                                 variant='default'
                                 className={`rounded-full px-10`}
                                 isLoading={isPending}
-                                disabled={!isSufficient}
+                                disabled={!isSufficient || number === 0}
                             // onClick={onSubmit}
                             >
                                 Yes
