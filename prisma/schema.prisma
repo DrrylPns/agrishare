@@ -47,6 +47,7 @@ model User {
   country               String?
   state                 String?
   brgy                  String?
+  district              String?
   city                  String?
   zip                   String?
   userId                String?                @unique
@@ -554,8 +555,6 @@ model Trade {
 
   notifications Notification[]
 }
-
-
 
 enum StatusType {
   PENDING
