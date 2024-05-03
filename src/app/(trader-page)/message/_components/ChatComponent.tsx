@@ -33,7 +33,7 @@ export default function ChatComponent({ currentUser }: Props) {
     }
 
     return (
-        <div key="1" className="w-full flex bg-white dark:bg-zinc-800 h-[820px] border border-lime-500 rounded-lg ">
+        <div key="1" className="w-full flex bg-white dark:bg-zinc-800 h-[820px] border border-lime-500 rounded-lg mt-[54px] md:mt-0">
             <aside className="w-80 border-r dark:border-zinc-700">
                 <div className="p-4 space-y-4 overflow-auto h-[820px] pb-2">
                     <div className="flex justify-between items-center">
@@ -100,7 +100,7 @@ export default function ChatComponent({ currentUser }: Props) {
                 </div>
             </aside >
 
-            <section className="flex flex-col w-full">
+            <section className="flex flex-col w-full max-md:hidden">
                 <main className="flex-1 overflow-auto p-4">
                     <div className="space-y-4 flex justify-center items-center h-[50vh] flex-col gap-3">
                         <h1 className="font-semibold text-2xl">
