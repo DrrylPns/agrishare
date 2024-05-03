@@ -24,12 +24,15 @@ import { CardWrapper } from "./card-wrapper";
 import { register } from "../../actions/register";
 import { Checkbox } from "./ui/checkbox";
 import Link from "next/link";
+import usePasswordToggle from "@/lib/hooks/usePasswordToggle";
 
 
 export const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
+  const [PasswordInputType, ToggleIcon] = usePasswordToggle();
+  const [ConfirmPasswordInputType, ConfirmToggleIcon] = usePasswordToggle();
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -119,36 +122,41 @@ export const RegisterForm = () => {
                   </FormItem>
                 )}
               />
+
+
               <FormField
                 control={form.control}
                 name="password"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Password</FormLabel>
-                    <FormControl>
+                    <FormControl className="w-full">
                       <Input
                         {...field}
                         disabled={isPending}
                         placeholder="******"
-                        type="password"
+                        type={PasswordInputType as string}
+                        ToggleIcon={ToggleIcon}
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Confirm Password</FormLabel>
-                    <FormControl>
+                    <FormControl className="w-full">
                       <Input
                         {...field}
                         disabled={isPending}
                         placeholder="******"
-                        type="password"
+                        type={ConfirmPasswordInputType as string}
+                        ToggleIcon={ConfirmToggleIcon}
                       />
                     </FormControl>
                     <FormMessage />

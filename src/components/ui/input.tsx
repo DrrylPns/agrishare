@@ -10,7 +10,7 @@ export interface InputProps
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ToggleIcon, ...props }, ref) => {
     return (
-      <>
+      <div className="w-full relative flex justify-between">
         <input
           type={type}
           className={cn(
@@ -22,9 +22,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         />
 
         {ToggleIcon && (
-          <span className="flex justify-end -mt-10 ml-[235px] lg:ml-[315px] xl:ml-[415px] z-0 w-fit">{ToggleIcon}</span>
+          <span className="block absolute right-4 top-1/2 transform -translate-y-1/2">{ToggleIcon}</span>
         )}
-      </>
+      </div>
     )
   }
 )

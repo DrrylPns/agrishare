@@ -27,6 +27,7 @@ import { CardWrapper } from "./card-wrapper";
 import { login } from "../../actions/login";
 import { cn } from "@/lib/utils";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "./ui/input-otp";
+import usePasswordToggle from "@/lib/hooks/usePasswordToggle";
 
 
 export const LoginForm = () => {
@@ -40,6 +41,7 @@ export const LoginForm = () => {
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
     const [isPending, startTransition] = useTransition();
+    const [PasswordInputType, ToggleIcon] = usePasswordToggle();
 
     const form = useForm<z.infer<typeof LoginSchema>>({
         resolver: zodResolver(LoginSchema),
@@ -140,12 +142,13 @@ export const LoginForm = () => {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Password</FormLabel>
-                                                <FormControl>
+                                                <FormControl className="w-full">
                                                     <Input
                                                         {...field}
                                                         disabled={isPending}
                                                         placeholder="******"
-                                                        type="password"
+                                                        type={PasswordInputType as string}
+                                                        ToggleIcon={ToggleIcon}
                                                     />
                                                 </FormControl>
                                                 {/* <Button
