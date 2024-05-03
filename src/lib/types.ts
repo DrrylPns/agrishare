@@ -214,6 +214,13 @@ export type UserWithMessages = Prisma.UserGetPayload<{
     }
 }>
 
+export type ChatRoomWithMessagesAndParticipants = Prisma.ChatRoomGetPayload<{
+    include: {
+        messages: true,
+        participants: true,
+    }
+}>
+
 export type ChatRoomWithMessages = Prisma.ChatRoomGetPayload<{
     include: {
         messages: true,

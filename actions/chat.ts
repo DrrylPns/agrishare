@@ -5,29 +5,45 @@ import { auth } from "../auth"
 import { getUserById } from "../data/user"
 import { redirect } from "next/navigation"
 
-export const fetchUsers = async () => {
+export const fetchUsers = async (searchUsers?: string) => {
     try {
-        const session = await auth()
+        const session = await auth();
 
-        if (!session) return { error: "Unauthorized" }
+        if (!session) return { error: "Unauthorized" };
 
-        const users = await prisma.user.findMany({
-            where: {
-                NOT: {
-                    id: session?.user.id
+        if (searchUsers) {
+            const users = await prisma.user.findMany({
+                where: {
+                    OR: [
+                        { name: { contains: searchUsers, mode: 'insensitive' } },
+                        { lastName: { contains: searchUsers, mode: 'insensitive' } }
+                    ]
                 }
-            },
-            include: {
-                Message: true,
-            },
-            orderBy: {
-                updatedAt: "desc"
-            },
-        })
+            });
 
-        return users
+            return users;
+        } else {
+            const chatRooms = await prisma.chatRoom.findMany({
+                where: {
+                    participants: {
+                        some: {
+                            id: session.user.id
+                        }
+                    }
+                },
+                include: {
+                    messages: true,
+                    participants: true
+                },
+                orderBy: {
+                    updatedAt: "desc"
+                },
+            });
+
+            return chatRooms;
+        }
     } catch (error: any) {
-        throw new Error(error)
+        throw new Error(error);
     }
 }
 

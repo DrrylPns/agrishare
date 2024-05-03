@@ -129,7 +129,7 @@ export const PasswordSettings: React.FC<PasswordSettingsProps> = ({ user }) => {
                                     <FormLabel>Current Password</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="Enter Password..."
+                                            placeholder="Enter Current Password..."
                                             {...field}
                                             disabled={!isEdit}
                                             type={CurrentPasswordInputType as string}
@@ -151,12 +151,12 @@ export const PasswordSettings: React.FC<PasswordSettingsProps> = ({ user }) => {
                                     <FormLabel>New Password</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="Enter Password..."
+                                            placeholder="Enter New Password..."
                                             {...field}
                                             disabled={!isEdit}
                                             type={NewPasswordInputType as string}
+                                            ToggleIcon={NewToggleIcon}
                                         />
-                                        ToggleIcon={NewToggleIcon}
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -173,7 +173,7 @@ export const PasswordSettings: React.FC<PasswordSettingsProps> = ({ user }) => {
                                     <FormLabel>Confirm New Password</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="Enter Password..."
+                                            placeholder="Confirm New Password..."
                                             {...field}
                                             disabled={!isEdit}
                                             type={ConfirmPasswordInputType as string}

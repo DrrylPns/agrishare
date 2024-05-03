@@ -1,6 +1,6 @@
 "use client";
 
-import { 
+import {
   Card,
   CardContent,
   CardFooter,
@@ -17,6 +17,7 @@ interface CardWrapperProps {
   backButtonLabel: string;
   backButtonHref: string;
   showSocial?: boolean;
+  formStep?: number;
 };
 
 export const CardWrapper = ({
@@ -24,23 +25,28 @@ export const CardWrapper = ({
   headerLabel,
   backButtonLabel,
   backButtonHref,
-  showSocial
+  showSocial,
+  formStep
 }: CardWrapperProps) => {
   return (
     <Card className="w-[400px] shadow-md">
+
       <CardHeader>
         <Header label={headerLabel} />
       </CardHeader>
+
       <CardContent>
         {children}
       </CardContent>
-      
+
       <CardFooter>
         <BackButton
           label={backButtonLabel}
           href={backButtonHref}
         />
       </CardFooter>
+
+
     </Card>
   );
 };

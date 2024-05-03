@@ -21,7 +21,7 @@ function SideNav() {
     if (status === "loading") return <Loading />
 
     return (
-        <div className={`w-[25%] hidden ${pathname === "/history" ? "hidden" : "md:block"}`}>
+        <div className={`w-[25%] hidden ${pathname.startsWith("/history") || pathname.startsWith("/message") ? "hidden" : "md:block"}`}>
             <div className={` ${pathname === '/agrifeed/'} border border-gray-300 shadow-sm drop-shadow-sm bg-white`}>
                 <h1 className='mx-5 py-2 mt-5 text-gray-500 text-xl font-poppins font-extralight '>Navigation</h1>
                 <div className='text-gray-500 transition-all duration-700 ease-in-out mt-3'>
