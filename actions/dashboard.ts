@@ -4,6 +4,8 @@ import prisma from "@/lib/db"
 import { auth } from "../auth"
 import { endOfDay, startOfDay } from "date-fns"
 import { eachDayOfInterval } from "date-fns"
+import { Role } from "@prisma/client"
+import { revalidatePath } from "next/cache"
 
 export const fetchUrbanFarmers = async () => {
     try {
@@ -27,6 +29,36 @@ export const fetchUrbanFarmers = async () => {
         })
 
         return urbanFarmers
+    } catch (error: any) {
+        throw new Error(error)
+    }
+}
+
+export const updateRole = async (uid: string, role: Role) => {
+    try {
+        const session = await auth()
+
+        if (!session) return { error: "Unauthorized" }
+
+        const user = await prisma.user.findUnique({
+            where: { id: session.user.id }
+        })
+
+        if (!user) return { error: "No user found!" }
+
+        if (user.role !== "ADMIN") return { error: "You are not an admin!" }
+
+        const editRole = await prisma.user.update({
+            where: {
+                id: uid,
+            },
+            data:{
+                role: role
+            }
+        })
+
+        revalidatePath("/users")
+        return { success: "Update success!" }
     } catch (error: any) {
         throw new Error(error)
     }
