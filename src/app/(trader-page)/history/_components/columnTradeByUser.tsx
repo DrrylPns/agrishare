@@ -19,8 +19,16 @@ import Link from "next/link"
 import Image from "next/image"
 import { UploadDropzone } from "@/lib/uploadthing"
 import { handleTradeProof } from "../../../../../actions/trade"
-import { conditionRates, formattedSLU } from "@/lib/utils"
+import { conditionRates, formattedSLU, reasons } from "@/lib/utils"
 import { RadioGroup } from "@headlessui/react"
+import { CancelTradeSchema, FormType } from "@/lib/validations/trade"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation } from "@tanstack/react-query"
+import axios, { AxiosError } from "axios"
+import { z } from "zod"
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form"
+import { IoIosRadioButtonOff, IoIosRadioButtonOn } from "react-icons/io"
 // import { handleTrade } from "../../../actions/trade"
 
 export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
@@ -173,7 +181,9 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
             const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false)
             const [isRejectOpen, setIsRejectOpen] = useState<boolean>(false)
             const [selectedRate, setSelectedRate] = useState(0)
+            const [selectedReason, setSelectedReason] = useState(reasons[0].value)
             const [selectRateError, setSelectRateError] = useState<boolean>(false)
+            const [selectReasonError, setSelectReasonError] = useState<boolean>(false)
 
 
             const tradeId = row.original.id;
@@ -409,6 +419,77 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                 })
             }
 
+            
+            const form = useForm<z.infer<typeof CancelTradeSchema>>({
+                resolver: zodResolver(CancelTradeSchema),
+            })
+
+            const { mutate: handleCancel, isLoading } = useMutation({
+                mutationFn: async ({ tradeId, type }: FormType) => {
+                    const payload: FormType = {
+                        tradeId,
+                        type,
+                    }
+                    const { data } = await axios.put("/api/trade/cancel", payload)
+                    return data
+                },
+                onError: (err) => {
+                    if (err instanceof AxiosError) {
+                        if (err.response?.status === 404) {
+                            toast({
+                                description: "No transaction found!",
+                                variant: 'destructive',
+                            })
+                        }
+                    } else {
+                        return toast({
+                            title: 'Something went wrong.',
+                            description: "Error",
+                            variant: 'destructive',
+                        })
+                    }
+                },
+                onSuccess: (data) => {
+                    toast({
+                        description: `Successfully cancelled the transaction.`,
+                        variant: 'default',
+                    })
+        
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 1000)
+                }
+            })
+            console.log(selectedReason)
+            const onSubmit = async(tradeId: string) => {
+                const cancelTrade = await axios.post("/api/trade/cancel", {tradeId, selectedReason}).then((data)=>{
+                    toast({
+                        description: `Successfully cancelled the transaction.`,
+                        variant: 'default',
+                    })
+        
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 1000)
+                }).catch((err)=>{
+                    if (err instanceof AxiosError) {
+                        if (err.response?.status === 404) {
+                            toast({
+                                description: "No transaction found!",
+                                variant: 'destructive',
+                            })
+                        }
+                    } else {
+                        return toast({
+                            title: 'Something went wrong.',
+                            description: "Error",
+                            variant: 'destructive',
+                        })
+                    }
+                })
+            }
+
+
             return (
                 <>
                     <DropdownMenu>
@@ -438,12 +519,13 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                 </DropdownMenuItem>
 
                             )}
-
-                            {/* <DropdownMenuItem
-                                onClick={() => setIsReviewOpen(true)}
-                            >
-                                Review
-                            </DropdownMenuItem> */}
+                            {tradeStatus === "PROCESSING" && ( 
+                                <DropdownMenuItem
+                                    onClick={() => setIsRejectOpen(true)}
+                                >
+                                    Cancel
+                                </DropdownMenuItem>
+                             )}
 
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -530,6 +612,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                             </DialogHeader>
                         </DialogContent>
                     </Dialog>
+
                     <Dialog open={isDownloadOpen} onOpenChange={setIsDownloadOpen}>
                         <DialogContent className="lg:max-w-2xl">
                             <div>
@@ -623,6 +706,100 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                         </DialogContent>
                     </Dialog>
 
+                    <Dialog open={isRejectOpen} onOpenChange={setIsRejectOpen}>
+                        <DialogContent>
+                            <DialogHeader className='flex flex-col items-start gap-1'>
+                                <DialogTitle>Why are you cancelling this trade?</DialogTitle>
+                                <DialogDescription className="w-full">
+                                    Please provide a reason for the cancellation. This will help us improve our service.
+                                </DialogDescription>
+                            </DialogHeader>
+
+                                        
+                            <RadioGroup
+                                value={selectedReason}
+                                onChange={setSelectedReason} 
+                                className="flex flex-col space-y-1"
+                            >
+                                    {reasons.map((reason) => (
+                                        // <RadioGroup.Option
+                                        //     key={reason.value}
+                                        //     value={reason.value}
+                                        //     onClick={() => setSelectReasonError(false)}
+                                        //     className="flex gap-3 items-center ui-active:whte ui-active:text-gray-700 text-sm w-24 py-1 px-2 outline-1 outline outline-gray-300 shadow-sm drop-shadow-sm  ui-not-active:bg-white ui-not-active:text-black"
+                                        // > {({ checked }) => (
+                                        //     <>
+                                        //         <span className={`${checked && 'text-green-400'}`}>
+                                        //         {checked ? <IoIosRadioButtonOn /> : <IoIosRadioButtonOff />}
+                                        //         </span>
+                                        //         {reason.label}
+                                        //     </>
+                                        //     )}
+                                        // </RadioGroup.Option>
+                                        <RadioGroup.Option onClick={() => setSelectReasonError(false)} key={reason.value} value={reason.value} className={`flex items-center font-poppins`}>
+                                            {({ checked }) => (
+                                            <>
+                                                <span className={`${checked && 'text-green-400'}`}>
+                                                {checked ? <IoIosRadioButtonOn /> : <IoIosRadioButtonOff />}
+                                                </span>
+                                                {reason.label}
+                                            </>
+                                            )}
+                                        </RadioGroup.Option>
+                                    ))}
+                                {/* <FormItem className="flex items-center space-x-3 space-y-0">
+                                    <FormControl>
+                                        <RadioGroupItem value="NotAvailable" />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                        Not availble on the given time.
+                                    </FormLabel>
+                                </FormItem>
+
+                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                    <FormControl>
+                                        <RadioGroupItem value="ChangeOfMind" />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                        Change of mind
+                                    </FormLabel>
+                                </FormItem>
+
+                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                    <FormControl>
+                                        <RadioGroupItem value="ChangeOfDonation" />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                        Change of donation details
+                                    </FormLabel>
+                                </FormItem>
+
+                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                    <FormControl>
+                                        <RadioGroupItem value="FailedToAppear" />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                        Failed to appear without prior notice
+                                    </FormLabel>
+                                </FormItem>
+
+                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                    <FormControl>
+                                        <RadioGroupItem value="Others" />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                        Others
+                                    </FormLabel>
+                                </FormItem> */}
+                            </RadioGroup>
+                            {selectReasonError && (
+                                <h1 className="text-red-500 text-xs text-center mt-3">*Select reason first!</h1>
+                            )}
+
+                            <Button  className=' bg-primary-green hover:bg-primary-green/80' onClick={()=>onSubmit(tradeId)} isLoading={isLoading}>Submit</Button>
+                        </DialogContent>
+                    </Dialog>
+
                     <AlertDialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
                         {/* <AlertDialogTrigger>Confirm Report</AlertDialogTrigger> */}
                         <AlertDialogContent>
@@ -660,45 +837,6 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>
-
-                    <AlertDialog open={isRejectOpen} onOpenChange={setIsRejectOpen}>
-                        {/* <AlertDialogTrigger>Reject Report</AlertDialogTrigger> */}
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>Are you sure you want to cancel the transaction?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    Note: Once confirmed, this action cannot be undone.
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                    className='bg-[#00B207] hover:bg-[#00B207]/80'
-                                    onClick={
-                                        async () => {
-                                            startTransition(() => {
-                                                // handleTrade("CANCELLED", tradeId, tradeeId, traderId, tradeeQty, traderQty, postId, traderSubcategory, tradeeSubcategory).then((callback) => {
-                                                //     if (callback?.error) {
-                                                //         toast({
-                                                //             description: callback.error,
-                                                //             variant: "destructive"
-                                                //         })
-                                                //     }
-
-                                                //     if (callback?.success) {
-                                                //         toast({
-                                                //             description: callback.success
-                                                //         })
-                                                //     }
-                                                // })
-                                            })
-                                        }
-                                    }
-                                >Continue</AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
-
 
                     <Dialog open={isProofOpen} onOpenChange={setIsProofOpen}>
                         <DialogContent className="lg:max-w-2xl">

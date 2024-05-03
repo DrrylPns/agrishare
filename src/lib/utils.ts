@@ -10,6 +10,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export const reasons = [
+ { value:"NotAvailable",label:" Not availble on the given time."}, {value:"ChangeOfMind",label:"Change of mind"}, {value:"ChangeOfTrade",label:"Change of trade details"}, {value:"FailedToAppear",label:"Failed to appear without prior notice"}, {value:"Others",label:"Others"}
+]
+
 export const categories = [
   {
     value: "DONATOR",
