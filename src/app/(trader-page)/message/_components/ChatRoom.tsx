@@ -43,7 +43,7 @@ import {
 import { ImageDownIcon, ImagePlus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState, useTransition } from "react";
-import { ChatRoomWithMessages, UserWithMessages } from "@/lib/types";
+import { ChatRoomWithMessages, ChatRoomWithMessagesAndParticipants, UserWithMessages } from "@/lib/types";
 import { deleteMessage, fetchMessages, fetchUsers, inspectChatRoom, sendMessage } from "../../../../../actions/chat";
 import { toast } from "@/components/ui/use-toast";
 // import {
@@ -66,11 +66,14 @@ export const ChatRoom = ({ chatroom, userId }: Props) => {
   const endOfMessagesRef = useRef<HTMLDivElement>(null);
   const [imageUrl, setImageUrl] = useState<string>("");
   const [isPending, startTransition] = useTransition();
+  const [userSearch, setUserSearch] = useState("")
 
-  const { data: users, isError, isLoading } = useQuery({
+  const { data: users, isError, isLoading, refetch } = useQuery({
     queryKey: ["users"],
-    queryFn: async () => await fetchUsers() as UserWithMessages[]
-  })
+    queryFn: async () => await fetchUsers(userSearch) as ChatRoomWithMessagesAndParticipants[],
+    refetchInterval: 2 * 1000,
+    staleTime: 2 * 1000,
+  });
 
   const {
     data: messages,
@@ -153,23 +156,47 @@ export const ChatRoom = ({ chatroom, userId }: Props) => {
             <h2 className="text-xl font-bold">Messages</h2>
           </div>
 
+          <div className="flex w-full max-w-sm items-center space-x-2">
+            <Input type="text" placeholder="Search users" value={userSearch} onChange={(e) => setUserSearch(e.target.value)} />
+            <Button
+              type="submit"
+              disabled={isPending}
+              onClick={() => {
+                startTransition(() => {
+                  fetchUsers(userSearch).then((callback) => {
+                    refetch()
+                  })
+                })
+              }}
+            >
+              Search
+            </Button>
+          </div>
+
           {users?.map((user) => {
+
+            const otherParticipant = user.participants?.find(participant => participant.id !== userId)
+
             return (
               // <div className="space-y-2" key={user.id}>
-              <Card
-                key={user.id}
-                className="p-6 cursor-pointer"
-                onClick={() => {
-                  inspectChatRoom(user.id);
-                }}
-              >
+              <Card className="p-2 cursor-pointer border-lime-500" onClick={() => {
+                {
+                  userSearch ?
+                    inspectChatRoom(user?.id as string)
+                    :
+                    inspectChatRoom(otherParticipant?.id as string)
+                }
+              }}>
                 {/* AVATAR OF COMMUNITY HINGIN NLNG IMAGE LOGO NG MGA COMMUNITY TAS GAWA AVATAR COMPONENT */}
-                <CardContent className="flex items-center justify-center gap-1 p-0">
+                <CardContent>
                   {/* <UserAvatar user={user} /> */}
                   <div className="flex flex-col justify-center">
-                    <h3 className="font-semibold">
-                      {user.name} {user.lastName}
-                    </h3>
+                    {userSearch ? (
+                      //@ts-ignore
+                      <h3 className="font-semibold">{user.name} {" "} {user.lastName}</h3>
+                    ) : (
+                      <h3 className="font-semibold">{otherParticipant?.name} {" "} {otherParticipant?.lastName}</h3>
+                    )}
                     {/* <p className="text-xs text-zinc-500 dark:text-zinc-400">
                                             {lastMessage ? lastMessage.content : 'No messages yet'}
                                             No messages yet
@@ -494,6 +521,7 @@ export const ChatRoom = ({ chatroom, userId }: Props) => {
                   if (callback.success) {
                     setContent("");
                     setImageUrl("");
+                    refetch();
                     queryClient.invalidateQueries({
                       queryKey: ["messages", chatroom.id],
                     });

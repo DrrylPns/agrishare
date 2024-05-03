@@ -15,8 +15,8 @@ const MessagePage = async () => {
     })
 
     return (
-        <div>
-            <ChatComponent user={user!} />
+        <div className='w-full p-3'>
+            <ChatComponent currentUser={user!} />
         </div>
     )
 }
