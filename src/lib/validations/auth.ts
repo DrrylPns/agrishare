@@ -64,6 +64,14 @@ export const RegisterSchema = z.object({
     terms: z.literal(true, {
         errorMap: () => ({ message: "You must accept Terms and Conditions" }),
     }),
+    companyName: z.string().optional(),
+    address: z.string().min(2, { message: "Address should be valid." }).max(255, { message: "Address is too long." }),
+    // brgy: z.string(),
+    // country: z.string(),
+    // state: z.string(),
+    // district: z.string(),
+    // city: z.string(),
+    zip: z.string().min(4, { message: "Invalid zip code." }).max(4, { message: "Invalid zip code." }),
 }).refine(data => data.password === data.confirmPassword, {
     message: "Password does not match",
     path: ["confirmPassword"],

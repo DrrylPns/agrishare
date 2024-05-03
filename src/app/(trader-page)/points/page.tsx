@@ -31,7 +31,7 @@ const page = async () => {
         <p className='font-extrabold text-[24px]'>{pts}</p>
       </div>
 
-      <Dialog>
+      {/* <Dialog>
         <DialogTrigger className='absolute top-5 right-0 mr-5'>
           <Info />
         </DialogTrigger>
@@ -49,11 +49,6 @@ const page = async () => {
                 Engaging in trading activities can also earn you points, and the basis for your accumulated points will depend on the quantity or kilograms of the items you trade with other agrizens.
               </div>
 
-              {/* <div className='text-muted-foreground flex md:flex-row flex-col md:gap-5 lg:gap-7 items-center justify-center gap-0'>
-                <Image src="/images/WaysToEarn3.png" alt='ways2earn3' width={100} height={100} className='w-[40px] h-[40px] md:w-[100px] md:h-[100px]' />
-                You can accumulate points not just through trading and donations; your best chance to earn points is by browsing today's news!
-              </div> */}
-
               <div className='text-muted-foreground flex md:flex-row flex-col md:gap-5 lg:gap-7 items-center justify-center gap-0'>
                 <Image src="/images/WaysToEarn4.png" alt='ways2earn4' width={100} height={100} className='w-[40px] h-[40px] md:w-[100px] md:h-[100px]' />
                 Now that your account is verified, unlocking additional features is not the only benefit; you also have the opportunity to earn points. What a fantastic way to kick off your journey as an Agritizens!
@@ -63,7 +58,7 @@ const page = async () => {
             </DialogDescription>
           </DialogHeader>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
 
       <div className={`bg-[url(https://utfs.io/f/6cab600f-5d4b-4c30-94da-7af722f07000-cm65r5.png)] bg-no-repeat h-[400px] relative flex flex-col gap-[40px]`}>
         <div className='flex flex-col justify-start items-center w-full gap-3'>
