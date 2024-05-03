@@ -472,8 +472,10 @@ model Donation {
   donator   User   @relation(fields: [donatorId], references: [id], onDelete: Cascade)
   donatorId String
 
-  Community   Community? @relation(fields: [communityId], references: [id], onDelete: Cascade)
-  communityId String?
+  Community     Community?   @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  communityId   String?
+  Coordinates   Coordinates? @relation(fields: [coordinatesId], references: [id])
+  coordinatesId String?
 }
 
 enum CancelType {
@@ -601,4 +603,6 @@ model Coordinates {
   name String @unique
   lat  Float
   lang Float
+
+  donations Donation[]
 }
