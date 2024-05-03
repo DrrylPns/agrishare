@@ -21,7 +21,6 @@ import { UploadDropzone } from "@/lib/uploadthing"
 import { handleTradeProof } from "../../../../../actions/trade"
 import { conditionRates, formattedSLU, reasons } from "@/lib/utils"
 import { RadioGroup } from "@headlessui/react"
-import { CancelTradeSchema, FormType } from "@/lib/validations/trade"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
@@ -419,48 +418,6 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                 })
             }
 
-            
-            const form = useForm<z.infer<typeof CancelTradeSchema>>({
-                resolver: zodResolver(CancelTradeSchema),
-            })
-
-            const { mutate: handleCancel, isLoading } = useMutation({
-                mutationFn: async ({ tradeId, type }: FormType) => {
-                    const payload: FormType = {
-                        tradeId,
-                        type,
-                    }
-                    const { data } = await axios.put("/api/trade/cancel", payload)
-                    return data
-                },
-                onError: (err) => {
-                    if (err instanceof AxiosError) {
-                        if (err.response?.status === 404) {
-                            toast({
-                                description: "No transaction found!",
-                                variant: 'destructive',
-                            })
-                        }
-                    } else {
-                        return toast({
-                            title: 'Something went wrong.',
-                            description: "Error",
-                            variant: 'destructive',
-                        })
-                    }
-                },
-                onSuccess: (data) => {
-                    toast({
-                        description: `Successfully cancelled the transaction.`,
-                        variant: 'default',
-                    })
-        
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 1000)
-                }
-            })
-            console.log(selectedReason)
             const onSubmit = async(tradeId: string) => {
                 const cancelTrade = await axios.post("/api/trade/cancel", {tradeId, selectedReason}).then((data)=>{
                     toast({
@@ -796,7 +753,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                 <h1 className="text-red-500 text-xs text-center mt-3">*Select reason first!</h1>
                             )}
 
-                            <Button  className=' bg-primary-green hover:bg-primary-green/80' onClick={()=>onSubmit(tradeId)} isLoading={isLoading}>Submit</Button>
+                            <Button  className=' bg-primary-green hover:bg-primary-green/80' onClick={()=>onSubmit(tradeId)}>Submit</Button>
                         </DialogContent>
                     </Dialog>
 
