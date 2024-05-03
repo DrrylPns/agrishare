@@ -20,6 +20,7 @@ import { toast } from "@/components/ui/use-toast"
 import { ChangePasswordSchema, ChangePasswordType } from "@/lib/validations/user-settings"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
+import usePasswordToggle from "@/lib/hooks/usePasswordToggle"
 
 type PasswordSettingsProps = {
     user: User
@@ -27,6 +28,9 @@ type PasswordSettingsProps = {
 
 export const PasswordSettings: React.FC<PasswordSettingsProps> = ({ user }) => {
     const [isEdit, setIsEdit] = useState<boolean>(false)
+    const [CurrentPasswordInputType, CurrentToggleIcon] = usePasswordToggle();
+    const [NewPasswordInputType, NewToggleIcon] = usePasswordToggle();
+    const [ConfirmPasswordInputType, ConfirmToggleIcon] = usePasswordToggle();
 
     const form = useForm<ChangePasswordType>({
         resolver: zodResolver(ChangePasswordSchema),
@@ -124,7 +128,13 @@ export const PasswordSettings: React.FC<PasswordSettingsProps> = ({ user }) => {
                                 <FormItem>
                                     <FormLabel>Current Password</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Enter Password..." {...field} type="password" disabled={!isEdit} />
+                                        <Input
+                                            placeholder="Enter Password..."
+                                            {...field}
+                                            disabled={!isEdit}
+                                            type={CurrentPasswordInputType as string}
+                                            ToggleIcon={CurrentToggleIcon}
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -140,7 +150,13 @@ export const PasswordSettings: React.FC<PasswordSettingsProps> = ({ user }) => {
                                 <FormItem>
                                     <FormLabel>New Password</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Enter Password..." {...field} type="password" disabled={!isEdit} />
+                                        <Input
+                                            placeholder="Enter Password..."
+                                            {...field}
+                                            disabled={!isEdit}
+                                            type={NewPasswordInputType as string}
+                                        />
+                                        ToggleIcon={NewToggleIcon}
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -156,7 +172,13 @@ export const PasswordSettings: React.FC<PasswordSettingsProps> = ({ user }) => {
                                 <FormItem>
                                     <FormLabel>Confirm New Password</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Enter Password..." {...field} type="password" disabled={!isEdit} />
+                                        <Input
+                                            placeholder="Enter Password..."
+                                            {...field}
+                                            disabled={!isEdit}
+                                            type={ConfirmPasswordInputType as string}
+                                            ToggleIcon={ConfirmToggleIcon}
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
