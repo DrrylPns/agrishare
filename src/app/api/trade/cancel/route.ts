@@ -3,7 +3,6 @@ import { auth } from "../../../../../auth";
 import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { CancelTradeSchema } from "@/lib/validations/trade";
 import { CancelType } from "@prisma/client";
 
 export async function POST(req: Request) {
