@@ -1,4 +1,4 @@
-import { AgriChange, Agriquest, Category, ClaimStatus, DonationStatus, NotificationType, Post, Prisma, Role, Status, StatusType, Subcategory, TransactionType, Types, User } from "@prisma/client";
+import { AgriChange, Agriquest, Category, ClaimStatus, Donation, DonationStatus, Issue, NotificationType, Post, Prisma, Role, Status, StatusType, Subcategory, Trade, TransactionType, Types, User } from "@prisma/client";
 
 export interface Posts {
     id: string;
@@ -52,6 +52,18 @@ export interface TradeWithTradeeTraders {
     tradee: User;
     post: Post;
 }
+
+export interface ReportTypes {
+    id:string 
+    postId: string|null
+    post: Posts
+    userId: string|null
+    reportedBy: User
+    issue:Issue
+    createdAt: Date        
+    updatedAt: Date       
+}
+
 
 interface UserHardCoded {
     id: string;

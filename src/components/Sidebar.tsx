@@ -4,7 +4,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { Cog, LayoutDashboard, LogOutIcon, MapPinned, Settings, TicketIcon, TreePine, UserPlus, UsersIcon } from 'lucide-react'
+import { Cog, Flag, LayoutDashboard, LogOutIcon, MapPinned, Settings, TicketIcon, TreePine, UserPlus, UsersIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FiRefreshCw } from 'react-icons/fi'
@@ -103,6 +103,10 @@ export const Sidebar = () => {
                         <Link href="add-agrimaps" className={`w-full flex items-center space-x-2 py-2 px-2 rounded-lg ${url === "add-agrimaps" ? "bg-[#00B207] hover:bg-[#00B207]/80 text-white" : "hover:bg-gray-200 text-gray-500"}`}>
                             <MapPinned className="w-4 h-4" />
                             <span className="text-sm font-medium">Agrimaps</span>
+                        </Link>
+                        <Link href="reports" className={`w-full flex items-center space-x-2 py-2 px-2 rounded-lg ${url === "reports" ? "bg-[#00B207] hover:bg-[#00B207]/80 text-white" : "hover:bg-gray-200 text-gray-500"}`}>
+                            <Flag  className="w-4 h-4" />
+                            <span className="text-sm font-medium">Reports</span>
                         </Link>
 
                     </nav>

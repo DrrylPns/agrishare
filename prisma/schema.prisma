@@ -72,9 +72,9 @@ model User {
   AgriChange            AgriChange[]
   claimedAgrichange     Claim[]
   requests              Request[]
-
   createdAgriquests Agriquest[] @relation("CreatedBy")
   claimedAgriquests Agriquest[] @relation("Claimed")
+  report Report[]
 
   // chatroomUser1 ChatRoom[] @relation("ChatroomUser1")
   // chatroomUser2 ChatRoom[] @relation("ChatroomUser2")
@@ -208,6 +208,8 @@ model Post {
 
   User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
+
+  report      Report[]
 }
 
 enum ShelfLifeUnit {
@@ -471,7 +473,6 @@ model Donation {
 
   donator   User   @relation(fields: [donatorId], references: [id], onDelete: Cascade)
   donatorId String
-
   Community     Community?   @relation(fields: [communityId], references: [id], onDelete: Cascade)
   communityId   String?
   Coordinates   Coordinates? @relation(fields: [coordinatesId], references: [id])
@@ -546,6 +547,7 @@ model Trade {
   updatedAt           DateTime     @updatedAt
   cancelType          CancelType?
   // yung nag post, pwede ma-fetch dito yung pinost na product
+
   tradeeId String
   tradee   User   @relation(fields: [tradeeId], references: [id], onDelete: Cascade, name: "Tradee")
 
@@ -565,6 +567,44 @@ enum StatusType {
   CANCELLED
 }
 
+model Report {
+  id        String           @id @default(cuid())
+  reportType ReportType
+
+  postId          String?
+  post            Post?  @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId String?
+  reportedBy  User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  issue   Issue
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  
+
+  // trade   Trade?   @relation(fields: [tradeId], references: [id], onDelete: Cascade, name: "Trade")
+  // tradeId String?
+  // post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade, name: "Post")
+  // postId String?
+  // donation   Donation?   @relation(fields: [donationId], references: [id], onDelete: Cascade, name: "Donation")
+  // donationId String?
+  
+}
+
+enum ReportType {
+  TRADER
+  DONATION
+  POST
+}
+
+enum Issue {
+  InnapropirateImage
+  DisrespecfulPost
+  WrongInformation
+  GraphicViolence
+  Harassment
+  Bullying
+  Others
+}
 model Notification {
   id        String           @id @default(cuid())
   type      NotificationType @default(PENDING)
