@@ -75,6 +75,7 @@ model User {
   createdAgriquests     Agriquest[]            @relation("CreatedBy")
   claimedAgriquests     Agriquest[]            @relation("Claimed")
   report                Report[]
+  isBanned              Boolean                @default(false)
 
   // chatroomUser1 ChatRoom[] @relation("ChatroomUser1")
   // chatroomUser2 ChatRoom[] @relation("ChatroomUser2")

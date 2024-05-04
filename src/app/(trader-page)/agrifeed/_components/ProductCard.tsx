@@ -36,6 +36,17 @@ import UpdateAgrifeedForm from "./UpdateAgrifeedForm";
 import RelativeDate from "@/components/RelativeDate";
 import { TiMessages } from "react-icons/ti";
 import { inspectChatRoom } from "../../../../../actions/chat";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useMutation } from "@tanstack/react-query";
+import { CancelDonationSchema, FormType } from "@/lib/validations/donation";
+import axios, { AxiosError } from "axios";
+import { AgrifeedReportSchema, AgrifeedReportType } from "@/lib/validations/agrifeed";
+import { Issue } from "@prisma/client";
 
 
 function ProductCard({
@@ -65,51 +76,120 @@ function ProductCard({
 }) {
     const { data: session } = useSession()
     const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [isReportOpen, setIsReportOpen] = useState<boolean>(false)
     const [isUpdateOpen, setIsUpdateOpen] = useState<boolean>(false)
     const [isPending, startTransition] = useTransition()
 
     const formattedShelfLifeUnit = formattedSLU(product.shelfLifeDuration, product.shelfLifeUnit)
 
+    const form = useForm<z.infer<typeof AgrifeedReportSchema>>({
+        resolver: zodResolver(AgrifeedReportSchema),
+    })
+
+    const { mutate: handleReport, isLoading } = useMutation({
+        mutationFn: async ({ postId, type }: AgrifeedReportType) => {
+            const payload: AgrifeedReportType = {
+                postId,
+                type,
+            }
+            const { data } = await axios.post("/api/agrifeedPost/report", payload)
+            return data
+        },
+        onError: (err) => {
+            if (err instanceof AxiosError) {
+                if (err.response?.status === 404) {
+                    toast({
+                        description: "No Post found!",
+                        variant: 'destructive',
+                    });
+                } else if (err.response?.status === 401) {
+                    // Display the error message returned from the server
+                    toast({
+                        description: err.response.data,
+                        variant: 'destructive',
+                    });
+                }
+            } else {
+                return toast({
+                    title: 'Something went wrong.',
+                    description: "Error",
+                    variant: 'destructive',
+                });
+            }
+        },
+        onSuccess: (data) => {
+            if(data === 'You already reported this post!'){
+                toast({
+                    description: data,
+                    variant: 'destructive',
+                })
+            }
+            toast({
+                description: `Successfully report the post.`,
+                variant: 'default',
+            })
+
+            setTimeout(() => {
+                window.location.reload()
+            }, 1000)
+        }
+    })
+    
+    function onSubmit(values: AgrifeedReportType, postId: string) {
+        const payload: AgrifeedReportType = {
+            postId: postId,
+            type: values.type as Issue,
+        }
+
+        handleReport(payload)
+    }
+
+
     return (
         <Card className='transition-all duration-700 ease-in-out border-gray-400 border p-5 sm:p-10 rounded-2xl drop-shadow-md hover:drop-shadow-md hover:shadow-xl font-poppins'>
 
             <div className='flex justify-between'>
-                <div className="flex justify-between w-full">
+                <div className="flex justify-between w-full pr-10">
                     <CardTitle className='text-xl sm:text-4xl font-semibold'>{name} {" "} {lastName}</CardTitle>
                     <h1 className='text-[0.6rem] sm:text-sm text-gray-700 my-1 sm:my-3'><span className='text-gray-500'><RelativeDate dateString={product.createdAt.toString()}/></span></h1>
                 </div>
+                <DropdownMenu>
+                    <DropdownMenuTrigger>
+                        <MoreHorizontalIcon className="h-4 w-4" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                    {session?.user.id === user.id && (
+                        <>
+                            <DropdownMenuItem
+                                className='cursor-pointer'
+                                onClick={() => setIsUpdateOpen(true)}
+                            >
+                                Edit
+                            </DropdownMenuItem>
 
-                {session?.user.id === user.id && (
-                    <>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger>
-                                <MoreHorizontalIcon className="h-4 w-4" />
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-
-                                <DropdownMenuItem
-                                    className='cursor-pointer'
-                                    onClick={() => setIsUpdateOpen(true)}
-                                >
-                                    Edit
-                                </DropdownMenuItem>
-
-                                <DropdownMenuItem
-                                    className='cursor-pointer text-rose-500'
-                                    onClick={() => setIsOpen(true)}
-                                >
-                                    Delete
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                        <UpdateAgrifeedForm
-                            product={product}
-                            isUpdateOpen={isUpdateOpen}
-                            setIsUpdateOpen={setIsUpdateOpen}
-                        />
-                    </>
-                )}
-
+                            <DropdownMenuItem
+                                className='cursor-pointer text-rose-500'
+                                onClick={() => setIsOpen(true)}
+                            >
+                                Delete
+                            </DropdownMenuItem>
+                        </>
+                    )}
+                    {session?.user.id !== user.id && (
+                        <DropdownMenuItem
+                            className='cursor-pointer text-rose-500'
+                            onClick={() => setIsReportOpen(true)}
+                        >
+                            Report
+                        </DropdownMenuItem>
+                    )}
+                    </DropdownMenuContent>
+                </DropdownMenu>
+                <UpdateAgrifeedForm
+                    product={product}
+                    isUpdateOpen={isUpdateOpen}
+                    setIsUpdateOpen={setIsUpdateOpen}
+                />
                 <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
                     <AlertDialogContent>
                         <AlertDialogHeader>
@@ -145,6 +225,100 @@ function ProductCard({
                     </AlertDialogContent>
                 </AlertDialog>
 
+                <Dialog open={isReportOpen} onOpenChange={setIsReportOpen}>
+                        <DialogContent>
+                            <DialogHeader className='flex flex-col items-start gap-1'>
+                                <DialogTitle>Why are you reporting this trader?</DialogTitle>
+                                <DialogDescription className="w-full">
+                                    Please provide a reason for the reporting. This will help our admin validate your report.
+                                </DialogDescription>
+                            </DialogHeader>
+
+                            <Form {...form}>
+                                <form onSubmit={form.handleSubmit((values) => onSubmit(values,id))} className="w-2/3 space-y-6">
+                                    <FormField
+                                        control={form.control}
+                                        name="type"
+                                        render={({ field }) => (
+                                            <FormItem className="space-y-3">
+                                                <FormLabel className='font-bold'>Reason</FormLabel>
+                                                <FormControl>
+                                                    <RadioGroup
+                                                        onValueChange={field.onChange}
+                                                        defaultValue={field.value}
+                                                        className="flex flex-col space-y-1"
+                                                    >
+                                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                                            <FormControl>
+                                                                <RadioGroupItem value="InnapropirateImage" />
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal">
+                                                                Innapropirate Image
+                                                            </FormLabel>
+                                                        </FormItem>
+
+                                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                                            <FormControl>
+                                                                <RadioGroupItem value="DisrespecfulPost" />
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal">
+                                                                Disrespecful Post
+                                                            </FormLabel>
+                                                        </FormItem>
+
+                                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                                            <FormControl>
+                                                                <RadioGroupItem value="WrongInformation" />
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal">
+                                                                Wrong Information
+                                                            </FormLabel>
+                                                        </FormItem>
+
+                                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                                            <FormControl>
+                                                                <RadioGroupItem value="GraphicViolence" />
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal">
+                                                                Graphic Violence
+                                                            </FormLabel>
+                                                        </FormItem>
+
+                                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                                            <FormControl>
+                                                                <RadioGroupItem value="Harassment" />
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal">
+                                                                Harassment
+                                                            </FormLabel>
+                                                        </FormItem>
+                                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                                            <FormControl>
+                                                                <RadioGroupItem value="Bullying" />
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal">
+                                                                Bullying
+                                                            </FormLabel>
+                                                        </FormItem>
+                                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                                            <FormControl>
+                                                                <RadioGroupItem value="Others" />
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal">
+                                                                Others
+                                                            </FormLabel>
+                                                        </FormItem>
+                                                    </RadioGroup>
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <Button type="submit" className=' bg-primary-green hover:bg-primary-green/80' isLoading={isLoading}>Submit</Button>
+                                </form>
+                            </Form>
+                        </DialogContent>
+                    </Dialog>
             </div>
 
             <div className='flex justify-around gap-5 mt-5'>

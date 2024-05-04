@@ -48,7 +48,7 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
             </div>
         },
     },
-    {
+    { 
         accessorKey: "product",
         header: ({ column }) => {
             return (
