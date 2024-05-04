@@ -75,6 +75,7 @@ model User {
   createdAgriquests Agriquest[] @relation("CreatedBy")
   claimedAgriquests Agriquest[] @relation("Claimed")
   report Report[]
+  isBanned          Boolean   @default(false)
 
   // chatroomUser1 ChatRoom[] @relation("ChatroomUser1")
   // chatroomUser2 ChatRoom[] @relation("ChatroomUser2")
@@ -605,6 +606,7 @@ enum Issue {
   Bullying
   Others
 }
+
 model Notification {
   id        String           @id @default(cuid())
   type      NotificationType @default(PENDING)

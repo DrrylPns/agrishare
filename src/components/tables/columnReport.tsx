@@ -82,12 +82,12 @@ export const columnReport: ColumnDef<ReportTypes>[] = [
             )
         },
         cell: ({ row }) => {
-            const item = row.original.post.name
+            const reason = row.original.issue
 
             return <div
                 className=""
             >
-                {item}
+                {formatedReason(reason)}
             </div>
         },
     },

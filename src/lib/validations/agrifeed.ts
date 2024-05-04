@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { Subcat } from "../utils";
+import { Issue, ReportType } from "@prisma/client";
 
 export type AgrifeedType = z.infer<typeof AgrifeedSchema>
 
@@ -28,4 +29,15 @@ export const AgrifeedSchema = z.object({
     harvestDate: z.coerce.date().optional(),
     preferedOffers: z.string().min(2, { message: "Preferred Offer should be valid." }),
     size: z.optional(z.string()),
+})
+
+
+export type AgrifeedReportType = z.infer<typeof AgrifeedReportSchema>
+
+export const AgrifeedReportSchema = z.object({
+    postId: z.optional(z.string()),
+    type: z.nativeEnum(Issue, {
+        required_error: "You need to select a reason for reporting this post.",
+    }),
+    
 })
