@@ -32,6 +32,19 @@ export const formatedReason = (reason:string)=>{
       return "Invalid Reason"
   }
 } 
+export const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      timeZone: 'UTC' // Specify the timezone if necessary
+  };
+  return date.toLocaleString('en-US', options);
+};
 export const categories = [
   {
     value: "DONATOR",

@@ -18,6 +18,7 @@ import { handleTrade } from "../../../actions/trade"
 import { formatedReason, formattedSLU } from "@/lib/utils"
 import Image from "next/image"
 import { UserAccountAvatar } from "../user-account-avatar"
+import { updateUserBanStatus } from "../../../actions/users"
 
 export const columnReport: ColumnDef<ReportTypes>[] = [
     {
@@ -58,7 +59,7 @@ export const columnReport: ColumnDef<ReportTypes>[] = [
         accessorKey: "tradee",
         header: ({ column }) => {
             return (
-                <DataTableColumnHeader column={column} title="Posted By:" />
+                <DataTableColumnHeader column={column} title="Reported By:" />
             )
         },
         cell: ({ row }) => {
@@ -181,29 +182,24 @@ export const columnReport: ColumnDef<ReportTypes>[] = [
                                     className='bg-[#00B207] hover:bg-[#00B207]/80'
                                     onClick={
                                         async () => {
-                                            startTransition(() => {
-                                                // if (tradeeConditionRate === null || traderConditionRate === null) {
-                                                //     toast({
-                                                //         title: "Not allowed",
-                                                //         description: "Item condition must have provided for both trader and tradee",
-                                                //         variant: "destructive"
-                                                //     })
-                                                // } else {
-                                                //     handleTrade(tradeeCalculatedPoints, traderCalculatedPoints, tradeeConditionRate, traderConditionRate, "COMPLETED", tradeId, tradeeId, traderId, tradeeQty, traderQty, postId, traderSubcategory, tradeeSubcategory).then((callback) => {
-                                                //         if (callback?.error) {
-                                                //             toast({
-                                                //                 description: callback.error,
-                                                //                 variant: "destructive"
-                                                //             })
-                                                //         }
-                                                //         if (callback?.success) {
-                                                //             toast({
-                                                //                 description: callback.success
-                                                //             })
-                                                //         }
-                                                //     })
-                                                // }
-                                            })
+                                            if(userId !== null){
+                                                updateUserBanStatus(userId).then((callback) => {
+                                                    if (callback?.error) {
+                                                        toast({
+                                                            description: callback.error,
+                                                            variant: "destructive"
+                                                        })
+                                                    }
+    
+                                                    if (callback?.success) {
+                                                        toast({
+                                                            description: callback.success,
+                                                            variant: "default",
+                                                        })
+                                                    }
+                                                })
+                                            }
+                                           
                                         }
                                     }
                                 >Continue</AlertDialogAction>

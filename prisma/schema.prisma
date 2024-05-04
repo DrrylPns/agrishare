@@ -76,7 +76,8 @@ model User {
   claimedAgriquests     Agriquest[]            @relation("Claimed")
   report                Report[]
   isBanned              Boolean                @default(false)
-
+  banUntil              DateTime?
+  banCount              Float                  @default(0)
   // chatroomUser1 ChatRoom[] @relation("ChatroomUser1")
   // chatroomUser2 ChatRoom[] @relation("ChatroomUser2")
 
