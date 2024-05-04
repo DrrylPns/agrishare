@@ -28,12 +28,13 @@ const ChatRoomPage = async ({ params }: Props) => {
         },
         include: {
             messages: true,
+            participants: true,
         }
     })
 
     return (
         <div className='pb-11 rounded-lg w-full p-3'>
-            
+
             <ChatRoom chatroom={chatroom as ChatRoomWithMessages} userId={user?.id!} />
         </div>
     )
