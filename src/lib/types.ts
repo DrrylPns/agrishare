@@ -54,14 +54,14 @@ export interface TradeWithTradeeTraders {
 }
 
 export interface ReportTypes {
-    id:string 
-    postId: string|null
+    id: string
+    postId: string | null
     post: Posts
-    userId: string|null
+    userId: string | null
     reportedBy: User
-    issue:Issue
-    createdAt: Date        
-    updatedAt: Date       
+    issue: Issue
+    createdAt: Date
+    updatedAt: Date
 }
 
 
@@ -127,17 +127,30 @@ export interface TransactionWithUserAndPost {
 }
 
 
-export interface NotificationWithUser {
-    id: string;
-    type: NotificationType;
-    isRead: boolean;
-    createdAt: Date;
-    updatedAt: Date;
-    userId: string;
-    tradeId: string;
-    user: User
-    trade: TradeWithTradersAndPost
-}
+// export interface NotificationWithUser {
+//     id: string;
+//     type: NotificationType;
+//     isRead: boolean;
+//     createdAt: Date;
+//     updatedAt: Date;
+//     userId: string;
+//     tradeId: string;
+//     user: User
+//     trade: TradeWithTradersAndPost
+// }
+
+export type NotificationWithUser = Prisma.NotificationGetPayload<{
+    include: {
+        user: true,
+        trade: {
+            include: {
+                trader: true,
+                tradee: true,
+                post: true,
+            }
+        }
+    }
+}>
 
 interface TradeWithTradersAndPost {
     id: string;

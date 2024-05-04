@@ -5,6 +5,7 @@ import { auth } from "../auth"
 import { getUserById } from "../data/user"
 import { Category, DonationStatus, Subcategory } from "@prisma/client"
 import { revalidatePath } from "next/cache"
+import { SendDonationType, sendDonationSchema } from "@/lib/validations/donation"
 
 export const fetchDonations = async () => {
     const donations = await prisma.donation.findMany({
@@ -268,4 +269,91 @@ export const handleDonationProof = async (img: string, donationId: string) => {
     }
 
     return { success: "Proof uploaded." }
+}
+
+export const findDonation = async (donationId: string) => {
+    try {
+
+        if (!donationId) return { error: "Invalid donation" }
+
+        const currentDonation = await prisma.donation.findUnique({
+            where: {
+                dn: donationId
+            }
+        })
+
+        if (!currentDonation) return { error: "Error: Can't find donation id!" }
+
+        return { currentDonation, success: "Donation Found!" }
+    } catch (error) {
+        throw new Error(error as any)
+    }
+}
+
+export const sendDonation = async (values: SendDonationType, coordinateId: string) => {
+    try {
+
+        const validatedFields = sendDonationSchema.safeParse(values)
+
+        if (!validatedFields.success) return { error: "Invalid fields" }
+
+        const {
+            dn,
+            item,
+            name,
+        } = validatedFields.data
+
+        const currentDonation = await prisma.donation.findUnique({
+            where: {
+                dn
+            },
+        })
+
+        if (!currentDonation) return { error: "Error: No donation found!" }
+
+        // instead of a specific coordinate, I want to check all coordinates if it exists already as a donation. Because the idea is
+        // 1 donation per coordinate. How can I do that?
+        const existingCoordinate = await prisma.coordinates.findFirst({
+            where: {
+                donations: {
+                    some: {
+                        dn
+                    }
+                }
+            },
+        })
+
+        if (existingCoordinate) {
+            return { error: "Error: This donation has already been sent to an urban farm!" };
+        }
+
+        const successfulDonation = await prisma.coordinates.update({
+            where: {
+                id: coordinateId
+            },
+            data: {
+                donations: {
+                    connect: {
+                        dn
+                    }
+                }
+            }
+        })
+
+        //create a notification for the user who donated, kung saan napunta
+
+        if (successfulDonation) {
+            await prisma.notification.create({
+                data: {
+                    type: "DONATIONARRIVED",
+                    userId: currentDonation.donatorId,
+                    urbanFarmName: successfulDonation.name,
+                }
+            })
+        }
+
+        return { success: "Donation sent" }
+    } catch (error) {
+        throw new Error(error as any)
+    }
 }

@@ -6,6 +6,7 @@ import { UrbanFarmList } from './_components/UrbanFarmList';
 
 const AddAgrimapsPage = async () => {
     const coordinates = await prisma.coordinates.findMany();
+    
     return (
         <div className='h-full'>
             <AdminTitle entry='7' title='Agrimaps' />

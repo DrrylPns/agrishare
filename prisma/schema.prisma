@@ -72,9 +72,9 @@ model User {
   AgriChange            AgriChange[]
   claimedAgrichange     Claim[]
   requests              Request[]
-  createdAgriquests Agriquest[] @relation("CreatedBy")
-  claimedAgriquests Agriquest[] @relation("Claimed")
-  report Report[]
+  createdAgriquests     Agriquest[]            @relation("CreatedBy")
+  claimedAgriquests     Agriquest[]            @relation("Claimed")
+  report                Report[]
 
   // chatroomUser1 ChatRoom[] @relation("ChatroomUser1")
   // chatroomUser2 ChatRoom[] @relation("ChatroomUser2")
@@ -209,7 +209,7 @@ model Post {
   User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
-  report      Report[]
+  report Report[]
 }
 
 enum ShelfLifeUnit {
@@ -471,8 +471,8 @@ model Donation {
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 
-  donator   User   @relation(fields: [donatorId], references: [id], onDelete: Cascade)
-  donatorId String
+  donator       User         @relation(fields: [donatorId], references: [id], onDelete: Cascade)
+  donatorId     String
   Community     Community?   @relation(fields: [communityId], references: [id], onDelete: Cascade)
   communityId   String?
   Coordinates   Coordinates? @relation(fields: [coordinatesId], references: [id])
@@ -568,18 +568,17 @@ enum StatusType {
 }
 
 model Report {
-  id        String           @id @default(cuid())
+  id         String     @id @default(cuid())
   reportType ReportType
 
-  postId          String?
-  post            Post?  @relation(fields: [postId], references: [id], onDelete: Cascade)
-  userId String?
-  reportedBy  User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId     String?
+  post       Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId     String?
+  reportedBy User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  issue   Issue
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
-  
+  issue     Issue
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // trade   Trade?   @relation(fields: [tradeId], references: [id], onDelete: Cascade, name: "Trade")
   // tradeId String?
@@ -587,7 +586,6 @@ model Report {
   // postId String?
   // donation   Donation?   @relation(fields: [donationId], references: [id], onDelete: Cascade, name: "Donation")
   // donationId String?
-  
 }
 
 enum ReportType {
@@ -605,12 +603,14 @@ enum Issue {
   Bullying
   Others
 }
+
 model Notification {
-  id        String           @id @default(cuid())
-  type      NotificationType @default(PENDING)
-  isRead    Boolean          @default(false)
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
+  id            String           @id @default(cuid())
+  urbanFarmName String? // optional ang pinaka use lang nito ay para sa DONATIONARRIVED
+  type          NotificationType @default(PENDING)
+  isRead        Boolean          @default(false)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -630,6 +630,7 @@ enum NotificationType {
   DONATIONPENDING // DONATION SENT
   DONATIONCANCELLED // DONATION CANCELLED BY ADMIN
   DONATIONAPPROVED // DONATION APPROVED BY ADMIN
+  DONATIONARRIVED // DONATION NAPUNTA NA SA DESIGNATED URBAN FARM
   PROCESSING // AGRICLAIM PROCESSED (DONE)
   COMPLETED // AGRICLAIM COMPLETE (DONE)
   CANCELLED // AGRICLAIM CANCELLED (DONE)

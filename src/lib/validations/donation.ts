@@ -27,3 +27,17 @@ export const CancelDonationSchema = z.object({
         required_error: "You need to select a reason for cancelling.",
     }),
 })
+
+export type SendDonationType = z.infer<typeof sendDonationSchema>
+
+export const sendDonationSchema = z.object({
+    dn: z.string({
+        required_error: "Donation ID is required!"
+    }).min(2).max(20),
+    name: z.string({
+        required_error: "Donator name is required!"
+    }).min(2).max(50),
+    item: z.string({
+        required_error: "Donation item is required!"
+    }).min(2).max(100),
+})

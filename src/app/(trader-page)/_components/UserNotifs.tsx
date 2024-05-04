@@ -120,6 +120,11 @@ export const UserNotifs = () => {
                                                         Your donation has been approved! <span className="font-bold">Click here for more information</span>
                                                     </div>
                                                 )}
+                                                {notification.type === "DONATIONARRIVED" && (
+                                                    <div>
+                                                        Your donation has been sent to {notification.urbanFarmName}! <span className="font-bold">Click here for more information</span>
+                                                    </div>
+                                                )}
                                                 {notification.type === "AGRIQUESTPENDING" && (
                                                     <div>
                                                         Your agriquest request has been sent and is pending for approval. <span className="font-bold">Click here for more information</span>
