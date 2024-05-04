@@ -46,7 +46,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { ChatRoomWithMessages, ChatRoomWithMessagesAndParticipants, UserWithMessages } from "@/lib/types";
 import { deleteMessage, fetchMessages, fetchUsers, inspectChatRoom, sendMessage } from "../../../../../actions/chat";
 import { toast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 // import {
 //   deleteMessage,
@@ -70,6 +70,9 @@ export const ChatRoom = ({ chatroom, userId }: Props) => {
   const [isPending, startTransition] = useTransition();
   const [userSearch, setUserSearch] = useState("");
   const router = useRouter()
+  const pathname = usePathname()
+
+  const currentChatroomId = pathname.replace("/message/", "")
 
   const { data: users, isError, isLoading, refetch } = useQuery({
     queryKey: ["users"],
@@ -93,6 +96,8 @@ export const ChatRoom = ({ chatroom, userId }: Props) => {
       staleTime: 4 * 1000,
     }
   );
+
+  const otherParticipant = chatroom?.participants.find(p => p.id !== userId)
 
   // useEffect(() => {
   //   pusherClient.subscribe(chatroom.id);
@@ -185,13 +190,13 @@ export const ChatRoom = ({ chatroom, userId }: Props) => {
               </Button>
             </div>
 
-            {users?.map((user) => {
+            {users?.map((user, i) => {
 
               const otherParticipant = user.participants?.find(participant => participant.id !== userId)
 
               return (
                 // <div className="space-y-2" key={user.id}>
-                <Card className="p-2 cursor-pointer border-lime-500" onClick={() => {
+                <Card className="p-2 cursor-pointer border-lime-500" key={i} onClick={() => {
                   {
                     userSearch ?
                       inspectChatRoom(user?.id as string)
@@ -222,15 +227,11 @@ export const ChatRoom = ({ chatroom, userId }: Props) => {
           </div>
         </aside>
 
+
         <section className="flex flex-col w-full">
           <header className="border-b dark:border-zinc-700 p-4">
             <h2 className="text-xl font-bold flex items-center gap-2">
-              {/* <Avatar className="relative overflow-visible w-10 h-10">
-              <span className="absolute right-0 top-0 flex h-3 w-3 rounded-full bg-green-600" />
-              <AvatarImage alt="User Avatar" src="/placeholder-avatar.jpg" />
-              <AvatarFallback>{avatarFallback}</AvatarFallback>
-            </Avatar> */}
-              {/* <div>{chatroom.community.name}</div> */}
+              {otherParticipant?.name} {" "} {otherParticipant?.lastName}
             </h2>
           </header>
           <main className="flex-1 overflow-auto p-4" onScroll={handleScroll}>
