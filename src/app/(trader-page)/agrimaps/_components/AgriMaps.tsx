@@ -105,10 +105,19 @@ export const AgriMaps = ({ coordinates }: Props) => {
                         <CardHeader>
                             <CardTitle
                                 onClick={() => setSelectedMarker(coordinate as any)}
-                                className='cursor-pointer flex flex-row gap-3 truncate text-lg'
+                                className='cursor-pointer flex flex-row justify-between gap-3 text-lg items-center w-full'
                             >
-                                <MapPin />
-                                {coordinate.name}
+                                <div className='flex flex-row gap-2 truncate'>
+                                    <MapPin />
+                                    {coordinate.name}
+                                </div>
+
+                                <div>
+                                    {
+                                        //@ts-ignore
+                                        coordinate._count?.donations
+                                    }
+                                </div>
                             </CardTitle>
                         </CardHeader>
                     </Card>

@@ -122,7 +122,7 @@ export const UserNotifs = () => {
                                                 )}
                                                 {notification.type === "DONATIONARRIVED" && (
                                                     <div>
-                                                        Your donation has been sent to {notification.urbanFarmName}! <span className="font-bold">Click here for more information</span>
+                                                        Your donation has been sent to {notification.urbanFarmName}!
                                                     </div>
                                                 )}
                                                 {notification.type === "AGRIQUESTPENDING" && (

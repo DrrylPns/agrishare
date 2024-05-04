@@ -309,10 +309,16 @@ export const sendDonation = async (values: SendDonationType, coordinateId: strin
             },
         })
 
+        if (!coordinateId) return { error: "Error: No urban farm found!" }
+
         if (!currentDonation) return { error: "Error: No donation found!" }
 
-        // instead of a specific coordinate, I want to check all coordinates if it exists already as a donation. Because the idea is
-        // 1 donation per coordinate. How can I do that?
+        if (currentDonation?.status === "CANCELLED") return { error: "Error: This donation has been cancelled by the user, you can't send it to urban farms" }
+
+        if (currentDonation?.status === "PENDING") return { error: "Error: This donation is still pending, you can't send it yet to urban farms" }
+
+        if (currentDonation?.status === "DECLINED") return { error: "Error: You already declined this donation, you can't send it to urban farms" }
+
         const existingCoordinate = await prisma.coordinates.findFirst({
             where: {
                 donations: {
@@ -335,9 +341,9 @@ export const sendDonation = async (values: SendDonationType, coordinateId: strin
                 donations: {
                     connect: {
                         dn
-                    }
-                }
-            }
+                    },
+                },
+            },
         })
 
         //create a notification for the user who donated, kung saan napunta
@@ -353,6 +359,22 @@ export const sendDonation = async (values: SendDonationType, coordinateId: strin
         }
 
         return { success: "Donation sent" }
+    } catch (error) {
+        throw new Error(error as any)
+    }
+}
+
+export const countDonations = async () => {
+    try {
+        const donationCountPerUF = await prisma.coordinates.count({
+            where: {
+                donations: {
+                    some: {}
+                }
+            }
+        })
+
+        return donationCountPerUF
     } catch (error) {
         throw new Error(error as any)
     }
