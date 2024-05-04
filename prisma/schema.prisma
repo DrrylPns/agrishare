@@ -544,7 +544,7 @@ model Trade {
   size                String?
   createdAt           DateTime     @default(now())
   updatedAt           DateTime     @updatedAt
-
+  cancelType          CancelType?
   // yung nag post, pwede ma-fetch dito yung pinost na product
   tradeeId String
   tradee   User   @relation(fields: [tradeeId], references: [id], onDelete: Cascade, name: "Tradee")
