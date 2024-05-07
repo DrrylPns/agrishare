@@ -855,7 +855,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                                                     <CheckIcon className="hidden ui-checked:block" height={20} width={20} />
                                                                     {rate === 0.5 && "Poor"}
                                                                     {rate === 1 && "Good"}
-                                                                    {rate === 1.5 && "Best"}
+                                                                    {rate === 1.5 && "Excellent"}
                                                                 </RadioGroup.Option>
                                                             ))}
                                                         </div>
