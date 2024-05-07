@@ -212,6 +212,11 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
                                     <DrawerFooter>
                                         <DrawerClose>
                                             <div className="flex flex-col gap-3 w-full items-center justify-center">
+                                                {!imageIsEmpty && (
+                                                    <Button variant="default" className="w-[320px]">
+                                                        Continue
+                                                    </Button>
+                                                )}
                                                 <Button
                                                     variant="outline"
                                                     className="w-[320px]"
