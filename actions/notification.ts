@@ -47,7 +47,7 @@ export const notificationRead = async (notificationId: string, path: string) => 
             data: { isRead: true }
         })
 
-        revalidatePath(`${path}`)
+        // revalidatePath(`${path}`)
         return { success: "Notification read." }
     }
 }

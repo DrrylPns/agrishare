@@ -533,7 +533,7 @@ model Trade {
   trd                 String       @unique
   item                String
   image               String       @db.Text
-  quantity            Float
+  quantity            Float?
   shelfLife           String?
   tradedQuantity      Float
   weight              Float
