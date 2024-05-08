@@ -51,3 +51,36 @@ export const notificationRead = async (notificationId: string, path: string) => 
         return { success: "Notification read." }
     }
 }
+
+export const fetchAdminNotifications = async () => {
+    const session = await auth()
+
+    if (!session) return { error: "Unauthorized" }
+
+    const user = await getUserById(session?.user.id)
+
+    if (!user) return { error: "No user found!" }
+
+    const notifications = await prisma.notification.findMany({
+        where: {
+            type: {
+                in: ["ADMINDONATION", "AGRICHANGE", "AGRIQUEST"]
+            }
+        },
+        include: {
+            user: true,
+            trade: {
+                include: {
+                    post: true,
+                    trader: true,
+                    tradee: true,
+                }
+            }
+        },
+        orderBy: {
+            createdAt: "desc"
+        },
+    })
+
+    return notifications
+}

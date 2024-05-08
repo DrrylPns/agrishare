@@ -27,6 +27,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Switch } from "@/components/ui/switch"
 import { useSession } from "next-auth/react"
+import { Badge } from "@/components/ui/badge"
 
 type AccountSettingsProps = {
     user?: User
@@ -115,6 +116,8 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
         updateAccount(payload)
     }
 
+    if (!user) return <>Error fetching user</>
+
     return (
         <div className="max-w-4xl mx-5 lg:mx-auto p-6 bg-white border border-[#E6E6E6] rounded-lg mb-3">
             <header className="mb-2 flex justify-between">
@@ -139,7 +142,17 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
                                 <DrawerTrigger asChild>
                                     <div className="w-full flex flex-col gap-3 justify-center items-center">
                                         {imageUrl.length ?
-                                            <div className="w-full flex items-center justify-center mt-5">
+                                            <div className="w-full flex flex-col items-center justify-center mt-5 gap-3">
+
+                                                <Badge className={cn(
+                                                    buttonVariants({
+                                                        variant: "primary"
+                                                    }),
+                                                    ""
+                                                )}>
+                                                    {user.role}
+                                                </Badge>
+
                                                 <Image
                                                     src={imageUrl}
                                                     alt="productImage"
@@ -152,7 +165,17 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
                                                 />
                                             </div>
 
-                                            : <div className="w-full flex items-center justify-center mt-5">
+                                            : <div className="w-full flex flex-col items-center justify-center mt-5 gap-3">
+
+                                                <Badge className={cn(
+                                                    buttonVariants({
+                                                        variant: "primary"
+                                                    }),
+                                                    ""
+                                                )}>
+                                                    {user.role}
+                                                </Badge>
+
                                                 <div className="rounded-full w-[110px] h-[110px] lg:w-[135px] lg:h-[135px] border-black/20 border cursor-pointer bg-gray-200 hover:bg-gray-300 flex items-center justify-center">
                                                     <ImageDown strokeWidth={1} size={32} />
                                                 </div>

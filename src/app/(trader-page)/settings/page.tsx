@@ -15,6 +15,8 @@ const SettingsPage = async () => {
         }
     })
 
+    if (!user) return <>Error Fetching User</>
+
     return (
         <main className="mt-[60px] sm:mt-0 lg:mr-[300px]">
             {/* Account Settings */}

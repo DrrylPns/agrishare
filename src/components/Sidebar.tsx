@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FiRefreshCw } from 'react-icons/fi'
 import { LogoutButton } from "./LogoutButton"
+import { AdminNotifs } from "@/app/(admin)/_components/AdminNotifs"
 
 export const Sidebar = () => {
     const pathname = usePathname()
@@ -65,8 +66,9 @@ export const Sidebar = () => {
             {/* DESKTOP NAV */}
             <div className="flex max-md:hidden">
                 <aside className="fixed top-0 h-screen w-56 bg-white text-gray-800 p-4">
-                    <div className="flex items-center mb-4 space-x-1">
+                    <div className="flex items-center mb-4 space-x-1 justify-between">
                         <h1 className="text-lg text-[#00B207] font-bold">ADMIN</h1>
+                        <AdminNotifs />
                     </div>
                     <nav className="space-y-2">
 
@@ -105,7 +107,7 @@ export const Sidebar = () => {
                             <span className="text-sm font-medium">Agrimaps</span>
                         </Link>
                         <Link href="reports" className={`w-full flex items-center space-x-2 py-2 px-2 rounded-lg ${url === "reports" ? "bg-[#00B207] hover:bg-[#00B207]/80 text-white" : "hover:bg-gray-200 text-gray-500"}`}>
-                            <Flag  className="w-4 h-4" />
+                            <Flag className="w-4 h-4" />
                             <span className="text-sm font-medium">Reports</span>
                         </Link>
 

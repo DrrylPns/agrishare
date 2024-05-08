@@ -29,8 +29,8 @@ import { auth } from "../../../../../auth"
 import { useSession } from "next-auth/react"
 
 export default function Page() {
-  const [imageUrl, setImageUrl] = useState<string>("")
-  const imageIsEmpty = imageUrl.length === 0
+  // const [imageUrl, setImageUrl] = useState<string>("")
+  // const imageIsEmpty = imageUrl.length === 0
   const [chosenCategory, setChosenCategory] = useState("")
   const [unit, setUnit] = useState("")
   const [size, setSize] = useState("")
@@ -51,7 +51,7 @@ export default function Page() {
 
   const { mutate: createPost, isLoading } = useMutation({
     mutationFn: async ({
-      image,
+      // image,
       // donatee,
       name,
       // product,
@@ -62,7 +62,7 @@ export default function Page() {
       size,
     }: DonationType) => {
       const payload: DonationType = {
-        image,
+        // image,
         // donatee,
         name,
         // product,
@@ -102,7 +102,7 @@ export default function Page() {
       name: values.name,
       // product: values.product,
       quantity: values.quantity,
-      image: imageUrl,
+      // image: imageUrl,
       category: values.category,
       subcategory: values.subcategory,
       pickUpDate: values.pickUpDate,
@@ -495,7 +495,7 @@ export default function Page() {
           <h1 className="text-center text-2xl font-semibold my-10 mt-2 md:mt-10">Acceptance</h1>
           <p className="text-xl font-poppins font-medium leading-6 mb-5 px-5 text-justify">That the Donee hereby accepts the foregoing donation from the Donor and for which he/his expresses his/her sincere appreciation and gratitude for the kindness shown by the Donor.</p>
           {/* Replace it with upload image */}
-          <div>
+          {/* <div>
             {!imageUrl.length && <h1 className="my-5">Upload Photo</h1>}
 
             {imageUrl.length ?
@@ -536,9 +536,16 @@ export default function Page() {
               </div>
             }
 
-          </div>
+          </div> */}
           <div className="text-right w-full">
-            <Button className="rounded-full text-xl font-semibold tracking-wider px-10 py-5 h-16" type="submit" disabled={imageIsEmpty || isLoading} isLoading={isLoading}>Submit</Button>
+            <Button
+              className="rounded-full text-xl font-semibold tracking-wider px-10 py-5 h-16"
+              type="submit"
+              disabled={isLoading}
+              isLoading={isLoading}
+            >
+              Submit
+            </Button>
           </div>
         </form>
       </Form>

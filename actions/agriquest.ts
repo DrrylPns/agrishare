@@ -174,6 +174,13 @@ export const claimAgriquest = async (id: string, data: DateOfPickupInAgriquestTy
                     type: "AGRIQUESTPENDING",
                 }
             })
+
+            await prisma.notification.create({
+                data: {
+                    userId: user.id,
+                    type: "AGRIQUEST",
+                }
+            })
         }
 
         revalidatePath("/agriquest")

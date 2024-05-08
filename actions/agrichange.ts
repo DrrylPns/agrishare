@@ -411,6 +411,13 @@ export const claimAgrichange = async (id: string, data: DateOfPickupInAgrichange
             }
         })
 
+        await prisma.notification.create({
+            data: {
+                type: "AGRICHANGE",
+                userId: user.id,
+            }
+        })
+
         revalidatePath("/agrichange")
         return { success: "Agrichange claiming intent is now being reviewed!" }
     } catch (error: any) {
