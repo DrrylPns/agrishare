@@ -150,6 +150,7 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
             const donatorName = row.original.donator.name
             const donatorLastName = row.original.donator.lastName
             const donatorProduct = row.original.product
+            const unit = row.original.category
             const donatoryQty = row.original.quantity
             const donationDn = row.original.dn
             const proof = row.original.proof
@@ -160,7 +161,7 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
             const donationStatus = row.original.status
             const donationId = row.original.id
             const donatorEMail = row.original.donator.email
-
+            const accumelatedPoints = row.original.pointsToGain
 
             const isImageNull = donatorImage === null;
             const imageIsEmpty = imageUrl.length === 0
@@ -308,8 +309,10 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                                             <h1>Donation Details</h1>
                                             <h1 className="text-black text-medium tex-sm">Quantity: {donationQuantity} </h1>
                                             <h1 className="text-black text-medium tex-sm">User Email: {donatorEMail}</h1>
-                                            <h1 className="text-black text-medium tex-sm">Item: {donatorProduct}</h1>
-
+                                            <h1 className="text-black text-medium tex-sm">Item: {donatorProduct}</h1>                               
+                                            <h1 className="text-black text-medium tex-sm">Unit: {unit === "FRESH_FRUIT" || unit === "VEGETABLES" ? "Kilo/s" : unit === "TOOLS" || unit === "EQUIPMENTS" ? "Piece/s" : "Pack/s"}</h1>                               
+                                            <h1 className="text-black text-medium tex-sm">ACcumulated Points: {accumelatedPoints}</h1>                               
+                                            
                                         </div>
                                         <Separator />
                                         <div className="w-full font-semibold">
