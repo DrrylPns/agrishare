@@ -208,6 +208,9 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({ user }) => {
                                             />
                                             <h1 className='mt-3 text-gray-500'>Uploaded Successfully</h1>
                                         </div> : <UploadDropzone
+                                            content={{
+                                                label: "Max 4MB (png, jpeg, svg)"
+                                            }}
                                             className="text-green"
                                             appearance={{
                                                 button: "bg-[#00B207] p-2 mb-3",

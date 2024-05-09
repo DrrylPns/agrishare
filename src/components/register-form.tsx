@@ -53,14 +53,14 @@ export const RegisterForm = () => {
   const [success, setSuccess] = useState<string | undefined>("");
   const [PasswordInputType, ToggleIcon] = usePasswordToggle();
   const [ConfirmPasswordInputType, ConfirmToggleIcon] = usePasswordToggle();
-  let countryData = Country.getAllCountries();
+  // let countryData = Country.getAllCountries();
   // let currentStateData = State.getStateByCode("NCR")
-  const [stateData, setStateData] = useState();
-  const [cityData, setCityData] = useState();
-  const [country, setCountry] = useState(countryData[173]);
-  const [state, setState] = useState<StateType>();
-  console.log(state)
-  const [city, setCity] = useState<CityType>();
+  // const [stateData, setStateData] = useState();
+  // const [cityData, setCityData] = useState();
+  // const [country, setCountry] = useState(countryData[173]);
+  // const [state, setState] = useState<StateType>();
+  // console.log(state)
+  // const [city, setCity] = useState<CityType>();
   const [district, setDistrict] = useState("")
   const [barangay, setBarangay] = useState("")
   const [isPending, startTransition] = useTransition()
@@ -68,23 +68,23 @@ export const RegisterForm = () => {
 
   const router = useRouter();
 
-  useEffect(() => {
-    //@ts-ignore
-    setStateData(State.getStatesOfCountry(country?.isoCode));
-  }, [country]);
+  // useEffect(() => {
+  //   //@ts-ignore
+  //   setStateData(State.getStatesOfCountry(country?.isoCode));
+  // }, [country]);
 
-  useEffect(() => {
-    //@ts-ignore
-    setCityData(City.getCitiesOfState(country?.isoCode, state?.isoCode));
-  }, [state]);
+  // useEffect(() => {
+  //   //@ts-ignore
+  //   setCityData(City.getCitiesOfState(country?.isoCode, state?.isoCode));
+  // }, [state]);
 
-  useEffect(() => {
-    stateData && setState(stateData[59]);
-  }, [stateData]);
+  // useEffect(() => {
+  //   stateData && setState(stateData[59]);
+  // }, [stateData]);
 
-  useEffect(() => {
-    cityData && setCity(cityData[23]);
-  }, [cityData]);
+  // useEffect(() => {
+  //   cityData && setCity(cityData[23]);
+  // }, [cityData]);
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -100,7 +100,7 @@ export const RegisterForm = () => {
     setSuccess("");
 
     startTransition(() => {
-      register(values, country.name, state?.name as string, city?.name as string, barangay, district)
+      register(values, barangay, district, "Quezon City")
         .then((data) => {
           setError(data.error);
           setSuccess(data.success);
@@ -263,7 +263,7 @@ export const RegisterForm = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-1 gap-6">
+                {/* <div className="grid grid-cols-1 gap-6">
                   <div className="">
                     <p className="font-semibold text-[14px]">Country:</p>
                     <AddressSelector data={countryData} selected={country} setSelected={setCountry} disabled={true} />
@@ -287,7 +287,21 @@ export const RegisterForm = () => {
                       <AddressSelector data={cityData} selected={city} setSelected={setCity} disabled={true} />
                     </div>
                   )}
-                </div>
+                </div> */}
+
+                <FormField
+                  control={form.control}
+                  name="address"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Address</FormLabel>
+                      <FormControl>
+                        <Input placeholder="House # & Street address" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
 
                 <div className="grid grid-cols-1 md:grid-cols-2 mt-5 gap-3">
@@ -492,19 +506,7 @@ export const RegisterForm = () => {
                   </Select>
                 </div>
 
-                <FormField
-                  control={form.control}
-                  name="address"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Address</FormLabel>
-                      <FormControl>
-                        <Input placeholder="House # & Street address" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <Input placeholder="Address" value={"Quezon City"} disabled={true} />
 
                 <FormField
                   control={form.control}

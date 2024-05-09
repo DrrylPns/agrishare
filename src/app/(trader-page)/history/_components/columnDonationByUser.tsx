@@ -1,35 +1,32 @@
 "use client"
 
-import { toast } from "@/components/ui/use-toast"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { DataTableColumnHeader } from "@/app/(admin)/users/_components/data-table-column-header"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { ColumnDef } from "@tanstack/react-table"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { toast } from "@/components/ui/use-toast"
 import { DonationWithDonators } from "@/lib/types"
-import { DataTableColumnHeader } from "@/app/(admin)/users/_components/data-table-column-header"
+import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
-import { useRef, useState, useTransition } from "react"
 import { DownloadIcon, MoreHorizontalIcon } from "lucide-react"
+import { useRef, useState, useTransition } from "react"
 // import AdminTitle from "../AdminTitle"
-import Link from "next/link"
-import html2canvas from "html2canvas"
-import { UploadDropzone } from "@/lib/uploadthing"
-import jsPDF from "jspdf"
-import { handleTradeProof } from "../../../../../actions/trade"
-import Image from "next/image"
-import { handleCancelDonation, handleDonationProof } from "../../../../../actions/donate"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { z } from "zod"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { Separator } from "@/components/ui/separator"
+import { UploadDropzone } from "@/lib/uploadthing"
+import { extractTime } from "@/lib/utils"
 import { CancelDonationSchema, FormType } from "@/lib/validations/donation"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios"
-import { Separator } from "@/components/ui/separator"
-import { extractTime } from "@/lib/utils"
+import html2canvas from "html2canvas"
+import jsPDF from "jspdf"
+import Image from "next/image"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { handleDonationProof } from "../../../../../actions/donate"
 
 // import { handleDonations } from "../../../actions/donate"
 
@@ -51,7 +48,7 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
             </div>
         },
     },
-    { 
+    {
         accessorKey: "product",
         header: ({ column }) => {
             return (
@@ -226,13 +223,13 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                         description: `Successfully cancelled the transaction.`,
                         variant: 'default',
                     })
-        
+
                     setTimeout(() => {
                         window.location.reload()
                     }, 1000)
                 }
             })
-            
+
             function onSubmit(values: FormType, donationId: string) {
                 const payload: FormType = {
                     donationId,
@@ -260,7 +257,7 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                             >
                                 Download reciept
                             </DropdownMenuItem>
-                            {proof !== null  || donationStatus === "CANCELLED" ? (
+                            {proof !== null || donationStatus === "CANCELLED" ? (
                                 null
                             ) : (
                                 <DropdownMenuItem
@@ -278,43 +275,43 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                                     Cancel
                                 </DropdownMenuItem>
                             )}
-                            
-                            
+
+
                         </DropdownMenuContent>
                     </DropdownMenu>
                     <Dialog open={isReviewOpen} onOpenChange={setIsReviewOpen}>
                         <DialogContent className="lg:max-w-5xl bg-white ui-open:bg-white">
                             <DialogHeader className="bg-white">
                                 <DialogTitle className="bg-white">
-                                    <DownloadIcon onClick={downloadPDF}/>
+                                    <DownloadIcon onClick={downloadPDF} />
                                 </DialogTitle>
                                 <DialogDescription className="bg-white">
                                     <div ref={pdfRef} className="text-lg font-bold bg-white mt-10 px-5 pb-5">
                                         <div className="text-black text-center">
-                                            <h1  className="text-2xl">Donation Receipt</h1>
-                                            <h1  className="text-xl">AgriShare : Trading-Donation</h1>
+                                            <h1 className="text-2xl">Donation Receipt</h1>
+                                            <h1 className="text-xl">AgriShare : Trading-Donation</h1>
                                         </div>
-                                        <div  className="text-black my-3">
+                                        <div className="text-black my-3">
                                             <h1>Donation ID:{donationDn}</h1>
                                         </div>
-                                        <Separator/>
+                                        <Separator />
                                         <div className="text-black my-3 font-semibold">
-                                            <h1 >Donator Details</h1> 
+                                            <h1 >Donator Details</h1>
                                             <h1 className="text-black text-medium tex-sm">User ID: {useId}</h1>
                                             {/* <h1>User Email: {donatorEmail}</h1> */}
                                             <h1 className="text-black text-medium tex-sm">Transaction Date: {format(dateDonated, "PPP")}</h1>
                                             <h1 className="text-black text-medium tex-sm">Transaction Time: {extractTime(dateDonated.toString())}</h1>
 
                                         </div>
-                                        <Separator/>
-                                        <div  className="text-black text-lg my-3 font-semibold">
-                                            <h1>Donation Details</h1> 
-                                            <h1 className="text-black text-medium tex-sm">Quantity: {donationQuantity}</h1>
+                                        <Separator />
+                                        <div className="text-black text-lg my-3 font-semibold">
+                                            <h1>Donation Details</h1>
+                                            <h1 className="text-black text-medium tex-sm">Quantity: {donationQuantity} </h1>
                                             <h1 className="text-black text-medium tex-sm">User Email: {donatorEMail}</h1>
-                                            <h1 className="text-black text-medium tex-sm">Item: {donatorProduct}</h1>                               
-                            
+                                            <h1 className="text-black text-medium tex-sm">Item: {donatorProduct}</h1>
+
                                         </div>
-                                        <Separator/>
+                                        <Separator />
                                         <div className="w-full font-semibold">
                                             <h1 className="mb-3 text-lg text-black">Transaction Terms</h1>
                                             <p className="mb-3 text-justify text-xs">This receipt serves as an acknowledgment that the item shall be held by the Center for Urban Agriculture and Innovation (CUAI), the designated entity responsible for managing donations from users of AgriShare: Donation-Trading Web Application. To avoid any potential confusion regarding the location, it is advisable to visit Agrimap for the accurate verification of CUAI's location.</p>
@@ -323,7 +320,7 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                                     </div>
                                 </DialogDescription>
                             </DialogHeader>
-                            
+
                         </DialogContent>
                     </Dialog>
 
@@ -387,6 +384,9 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                                             <h1 className='text-xl text-muted-foreground'>Image Uploaded!</h1>
                                         </div> : <UploadDropzone
                                             className="text-green"
+                                            content={{
+                                                label: "Max 4MB (png, jpeg, svg)"
+                                            }}
                                             appearance={{
                                                 button: "bg-[#00B207] p-2 mb-3",
                                                 label: "text-green",
@@ -480,7 +480,7 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                                                                 <RadioGroupItem value="ChangeOfMind" />
                                                             </FormControl>
                                                             <FormLabel className="font-normal">
-                                                               Change of mind
+                                                                Change of mind
                                                             </FormLabel>
                                                         </FormItem>
 

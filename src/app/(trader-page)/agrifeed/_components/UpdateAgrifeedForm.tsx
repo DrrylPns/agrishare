@@ -182,6 +182,9 @@ function UpdateAgrifeedForm({
                     />
                     <Button variant="outline" onClick={() => setImageUrl("")}>Change</Button>
                   </div> : <UploadDropzone
+                    content={{
+                      label: "Max 4MB (png, jpeg, svg)"
+                    }}
                     className="text-green"
                     appearance={{
                       button: "bg-[#00B207] p-2 mb-3",

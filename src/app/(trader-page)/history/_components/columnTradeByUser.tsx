@@ -418,17 +418,17 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                 })
             }
 
-            const onSubmit = async(tradeId: string) => {
-                const cancelTrade = await axios.post("/api/trade/cancel", {tradeId, selectedReason}).then((data)=>{
+            const onSubmit = async (tradeId: string) => {
+                const cancelTrade = await axios.post("/api/trade/cancel", { tradeId, selectedReason }).then((data) => {
                     toast({
                         description: `Successfully cancelled the transaction.`,
                         variant: 'default',
                     })
-        
+
                     setTimeout(() => {
                         window.location.reload()
                     }, 1000)
-                }).catch((err)=>{
+                }).catch((err) => {
                     if (err instanceof AxiosError) {
                         if (err.response?.status === 404) {
                             toast({
@@ -476,13 +476,13 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                 </DropdownMenuItem>
 
                             )}
-                            {tradeStatus === "PROCESSING" && ( 
+                            {tradeStatus === "PROCESSING" && (
                                 <DropdownMenuItem
                                     onClick={() => setIsRejectOpen(true)}
                                 >
                                     Cancel
                                 </DropdownMenuItem>
-                             )}
+                            )}
 
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -672,38 +672,38 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                 </DialogDescription>
                             </DialogHeader>
 
-                                        
+
                             <RadioGroup
                                 value={selectedReason}
-                                onChange={setSelectedReason} 
+                                onChange={setSelectedReason}
                                 className="flex flex-col space-y-1"
                             >
-                                    {reasons.map((reason) => (
-                                        // <RadioGroup.Option
-                                        //     key={reason.value}
-                                        //     value={reason.value}
-                                        //     onClick={() => setSelectReasonError(false)}
-                                        //     className="flex gap-3 items-center ui-active:whte ui-active:text-gray-700 text-sm w-24 py-1 px-2 outline-1 outline outline-gray-300 shadow-sm drop-shadow-sm  ui-not-active:bg-white ui-not-active:text-black"
-                                        // > {({ checked }) => (
-                                        //     <>
-                                        //         <span className={`${checked && 'text-green-400'}`}>
-                                        //         {checked ? <IoIosRadioButtonOn /> : <IoIosRadioButtonOff />}
-                                        //         </span>
-                                        //         {reason.label}
-                                        //     </>
-                                        //     )}
-                                        // </RadioGroup.Option>
-                                        <RadioGroup.Option onClick={() => setSelectReasonError(false)} key={reason.value} value={reason.value} className={`flex items-center font-poppins`}>
-                                            {({ checked }) => (
+                                {reasons.map((reason) => (
+                                    // <RadioGroup.Option
+                                    //     key={reason.value}
+                                    //     value={reason.value}
+                                    //     onClick={() => setSelectReasonError(false)}
+                                    //     className="flex gap-3 items-center ui-active:whte ui-active:text-gray-700 text-sm w-24 py-1 px-2 outline-1 outline outline-gray-300 shadow-sm drop-shadow-sm  ui-not-active:bg-white ui-not-active:text-black"
+                                    // > {({ checked }) => (
+                                    //     <>
+                                    //         <span className={`${checked && 'text-green-400'}`}>
+                                    //         {checked ? <IoIosRadioButtonOn /> : <IoIosRadioButtonOff />}
+                                    //         </span>
+                                    //         {reason.label}
+                                    //     </>
+                                    //     )}
+                                    // </RadioGroup.Option>
+                                    <RadioGroup.Option onClick={() => setSelectReasonError(false)} key={reason.value} value={reason.value} className={`flex items-center font-poppins`}>
+                                        {({ checked }) => (
                                             <>
                                                 <span className={`${checked && 'text-green-400'}`}>
-                                                {checked ? <IoIosRadioButtonOn /> : <IoIosRadioButtonOff />}
+                                                    {checked ? <IoIosRadioButtonOn /> : <IoIosRadioButtonOff />}
                                                 </span>
                                                 {reason.label}
                                             </>
-                                            )}
-                                        </RadioGroup.Option>
-                                    ))}
+                                        )}
+                                    </RadioGroup.Option>
+                                ))}
                                 {/* <FormItem className="flex items-center space-x-3 space-y-0">
                                     <FormControl>
                                         <RadioGroupItem value="NotAvailable" />
@@ -753,7 +753,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                 <h1 className="text-red-500 text-xs text-center mt-3">*Select reason first!</h1>
                             )}
 
-                            <Button  className=' bg-primary-green hover:bg-primary-green/80' onClick={()=>onSubmit(tradeId)}>Submit</Button>
+                            <Button className=' bg-primary-green hover:bg-primary-green/80' onClick={() => onSubmit(tradeId)}>Submit</Button>
                         </DialogContent>
                     </Dialog>
 
@@ -815,6 +815,9 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                             />
                                             <h1 className='text-xl text-muted-foreground'>Image Uploaded!</h1>
                                         </div> : <UploadDropzone
+                                            content={{
+                                                label: "Max 4MB (png, jpeg, svg)"
+                                            }}
                                             className="text-green"
                                             appearance={{
                                                 button: "bg-[#00B207] p-2 mb-3",

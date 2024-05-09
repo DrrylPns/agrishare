@@ -63,7 +63,7 @@ export default function ChatComponent({ currentUser }: Props) {
 
                         return (
                             <div className="space-y-2" key={user.id}>
-                                <Card className="p-2 cursor-pointer border-lime-500" onClick={() => {
+                                <Card className="cursor-pointer border-lime-500" onClick={() => {
                                     {
                                         userSearch ?
                                             inspectChatRoom(user?.id as string)
@@ -72,7 +72,7 @@ export default function ChatComponent({ currentUser }: Props) {
                                     }
                                 }}>
                                     {/* AVATAR OF COMMUNITY HINGIN NLNG IMAGE LOGO NG MGA COMMUNITY TAS GAWA AVATAR COMPONENT */}
-                                    <CardContent>
+                                    <CardContent className="p-2">
                                         {/* IF I SEARCH A USER THE OTHER PARTICIPANT DOESN'T EXIST, THUS WHEN I SEARCH I CAN'T SEE ANY NAME AND LAST NAME. HOW CAN I CONDITIONALLY RENDER THIS? */}
                                         {userSearch ? (
                                             //@ts-ignore

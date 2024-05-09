@@ -174,6 +174,9 @@ function Page({
                             />
                             <h1 className='mt-3 text-gray-500'>Uploaded Successfully</h1>
                         </div> : <UploadDropzone
+                            content={{
+                                label: "Max 4MB (png, jpeg, svg)"
+                            }}
                             className="text-green"
                             appearance={{
                                 button: "bg-[#099073] p-2",

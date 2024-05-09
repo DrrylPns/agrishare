@@ -11,7 +11,7 @@ import { getUserByEmail } from "../data/user";
 import prisma from "@/lib/db";
 import { generateUserId } from "@/lib/utils";
 
-export const register = async (values: z.infer<typeof RegisterSchema>, country: string, state: string, city: string, barangay: string, district: string,) => {
+export const register = async (values: z.infer<typeof RegisterSchema>, barangay: string, district: string, city: string) => {
   const validatedFields = RegisterSchema.safeParse(values);
 
   if (!validatedFields.success) {
@@ -45,8 +45,8 @@ export const register = async (values: z.infer<typeof RegisterSchema>, country: 
       email,
       hashedPassword: hashedPassword,
       lastName,
-      country,
-      state,
+      // country,
+      // state,
       city,
       brgy: barangay,
       district,
