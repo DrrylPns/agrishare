@@ -536,7 +536,7 @@ model Trade {
   quantity            Float?
   shelfLife           String?
   tradedQuantity      Float
-  weight              Float
+  weight              Float?
   value               Float?
   description         String       @db.Text
   tradeeConditionRate Float?
@@ -647,7 +647,7 @@ enum NotificationType {
 }
 
 model Coordinates {
-  id   String @id @default(cuid())  
+  id   String @id @default(cuid())
   name String @unique
   lat  Float
   lang Float

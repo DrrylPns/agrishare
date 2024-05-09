@@ -17,6 +17,26 @@ export const fetchTransaction = async () => {
     return transactions
 }
 
+export const fetchTransactionByDateRange = (startDate: Date, endDate: Date) => {
+    const transactions = prisma.transaction.findMany({
+        where: {
+            createdAt: {
+                gte: startDate, // greater than or equal to the start date
+                lte: endDate,   // less than or equal to the end date
+            }
+        },
+        include: {
+            post: true,
+            user: true,
+        },
+        orderBy: {
+            createdAt: "desc"
+        },
+    });
+
+    return transactions;
+};
+
 export const fetchTransactionByUser = async () => {
     const session = await auth()
 

@@ -1,0 +1,104 @@
+"use client"
+import { TradesWithRelations, TransactionWithRelations } from '@/app/(trader-page)/agrifeed/_components/_types'
+import AdminTitle from '@/components/AdminTitle'
+import { Button } from '@/components/ui/button'
+import { Calendar } from '@/components/ui/calendar'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { cn } from '@/lib/utils'
+import { Card } from '@tremor/react'
+import { format } from 'date-fns'
+import { CalendarIcon } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { DateRange } from 'react-day-picker'
+import { fetchTradesByDateRange } from '../../../../../actions/trade'
+import { DataTable } from '../../users/_components/data-table'
+import { ColumnTradeReports } from '../_components/ColumnTradeReports'
+import { fetchTransactionByDateRange } from '../../../../../actions/transaction'
+import { ColumnPointsReports } from '../_components/ColumnPointsReports'
+import { CardHeader } from '@/components/ui/card'
+
+const TradeReportsPage = () => {
+    const [date, setDate] = useState<DateRange | undefined>(undefined);
+    const [trades, setTrades] = useState<TransactionWithRelations[]>([])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                let startDate: Date | undefined;
+                let endDate: Date | undefined;
+
+                if (date && date.from && date.to) {
+                    startDate = date.from;
+                    endDate = date.to;
+                } else {
+                    // Default to current year if date range not selected
+                    const today = new Date();
+                    startDate = new Date(today.getFullYear(), 0, 1); // Start date is first day of current year
+                    endDate = new Date(today.getFullYear(), 11, 31); // End date is last day of current year
+                }
+
+                const data = await fetchTransactionByDateRange(startDate, endDate);
+                setTrades(data as TransactionWithRelations[])
+            } catch (error) {
+                console.error("Error fetching sales data:", error);
+            }
+        };
+
+        fetchData();
+    }, [date]);
+
+    return (
+        <div>
+            <AdminTitle entry='1' title='Point Reports' />
+            <Card className='mx-auto max-w-full h-full drop-shadow-lg'>
+                <CardHeader>
+
+                </CardHeader>
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Button
+                            id="date"
+                            variant={"outline"}
+                            className={cn(
+                                "w-full md:w-fulljustify-start text-left font-normal",
+                                !date && "text-muted-foreground"
+                            )}
+                        >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {date?.from ? (
+                                date.to ? (
+                                    <>
+                                        {format(date.from, "LLL dd, y")} -{" "}
+                                        {format(date.to, "LLL dd, y")}
+                                    </>
+                                ) : (
+                                    format(date.from, "LLL dd, y")
+                                )
+                            ) : (
+                                <span>Pick a date</span>
+                            )}
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                            initialFocus
+                            mode="range"
+                            defaultMonth={date?.from}
+                            selected={date}
+                            onSelect={setDate}
+                            numberOfMonths={2}
+                        />
+                    </PopoverContent>
+                </Popover>
+                <DataTable
+                    //@ts-ignore
+                    data={trades}
+                    columns={ColumnPointsReports}
+                    isHistory
+                />
+            </Card>
+        </div>
+    )
+}
+
+export default TradeReportsPage

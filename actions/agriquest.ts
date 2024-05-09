@@ -244,6 +244,27 @@ export const fetchAgriQuestTransactions = async () => {
     }
 }
 
+export const fetchAgriQuestTransactionsByDateRange = (startDate: Date, endDate: Date) => {
+    const trades = prisma.request.findMany({
+        where: {
+            createdAt: {
+                gte: startDate, // greater than or equal to the start date
+                lte: endDate,   // less than or equal to the end date
+            },
+            status: "APPROVED",
+        },
+        include: {
+            agriquest: true,
+            user: true,
+        },
+        orderBy: {
+            createdAt: "desc"
+        },
+    });
+
+    return trades;
+};
+
 export const handleRequest = async (status: ClaimStatus, requestId: string, userId: string, agriquestId: string, quantity: number) => {
     try {
         const session = await auth()

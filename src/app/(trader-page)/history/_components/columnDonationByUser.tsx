@@ -309,10 +309,10 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                                             <h1>Donation Details</h1>
                                             <h1 className="text-black text-medium tex-sm">Quantity: {donationQuantity} </h1>
                                             <h1 className="text-black text-medium tex-sm">User Email: {donatorEMail}</h1>
-                                            <h1 className="text-black text-medium tex-sm">Item: {donatorProduct}</h1>                               
-                                            <h1 className="text-black text-medium tex-sm">Unit: {unit === "FRESH_FRUIT" || unit === "VEGETABLES" ? "Kilo/s" : unit === "TOOLS" || unit === "EQUIPMENTS" ? "Piece/s" : "Pack/s"}</h1>                               
-                                            <h1 className="text-black text-medium tex-sm">ACcumulated Points: {accumelatedPoints}</h1>                               
-                                            
+                                            <h1 className="text-black text-medium tex-sm">Item: {donatorProduct}</h1>
+                                            <h1 className="text-black text-medium tex-sm">Unit: {unit === "FRESH_FRUIT" || unit === "VEGETABLES" ? "Kilo/s" : unit === "TOOLS" || unit === "EQUIPMENTS" ? "Piece/s" : "Pack/s"}</h1>
+                                            <h1 className="text-black text-medium tex-sm">Accumulated Points: {accumelatedPoints}</h1>
+
                                         </div>
                                         <Separator />
                                         <div className="w-full font-semibold">

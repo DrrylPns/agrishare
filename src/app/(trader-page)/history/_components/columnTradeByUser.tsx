@@ -463,7 +463,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                 <DropdownMenuItem className="cursor-pointer"
                                     onClick={() => setIsDownloadOpen(true)}
                                 >
-                                    Download
+                                    Review
                                 </DropdownMenuItem>
 
                             )}
@@ -506,7 +506,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                                     {/* <p className="font-semibold">Trade ID: {id}</p> */}
                                                     <p>Name: {traderName} {" "} {traderLastName}</p>
                                                     <p>Item: {traderItem}</p>
-                                                    <p>Quantity: {traderQty}</p>
+                                                    <p>Quantity: {traderQty} {traderCategory === "FRESH_FRUIT" || traderCategory === "VEGETABLES" ? "Kilo/s" : traderCategory === "TOOLS" || traderCategory === "EQUIPMENTS" ? "Piece/s" : "Pack/s"}</p>
 
                                                     <p>
                                                         Accumulated Points: <span className="text-green-500">{traderCalculatedPoints.toFixed(0)} Point(s)</span>
@@ -534,7 +534,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                                 <div className="mt-4 text-sm text-center md:text-left">
                                                     <p>Name: {tradeeName} {" "} {tradeeLastName}</p>
                                                     <p>Item: {tradeeItem}</p>
-                                                    <p>Quantity: {tradeeQty}</p>
+                                                    <p>Quantity: {tradeeQty} {tradeeCategory === "FRESH_FRUIT" || tradeeCategory === "VEGETABLES" ? "Kilo/s" : tradeeCategory === "TOOLS" || tradeeCategory === "EQUIPMENTS" ? "Piece/s" : "Pack/s"}</p>
                                                     <p>
                                                         Accumulated Points: <span className="text-green-500">{tradeeCalculatedPoints.toFixed(0)} Point(s)</span>
                                                     </p>
@@ -590,7 +590,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                                         {/* <p className="font-semibold">Trade ID: {id}</p> */}
                                                         <p>Name: {traderName} {" "} {traderLastName}</p>
                                                         <p>Item: {traderItem}</p>
-                                                        <p>Quantity: {traderQty}</p>
+                                                        <p>Quantity: {traderQty} {traderCategory === "FRESH_FRUIT" || traderCategory === "VEGETABLES" ? "Kilo/s" : traderCategory === "TOOLS" || traderCategory === "EQUIPMENTS" ? "Piece/s" : "Pack/s"}</p>
                                                         <p>
                                                             Accumulated Points: <span className="text-green-500">{traderCalculatedPoints.toFixed(0)} Point(s)</span>
                                                         </p>
@@ -621,7 +621,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                                     <div className="mt-4 text-sm text-center md:text-left">
                                                         <p>Name: {tradeeName} {" "} {tradeeLastName}</p>
                                                         <p>Item: {tradeeItem}</p>
-                                                        <p>Quantity: {tradeeQty}</p>
+                                                        <p>Quantity: {tradeeQty} {tradeeCategory === "FRESH_FRUIT" || tradeeCategory === "VEGETABLES" ? "Kilo/s" : tradeeCategory === "TOOLS" || tradeeCategory === "EQUIPMENTS" ? "Piece/s" : "Pack/s"}</p>
                                                         <p>
                                                             Accumulated Points: <span className="text-green-500">{tradeeCalculatedPoints.toFixed(0)} Point(s)</span>
                                                         </p>
@@ -659,7 +659,7 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
                                     </DialogDescription>
                                 </DialogHeader>
                             </div>
-                            <Button variant={'primary'} onClick={downloadPDF}>Download</Button>
+                            {/* <Button variant={'primary'} onClick={downloadPDF}>Download</Button> */}
                         </DialogContent>
                     </Dialog>
 

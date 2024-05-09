@@ -7,6 +7,8 @@ import { StatusType, Subcategory } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { sendAcceptedTradeNotification, sendDeclinedNotification, sendTradeNotification } from "@/lib/mail";
 import { generateTRD } from "@/lib/utils";
+import { DateRange } from "react-day-picker";
+import { DateRangePickerValue } from "@tremor/react";
 
 
 export const trade = async (
@@ -46,7 +48,7 @@ export const trade = async (
 
     // if (value <= 0) return { error: "Value can't be less than 0" }
 
-    if (weight <= 0) return { error: "Weight can't be less than 0" }
+    if (weight <= 0) return { error: "Quantity can't be less than 0" }
 
     const trd = generateTRD()
 
@@ -57,7 +59,7 @@ export const trade = async (
             description,
             // quantity,
             // value,
-            weight,
+            quantity: weight,
             item,
             tradeeId,
             traderId: user.id,
@@ -104,8 +106,8 @@ export const trade = async (
     return { success: "Trade issued." }
 }
 
-export const fetchTrades = () => {
-    const trades = prisma.trade.findMany({
+export const fetchTrades = async () => {
+    const trades = await prisma.trade.findMany({
         include: {
             tradee: true,
             trader: true,
@@ -118,6 +120,39 @@ export const fetchTrades = () => {
 
     return trades
 }
+
+// Modify the fetchTrades function to accept a date range parameter
+export const fetchTradesByDateRange = async (startDate: Date, endDate: Date) => {
+    const trades = await prisma.trade.findMany({
+        where: {
+            createdAt: {
+                gte: startDate, // greater than or equal to the start date
+                lte: endDate,   // less than or equal to the end date
+            },
+            status: "COMPLETED",
+        },
+        include: {
+            tradee: true,
+            trader: true,
+            post: true,
+        },
+        orderBy: {
+            createdAt: "desc"
+        },
+    });
+
+    const countTrades = await prisma.trade.count({
+        where: {
+            createdAt: {
+                gte: startDate,
+                lte: endDate,
+            },
+            status: "COMPLETED",
+        },
+    });
+
+    return { trades, countTrades };
+};
 
 export const fetchTradesByUser = async () => {
     const session = await auth()

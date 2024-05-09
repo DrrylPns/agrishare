@@ -1,6 +1,6 @@
 'use server';
 
-import { ShelfLifeUnit, Types } from "@prisma/client";
+import { Prisma, ShelfLifeUnit, Types } from "@prisma/client";
 
 export type User = {
   id: string;
@@ -74,3 +74,38 @@ export type Agrichange = {
   createdAt: Date
   updatedAt: Date
 }
+
+export type TradesWithRelations = Prisma.TradeGetPayload<{
+  include: {
+    tradee: true,
+    trader: true,
+    post: true,
+  }
+}>
+
+export type DonationWithDonator = Prisma.DonationGetPayload<{
+  include: {
+    donator: true,
+  }
+}>
+
+export type TransactionWithRelations = Prisma.TransactionGetPayload<{
+  include: {
+    post: true,
+    user: true,
+  }
+}>
+
+export type ClaimWithRelations = Prisma.ClaimGetPayload<{
+  include: {
+    agriChange: true,
+    user: true,
+  }
+}>
+
+export type AgriquestWithRelations = Prisma.RequestGetPayload<{
+  include: {
+    agriquest: true,
+    user: true,
+  }
+}>

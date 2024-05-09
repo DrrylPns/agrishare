@@ -479,6 +479,27 @@ export const fetchAgriChangeTransactions = async () => {
     }
 }
 
+export const fetchAgriChangeTransactionsByDateRange = (startDate: Date, endDate: Date) => {
+    const trades = prisma.claim.findMany({
+        where: {
+            createdAt: {
+                gte: startDate, // greater than or equal to the start date
+                lte: endDate,   // less than or equal to the end date
+            },
+            status: "APPROVED",
+        },
+        include: {
+            agriChange: true,
+            user: true,
+        },
+        orderBy: {
+            createdAt: "desc"
+        },
+    });
+
+    return trades;
+};
+
 export const handleClaim = async (status: ClaimStatus, claimId: string, userId: string, points: number, agrichangeId: string) => {
     try {
         const session = await auth()

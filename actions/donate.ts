@@ -20,6 +20,53 @@ export const fetchDonations = async () => {
     return donations
 }
 
+export const fetchDonationsByDateRange = async (startDate: Date, endDate: Date) => {
+    const donations = await prisma.donation.findMany({
+        where: {
+            createdAt: {
+                gte: startDate, // greater than or equal to the start date
+                lte: endDate,   // less than or equal to the end date
+            },
+            status: "APPROVED",
+        },
+        include: {
+            donator: true,
+        },
+        orderBy: {
+            createdAt: "desc"
+        },
+    });
+
+    const sumPointsToGain = await prisma.donation.aggregate({
+        _sum: {
+            pointsToGain: true
+        },
+        where: {
+            createdAt: {
+                gte: startDate,
+                lte: endDate,
+            },
+            status: "APPROVED",
+        },
+    });
+
+    const countDonations = await prisma.donation.count({
+        where: {
+            createdAt: {
+                gte: startDate,
+                lte: endDate,
+            },
+            status: "APPROVED",
+        },
+    })
+
+    const totalPointsToGain = sumPointsToGain._sum?.pointsToGain || 0;
+
+    const formattedTotalPoints = totalPointsToGain.toLocaleString();
+
+    return { donations, countDonations, formattedTotalPoints };
+};
+
 export const fetchDonationsByUser = async () => {
     const session = await auth()
 

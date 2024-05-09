@@ -13,6 +13,9 @@ import { columnClaims } from '@/components/tables/columnClaims'
 import { fetchAgriQuestTransactions } from '../../../../actions/agriquest'
 import { columnQuest } from '@/components/tables/columnQuest'
 import { BadgeCent, HeartHandshakeIcon, LeafyGreen, ShieldAlert, ShoppingBasketIcon } from 'lucide-react'
+import Link from 'next/link'
+import { cn } from '@/lib/utils'
+import { buttonVariants } from '@/components/ui/button'
 
 export const dynamic = 'force-dynamic';
 
@@ -54,7 +57,20 @@ const page = async () => {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <AdminTitle entry='1' title='Trades' />
+              <div className='w-full flex justify-between items-center'>
+                <AdminTitle entry='1' title='Trades' />
+
+                <Link
+                  href="/trade-reports"
+                  className={cn(
+                    buttonVariants({
+                      variant: "outline"
+                    })
+                  )}
+                >
+                  Reports
+                </Link>
+              </div>
               <DataTable
                 //@ts-ignore
                 data={trades}
@@ -63,7 +79,20 @@ const page = async () => {
               />
             </TabPanel>
             <TabPanel>
-              <AdminTitle entry='2' title='Donations' />
+              <div className='w-full flex justify-between items-center'>
+                <AdminTitle entry='2' title='Donations' />
+
+                <Link
+                  href="/donation-reports"
+                  className={cn(
+                    buttonVariants({
+                      variant: "outline"
+                    })
+                  )}
+                >
+                  Reports
+                </Link>
+              </div>
               <DataTable
                 //@ts-ignore
                 data={donations}
@@ -72,7 +101,20 @@ const page = async () => {
               />
             </TabPanel>
             <TabPanel>
-              <AdminTitle entry='3' title='Points' />
+              <div className='w-full flex justify-between items-center'>
+                <AdminTitle entry='3' title='Points' />
+
+                <Link
+                  href="/point-reports"
+                  className={cn(
+                    buttonVariants({
+                      variant: "outline"
+                    })
+                  )}
+                >
+                  Reports
+                </Link>
+              </div>
               <DataTable
                 data={transactions}
                 columns={columnPoints}
@@ -80,7 +122,20 @@ const page = async () => {
               />
             </TabPanel>
             <TabPanel>
-              <AdminTitle entry='4' title='Claims' />
+              <div className='w-full flex justify-between items-center'>
+                <AdminTitle entry='4' title='Claims' />
+
+                <Link
+                  href="/claim-reports"
+                  className={cn(
+                    buttonVariants({
+                      variant: "outline"
+                    })
+                  )}
+                >
+                  Reports
+                </Link>
+              </div>
               <DataTable
                 //@ts-ignore
                 data={claims}
@@ -89,7 +144,20 @@ const page = async () => {
               />
             </TabPanel>
             <TabPanel>
-              <AdminTitle entry='5' title='Agriquests' />
+              <div className='w-full flex justify-between items-center'>
+                <AdminTitle entry='5' title='Agriquests' />
+
+                <Link
+                  href="/agriquest-reports"
+                  className={cn(
+                    buttonVariants({
+                      variant: "outline"
+                    })
+                  )}
+                >
+                  Reports
+                </Link>
+              </div>
               <DataTable
                 //@ts-ignore
                 data={requests}

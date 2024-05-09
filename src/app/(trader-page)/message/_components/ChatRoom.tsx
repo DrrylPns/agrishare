@@ -487,9 +487,6 @@ export const ChatRoom = ({ chatroom, userId }: Props) => {
                       <h1>Upload a picture!</h1>
                       <UploadButton
                         className="text-green"
-                        content={{
-                          label: "Max 4MB (png, jpeg, svg)"
-                        }}
                         appearance={{
                           button: "bg-[#00B207] p-2 mb-3",
                           allowedContent:
