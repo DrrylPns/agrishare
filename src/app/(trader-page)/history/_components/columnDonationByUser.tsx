@@ -11,7 +11,7 @@ import { DonationWithDonators } from "@/lib/types"
 import { DataTableColumnHeader } from "@/app/(admin)/users/_components/data-table-column-header"
 import { format } from "date-fns"
 import { useRef, useState, useTransition } from "react"
-import { MoreHorizontalIcon } from "lucide-react"
+import { DownloadIcon, MoreHorizontalIcon } from "lucide-react"
 // import AdminTitle from "../AdminTitle"
 import Link from "next/link"
 import html2canvas from "html2canvas"
@@ -28,6 +28,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { CancelDonationSchema, FormType } from "@/lib/validations/donation"
 import { useMutation } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios"
+import { Separator } from "@/components/ui/separator"
+import { extractTime } from "@/lib/utils"
+
 // import { handleDonations } from "../../../actions/donate"
 
 export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
@@ -151,13 +154,16 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
             const donatorLastName = row.original.donator.lastName
             const donatorProduct = row.original.product
             const donatoryQty = row.original.quantity
-            const donatorPoints = row.original.pointsToGain
+            const donationDn = row.original.dn
             const proof = row.original.proof
             const donatorId = row.original.donator.id
-
+            const useId = row.original.donator.userId
+            const donationQuantity = row.original.quantity
             const dateDonated = row.original.createdAt
             const donationStatus = row.original.status
             const donationId = row.original.id
+            const donatorEMail = row.original.donator.email
+
 
             const isImageNull = donatorImage === null;
             const imageIsEmpty = imageUrl.length === 0
@@ -171,19 +177,19 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                     return;
                 }
                 html2canvas(input).then((canvas) => {
-                    const imgData = canvas.toDataURL('image/png')
+                    const imgData = canvas.toDataURL('image/png');
                     const pdf = new jsPDF('p', 'mm', 'a4', true);
                     const pdfWidth = pdf.internal.pageSize.getWidth();
                     const pdfHeight = pdf.internal.pageSize.getHeight();
                     const imgWidth = canvas.width;
                     const imgHeight = canvas.height;
-                    const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight)
+                    const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
                     const imgX = (pdfWidth - imgWidth * ratio) / 2;
-                    const imgY = 30;
-                    pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
-                    pdf.save('Reciept.pdf')
-
-                })
+                    const imgY = 2; // Adjust the Y position to start from the top with a 20px crop
+                    const imgHeightAdjusted = imgHeight * ratio + 30; // Adjusted height to fit the entire page with the crop
+                    pdf.addImage(imgData, 'PNG', imgX, imgY, pdfWidth, imgHeightAdjusted);
+                    pdf.save('Receipt.pdf');
+                });
             }
 
             const form = useForm<z.infer<typeof CancelDonationSchema>>({
@@ -252,7 +258,7 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                                 className="cursor-pointer"
                                 onClick={() => setIsReviewOpen(true)}
                             >
-                                Download
+                                Download reciept
                             </DropdownMenuItem>
                             {proof !== null  || donationStatus === "CANCELLED" ? (
                                 null
@@ -273,46 +279,51 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                                 </DropdownMenuItem>
                             )}
                             
+                            
                         </DropdownMenuContent>
                     </DropdownMenu>
                     <Dialog open={isReviewOpen} onOpenChange={setIsReviewOpen}>
-                        <DialogContent className="lg:max-w-2xl" ref={pdfRef}>
-                            <DialogHeader>
-                                <DialogTitle>
-                                    {/* <AdminTitle entry="4" title="Donations Review" /> */}
-                                    <p className="text-center">Status: {donationStatus}</p>
+                        <DialogContent className="lg:max-w-5xl bg-white ui-open:bg-white">
+                            <DialogHeader className="bg-white">
+                                <DialogTitle className="bg-white">
+                                    <DownloadIcon onClick={downloadPDF}/>
                                 </DialogTitle>
-                                <DialogDescription>
-                                    <div ref={pdfRef}>
-                                        <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-between max-w-fit mx-auto">
-                                            <div className="flex flex-col items-center md:items-start">
-                                                <Avatar>
-                                                    <AvatarImage src={`${isImageNull ? "/avatar-placeholder.jpg" : donatorImage}`} alt="profile" />
-                                                    <AvatarFallback>CN</AvatarFallback>
-                                                </Avatar>
-                                                <div className="mt-4 text-sm text-center md:text-start">
-                                                    {/* <p className="font-semibold">Trade ID: {id}</p> */}
-                                                    <p>Name: {donatorName} {" "} {donatorLastName}</p>
-                                                    <p>Item: {donatorProduct}</p>
-                                                    <p>Quantity: {donatoryQty}</p>
-                                                    <p>
-                                                        Accumulated Points: <span className="text-green-500">{donatorPoints.toFixed(2)} Point(s)</span>
-                                                    </p>
-                                                    <p>Date: {format(dateDonated, "PPP")}</p>
-                                                    {proof !== null ? (
-                                                        <a target="_blank" className="text-blue-500" href={proof}>
-                                                            Proof: See Proof
-                                                        </a>
-                                                    ) : (
-                                                        <></>
-                                                    )}
-                                                </div>
-                                            </div>
+                                <DialogDescription className="bg-white">
+                                    <div ref={pdfRef} className="text-lg font-bold bg-white mt-10 px-5 pb-5">
+                                        <div className="text-black text-center">
+                                            <h1  className="text-2xl">Donation Receipt</h1>
+                                            <h1  className="text-xl">AgriShare : Trading-Donation</h1>
+                                        </div>
+                                        <div  className="text-black my-3">
+                                            <h1>Donation ID:{donationDn}</h1>
+                                        </div>
+                                        <Separator/>
+                                        <div className="text-black my-3 font-semibold">
+                                            <h1 >Donator Details</h1> 
+                                            <h1 className="text-black text-medium tex-sm">User ID: {useId}</h1>
+                                            {/* <h1>User Email: {donatorEmail}</h1> */}
+                                            <h1 className="text-black text-medium tex-sm">Transaction Date: {format(dateDonated, "PPP")}</h1>
+                                            <h1 className="text-black text-medium tex-sm">Transaction Time: {extractTime(dateDonated.toString())}</h1>
+
+                                        </div>
+                                        <Separator/>
+                                        <div  className="text-black text-lg my-3 font-semibold">
+                                            <h1>Donation Details</h1> 
+                                            <h1 className="text-black text-medium tex-sm">Quantity: {donationQuantity}</h1>
+                                            <h1 className="text-black text-medium tex-sm">User Email: {donatorEMail}</h1>
+                                            <h1 className="text-black text-medium tex-sm">Item: {donatorProduct}</h1>                               
+                            
+                                        </div>
+                                        <Separator/>
+                                        <div className="w-full font-semibold">
+                                            <h1 className="mb-3 text-lg text-black">Transaction Terms</h1>
+                                            <p className="mb-3 text-justify text-xs">This receipt serves as an acknowledgment that the item shall be held by the Center for Urban Agriculture and Innovation (CUAI), the designated entity responsible for managing donations from users of AgriShare: Donation-Trading Web Application. To avoid any potential confusion regarding the location, it is advisable to visit Agrimap for the accurate verification of CUAI's location.</p>
+                                            <h1 className="text-sm">Please present this receipt to the administrators of CUAI to confirm your transaction and to facilitate the allocation of corresponding points.</h1>
                                         </div>
                                     </div>
                                 </DialogDescription>
                             </DialogHeader>
-                            <Button variant={'primary'} onClick={downloadPDF}>Download</Button>
+                            
                         </DialogContent>
                     </Dialog>
 

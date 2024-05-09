@@ -10,6 +10,24 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export const extractTime = (date:string)=>{
+  const dateTime = new Date(date);
+
+  // Get the hours, minutes, and seconds from the Date object
+  let hours = dateTime.getHours();
+  const minutes = dateTime.getMinutes();
+  const seconds = dateTime.getSeconds();
+  
+  // Convert hours to 12-hour clock format
+  const suffix = hours >= 12 ? "pm" : "am";
+  hours = hours % 12 || 12; // Convert 0 to 12 for midnight
+  
+  // Format the time as a string
+  const timeString = `${hours}:${minutes}${suffix}`;
+
+  return timeString
+}
+
 export const reasons = [
  { value:"NotAvailable",label:" Not availble on the given time."}, {value:"ChangeOfMind",label:"Change of mind"}, {value:"ChangeOfTrade",label:"Change of trade details"}, {value:"FailedToAppear",label:"Failed to appear without prior notice"}, {value:"Others",label:"Others"}
 ]
