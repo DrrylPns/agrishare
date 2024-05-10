@@ -156,6 +156,18 @@ export const handleDonations = async (status: DonationStatus, quantity: number, 
         return { error: "Invalid action, the donator has cancelled its donation." }
     }
 
+    if (remarks) {
+        await prisma.donation.update({
+            data: {
+                status,
+                remarks,
+            },
+            where: {
+                id: currentDonation.id
+            }
+        })
+    }
+
     const processDonate = await prisma.donation.update({
         data: { status },
         where: { id: currentDonation.id }
