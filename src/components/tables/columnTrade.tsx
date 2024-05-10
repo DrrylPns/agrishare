@@ -1,21 +1,22 @@
 "use client"
 
 import { DataTableColumnHeader } from "@/app/(admin)/users/_components/data-table-column-header"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { toast } from "@/components/ui/use-toast"
 import { TradeWithTradeeTraders } from "@/lib/types"
+import { formattedSLU } from "@/lib/utils"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
-import { useState, useTransition } from "react"
-import { toast } from "@/components/ui/use-toast"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { FolderSyncIcon, MoreHorizontalIcon } from "lucide-react"
-import AdminTitle from "../AdminTitle"
-import Link from "next/link"
+import { useState, useTransition } from "react"
 import { handleTrade } from "../../../actions/trade"
-import { formattedSLU } from "@/lib/utils"
+import AdminTitle from "../AdminTitle"
+import { Textarea } from "../ui/textarea"
+import { Label } from "../ui/label"
 
 export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
     {
@@ -163,7 +164,7 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
             const [isPending, startTransition] = useTransition()
             const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false)
             const [isRejectOpen, setIsRejectOpen] = useState<boolean>(false)
-
+            const [remarks, setRemarks] = useState("")
 
             const tradeId = row.original.id;
             const traderId = row.original.trader.id
@@ -686,6 +687,12 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                     Note: Once confirmed, this action cannot be undone.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
+
+                            <div className="grid w-full gap-1.5">
+                                <Label htmlFor="message">Remarks</Label>
+                                <Textarea placeholder="Type your remarks here." className="resize-none" value={remarks} onChange={(e) => setRemarks(e.target.value)} />
+                            </div>
+
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
@@ -693,7 +700,7 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleTrade(tradeeCalculatedPoints, traderCalculatedPoints, tradeeConditionRate, traderConditionRate, "CANCELLED", tradeId, tradeeId, traderId, tradeeQty, traderQty, postId, traderSubcategory, tradeeSubcategory).then((callback) => {
+                                                handleTrade(tradeeCalculatedPoints, traderCalculatedPoints, tradeeConditionRate, traderConditionRate, "CANCELLED", tradeId, tradeeId, traderId, tradeeQty, traderQty, postId, traderSubcategory, tradeeSubcategory, remarks).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,

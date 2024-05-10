@@ -23,6 +23,7 @@ import jsPDF from 'jspdf'
 import Image from "next/image"
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
+import { Textarea } from "../ui/textarea"
 
 export const columnDonation: ColumnDef<DonationWithDonators>[] = [
     {
@@ -141,7 +142,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
             const [quantity, setQuantity] = useState<number>(0)
             const [selectedRate, setSelectedRate] = useState(0)
             const [selectRateError, setSelectRateError] = useState<boolean>(false)
-
+            const [remarks, setRemarks] = useState("")
 
             const donatorImage = row.original.donator.image
             const donatorName = row.original.donator.name
@@ -154,7 +155,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
             const donatorId = row.original.donator.id
             const donatorProof = row.original.proof
             const donationSize = row.original.size
-     
+
             const dateDonated = row.original.createdAt
             const donationStatus = row.original.status
             const donationId = row.original.id
@@ -164,7 +165,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
             const isDisable = selectedRate === 0 ? true : false
 
             const handleConfirm = () => {
-                if (isDonationProofNull ){
+                if (isDonationProofNull) {
                     toast({
                         description: "Not Allowed! The donator must upload his/her proof first.",
                         variant: "destructive"
@@ -177,7 +178,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                     setSelectRateError(true)
                 }
 
-                if(selectedRate !== 0 && !isDonationProofNull && !quantityError){
+                if (selectedRate !== 0 && !isDonationProofNull && !quantityError) {
                     setIsConfirmOpen(true)
                 }
             }
@@ -209,7 +210,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
             const handleQuantityChange = (event: ChangeEvent<HTMLInputElement>) => {
                 const newValue = parseInt(event.target.value, 10);
                 setQuantity(newValue);
-                if(newValue >= 1){
+                if (newValue >= 1) {
                     setQuantityError(false)
                 }
             };
@@ -228,10 +229,10 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                             <DropdownMenuSeparator />
                             {donationStatus !== 'PENDING'}
                             <DropdownMenuItem className="cursor-pointer"
-                                    onClick={() => setIsDownloadOpen(true)}
-                                >
-                                    Download
-                                </DropdownMenuItem>
+                                onClick={() => setIsDownloadOpen(true)}
+                            >
+                                Download
+                            </DropdownMenuItem>
                             <DropdownMenuItem
                                 onClick={() => setIsReviewOpen(true)}
                             >
@@ -266,10 +267,10 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                                     </p>
                                                     <p>Date: {format(dateDonated, "PPP")}</p>
                                                     {donatorProof !== null ? (
-                                                         <a target="_blank" className="text-blue-500 flex" href={donatorProof}>
-                                                            Proof: 
+                                                        <a target="_blank" className="text-blue-500 flex" href={donatorProof}>
+                                                            Proof:
                                                             <div className="ml-5 w-20 h-20">
-                                                                <Image src={donatorProof} alt="donator proof" width={100} height={100} className="object-contain w-full h-full"/>
+                                                                <Image src={donatorProof} alt="donator proof" width={100} height={100} className="object-contain w-full h-full" />
                                                             </div>
                                                         </a>
                                                     ) : (
@@ -392,6 +393,12 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                     Note: Once confirmed, this action cannot be undone.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
+
+                            <div className="grid w-full gap-1.5">
+                                <Label htmlFor="message">Remarks</Label>
+                                <Textarea placeholder="Type your remarks here." className="resize-none" value={remarks} onChange={(e) => setRemarks(e.target.value)} />
+                            </div>
+
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
@@ -399,7 +406,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleDonations("DECLINED", quantity, selectedRate, donationSubCategory, donationCategory, donationId, donatorId, donationSize).then((callback) => {
+                                                handleDonations("DECLINED", quantity, selectedRate, donationSubCategory, donationCategory, donationId, donatorId, donationSize, remarks).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,
@@ -428,7 +435,7 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                     <AdminTitle entry="4" title="Donations Review" />
                                     <p className="text-center">Status: {donationStatus}</p>
                                 </DialogTitle>
-                                <DialogDescription  ref={pdfRef}>
+                                <DialogDescription ref={pdfRef}>
                                     <>
                                         <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-between max-w-fit mx-auto">
                                             <div className="flex flex-col items-center md:items-start">
@@ -446,10 +453,10 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                                     </p>
                                                     <p>Date: {format(dateDonated, "PPP")}</p>
                                                     {donatorProof !== null ? (
-                                                         <a target="_blank" className="text-blue-500 flex" href={donatorProof}>
-                                                            Proof: 
+                                                        <a target="_blank" className="text-blue-500 flex" href={donatorProof}>
+                                                            Proof:
                                                             <div className="ml-5 w-20 h-20">
-                                                                <Image src={donatorProof} alt="donator proof" width={100} height={100} className="object-contain w-full h-full"/>
+                                                                <Image src={donatorProof} alt="donator proof" width={100} height={100} className="object-contain w-full h-full" />
                                                             </div>
                                                         </a>
                                                     ) : (
@@ -462,13 +469,13 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                                             </div>
                                         </div>
                                     </>
-                                    
+
                                 </DialogDescription>
-                                
+
                             </DialogHeader>
                             {donationStatus === 'APPROVED' && (
-                                        <Button variant={'primary'} onClick={downloadPDF}>Download</Button>
-                                    )}
+                                <Button variant={'primary'} onClick={downloadPDF}>Download</Button>
+                            )}
                         </DialogContent>
                     </Dialog>
                 </>

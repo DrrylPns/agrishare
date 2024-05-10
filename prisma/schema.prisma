@@ -350,6 +350,7 @@ model Claim {
   itm        String      @unique
   status     ClaimStatus @default(PENDING)
   quantity   Float
+  remarks    String?
   pickUpDate DateTime?
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
@@ -382,6 +383,7 @@ model Agriquest {
 model Request {
   id         String      @id @default(cuid())
   aq         String      @unique
+  remarks    String?
   status     ClaimStatus @default(PENDING)
   pickUpDate DateTime?
   createdAt  DateTime    @default(now())
@@ -466,6 +468,7 @@ model Donation {
   status       DonationStatus @default(PENDING)
   category     Category?
   subcategory  Subcategory?
+  remarks      String?
   size         String?
   proof        String?
   pickUpDate   DateTime?
@@ -543,6 +546,7 @@ model Trade {
   traderConditionRate Float?
   proofTradee         String?
   proofTrader         String?
+  remarks             String?
   status              StatusType   @default(PENDING)
   category            Category?
   subcategory         Subcategory?

@@ -17,6 +17,8 @@ import { handleClaim } from "../../../actions/agrichange"
 import AdminTitle from "../AdminTitle"
 import { toast } from "../ui/use-toast"
 import { handleRequest } from "../../../actions/agriquest"
+import { Label } from "../ui/label"
+import { Textarea } from "../ui/textarea"
 
 export const columnQuest: ColumnDef<RequestWithAgriquestAndUsers>[] = [
     {
@@ -112,6 +114,8 @@ export const columnQuest: ColumnDef<RequestWithAgriquestAndUsers>[] = [
             const [isPending, startTransition] = useTransition()
             const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false)
             const [isRejectOpen, setIsRejectOpen] = useState<boolean>(false)
+            const [remarks, setRemarks] = useState("")
+
 
             const userId = row.original.user.id
             const requesterImage = row.original.user.image
@@ -196,7 +200,7 @@ export const columnQuest: ColumnDef<RequestWithAgriquestAndUsers>[] = [
                                                 >Decline</Button>
                                             </div>
                                         )}
-                                        
+
                                     </>
                                 </DialogDescription>
                             </DialogHeader>
@@ -251,6 +255,12 @@ export const columnQuest: ColumnDef<RequestWithAgriquestAndUsers>[] = [
                                     Note: Once confirmed, this action cannot be undone.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
+
+                            <div className="grid w-full gap-1.5">
+                                <Label htmlFor="message">Remarks</Label>
+                                <Textarea placeholder="Type your remarks here." className="resize-none" value={remarks} onChange={(e) => setRemarks(e.target.value)} />
+                            </div>
+
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
@@ -258,7 +268,7 @@ export const columnQuest: ColumnDef<RequestWithAgriquestAndUsers>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleRequest(ClaimStatus.DECLINED, requestId, userId, agriquestId, quantity).then((callback) => {
+                                                handleRequest(ClaimStatus.DECLINED, requestId, userId, agriquestId, quantity, remarks).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,

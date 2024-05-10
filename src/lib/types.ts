@@ -36,6 +36,7 @@ export interface TradeWithTradeeTraders {
     tradedQuantity: number;
     shelfLife: string;
     weight: number;
+    remarks: string;
     traderConditionRate: number | null;
     tradeeConditionRate: number | null;
     proofTradee: string | null;
@@ -97,6 +98,7 @@ export interface DonationWithDonators {
     name: string;
     product: string;
     quantity: number;
+    remarks: string;
     image: string;
     pointsToGain: number;
     status: DonationStatus;
@@ -177,6 +179,7 @@ export interface ClaimsWithAgrichangeAndUsers {
     itm: string;
     status: ClaimStatus;
     quantity: number;
+    remarks: string;
     createdAt: Date;
     updatedAt: Date;
     agriChange: AgriChange;
@@ -189,6 +192,7 @@ export interface RequestWithAgriquestAndUsers {
     id: string;
     aq: string;
     status: ClaimStatus;
+    remarks: string;
     createdAt: Date;
     updatedAt: Date;
     agriQuestId: string;

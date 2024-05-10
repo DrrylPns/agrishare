@@ -174,7 +174,7 @@ export const fetchTradesByUser = async () => {
     return trades
 }
 
-export const handleTrade = async (tradeeCalculatedPoints: number, traderCalculatedPoints: number, tradeeCondtionRate: number | null, traderConditionRate: number | null, status: StatusType, tradeId: string, tradeeId: string, traderId: string, tradeeQty: number, traderQty: number, postId: string, traderSubcategory: Subcategory | null, tradeeSubcategory: Subcategory | null) => {
+export const handleTrade = async (tradeeCalculatedPoints: number, traderCalculatedPoints: number, tradeeCondtionRate: number | null, traderConditionRate: number | null, status: StatusType, tradeId: string, tradeeId: string, traderId: string, tradeeQty: number, traderQty: number, postId: string, traderSubcategory: Subcategory | null, tradeeSubcategory: Subcategory | null, remarks?: string) => {
     const session = await auth()
 
     if (!session) return { error: "Unauthorized" }
@@ -213,16 +213,19 @@ export const handleTrade = async (tradeeCalculatedPoints: number, traderCalculat
         return { error: "Invalid action, the trade is already confirmed." }
     }
 
-    await prisma.trade.update({
-        data: {
-            status
-        },
-        where: {
-            id: tradeId
-        },
-    })
+
 
     if (status === "COMPLETED") {
+
+        await prisma.trade.update({
+            data: {
+                status,
+            },
+            where: {
+                id: tradeId
+            },
+        })
+
         const tradee = await prisma.user.findUnique({
             where: {
                 id: tradeeId
@@ -344,6 +347,18 @@ export const handleTrade = async (tradeeCalculatedPoints: number, traderCalculat
         // })
 
         // TODO: CREATE TRANSACTION FOR CANCELLED TRADES CAN EVEN IMPLEMENT PENALTY WHEREIN USERS CAN RECEIVE MINUS LOYALTY POINTS
+
+        if (!remarks) return { error: "Remarks needed!" }
+
+        await prisma.trade.update({
+            data: {
+                status,
+                remarks,
+            },
+            where: {
+                id: tradeId
+            },
+        })
 
         revalidatePath("/transactions")
         return { success: "Cancelled the trade." }

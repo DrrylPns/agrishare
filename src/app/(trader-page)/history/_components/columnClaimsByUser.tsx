@@ -96,6 +96,23 @@ export const columnClaimsByUser: ColumnDef<ClaimsWithAgrichangeAndUsers>[] = [
             </div>
         },
     },
+    {
+        accessorKey: "remarks",
+        header: ({ column }) => {
+            return (
+                <DataTableColumnHeader column={column} title="Remarks" />
+            )
+        },
+        cell: ({ row }) => {
+            const remarks = row.original.remarks
+
+            return <div
+                className=""
+            >
+                {remarks}
+            </div>
+        },
+    },
     // {
     //     id: "actions",
     //     header: "Actions",

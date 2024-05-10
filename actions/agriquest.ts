@@ -265,7 +265,7 @@ export const fetchAgriQuestTransactionsByDateRange = (startDate: Date, endDate: 
     return trades;
 };
 
-export const handleRequest = async (status: ClaimStatus, requestId: string, userId: string, agriquestId: string, quantity: number) => {
+export const handleRequest = async (status: ClaimStatus, requestId: string, userId: string, agriquestId: string, quantity: number, remarks?: string) => {
     try {
         const session = await auth()
 
@@ -299,11 +299,6 @@ export const handleRequest = async (status: ClaimStatus, requestId: string, user
             return { error: "Invalid action, the request intent is already declined." }
         }
 
-        const processRequest = await prisma.request.update({
-            data: { status },
-            where: { id: currentRequest.id }
-        })
-
         if (requester.requestLeft <= 0) return { error: "This user has no requests left!" }
 
         const agriquest = await prisma.agriquest.findUnique({
@@ -313,6 +308,11 @@ export const handleRequest = async (status: ClaimStatus, requestId: string, user
         if (!agriquest) return { error: "No item found!" }
 
         if (status === "APPROVED") {
+
+            const processRequest = await prisma.request.update({
+                data: { status },
+                where: { id: currentRequest.id }
+            })
 
             if (processRequest) {
                 await prisma.user.update({
@@ -342,6 +342,16 @@ export const handleRequest = async (status: ClaimStatus, requestId: string, user
             // TODO: CREATE TRANSACTION FOR CANCELLED DONATIONS CAN EVEN IMPLEMENT PENALTY WHEREIN USERS CAN RECEIVE MINUS LOYALTY POINTS
 
             // magccreate pa rin ng transaction pero cancelled at walang maggain na points?
+
+            if (!remarks) return { error: "Remarks needed!" }
+
+            await prisma.request.update({
+                data: {
+                    status,
+                    remarks,
+                },
+                where: { id: currentRequest.id }
+            })
 
             await prisma.agriquest.update({
                 where: { id: agriquest.id },

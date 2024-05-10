@@ -16,6 +16,8 @@ import Link from "next/link"
 import { toast } from "../ui/use-toast"
 import { handleClaim } from "../../../actions/agrichange"
 import { ClaimStatus } from "@prisma/client"
+import { Label } from "../ui/label"
+import { Textarea } from "../ui/textarea"
 
 export const columnClaims: ColumnDef<ClaimsWithAgrichangeAndUsers>[] = [
     {
@@ -114,6 +116,8 @@ export const columnClaims: ColumnDef<ClaimsWithAgrichangeAndUsers>[] = [
             const [isPending, startTransition] = useTransition()
             const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false)
             const [isRejectOpen, setIsRejectOpen] = useState<boolean>(false)
+            const [remarks, setRemarks] = useState("")
+
 
             const userId = row.original.user.id
             const donatorImage = row.original.user.image
@@ -259,6 +263,12 @@ export const columnClaims: ColumnDef<ClaimsWithAgrichangeAndUsers>[] = [
                                     Note: Once confirmed, this action cannot be undone.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
+
+                            <div className="grid w-full gap-1.5">
+                                <Label htmlFor="message">Remarks</Label>
+                                <Textarea placeholder="Type your remarks here." className="resize-none" value={remarks} onChange={(e) => setRemarks(e.target.value)} />
+                            </div>
+
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
@@ -266,7 +276,7 @@ export const columnClaims: ColumnDef<ClaimsWithAgrichangeAndUsers>[] = [
                                     onClick={
                                         async () => {
                                             startTransition(() => {
-                                                handleClaim(ClaimStatus.DECLINED, claimId, userId, points, agriquestId).then((callback) => {
+                                                handleClaim(ClaimStatus.DECLINED, claimId, userId, points, agriquestId, remarks).then((callback) => {
                                                     if (callback?.error) {
                                                         toast({
                                                             description: callback.error,

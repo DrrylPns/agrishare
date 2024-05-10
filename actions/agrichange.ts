@@ -500,7 +500,7 @@ export const fetchAgriChangeTransactionsByDateRange = (startDate: Date, endDate:
     return trades;
 };
 
-export const handleClaim = async (status: ClaimStatus, claimId: string, userId: string, points: number, agrichangeId: string) => {
+export const handleClaim = async (status: ClaimStatus, claimId: string, userId: string, points: number, agrichangeId: string, remarks?: string) => {
     try {
         const session = await auth()
 
@@ -540,11 +540,6 @@ export const handleClaim = async (status: ClaimStatus, claimId: string, userId: 
 
         if (!agrichange) return { error: "No item found!" }
 
-        const processClaim = await prisma.claim.update({
-            data: { status },
-            where: { id: currentClaim.id }
-        })
-
         if (status === "APPROVED") {
 
             // if (processClaim) {
@@ -555,6 +550,13 @@ export const handleClaim = async (status: ClaimStatus, claimId: string, userId: 
             //         where: { id: claimer.id }
             //     })
             // }
+
+            await prisma.claim.update({
+                data: {
+                    status,
+                },
+                where: { id: currentClaim.id }
+            })
 
             const totalPoints = points * currentClaim.quantity
 
@@ -595,6 +597,17 @@ export const handleClaim = async (status: ClaimStatus, claimId: string, userId: 
             // })
 
             // ibalik yung onhold points if declined
+
+            if (!remarks) return { error: "Remarks needed!" }
+
+            await prisma.claim.update({
+                data: {
+                    status,
+                    remarks,
+                },
+                where: { id: currentClaim.id }
+            })
+
             await prisma.user.update({
                 data: {
                     points: claimer.points + points * currentClaim?.quantity
@@ -608,7 +621,8 @@ export const handleClaim = async (status: ClaimStatus, claimId: string, userId: 
                 data: {
                     quantity: {
                         increment: currentClaim?.quantity
-                    }
+                    },
+
                 }
             })
 

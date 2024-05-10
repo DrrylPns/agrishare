@@ -117,7 +117,7 @@ export const handleCancelDonation = async (status: DonationStatus, donationId: s
 
 }
 
-export const handleDonations = async (status: DonationStatus, quantity: number, conditionRate: number, subcategory: Subcategory | null, category: Category, donationId: string, donatorId: string, size: string | null) => {
+export const handleDonations = async (status: DonationStatus, quantity: number, conditionRate: number, subcategory: Subcategory | null, category: Category, donationId: string, donatorId: string, size: string | null, remarks?: string) => {
     const session = await auth()
 
     if (!session) return { error: "Unauthorized" }
@@ -277,6 +277,8 @@ export const handleDonations = async (status: DonationStatus, quantity: number, 
             // TODO: CREATE TRANSACTION FOR CANCELLED DONATIONS CAN EVEN IMPLEMENT PENALTY WHEREIN USERS CAN RECEIVE MINUS LOYALTY POINTS
 
             // magccreate pa rin ng transaction pero cancelled at walang maggain na points?
+
+            if (!remarks) return { error: "Remarks needed!" }
 
             await prisma.notification.create({
                 data: {

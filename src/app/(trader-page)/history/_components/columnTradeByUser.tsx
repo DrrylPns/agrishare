@@ -169,6 +169,23 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
         },
     },
     {
+        accessorKey: "remarks",
+        header: ({ column }) => {
+            return (
+                <DataTableColumnHeader column={column} title="Remarks" />
+            )
+        },
+        cell: ({ row }) => {
+            const remarks = row.original.remarks
+
+            return <div
+                className=""
+            >
+                {remarks}
+            </div>
+        },
+    },
+    {
         id: "actions",
         header: "Actions",
         cell: ({ row }) => {
@@ -184,6 +201,8 @@ export const columnTradeByUser: ColumnDef<TradeWithTradeeTraders>[] = [
             const [selectRateError, setSelectRateError] = useState<boolean>(false)
             const [selectReasonError, setSelectReasonError] = useState<boolean>(false)
 
+
+            const remarks = row.original.remarks
 
             const tradeId = row.original.id;
             const traderId = row.original.trader.id
