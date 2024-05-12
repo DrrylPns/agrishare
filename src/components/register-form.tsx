@@ -31,6 +31,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Card, CardFooter, CardHeader } from "./ui/card";
 import { Header } from "./header";
 import { BackButton } from "./back-button";
+import { toast } from "./ui/use-toast";
 
 type StateType = {
   countryCode: string;
@@ -154,6 +155,20 @@ export const RegisterForm = () => {
                           {...field}
                           disabled={isPending}
                           placeholder="John"
+                          onKeyPress={(event) => {
+                            const charCode = event.which
+                              ? event.which
+                              : event.keyCode;
+                            if (
+                              !(charCode >= 65 && charCode <= 90) &&
+                              !(charCode >= 97 && charCode <= 122) &&
+                              charCode !== 8 &&
+                              charCode !== 9 &&
+                              charCode !== 0
+                            ) {
+                              event.preventDefault();
+                            }
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -171,6 +186,20 @@ export const RegisterForm = () => {
                           {...field}
                           disabled={isPending}
                           placeholder="Doe"
+                          onKeyPress={(event) => {
+                            const charCode = event.which
+                              ? event.which
+                              : event.keyCode;
+                            if (
+                              !(charCode >= 65 && charCode <= 90) &&
+                              !(charCode >= 97 && charCode <= 122) &&
+                              charCode !== 8 &&
+                              charCode !== 9 &&
+                              charCode !== 0
+                            ) {
+                              event.preventDefault();
+                            }
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -230,6 +259,14 @@ export const RegisterForm = () => {
                     const lnState = form.getFieldState("lastName")
                     const fnState = form.getFieldState("name")
                     const emState = form.getFieldState("email")
+
+                    const cp = form.getValues("confirmPassword")
+                    const pw = form.getValues("password")
+
+                    if (pw !== cp) return toast({
+                      description: "password does not match",
+                      variant: "destructive"
+                    })
 
                     if (!cpState.isDirty || cpState.invalid) return;
                     if (!pwState.isDirty || pwState.invalid) return;
