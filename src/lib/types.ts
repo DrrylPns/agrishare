@@ -264,3 +264,10 @@ export type TradeWithTradeeTradersV2 = Prisma.TradeGetPayload<{
         post: true,
     }
 }>
+
+export type DonationWithRelation = Prisma.DonationGetPayload<{
+    include: {
+        donator: true,
+        Coordinates: true,
+    }
+}>

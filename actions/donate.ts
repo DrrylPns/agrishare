@@ -10,7 +10,8 @@ import { SendDonationType, sendDonationSchema } from "@/lib/validations/donation
 export const fetchDonations = async () => {
     const donations = await prisma.donation.findMany({
         include: {
-            donator: true
+            donator: true,
+            Coordinates: true,
         },
         orderBy: {
             createdAt: "desc"
@@ -74,7 +75,8 @@ export const fetchDonationsByUser = async () => {
 
     const donations = await prisma.donation.findMany({
         include: {
-            donator: true
+            donator: true,
+            Coordinates: true,
         },
         orderBy: {
             createdAt: "desc"
@@ -117,7 +119,7 @@ export const handleCancelDonation = async (status: DonationStatus, donationId: s
 
 }
 
-export const handleDonations = async (status: DonationStatus, quantity: number, conditionRate: number, subcategory: Subcategory | null, category: Category, donationId: string, donatorId: string, size: string | null, remarks?: string) => {
+export const handleDonations = async (status: DonationStatus, quantity: number, conditionRate: number, subcategory: Subcategory | null, category: Category | null, donationId: string, donatorId: string, size: string | null, remarks?: string) => {
     const session = await auth()
 
     if (!session) return { error: "Unauthorized" }

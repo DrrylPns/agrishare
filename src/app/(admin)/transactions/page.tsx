@@ -94,7 +94,6 @@ const page = async () => {
                 </Link>
               </div>
               <DataTable
-                //@ts-ignore
                 data={donations}
                 columns={columnDonation}
                 isHistory

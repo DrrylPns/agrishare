@@ -8,7 +8,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ColumnDef } from "@tanstack/react-table"
-import { DonationWithDonators } from "@/lib/types"
+import { DonationWithDonators, DonationWithRelation } from "@/lib/types"
 import { DataTableColumnHeader } from "@/app/(admin)/users/_components/data-table-column-header"
 import { format } from "date-fns"
 import { ChangeEvent, Fragment, useRef, useState, useTransition } from "react"
@@ -25,7 +25,7 @@ import { Input } from "../ui/input"
 import { Label } from "../ui/label"
 import { Textarea } from "../ui/textarea"
 
-export const columnDonation: ColumnDef<DonationWithDonators>[] = [
+export const columnDonation: ColumnDef<DonationWithRelation>[] = [
     {
         accessorKey: "dn",
         header: ({ column }) => {
@@ -108,6 +108,32 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                 className=""
             >
                 {status}
+            </div>
+        },
+    },
+    {
+        accessorKey: "urbanfarm",
+        header: ({ column }) => {
+            return (
+                <DataTableColumnHeader column={column} title="Urban Farm" />
+            )
+        },
+        cell: ({ row }) => {
+            const ufName = row.original.Coordinates?.name
+            const coordinates = row.original.Coordinates
+            const status = row.original.status
+
+            //@ts-ignore
+            const output = status === "APPROVED" && ufName?.length > 1 ? ufName :
+                status === "APPROVED" && coordinates === null ? "No urban farm assigned yet" :
+                    status === "DECLINED" ? "This donation is declined" :
+                        status === "CANCELLED" ? "This donation is cancelled" :
+                            "This donation is currently pending"
+
+            return <div
+                className=""
+            >
+                {output}
             </div>
         },
     },
@@ -228,11 +254,11 @@ export const columnDonation: ColumnDef<DonationWithDonators>[] = [
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             {donationStatus !== 'PENDING'}
-                            <DropdownMenuItem className="cursor-pointer"
+                            {/* <DropdownMenuItem className="cursor-pointer"
                                 onClick={() => setIsDownloadOpen(true)}
                             >
                                 Download
-                            </DropdownMenuItem>
+                            </DropdownMenuItem> */}
                             <DropdownMenuItem
                                 onClick={() => setIsReviewOpen(true)}
                             >

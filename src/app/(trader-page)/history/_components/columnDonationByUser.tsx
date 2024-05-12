@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { toast } from "@/components/ui/use-toast"
-import { DonationWithDonators } from "@/lib/types"
+import { DonationWithDonators, DonationWithRelation } from "@/lib/types"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
 import { DownloadIcon, MoreHorizontalIcon } from "lucide-react"
@@ -30,7 +30,7 @@ import { handleDonationProof } from "../../../../../actions/donate"
 
 // import { handleDonations } from "../../../actions/donate"
 
-export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
+export const columnDonationByUser: ColumnDef<DonationWithRelation>[] = [
     {
         accessorKey: "dn",
         header: ({ column }) => {
@@ -113,6 +113,32 @@ export const columnDonationByUser: ColumnDef<DonationWithDonators>[] = [
                 className=""
             >
                 {status}
+            </div>
+        },
+    },
+    {
+        accessorKey: "urbanfarm",
+        header: ({ column }) => {
+            return (
+                <DataTableColumnHeader column={column} title="Urban Farm" />
+            )
+        },
+        cell: ({ row }) => {
+            const ufName = row.original.Coordinates?.name
+            const coordinates = row.original.Coordinates
+            const status = row.original.status
+
+            //@ts-ignore
+            const output = status === "APPROVED" && ufName?.length > 1 ? ufName :
+                status === "APPROVED" && coordinates === null ? "No urban farm assigned yet" :
+                    status === "DECLINED" ? "This donation is declined" :
+                        status === "CANCELLED" ? "This donation is cancelled" :
+                            "This donation is currently pending"
+
+            return <div
+                className=""
+            >
+                {output}
             </div>
         },
     },

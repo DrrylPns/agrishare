@@ -508,9 +508,9 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
 
-                            <DropdownMenuItem className="cursor-pointer">
+                            {/* <DropdownMenuItem className="cursor-pointer">
                                 Download
-                            </DropdownMenuItem>
+                            </DropdownMenuItem> */}
 
                             <DropdownMenuItem
                                 onClick={() => setIsReviewOpen(true)}
