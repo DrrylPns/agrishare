@@ -4,7 +4,7 @@ import { AgrimapSchema, AgrimapType } from "@/lib/validations/agrimaps"
 import { auth } from "../auth"
 import prisma from "@/lib/db"
 
-export const createAgrimaps = async (values: AgrimapType) => {
+export const createAgrimaps = async (values: AgrimapType, barangay: string, district: string) => {
     try {
         const session = await auth()
 
@@ -15,6 +15,10 @@ export const createAgrimaps = async (values: AgrimapType) => {
         if (!validatedFields.success) return { error: "Invalid fields" }
 
         const { lat, lng, name } = validatedFields.data
+
+        if (!barangay) return { error: "No barangay selected!" }
+
+        if (!district) return { error: "No district selected!" }
 
         const latExists = await prisma.coordinates.findFirst({
             where: {
@@ -42,6 +46,8 @@ export const createAgrimaps = async (values: AgrimapType) => {
                 lat,
                 lang: lng,
                 name,
+                barangay,
+                district,
             }
         })
 
@@ -60,3 +66,38 @@ export const fetchAgrimaps = async () => {
         throw new Error(error as any);
     }
 };
+
+export const fetchUserSideAgrimaps = async (barangay?: string) => {
+    try {
+        if (barangay) {
+            const agrimaps = await prisma.coordinates.findMany({
+                include: {
+                    _count: {
+                        select: {
+                            donations: true
+                        }
+                    }
+                },
+                where: {
+                    barangay
+                }
+            });
+
+            return agrimaps
+        } else {
+            const agrimaps = await prisma.coordinates.findMany({
+                include: {
+                    _count: {
+                        select: {
+                            donations: true
+                        }
+                    }
+                }
+            });
+
+            return agrimaps
+        }
+    } catch (error) {
+        throw new Error(error as any)
+    }
+}

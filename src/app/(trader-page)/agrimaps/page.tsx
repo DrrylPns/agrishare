@@ -18,7 +18,9 @@ async function page() {
 
   return (
     <div className='w-full md:w-3/5 mt-5 sm:mt-0'>
-      <AgriMaps coordinates={agrimaps} />
+      <AgriMaps
+        // coordinates={agrimaps}
+      />
     </div>
   )
 }

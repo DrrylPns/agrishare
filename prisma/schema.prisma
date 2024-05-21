@@ -651,10 +651,12 @@ enum NotificationType {
 }
 
 model Coordinates {
-  id   String @id @default(cuid())
-  name String @unique
-  lat  Float
-  lang Float
+  id       String  @id @default(cuid())
+  name     String  @unique
+  lat      Float
+  lang     Float
+  district String
+  barangay String
 
   donations Donation[]
 }
