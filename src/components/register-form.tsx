@@ -1,11 +1,13 @@
 "use client";
 
-import * as z from "zod";
-import { useState, useTransition, useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
-import { Input } from "@/components/ui/input";
+import { FormError } from "@/components/form-error";
+import { FormSuccess } from "@/components/form-success";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -15,23 +17,24 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Country, State, City } from "country-state-city"
-import { Button } from "@/components/ui/button";
-import { FormError } from "@/components/form-error";
-import { FormSuccess } from "@/components/form-success";
-import { RegisterSchema } from "@/lib/validations/auth";
-import { CardWrapper } from "./card-wrapper";
-import { register } from "../../actions/register";
-import { Checkbox } from "./ui/checkbox";
-import Link from "next/link";
+import { Input } from "@/components/ui/input";
+import { alicia, bahaytoro, balingasa, bungad, damar, damayan, delmonte, katipunan, mariblo, masambong, nayongkanluran, paangbundok, pagibigsanayon, paltok, paraiso, philam, project6, ramonmagsaysay, saintpeter, salvacion, sanantonio, sanjose, santacruz, santateresita, santocristo, santodomingo, sienna, talayan, vasra, veteransvillage, westtriangle } from "@/lib/d1";
+import { bagongsilangan, batasanhills, commonwealth, holyspirit, payatas } from "@/lib/d2";
+import { amihan, bagumbayan, bagumbuhay, bayanihan, blueridgea, blueridgeb, campaguinaldo, claro, dioquinozobel, duyanduyan, eastkamias, erodriguez, escopa1, escopa2, escopa3, escopa4, loyolaHeights, mangga, marilag, masagana, matandangbalara, milagrosa, pansol, quirino2A, quirino2B, quirino2C, quirino3A, saintIgnatius, sanRoque, silangan, socorro, tagumpay, ugongNorte, villaMariaClara, westKamias, whitePlains } from "@/lib/d3";
 import usePasswordToggle from "@/lib/hooks/usePasswordToggle";
+import { RegisterSchema } from "@/lib/validations/auth";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import AddressSelector from "./AddressSelector";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select";
-import { Card, CardFooter, CardHeader } from "./ui/card";
-import { Header } from "./header";
+import { register } from "../../actions/register";
 import { BackButton } from "./back-button";
+import { Header } from "./header";
+import { Card, CardFooter, CardHeader } from "./ui/card";
+import { Checkbox } from "./ui/checkbox";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select";
 import { toast } from "./ui/use-toast";
+import { bagongLipunanNgCrame, botocan, central, damayangLagi, donManuel, donaImelda, donaJosefa, horseshoe, immaculateConception, kalusugan, kamuning, kaunlaran, kristongHari, krusNaLigas, lagingHanda, malaya, mariana, obrero, oldCapitolSite, paligsahan, pinagkaisahan, pinyahan, roxas, sacredHeart, sanIsidro, sanMartinDePorres, sanVicente, santol, sikatunaVillage, southTriangle, stoNino, tatalon, teachersVillageEast, teachersVillageWest, upCampus, upVillage, valencia } from "@/lib/d4";
+import { bagbag, capri, fairview, greaterLagro, gulod, kaligayahan, nagkaisangNayon, northFairview, novalichesProper, pasongPutikProper, sanAgustin, sanBartolome, santaLucia, santaMonica } from "@/lib/d5";
+import { apolonioSamson, baesa, balongBato, culiat, sangandaan, sauyo, talipapaStreets, tandangSoraStreets } from "@/lib/d6";
 
 type StateType = {
   countryCode: string;
@@ -49,6 +52,10 @@ type CityType = {
   countryCode: string;
 }
 
+interface BarangayStreets {
+  [key: string]: string[]; // Define index signature
+}
+
 export const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
@@ -64,8 +71,11 @@ export const RegisterForm = () => {
   // const [city, setCity] = useState<CityType>();
   const [district, setDistrict] = useState("")
   const [barangay, setBarangay] = useState("")
+  const [street, setStreet] = useState("")
   const [isPending, startTransition] = useTransition()
   const [formStep, setFormStep] = useState(1)
+  // const [customStreet, setCustomStreet] = useState('');
+  const [showInput, setShowInput] = useState(false);
 
   const router = useRouter();
 
@@ -101,13 +111,187 @@ export const RegisterForm = () => {
     setSuccess("");
 
     startTransition(() => {
-      register(values, barangay, district, "Quezon City")
+      register(values, barangay, district, "Quezon City", street)
         .then((data) => {
           setError(data.error);
           setSuccess(data.success);
         });
     });
   };
+
+  const handleBarangayChange = (selectedBarangay: string) => {
+    setBarangay(selectedBarangay);
+    setStreet("");
+  };
+
+  const barangayStreets: BarangayStreets = {
+    Alicia: alicia,
+    'Bahay Toro': bahaytoro,
+    Balingasa: balingasa,
+    Bungad: bungad,
+    Damar: damar,
+    Damayan: damayan,
+    'Del Monte': delmonte, // Add Del Monte
+    Katipunan: katipunan, // Add Katipunan
+    Mariblo: mariblo, // Add Mariblo
+    Masambong: masambong, // Add Masambong
+    'Nayong Kanluran': nayongkanluran, // Add Nayong Kanluran
+    'Paang Bundok': paangbundok, // Add Paang Bundok
+    'Pag-ibig sa Nayon': pagibigsanayon, // Add Pag-ibig sa Nayon
+    Paltok: paltok, // Add Paltok
+    Paraiso: paraiso, // Add Paraiso
+    'Phil-Am': philam, // Add Phil-Am
+    'Project 6': project6, // Add Project 6
+    'Ramon Magsaysay': ramonmagsaysay, // Add Ramon Magsaysay
+    'Saint Peter': saintpeter, // Add Saint Peter
+    Salvacion: salvacion, // Add Salvacion
+    'San Antonio': sanantonio, // Add San Antonio
+    'San Jose': sanjose, // Add San Jose
+    'Santa Cruz': santacruz, // Add Santa Cruz
+    'Santa Teresita': santateresita, // Add Santa Teresita
+    'Sto. Cristo': santocristo, // Add Sto. Cristo
+    'Santo Domingo': santodomingo, // Add Santo Domingo
+    Siena: sienna, // Add Siena
+    Talayan: talayan, // Add Talayan
+    Vasra: vasra, // Add Vasra
+    'Veterans Village': veteransvillage, // Add Veterans Village
+    'West Triangle': westtriangle, // Add West Triangle
+    'Bagong Silangan': bagongsilangan, // Add Bagong Silangan
+    'Batasan Hills': batasanhills, // Add Batasan Hills
+    Commonwealth: commonwealth, // Add Commonwealth
+    'Holy Spirit': holyspirit, // Add Holy Spirit
+    'Payatas (Litex)': payatas, // Add Payatas (Litex)
+    Amihan: amihan, // Add Amihan
+    Bagumbayan: bagumbayan, // Add Bagumbayan
+    Bagumbuhay: bagumbuhay, // Add Bagumbuhay
+    Bayanihan: bayanihan, // Add Bayanihan
+    'Blue Ridge A': blueridgea, // Add Blue Ridge A
+    'Blue Ridge B': blueridgeb, // Add Blue Ridge B
+    'Camp Aguinaldo': campaguinaldo, // Add Camp Aguinaldo
+    'Claro (Quirino 3-B)': claro, // Add Claro (Quirino 3-B)
+    'Dioquino Zobel': dioquinozobel, // Add Dioquino Zobel
+    'Duyan-duyan': duyanduyan, // Add Duyan-duyan
+    'E. Rodriguez': erodriguez, // Add E. Rodriguez
+    'East Kamias': eastkamias, // Add East Kamias
+    'Escopa I': escopa1, // Add Escopa I
+    'Escopa II': escopa2, // Add Escopa II
+    'Escopa III': escopa3, // Add Escopa III
+    'Escopa IV': escopa4, // Add Escopa IV
+    'Loyola Heights': loyolaHeights, // Add Loyola Heights
+    Mangga: mangga, // Add Mangga
+    Marilag: marilag, // Add Marilag
+    Masagana: masagana, // Add Masagana
+    'Matandang Balara': matandangbalara, // Add Matandang Balara
+    Milagrosa: milagrosa, // Add Milagrosa
+    Pansol: pansol, // Add Pansol
+    'Quirino 2-A': quirino2A, // Add Quirino 2-A
+    'Quirino 2-B': quirino2B, // Add Quirino 2-B
+    'Quirino 2-C': quirino2C, // Add Quirino 2-C
+    'Quirino 3-A': quirino3A, // Add Quirino 3-A
+    'St. Ignatius': saintIgnatius, // Add St. Ignatius
+    'San Roque': sanRoque, // Add San Roque
+    Silangan: silangan, // Add Silangan
+    Socorro: socorro, // Add Socorro
+    Tagumpay: tagumpay, // Add Tagumpay
+    'Ugong Norte': ugongNorte,
+    'Villa Maria Clara': villaMariaClara,
+    'West Kamias': westKamias,
+    'White Plains': whitePlains,
+    'Bagong Lipunan ng Crame': bagongLipunanNgCrame,
+    Botocan: botocan,
+    Central: central,
+    'Damayang Lagi': damayangLagi,
+    'Don Manuel': donManuel,
+    'Doña Imelda': donaImelda,
+    'Doña Josefa': donaJosefa,
+    Horseshoe: horseshoe,
+    'Immaculate Conception': immaculateConception,
+    Kalusugan: kalusugan,
+    Kamuning: kamuning,
+    Kaunlaran: kaunlaran,
+    'Kristong Hari': kristongHari,
+    'Krus na Ligas': krusNaLigas,
+    'Laging Handa': lagingHanda,
+    Malaya: malaya,
+    Mariana: mariana,
+    Obrero: obrero,
+    'Old Capitol Site': oldCapitolSite,
+    Paligsahan: paligsahan,
+    Pinagkaisahan: pinagkaisahan,
+    Pinyahan: pinyahan,
+    Roxas: roxas,
+    'Sacred Heart': sacredHeart,
+    'San Isidro': sanIsidro,
+    'San Martin de Porres': sanMartinDePorres,
+    'San Vicente': sanVicente,
+    Santol: santol,
+    'Sikatuna Village': sikatunaVillage,
+    'South Triangle': southTriangle,
+    'Sto. Niño': stoNino,
+    Tatalon: tatalon,
+    'Teacher\'s Village East': teachersVillageEast,
+    'Teacher\'s Village West': teachersVillageWest,
+    'U.P. Campus': upCampus,
+    'U.P. Village': upVillage,
+    Valencia: valencia,
+    Bagbag: bagbag,
+    Capri: capri,
+    Fairview: fairview,
+    Gulod: gulod,
+    'Greater Lagro': greaterLagro,
+    Kaligayahan: kaligayahan,
+    'Nagkaisang Nayon': nagkaisangNayon,
+    'North Fairview': northFairview,
+    'Novaliches Proper': novalichesProper,
+    'Pasong Putik Proper': pasongPutikProper,
+    'San Agustin': sanAgustin,
+    'San Bartolome': sanBartolome,
+    'Sta. Lucia': santaLucia,
+    'Sta. Monica': santaMonica,
+    'Apolonio Samson': apolonioSamson,
+    Baesa: baesa,
+    'Balong Bato': balongBato,
+    Culiat: culiat,
+    Sangandaan: sangandaan,
+    Sauyo: sauyo,
+    Talipapa: talipapaStreets,
+    'Tandang Sora': tandangSoraStreets,
+  };
+
+  const renderStreetOptions = () => {
+    if (barangay && barangayStreets[barangay]) {
+      return barangayStreets[barangay].map((streetName: string) => (
+        <SelectItem key={streetName} value={streetName}>{streetName}</SelectItem>
+      ));
+    } else {
+      return null;
+    }
+  };
+
+  // const renderStreetOptions = () => {
+  //   if (!showInput) {
+  //     if (barangay && barangayStreets[barangay]) {
+  //       return barangayStreets[barangay].map((streetName: string) => (
+  //         <SelectItem key={streetName} value={streetName}>{streetName}</SelectItem>
+  //       ));
+  //     } else {
+  //       return null;
+  //     }
+  //   } else {
+  //     return (
+  //       <>
+  //         <Input
+  //           type="text"
+  //           value={customStreet}
+  //           onChange={(e) => setCustomStreet(e.target.value)}
+  //           placeholder="Enter your street"
+  //         />
+  //         <button onClick={() => setShowInput(false)}>Cancel</button>
+  //         <button onClick={() => setStreet(customStreet)}>Save</button>
+  //       </>
+  //     );
+  //   }
+  // };
 
   return (
     <div className="h-screen w-full flex items-center justify-center bg-[#84D187]">
@@ -300,32 +484,6 @@ export const RegisterForm = () => {
                   />
                 </div>
 
-                {/* <div className="grid grid-cols-1 gap-6">
-                  <div className="">
-                    <p className="font-semibold text-[14px]">Country:</p>
-                    <AddressSelector data={countryData} selected={country} setSelected={setCountry} disabled={true} />
-                  </div>
-
-                  {state && (
-                    <div>
-                      <p className="font-semibold text-[14px]">State:</p>
-                      <AddressSelector
-                        data={stateData}
-                        selected={state}
-                        setSelected={setState}
-                        disabled={true}
-                      />
-                    </div>
-                  )}
-
-                  {city && (
-                    <div>
-                      <p className=" font-semibold text-[14px]">City:</p>
-                      <AddressSelector data={cityData} selected={city} setSelected={setCity} disabled={true} />
-                    </div>
-                  )}
-                </div> */}
-
                 <FormField
                   control={form.control}
                   name="address"
@@ -361,7 +519,7 @@ export const RegisterForm = () => {
                     </SelectContent>
                   </Select>
 
-                  <Select value={barangay} onValueChange={setBarangay}>
+                  <Select value={barangay} onValueChange={handleBarangayChange}>
                     <SelectTrigger className="">
                       <SelectValue placeholder="Select a barangay" />
                     </SelectTrigger>
@@ -473,7 +631,7 @@ export const RegisterForm = () => {
                               <SelectItem value="Doña Imelda">Doña Imelda</SelectItem>
                               <SelectItem value="Doña Josefa">Doña Josefa</SelectItem>
                               <SelectItem value="Horseshoe">Horseshoe</SelectItem>
-                              <SelectItem value="Immaculate Concepciono">Immaculate Concepciono</SelectItem>
+                              <SelectItem value="Immaculate Conception">Immaculate Conception</SelectItem>
                               <SelectItem value="Kalusugan">Kalusugan</SelectItem>
                               <SelectItem value="Kamuning">Kamuning</SelectItem>
                               <SelectItem value="Kaunlaran">Kaunlaran</SelectItem>
@@ -541,6 +699,43 @@ export const RegisterForm = () => {
                       </SelectGroup>
                     </SelectContent>
                   </Select>
+                </div>
+
+                <div className="grid grid-cols-1 mt-5 gap-3">
+                  {!showInput ? (
+                    <Select value={street} onValueChange={setStreet}>
+                      <SelectTrigger className="">
+                        <SelectValue placeholder="Select a street" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Barangay</SelectLabel>
+                          {renderStreetOptions()}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  ) :
+                    <Input
+                      type="text"
+                      value={street}
+                      onChange={(e) => setStreet(e.target.value)}
+                      placeholder="Enter your street"
+                    />
+                  }
+
+                  {!showInput ? (
+                    <p className="text-sm text-muted-foreground cursor-pointer underline" onClick={() => {
+                      setShowInput(true)
+                    }}>
+                      Can't see your street? Click here!
+                    </p>
+                  ) :
+                    <p className="text-sm text-muted-foreground cursor-pointer underline" onClick={() => {
+                      setShowInput(false)
+                    }}>
+                      Go back to dropdown selection!
+                    </p>
+                  }
                 </div>
 
                 <Input placeholder="Address" value={"Quezon City"} disabled={true} />

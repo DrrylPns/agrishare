@@ -10,18 +10,18 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const extractTime = (date:string)=>{
+export const extractTime = (date: string) => {
   const dateTime = new Date(date);
 
   // Get the hours, minutes, and seconds from the Date object
   let hours = dateTime.getHours();
   const minutes = dateTime.getMinutes();
   const seconds = dateTime.getSeconds();
-  
+
   // Convert hours to 12-hour clock format
   const suffix = hours >= 12 ? "pm" : "am";
   hours = hours % 12 || 12; // Convert 0 to 12 for midnight
-  
+
   // Format the time as a string
   const timeString = `${hours}:${minutes}${suffix}`;
 
@@ -29,37 +29,37 @@ export const extractTime = (date:string)=>{
 }
 
 export const reasons = [
- { value:"NotAvailable",label:" Not availble on the given time."}, {value:"ChangeOfMind",label:"Change of mind"}, {value:"ChangeOfTrade",label:"Change of trade details"}, {value:"FailedToAppear",label:"Failed to appear without prior notice"}, {value:"Others",label:"Others"}
+  { value: "NotAvailable", label: " Not availble on the given time." }, { value: "ChangeOfMind", label: "Change of mind" }, { value: "ChangeOfTrade", label: "Change of trade details" }, { value: "FailedToAppear", label: "Failed to appear without prior notice" }, { value: "Others", label: "Others" }
 ]
-export const formatedReason = (reason:string)=>{
-  if(reason === "InnapropirateImage"){
-      return "Innapropirate image"
-  } else if(reason === "DisrespecfulPost") {
-      return "Innapropirate image"
-  } else if(reason === "WrongInformation"){
-      return "Wrong Information"
-  } else if(reason === "GraphicViolence"){
-      return "Graphic Violence"
-  } else if(reason === "Harassment"){
-      return "Harassment"
-  } else if(reason === "Bullying"){
-      return "Bullying"
-  } else if(reason === "Others"){
-      return "Others"
+export const formatedReason = (reason: string) => {
+  if (reason === "InnapropirateImage") {
+    return "Innapropirate image"
+  } else if (reason === "DisrespecfulPost") {
+    return "Innapropirate image"
+  } else if (reason === "WrongInformation") {
+    return "Wrong Information"
+  } else if (reason === "GraphicViolence") {
+    return "Graphic Violence"
+  } else if (reason === "Harassment") {
+    return "Harassment"
+  } else if (reason === "Bullying") {
+    return "Bullying"
+  } else if (reason === "Others") {
+    return "Others"
   } else {
-      return "Invalid Reason"
+    return "Invalid Reason"
   }
-} 
+}
 export const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
   const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      second: 'numeric',
-      timeZone: 'UTC' // Specify the timezone if necessary
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    timeZone: 'UTC' // Specify the timezone if necessary
   };
   return date.toLocaleString('en-US', options);
 };
