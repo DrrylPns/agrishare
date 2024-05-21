@@ -146,7 +146,7 @@ export const columnDonationByUser: ColumnDef<DonationWithRelation>[] = [
         accessorKey: "createdAt",
         header: ({ column }) => {
             return (
-                <DataTableColumnHeader column={column} title="DATE" />
+                <DataTableColumnHeader column={column} title="Transaction Date" />
             )
         },
         cell: ({ row }) => {
@@ -156,6 +156,29 @@ export const columnDonationByUser: ColumnDef<DonationWithRelation>[] = [
                 className=""
             >
                 {format(date, "PPP")}
+            </div>
+        },
+    },
+    {
+        accessorKey: "updatedAt",
+        header: ({ column }) => {
+            return (
+                <DataTableColumnHeader column={column} title="Delivered date" />
+            )
+        },
+        cell: ({ row }) => {
+            const date = row.original.updatedAt
+            const proof = row.original.proof
+
+            return <div
+                className=""
+            >
+                {proof === null ? (
+                    <></>
+                ):(
+                    <>{format(date, "PPP")}</>
+
+                )}
             </div>
         },
     },
@@ -201,6 +224,7 @@ export const columnDonationByUser: ColumnDef<DonationWithRelation>[] = [
             const useId = row.original.donator.userId
             const donationQuantity = row.original.quantity
             const dateDonated = row.original.createdAt
+            const dateDelivered = row.original.updatedAt
             const donationStatus = row.original.status
             const donationId = row.original.id
             const donatorEMail = row.original.donator.email
@@ -345,7 +369,9 @@ export const columnDonationByUser: ColumnDef<DonationWithRelation>[] = [
                                             {/* <h1>User Email: {donatorEmail}</h1> */}
                                             <h1 className="text-black text-medium tex-sm">Transaction Date: {format(dateDonated, "PPP")}</h1>
                                             <h1 className="text-black text-medium tex-sm">Transaction Time: {extractTime(dateDonated.toString())}</h1>
-
+                                            {proof !== null && (
+                                                <h1 className="text-black text-medium tex-sm">Date Delivered: {format(dateDelivered, "PPP")}</h1>
+                                            )}
                                         </div>
                                         <Separator />
                                         <div className="text-black text-lg my-3 font-semibold">
@@ -354,7 +380,7 @@ export const columnDonationByUser: ColumnDef<DonationWithRelation>[] = [
                                             <h1 className="text-black text-medium tex-sm">User Email: {donatorEMail}</h1>
                                             <h1 className="text-black text-medium tex-sm">Item: {donatorProduct}</h1>
                                             <h1 className="text-black text-medium tex-sm">Unit: {unit === "FRESH_FRUIT" || unit === "VEGETABLES" ? "Kilo/s" : unit === "TOOLS" || unit === "EQUIPMENTS" ? "Piece/s" : "Pack/s"}</h1>
-                                            <h1 className="text-black text-medium tex-sm">Accumulated Points: {accumelatedPoints}</h1>
+                                            <h1 className="text-black text-medium tex-sm">Accumulated Points: {accumelatedPoints.toFixed(0)}</h1>
 
                                         </div>
                                         <Separator />
