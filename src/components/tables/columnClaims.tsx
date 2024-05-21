@@ -128,6 +128,10 @@ export const columnClaims: ColumnDef<ClaimsWithAgrichangeAndUsers>[] = [
 
             const points = row.original.agriChange.pointsNeeded
             const qty = row.original.quantity
+            const agriCat = row.original.agriChange.category
+            const donationUnit = agriCat === "FRESH_FRUIT" || agriCat === "VEGETABLES" ? "Kilo/s" :
+                agriCat === "EQUIPMENTS" || agriCat === "TOOLS" ? "Piece/s" :
+                    agriCat === "FERTILIZER" || agriCat === "SEEDS" || agriCat === "SOILS" ? "Pack/s" : "Unit"
 
             const overallPts = points * qty
 
@@ -186,6 +190,7 @@ export const columnClaims: ColumnDef<ClaimsWithAgrichangeAndUsers>[] = [
                                                     {/* <p className="font-semibold">Trade ID: {id}</p> */}
                                                     <p>Name: {name} {" "} {lastName}</p>
                                                     <p>Item: {product}</p>
+                                                    <p>Quantity: {qty} {" "} {donationUnit}</p>
                                                     <p>
                                                         Points deduction: <span className="text-rose-500">- {overallPts.toFixed(0)} Point(s)</span>
                                                     </p>

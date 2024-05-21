@@ -181,6 +181,9 @@ export const columnDonation: ColumnDef<DonationWithRelation>[] = [
             const donatorId = row.original.donator.id
             const donatorProof = row.original.proof
             const donationSize = row.original.size
+            const donationUnit = donationCategory === "FRESH_FRUIT" || donationCategory === "VEGETABLES" ? "Kilo/s" :
+                donationCategory === "EQUIPMENTS" || donationCategory === "TOOLS" ? "Piece/s" :
+                    donationCategory === "FERTILIZER" || donationCategory === "SEEDS" || donationCategory === "SOILS" ? "Pack/s" : "Unit"
 
             const dateDonated = row.original.createdAt
             const donationStatus = row.original.status
@@ -287,7 +290,7 @@ export const columnDonation: ColumnDef<DonationWithRelation>[] = [
                                                     {/* <p className="font-semibold">Trade ID: {id}</p> */}
                                                     <p>Name: {donatorName} {" "} {donatorLastName}</p>
                                                     <p>Item: {donatorProduct}</p>
-                                                    <p>Quantity: {donatoryQty}</p>
+                                                    <p>Quantity: {donatoryQty}{" "} {donationUnit}</p>
                                                     <p>
                                                         Accumulated Points: <span className="text-green-500">{donatorPoints.toFixed(0)} Point(s)</span>
                                                     </p>

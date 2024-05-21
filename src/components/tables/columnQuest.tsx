@@ -125,6 +125,12 @@ export const columnQuest: ColumnDef<RequestWithAgriquestAndUsers>[] = [
             const lastName = row.original.user.lastName
 
             const quantity = row.original.agriquest.quantityPerTrade
+            const category = row.original.agriquest.category
+            const donationUnit = category === "FRESH_FRUIT" || category === "VEGETABLES" ? "Kilo/s" :
+                category === "EQUIPMENTS" || category === "TOOLS" ? "Piece/s" :
+                    category === "FERTILIZER" || category === "SEEDS" || category === "SOILS" ? "Pack/s" : "Unit"
+
+
             const product = row.original.agriquest.name
             const agriquestId = row.original.agriquest.id
 
@@ -137,7 +143,7 @@ export const columnQuest: ColumnDef<RequestWithAgriquestAndUsers>[] = [
                 <>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
+                            <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
                                 <span className="sr-only">Open menu</span>
                                 <MoreHorizontalIcon className="h-4 w-4" />
                             </Button>
@@ -178,7 +184,7 @@ export const columnQuest: ColumnDef<RequestWithAgriquestAndUsers>[] = [
                                                     {/* <p className="font-semibold">Trade ID: {id}</p> */}
                                                     <p>Name: {name} {" "} {lastName}</p>
                                                     <p>Item: {product}</p>
-                                                    <p>Quantity: {quantity}</p>
+                                                    <p>Quantity: {quantity}{" "}{donationUnit}</p>
                                                     {/* <p>
                                                         Points deduction: <span className="text-rose-500">{points.toFixed(2)} Point(s)</span>
                                                     </p> */}

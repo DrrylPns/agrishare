@@ -183,6 +183,9 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
             const traderSize = row.original.size
             const traderCategory = row.original.category
             const traderConditionRate = row.original.traderConditionRate
+            const traderUnit = traderCategory === "FRESH_FRUIT" || traderCategory === "VEGETABLES" ? "Kilo/s" :
+                traderCategory === "EQUIPMENTS" || traderCategory === "TOOLS" ? "Piece/s" :
+                    traderCategory === "FERTILIZER" || traderCategory === "SEEDS" || traderCategory === "SOILS" ? "Pack/s" : "Unit"
 
             const tradeeName = row.original.tradee.name
             const tradeeLastName = row.original.tradee.lastName
@@ -195,6 +198,9 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
             const tradeeSize = row.original.post.size
             const tradeeCategory = row.original.post.category
             const tradeeConditionRate = row.original.tradeeConditionRate
+            const tradeeUnit = tradeeCategory === "FRESH_FRUIT" || tradeeCategory === "VEGETABLES" ? "Kilo/s" :
+                tradeeCategory === "EQUIPMENTS" || tradeeCategory === "TOOLS" ? "Piece/s" :
+                    tradeeCategory === "FERTILIZER" || tradeeCategory === "SEEDS" || tradeeCategory === "SOILS" ? "Pack/s" : "Unit"
 
             const tradeeShelfLifeDuration = row.original.post.shelfLifeDuration
             const tradeeShelfLifeUnit = row.original.post.shelfLifeUnit
@@ -540,7 +546,7 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                                     {/* <p className="font-semibold">Trade ID: {id}</p> */}
                                                     <p>Name: {traderName} {" "} {traderLastName}</p>
                                                     <p>Item: {traderItem}</p>
-                                                    <p>Quantity: {traderQty}</p>
+                                                    <p>Quantity: {traderQty} {" "} {traderUnit}</p>
                                                     <p>
                                                         Accumulated Points: <span className="text-green-500">{traderCalculatedPoints.toFixed(0)} Point(s)</span>
                                                     </p>
@@ -580,7 +586,7 @@ export const columnTrade: ColumnDef<TradeWithTradeeTraders>[] = [
                                                 <div className="mt-4 text-sm text-center md:text-left">
                                                     <p>Name: {tradeeName} {" "} {tradeeLastName}</p>
                                                     <p>Item: {tradeeItem}</p>
-                                                    <p>Quantity: {tradeeQty}</p>
+                                                    <p>Quantity: {tradeeQty} {" "} {tradeeUnit}</p>
                                                     <p>
                                                         Accumulated Points: <span className="text-green-500">{tradeeCalculatedPoints.toFixed(0)} Point(s)</span>
                                                     </p>
