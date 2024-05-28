@@ -82,7 +82,7 @@ const TradeReportsPage = () => {
             </div>
             <Card className='mx-auto max-w-full h-full drop-shadow-lg' ref={pdfRef}>
                 <CardHeader>
-
+                <h1 className='text-center w-full font-semibold mb-10'>Points</h1>
                 </CardHeader>
                 <Popover>
                     <PopoverTrigger asChild>

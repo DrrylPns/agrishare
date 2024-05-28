@@ -86,6 +86,7 @@ const DonationReportsPage = () => {
                 <div> <DownloadIcon onClick={downloadPDF} className='cursor-pointer' /></div>
             </div>
             <Card className='mx-auto max-w-full h-full drop-shadow-lg' ref={pdfRef}>
+                <h1 className='text-center w-full font-semibold mb-10'>Donations</h1>
                 <CardHeader className='flex flex-col gap-2'>
                     <div>
                         Total points gained by users based on date: {totalPoints}

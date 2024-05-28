@@ -82,6 +82,7 @@ const TradeReportsPage = () => {
                 <div> <DownloadIcon onClick={downloadPDF} className='cursor-pointer' /></div>
             </div>
             <Card className='mx-auto max-w-full h-full drop-shadow-lg' ref={pdfRef}>
+            <h1 className='text-center w-full font-semibold mb-10'>Agriquest</h1>
                 <Popover>
                     <PopoverTrigger asChild>
                         <Button

@@ -84,6 +84,7 @@ const TradeReportsPage = () => {
             </div>
             
             <Card className='mx-auto max-w-full h-full drop-shadow-lg' ref={pdfRef}>
+                 <h1 className='text-center w-full font-semibold mb-10'>Trade</h1>
                 <CardHeader>
                     Total of trades based on date: {countTrade}
                 </CardHeader>
