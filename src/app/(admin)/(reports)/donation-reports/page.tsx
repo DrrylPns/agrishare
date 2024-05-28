@@ -7,8 +7,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils'
 import { Card } from '@tremor/react'
 import { addDays, format } from 'date-fns'
-import { CalendarIcon } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { CalendarIcon, DownloadIcon } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { DataTable } from '../../users/_components/data-table'
 import { useQuery } from '@tanstack/react-query'
@@ -18,6 +18,8 @@ import { ColumnTradeReports } from '../_components/ColumnTradeReports'
 import { ColumnDonationReports } from '../_components/ColumnDonationReports'
 import { fetchDonationsByDateRange } from '../../../../../actions/donate'
 import { CardHeader } from '@/components/ui/card'
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
 
 const DonationReportsPage = () => {
     const [date, setDate] = useState<DateRange | undefined>(undefined);
@@ -52,10 +54,38 @@ const DonationReportsPage = () => {
         fetchData();
     }, [date]);
 
+    const pdfRef = useRef<HTMLDivElement>(null);
+
+    const downloadPDF = () => {
+        const input = pdfRef.current;
+        if (!input) {
+            console.error("PDF reference is not available");
+            return;
+        }
+        html2canvas(input).then((canvas) => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF('p', 'mm', 'a4', true);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
+            const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+            const imgX = (pdfWidth - imgWidth * ratio) / 2;
+            const imgY = 2; // Adjust the Y position to start from the top with a 20px crop
+            const imgHeightAdjusted = imgHeight * ratio + 30; // Adjusted height to fit the entire page with the crop
+            pdf.addImage(imgData, 'PNG', imgX, imgY, pdfWidth, imgHeightAdjusted);
+            pdf.save('Donations-Report.pdf');
+        });
+    }
+
     return (
         <div>
-            <AdminTitle entry='1' title='Donation Reports' />
-            <Card className='mx-auto max-w-full h-full drop-shadow-lg'>
+           
+            <div className='flex justify-between items-center'>
+                <AdminTitle entry='1' title='Donation Reports' />
+                <div> <DownloadIcon onClick={downloadPDF} className='cursor-pointer' /></div>
+            </div>
+            <Card className='mx-auto max-w-full h-full drop-shadow-lg' ref={pdfRef}>
                 <CardHeader className='flex flex-col gap-2'>
                     <div>
                         Total points gained by users based on date: {totalPoints}

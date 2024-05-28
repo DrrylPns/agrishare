@@ -7,8 +7,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils'
 import { Card } from '@tremor/react'
 import { format } from 'date-fns'
-import { CalendarIcon } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { CalendarIcon, DownloadIcon } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { fetchTradesByDateRange } from '../../../../../actions/trade'
 import { DataTable } from '../../users/_components/data-table'
@@ -16,6 +16,8 @@ import { ColumnTradeReports } from '../_components/ColumnTradeReports'
 import { fetchTransactionByDateRange } from '../../../../../actions/transaction'
 import { ColumnPointsReports } from '../_components/ColumnPointsReports'
 import { CardHeader } from '@/components/ui/card'
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
 
 const TradeReportsPage = () => {
     const [date, setDate] = useState<DateRange | undefined>(undefined);
@@ -47,10 +49,38 @@ const TradeReportsPage = () => {
         fetchData();
     }, [date]);
 
+    const pdfRef = useRef<HTMLDivElement>(null);
+
+    const downloadPDF = () => {
+        const input = pdfRef.current;
+        if (!input) {
+            console.error("PDF reference is not available");
+            return;
+        }
+        html2canvas(input).then((canvas) => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF('p', 'mm', 'a4', true);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
+            const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+            const imgX = (pdfWidth - imgWidth * ratio) / 2;
+            const imgY = 2; // Adjust the Y position to start from the top with a 20px crop
+            const imgHeightAdjusted = imgHeight * ratio + 30; // Adjusted height to fit the entire page with the crop
+            pdf.addImage(imgData, 'PNG', imgX, imgY, pdfWidth, imgHeightAdjusted);
+            pdf.save('Points-Report.pdf');
+        });
+    }
+
     return (
         <div>
-            <AdminTitle entry='1' title='Point Reports' />
-            <Card className='mx-auto max-w-full h-full drop-shadow-lg'>
+          
+            <div className='flex justify-between items-center'>
+                <AdminTitle entry='1' title='Point Reports' />
+                <div> <DownloadIcon onClick={downloadPDF} className='cursor-pointer' /></div>
+            </div>
+            <Card className='mx-auto max-w-full h-full drop-shadow-lg' ref={pdfRef}>
                 <CardHeader>
 
                 </CardHeader>
