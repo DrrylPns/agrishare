@@ -491,7 +491,7 @@ export const RegisterForm = () => {
                     <FormItem>
                       <FormLabel>Address</FormLabel>
                       <FormControl>
-                        <Input placeholder="House # & Street address" {...field} />
+                        <Input placeholder="House #/Block #/ Lot #" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

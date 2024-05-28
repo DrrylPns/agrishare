@@ -526,7 +526,7 @@ export const TraderAddress: React.FC<TraderAddressProps> = ({ user }) => {
                                 <FormItem>
                                     <FormLabel>Address</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="House # & Street address" {...field} disabled={!isEdit} />
+                                        <Input placeholder="House #/Block #/ Lot #" {...field} disabled={!isEdit} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

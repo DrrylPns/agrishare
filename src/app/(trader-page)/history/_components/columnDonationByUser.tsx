@@ -175,7 +175,7 @@ export const columnDonationByUser: ColumnDef<DonationWithRelation>[] = [
             >
                 {proof === null ? (
                     <></>
-                ):(
+                ) : (
                     <>{format(date, "PPP")}</>
 
                 )}
@@ -376,10 +376,10 @@ export const columnDonationByUser: ColumnDef<DonationWithRelation>[] = [
                                         <Separator />
                                         <div className="text-black text-lg my-3 font-semibold">
                                             <h1>Donation Details</h1>
+                                            <h1 className="text-black text-medium tex-sm">Unit: {unit === "FRESH_FRUIT" || unit === "VEGETABLES" ? "Kilo/s" : unit === "TOOLS" || unit === "EQUIPMENTS" ? "Piece/s" : "Pack/s"}</h1>
                                             <h1 className="text-black text-medium tex-sm">Quantity: {donationQuantity} </h1>
                                             <h1 className="text-black text-medium tex-sm">User Email: {donatorEMail}</h1>
                                             <h1 className="text-black text-medium tex-sm">Item: {donatorProduct}</h1>
-                                            <h1 className="text-black text-medium tex-sm">Unit: {unit === "FRESH_FRUIT" || unit === "VEGETABLES" ? "Kilo/s" : unit === "TOOLS" || unit === "EQUIPMENTS" ? "Piece/s" : "Pack/s"}</h1>
                                             <h1 className="text-black text-medium tex-sm">Accumulated Points: {accumelatedPoints.toFixed(0)}</h1>
 
                                         </div>
